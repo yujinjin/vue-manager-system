@@ -1,0 +1,30 @@
+/* 改变主题色变量 */
+$--color-primary: #209FFF;
+
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";
+
+.el-tabs__header {
+  background: #FAFAFA;
+  .el-tabs__item {
+    line-height: 50px;
+    height: 50px;
+    padding: 0;
+    .f-tab-pane {
+      padding: 0 20px;
+    }
+  }
+}
+
+.el-form-item__content {
+  width: 240px;
+  .el-select {
+    width: 100%;
+  }
+}
+
+.el-divider--horizontal {
+  margin: 0;
+}

@@ -1,0 +1,58 @@
+{
+    "success": true,
+    "unAuthorizedRequest": false,
+    "error": null,
+    "result": [
+        {
+            "icon": "phone",
+            "iconBg": "bg-themeprimary",
+            "title": "Skype meeting with Patty",
+            "description": "01:00 pm",
+            "extraIcon": [
+                {
+                    "name": "clock-o",
+                    "bg": "themeprimary"
+                }
+            ],
+            "extraDescription": "office"
+        },
+        {
+            "icon": "check",
+            "iconBg": "bg-darkorange",
+            "title": "Uncharted break",
+            "description": "03:30 pm - 05:15 pm",
+            "extraIcon": [
+                {
+                    "name": "clock-o",
+                    "bg": "darkorange"
+                }
+            ],
+            "extraDescription": ""
+        },
+        {
+            "icon": "table",
+            "iconBg": "bg-warning",
+            "title": "Kate birthday party",
+            "description": "08:30 pm",
+            "extraIcon": [
+                {
+                    "name": "calendar",
+                    "bg": "warning"
+                },
+                {
+                    "name": "clock-o",
+                    "bg": "warning"
+                }
+            ],
+            "extraDescription": "at home"
+        },
+        {
+            "icon": "money",
+            "iconBg": "bg-success",
+            "title": "Dinner with friends",
+            "description": "10:30 pm",
+            "extraIcon": [],
+            "extraDescription": ""
+        }
+    ]
+}

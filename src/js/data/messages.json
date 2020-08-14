@@ -1,0 +1,31 @@
+{
+    "success": true,
+    "unAuthorizedRequest": false,
+    "error": null,
+    "result": {
+        "unreadCount": 3,
+        "list": [
+            {
+                "avatar": "head-photo-01.jpg",
+                "name": "Divyia Austin",
+                "subject": "Here's the recipe for apple pie",
+                "contents": "to identify the sending application when the senders image is shown for the main icon",
+                "time": "2018-10-31T14:04:07.083+08:00"
+            },
+            {
+                "avatar": "head-photo-02.jpg",
+                "name": "Bing.com",
+                "subject": "Bing Newsletter: The January Issue",
+                "contents": "Discover new music just in time for the Grammy® Awards.",
+                "time": "2018-10-30T14:04:07.083+08:00"
+            },
+            {
+                "avatar": "head-photo-03.jpg",
+                "name": "Nicolas",
+                "subject": "New 4K Cameras",
+                "contents": "The 4K revolution has come over the horizon and is reaching the general populous",
+                "time": "2018-10-29T14:04:07.083+08:00"
+            }
+        ]
+    }
+}

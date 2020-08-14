@@ -1,0 +1,62 @@
+{
+	"success": true,
+	"error": null,
+	"result": [
+		{
+			"name": "Main",
+			"displayName": "Main",
+			"items": [
+				{
+					"name": "Boss.Application.Main.AuthCenter",
+					"displayName": "认证",
+					"items": [
+						{
+							"name": "Boss.Application.Main.AuthCenter.Identity.Roles",
+							"displayName": "角色管理"
+						},
+						{
+							"name": "Boss.Application.Main.AuthCenter.Identity.Users",
+							"displayName": "用户管理"
+						}
+					]
+				},
+				{
+					"name": "Boss.Application.Main.AuthCenter.IdentityServer",
+					"displayName": "授权",
+					"items": [
+						{
+							"name": "Boss.Application.Main.AuthCenter.IdentityServer.IdentityResources",
+							"displayName": "身份资源"
+						},
+						{
+							"name": "Boss.Application.Main.AuthCenter.IdentityServer.Clients",
+							"displayName": "客户端管理"
+						},
+						{
+							"name": "Boss.Application.Main.AuthCenter.IdentityServer.ApiResources",
+							"displayName": "Api资源管理"
+						},
+						{
+							"name": "Boss.Application.Main.AuthCenter.IdentityServer.PersistedGrants",
+							"displayName": "持久化授权"
+						}
+					]
+				},
+				{
+					"name": "Demo",
+					"displayName": "演示",
+					"items": [
+						{
+							"name": "commonTable",
+							"displayName": "普通表格"
+						},
+						{
+							"name": "commonForm",
+							"displayName": "普通表单"
+						}
+					]
+				}
+			]
+		}
+	]
+}

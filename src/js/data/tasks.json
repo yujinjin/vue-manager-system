@@ -1,0 +1,25 @@
+{
+	"success": true,
+	"unAuthorizedRequest": false,
+	"error": null,
+    "result": {
+        "progressNumber": 4,
+        "list": [{
+            "name": "Account Creation",
+            "progress": 0.65,
+            "color": "#2dc3e8"
+        }, {
+            "name": "Profile Data",
+            "progress": 0.35,
+            "color": "#53a93f"
+        }, {
+            "name": "Updating Resume",
+            "progress": 0.75,
+            "color": "#ed4e2a"
+        }, {
+            "name": "Account Creation",
+            "progress": 0.10,
+            "color": "#f4b400"
+        }]
+    }
+}
