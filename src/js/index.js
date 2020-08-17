@@ -23,7 +23,7 @@ export default (function() {
 		// 只要不是生产环境的build，全部认为是调试版本
 		site.config.isDebug = process.env.NODE_ENV === "development" || process.env.VUE_APP_ENV != "PRD";
 		if (site.config.isDebug) {
-			window.app = app;
+			window.site = site;
 		}
 		if (process.env.NODE_ENV == "production") {
 			// 开发模式

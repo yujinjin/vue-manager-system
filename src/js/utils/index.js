@@ -347,22 +347,17 @@ export default {
 		if (typeof url === "string" && /(.+\.(jpeg|png|bmp|jpg|gif))\?.+/g.test(url)) {
 			url = RegExp.$1;
 		}
-		let width = false;
-		let height = false;
-		if (size) {
-			if (typeof size === "number") {
-				width = height = size;
-			} else {
-				width = size.width;
-				height = size.height;
-			}
-		}
 		// 获取图片压缩质量样式
 		let style = "";
-		if (width || height) {
-			// 小图不需要压缩质量
-			const q = (width || height) <= 100 ? 100 : 90;
-			style = "?" + "x-oss-process=image/resize,m_lfit," + (width ? `w_${width},` : "") + (height ? `h_${height},` : "") + `limit_1/auto-orient,1/quality,q_${q}`;
+		if (size || height) {
+			if (typeof size === "string") {
+				// 兼容以前的图片版本
+				style = "?x-oss-process=style/" + size;
+			} else {
+				// 小图不需要压缩质量
+				const q = (size || height) <= 100 ? 100 : 90;
+				style = "?" + "x-oss-process=image/resize,m_lfit," + (size ? `w_${size},` : "") + (height ? `h_${height},` : "") + `limit_1/auto-orient,1/quality,q_${q}`;
+			}
 		}
 		//全站统一配置
 		if (url.match(/http:\/\//) || url.match(/https:\/\//) || url.match(/\/\//)) {

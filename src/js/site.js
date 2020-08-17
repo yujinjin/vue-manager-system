@@ -11,7 +11,7 @@ export default {
 		releaseTime: "", //发布时间
 		isDebug: false, //是否是前端调试状态
 		releaseTime: "2020.08.13", //发布时间
-		errorImgUrl: require("@imgs/static/error.png"), // 默认错误图片地址
+		errorImgUrl: require("@imgs/static/error.jpg"), // 默认错误图片地址
 		logoImgUrl: require("@imgs/static/logo.png"), // logo图片地址
 		webApiDomain: "", //web站点的接口地址
 		siteDomain: "", // 服务站点地址

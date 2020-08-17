@@ -21,7 +21,7 @@ let routers = {
 			meta: {
 				title: "首页"
 			},
-			component: pageFactory("@views/home.vue", { name: "home" }), // require('../../views/home.vue').default,
+			component: resolve => require(["@views/home.vue"], pageFactory(resolve, { name: "home", type: "other" })),
 			children: []
 		},
 		{
@@ -31,7 +31,9 @@ let routers = {
 				auth: false,
 				title: "登录"
 			},
-			component: pageFactory("@views/login.vue", { name: "login" })
+			component: resolve => require(["@views/login.vue"], pageFactory(resolve, { name: "login", type: "other" }))
+			// component: pageFactory("login.vue", { name: "login", type: "test" })
+			// component: resolve => require(["@views/login.vue"], component => resolve(component.default))
 		},
 		{
 			path: "*", //未发现该页面
@@ -40,7 +42,7 @@ let routers = {
 				auth: false,
 				title: "未发现该页面"
 			},
-			component: pageFactory("@views/not-found.vue", { name: "not-found" })
+			component: resolve => require(["@views/error/not-found.vue"], pageFactory(resolve, { name: "not-found", type: "other" }))
 		}
 	],
 

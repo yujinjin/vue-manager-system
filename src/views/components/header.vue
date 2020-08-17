@@ -2,7 +2,7 @@
 	<div class="header fixed-top">
 		<div class="left-inner">
 			<div class="logo-box">
-				<img src="../../imgs/724logo.png" height="40" width="40" />
+				<img src="../../imgs/static/logo.png" height="40" width="40" />
 			</div>
 			<div class="title-text">后台管理系统框架</div>
 		</div>

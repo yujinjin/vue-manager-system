@@ -229,4 +229,6 @@ export default (function() {
 			}
 		}
 	};
+
+	return controler;
 })();

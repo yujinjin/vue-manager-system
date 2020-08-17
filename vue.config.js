@@ -74,10 +74,13 @@ module.exports = {
 			.end();
 
 		config.module
-			.rule("images")
+			.rule("static-images")
+			.test(/\.(png|jpe?g|gif|ico)(\?.*)?$/)
+			.include.add(resolve("src/imgs/static"))
+			.end()
 			.use("url-loader")
 			.loader("url-loader")
-			.tap(options => Object.assign(options, { limit: 1024 }))
+			.options({ limit: 0, name: "build/img/[name].[hash:7].[ext]" })
 			.end();
 
 		config.when(process.env.NODE_ENV === "development", config => config.devtool("cheap-source-map"));

@@ -11,7 +11,7 @@ import event from "./event";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-	strict: configs.ENV !== "PRD", //在非生产环境下，使用严格模式
+	strict: config.ENV !== "PRD", //在非生产环境下，使用严格模式
 	modules: {
 		data,
 		event
