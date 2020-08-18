@@ -24,5 +24,13 @@ export default {
 				ajaxOptions
 			)
 		);
+	},
+
+	sendValidateCode(ajaxOptions) {
+		return new Promise(resolve => {
+			setTimeout(() => {
+				resolve();
+			}, 500);
+		});
 	}
 };

@@ -97,6 +97,8 @@ export default {
 	width: 100%;
 	position: relative;
 	display: flex;
+	min-width: 1366px;
+	min-height: 768px;
 
 	.page-container {
 		width: 100%;

@@ -1,5 +1,6 @@
 import "@style/less/site.less";
 import "@style/scss/element-variables.scss";
+import "element-ui/lib/theme-chalk/index.css";
 import Vue from "vue";
 import VueRouter from "vue-router";
 import ElementUI from "element-ui";
@@ -91,7 +92,7 @@ export default (function() {
 				logs.error(JSON.stringify({ message: "Vue errorHandler:" + err.message, stack: err.stack, type: info }));
 			};
 		}
-
+		Vue.use(ElementUI);
 		Vue.use(VueRouter);
 		Object.keys(directives).forEach(key => {
 			Vue.directive(key, directives[key]);

@@ -4,6 +4,11 @@
  * 描述：系统API接口
  */
 export default {
+	login(ajaxOptions) {
+		return new Promise(resolve => {
+			resolve(require("@js/data/login.json").result);
+		});
+	},
 	// 查询当前登录用户的操作权限
 	queryPermission() {
 		// return site.ajax(Object.assign({
