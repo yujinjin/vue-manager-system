@@ -3,60 +3,95 @@
 	"error": null,
 	"result": [
 		{
-			"name": "Main",
-			"displayName": "Main",
-			"items": [
-				{
-					"name": "Boss.Application.Main.AuthCenter",
-					"displayName": "认证",
-					"items": [
-						{
-							"name": "Boss.Application.Main.AuthCenter.Identity.Roles",
-							"displayName": "角色管理"
-						},
-						{
-							"name": "Boss.Application.Main.AuthCenter.Identity.Users",
-							"displayName": "用户管理"
-						}
-					]
-				},
-				{
-					"name": "Boss.Application.Main.AuthCenter.IdentityServer",
-					"displayName": "授权",
-					"items": [
-						{
-							"name": "Boss.Application.Main.AuthCenter.IdentityServer.IdentityResources",
-							"displayName": "身份资源"
-						},
-						{
-							"name": "Boss.Application.Main.AuthCenter.IdentityServer.Clients",
-							"displayName": "客户端管理"
-						},
-						{
-							"name": "Boss.Application.Main.AuthCenter.IdentityServer.ApiResources",
-							"displayName": "Api资源管理"
-						},
-						{
-							"name": "Boss.Application.Main.AuthCenter.IdentityServer.PersistedGrants",
-							"displayName": "持久化授权"
-						}
-					]
-				},
-				{
-					"name": "Demo",
-					"displayName": "演示",
-					"items": [
-						{
-							"name": "commonTable",
-							"displayName": "普通表格"
-						},
-						{
-							"name": "commonForm",
-							"displayName": "普通表单"
-						}
-					]
+			"name": "system-manage",
+			"displayName": "系统",
+			"icon": "system-manage",
+			"items": [{
+				"name": "dashboard",
+				"displayName": "工作台",
+				"route": {
+					"name": "home"
 				}
-			]
+			}, {
+				"name": "user-manage",
+				"displayName": "用户管理",
+				"route": {
+					"name": "user-list"
+				}
+			}, {
+				"name": "role-manage",
+				"displayName": "角色管理",
+				"route": {
+					"name": "role-list"
+				}
+			}, {
+				"name": "menu-manage",
+				"displayName": "菜单管理",
+				"route": {
+					"name": "menu-manager"
+				}
+			}, {
+				"name": "audit-logs",
+				"displayName": "审计日志",
+				"route": {
+					"name": "audit-logs"
+				}
+			}, {
+				"name": "settings",
+				"displayName": "设置",
+				"route": {
+					"name": "settings"
+				}
+			}]
+		}, {
+			"name": "example",
+			"displayName": "示例",
+			"icon": "example",
+			"items": [{
+				"name": "query",
+				"displayName": "数据查询",
+				"items": [{
+					"name": "simple-query",
+					"displayName": "普通查询",
+					"route": {
+						"name": "simple-query"
+					}
+				}, {
+					"name": "complex-query",
+					"displayName": "复杂查询",
+					"route": {
+						"name": "complex-query"
+					}
+				}, {
+					"name": "special-query",
+					"displayName": "特殊查询",
+					"route": {
+						"name": "special-query"
+					}
+				}]
+			}, {
+				"name": "form",
+				"displayName": "表单提交",
+				"items": [{
+					"name": "simple-form",
+					"displayName": "普通表单",
+					"route": {
+						"name": "user-manager"
+					}
+				}, {
+					"name": "complex-form",
+					"displayName": "复杂表单",
+					"route": {
+						"name": "complex-form"
+					}
+				}, {
+					"name": "special-form",
+					"displayName": "特殊表单",
+					"route": {
+						"name": "special-form"
+					}
+				}]
+			}]
 		}
 	]
 }

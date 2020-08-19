@@ -34,7 +34,7 @@ export default {
 		if (permissionValue) {
 			permissionValue = permissionValue.replace(/-/g, ".");
 		}
-		if (permissionValue && store.state.appData.permissions && store.state.appData.permissions.length > 0 && store.state.appData.permissions.findIndex(c => c.toLocaleLowerCase() === permissionValue.toLocaleLowerCase()) === -1) {
+		if (permissionValue && store.state.datapermissions && store.state.datapermissions.length > 0 && store.state.datapermissions.findIndex(c => c.toLocaleLowerCase() === permissionValue.toLocaleLowerCase()) === -1) {
 			el.style.display = "none";
 		}
 	}

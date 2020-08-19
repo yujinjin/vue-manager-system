@@ -8,7 +8,7 @@
 import query from "./query";
 import form from "./form";
 
-export default function(resolve, { type = "query", name = null } = {}) {
+export default function(resolve, { type = "other", name = null } = {}) {
 	if (type == "query") {
 		// return function(resolve) {
 		// 	return require([path], component => resolve(query(component.default, name)));

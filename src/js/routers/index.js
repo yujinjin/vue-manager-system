@@ -9,7 +9,7 @@
  *  menuPath: 当前页面所属的菜单，默认情况下是当前路由的path。主要用于部分页面（特别是详情页）无法找到左边对应的菜单所处理。也可以手动处理home中的currentSelectMenuPath属性
  * }
  */
-// import system from "./system";
+import system from "./system";
 import globalService from "@js/services/global-service";
 import pageFactory from "@js/page-factory/";
 
@@ -21,7 +21,7 @@ let routers = {
 			meta: {
 				title: "首页"
 			},
-			component: resolve => require(["@views/home.vue"], pageFactory(resolve, { name: "home", type: "other" })),
+			component: resolve => require(["@views/home.vue"], pageFactory(resolve, { name: "home" })),
 			children: []
 		},
 		{
@@ -31,7 +31,7 @@ let routers = {
 				auth: false,
 				title: "登录"
 			},
-			component: resolve => require(["@views/login.vue"], pageFactory(resolve, { name: "login", type: "other" }))
+			component: resolve => require(["@views/login.vue"], pageFactory(resolve, { name: "login" }))
 			// component: pageFactory("login.vue", { name: "login", type: "test" })
 			// component: resolve => require(["@views/login.vue"], component => resolve(component.default))
 		},
@@ -42,7 +42,7 @@ let routers = {
 				auth: false,
 				title: "未发现该页面"
 			},
-			component: resolve => require(["@views/error/not-found.vue"], pageFactory(resolve, { name: "not-found", type: "other" }))
+			component: resolve => require(["@views/error/not-found.vue"], pageFactory(resolve, { name: "not-found" }))
 		}
 	],
 
@@ -106,5 +106,5 @@ let routers = {
 		}
 	}
 };
-// routers.routes[0].children.push(...system);
+routers.routes[0].children.push(...system);
 export default routers;

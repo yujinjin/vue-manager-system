@@ -196,8 +196,15 @@ export default {
 			// 传入goBack参数是表示返回跳转：A->B(登录页,back)->A
 			let [_this, _toName, _go, _current_query, _current_params] = [this, this.$route.query.toName, this.$route.query.goBack, this.$route.toQuery, this.$route.query.toParams];
 			if (_toName) {
-				delete _current_query.toName;
-				delete _current_query.toParams;
+				if (_current_query) {
+					try {
+						_current_query = JSON.parse(_current_query);
+					} catch (e) {
+						_current_query = {};
+					}
+				} else {
+					_current_params = {};
+				}
 				if (_current_params) {
 					try {
 						_current_params = JSON.parse(_current_params);

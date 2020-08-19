@@ -9,30 +9,6 @@
 					{{ menuItem.displayName }}
 				</div>
 			</div>
-			<!-- <div class="menu-item">
-				<div class="icons-box">
-					<svg-icon value="table"></svg-icon>
-				</div>
-				<div class="menu-text">
-					概况
-				</div>
-			</div>
-			<div class="menu-item active">
-				<div class="icons-box">
-					<svg-icon value="table"></svg-icon>
-				</div>
-				<div class="menu-text">
-					测试
-				</div>
-			</div>
-			<div class="menu-item">
-				<div class="icons-box">
-					<svg-icon value="table"></svg-icon>
-				</div>
-				<div class="menu-text">
-					测试
-				</div>
-			</div> -->
 		</div>
 		<div class="sub-menu-panel" v-if="subMenuData">
 			<template v-for="menuItem in subMenuData">
@@ -52,43 +28,6 @@
 					</div>
 				</div>
 			</template>
-
-			<!-- <div class="menu-item">
-				<div class="menu-text">
-					测试
-				</div>
-				<div class="icons-box">
-					<svg-icon value="angle-right"></svg-icon>
-				</div>
-			</div>
-			<div class="menu-item">
-				<div class="menu-text">
-					测试
-				</div>
-				<div class="icons-box">
-					<svg-icon value="angle-right" class="open"></svg-icon>
-				</div>
-			</div>
-			<div class="child-menu-panel">
-				<div class="menu-item">
-					<div class="menu-text">
-						测试
-					</div>
-				</div>
-				<div class="menu-item active">
-					<div class="menu-text">
-						测试
-					</div>
-				</div>
-			</div>
-			<div class="menu-item">
-				<div class="menu-text">
-					测试
-				</div>
-				<div class="icons-box">
-					<svg-icon value="angle-right"></svg-icon>
-				</div>
-			</div> -->
 		</div>
 	</div>
 </template>
@@ -99,55 +38,7 @@ export default {
 			isFixed: true, // 边栏是否固定
 			menuData: null, // 菜单数据
 			subMenuData: null, // 子菜单数据
-			isHasMenuEventTrigger: false, // 是否有手动的菜单事件触发
-			menuConfig: {
-				"Boss.Application.Main.AuthCenter": {
-					icon: "form"
-				}, // 认证
-				"Boss.Application.Main.AuthCenter.Identity.Roles": {
-					route: {
-						name: "home"
-					}
-				}, // 角色管理
-				"Boss.Application.Main.AuthCenter.Identity.Users": {
-					route: {
-						name: "home"
-					}
-				}, // 用户管理
-				"Boss.Application.Main.AuthCenter.IdentityServer": {
-					icon: "table"
-				}, // 授权
-				"Boss.Application.Main.AuthCenter.IdentityServer.IdentityResources": {
-					route: {
-						name: "home"
-					}
-				}, // 身份资源
-				"Boss.Application.Main.AuthCenter.IdentityServer.Clients": {
-					route: {
-						name: "home"
-					}
-				}, // 客户端管理
-				"Boss.Application.Main.AuthCenter.IdentityServer.ApiResources": {
-					route: {
-						name: "home"
-					}
-				}, // Api资源管理
-				"Boss.Application.Main.AuthCenter.IdentityServer.PersistedGrants": {
-					route: {
-						name: "home"
-					}
-				},
-				commonTable: {
-					route: {
-						name: "commonTable"
-					}
-				},
-				commonForm: {
-					route: {
-						name: "commonForm"
-					}
-				}
-			} // 菜单数据配置
+			isHasMenuEventTrigger: false // 是否有手动的菜单事件触发
 		};
 	},
 	props: {
@@ -178,32 +69,21 @@ export default {
 		// 初始化菜单数据
 		initMenuData(menuData) {
 			if (!menuData || menuData.length == 0) {
-				site.toastr.error("没有主菜单数据");
+				this.$message.error("没有主菜单数据");
 				return;
 			}
-			// 找到main菜单数据，目前这个对象写死
-			let mainMenu = menuData.find(menuItem => menuItem.name == "Main");
-			if (!mainMenu) {
-				site.toastr.error("没有主菜单数据");
-				return;
-			}
-			mainMenu = mainMenu.items;
 			//初始化菜单状态，不然不会跟踪变化
 			let initMenuStatus = menus => {
 				for (let i = 0; i < menus.length; i++) {
 					menus[i].isOpen = false;
 					menus[i].isActive = false;
-					if (this.menuConfig[menus[i].name]) {
-						Object.assign(menus[i], this.menuConfig[menus[i].name]);
-					}
 					if (menus[i].items && menus[i].items.length > 0) {
 						initMenuStatus(menus[i].items);
 					}
 				}
 			};
-			initMenuStatus(mainMenu);
-			this.menuData = mainMenu;
-			console.info(".........initMenuData");
+			initMenuStatus(menuData);
+			this.menuData = menuData;
 			this.initActiveMenuData();
 		},
 
@@ -218,36 +98,54 @@ export default {
 				if (JSON.stringify(currentRouter.params) == "{}") {
 					delete currentRouter.params;
 				}
-				for (let key in this.menuConfig) {
-					if (this.menuConfig[key].route && site.utils.isEqual(currentRouter, JSON.parse(JSON.stringify(this.menuConfig[key].route)))) {
-						menuName = key;
-						break;
-					}
-				}
-			}
-			if (!menuName) {
-				site.log.info("没有此菜单数据");
-				return;
-			}
-			let activeMenuData = (menus, level) => {
-				for (let i = 0; i < menus.length; i++) {
-					if (menus[i].name == menuName) {
-						menus[i].isOpen = true;
-						menus[i].isActive = true;
-						if (level == 1) {
-							// 找到第二菜单层级
-							this.subMenuData = menus[i].items;
+				let activeMenuDataByRoute = (menus, level) => {
+					for (let i = 0; i < menus.length; i++) {
+						if (menus[i].route && site.utils.isEqual(currentRouter, JSON.parse(JSON.stringify(menus[i].route)))) {
+							menus[i].isOpen = true;
+							menus[i].isActive = true;
+							if (level == 1) {
+								// 找到第二菜单层级
+								this.subMenuData = menus[i].items;
+							}
+							return true;
+						} else if (menus[i].items && menus[i].items.length > 0 && activeMenuDataByRoute(menus[i].items, level + 1)) {
+							menus[i].isOpen = true;
+							menus[i].isActive = true;
+							if (level == 1) {
+								// 找到第二菜单层级
+								this.subMenuData = menus[i].items;
+							}
+							return true;
 						}
-						return true;
-					} else if (menus[i].items && menus[i].items.length > 0 && activeMenuData(menus[i].items, level + 1)) {
-						menus[i].isOpen = true;
-						menus[i].isActive = true;
-						return true;
 					}
-				}
-				return false;
-			};
-			activeMenuData(this.menuData, 1);
+					return false;
+				};
+				activeMenuDataByRoute(this.menuData, 1);
+			} else {
+				let activeMenuDataByName = (menus, level) => {
+					for (let i = 0; i < menus.length; i++) {
+						if (menus[i].name == menuName) {
+							menus[i].isOpen = true;
+							menus[i].isActive = true;
+							if (level == 1) {
+								// 找到第二菜单层级
+								this.subMenuData = menus[i].items;
+							}
+							return true;
+						} else if (menus[i].items && menus[i].items.length > 0 && activeMenuDataByName(menus[i].items, level + 1)) {
+							menus[i].isOpen = true;
+							menus[i].isActive = true;
+							if (level == 1) {
+								// 找到第二菜单层级
+								this.subMenuData = menus[i].items;
+							}
+							return true;
+						}
+					}
+					return false;
+				};
+				activeMenuDataByName(this.menuData, 1);
+			}
 		},
 
 		// 激活菜单事件状态
@@ -281,7 +179,7 @@ export default {
 				}
 				if (!menuItem.route) {
 					// 如果当前菜单没有路由
-					site.toastr.error("当前菜单没有配置路由地址，请去配置路由地址");
+					this.$message.error("当前菜单没有配置路由地址，请去配置路由地址");
 					return;
 				}
 				this.changeMenuStatus();
@@ -371,6 +269,7 @@ export default {
 
 			.icons-box {
 				width: 20px;
+				font-size: 18px;
 			}
 
 			.menu-text {
@@ -414,6 +313,7 @@ export default {
 			.menu-text {
 				flex: 1;
 				padding-left: 5px;
+				font-size: 13px;
 			}
 		}
 

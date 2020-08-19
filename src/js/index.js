@@ -25,6 +25,7 @@ export default (function() {
 		site.config.isDebug = process.env.NODE_ENV === "development" || process.env.VUE_APP_ENV != "PRD";
 		if (site.config.isDebug) {
 			window.site = site;
+			window.$ = jQuery;
 		}
 		if (process.env.NODE_ENV == "production") {
 			// 开发模式
@@ -43,9 +44,9 @@ export default (function() {
 				value: {
 					token: loginUserInfo.token,
 					expiredTime: loginUserInfo.expiredTime,
-					userId: loginUserInfo.info.userId,
-					name: loginUserInfo.info.name,
-					headImgURL: loginUserInfo.info.headImgURL
+					userId: loginUserInfo.userId,
+					name: loginUserInfo.name,
+					headImgURL: loginUserInfo.headImgURL
 				}
 			});
 		}

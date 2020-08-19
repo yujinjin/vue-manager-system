@@ -1,23 +1,15 @@
 <template>
 	<div class="main">
-		<v-header></v-header>
-		<div class="page-container">
-			<sidebar class="side-bar" :customMenuName="customMenuName"></sidebar>
-			<div class="page-content">
-				<!-- <transition name="move" mode="out-in"> -->
-				<!-- 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们, TODO: 需要测试 -->
-				<keep-alive :include="$store.state.appData.cachedViews">
-					<router-view :key="routeKey" class="page-body"></router-view>
-				</keep-alive>
-				<!-- </transition> -->
-			</div>
-		</div>
+		<header-bar></header-bar>
+		<side-bar class="side-bar" :customMenuName="customMenuName"></side-bar>
+		<keep-alive :include="$store.state.data.cachedViews">
+			<router-view :key="routeKey" class="page-content"></router-view>
+		</keep-alive>
 	</div>
 </template>
 <script>
-import vHeader from "./components/header.vue";
-import sidebar from "./components/sidebar.vue";
-// import store from "@js/store";
+import headerBar from "./components/header-bar.vue";
+import sideBar from "./components/side-bar.vue";
 
 export default {
 	data: function() {
@@ -39,8 +31,8 @@ export default {
 		};
 	},
 	components: {
-		sidebar,
-		vHeader
+		headerBar,
+		sideBar
 	},
 	beforeRouteEnter(to, from, next) {
 		//必须先拿到权限才能做页面操作
@@ -74,6 +66,9 @@ export default {
 		}
 	},
 	created() {
+		if ($(window).height() < 766 || $(window).width() < 1366) {
+			this.$message.warning("当前管理系统屏幕分辨率最佳体验不低于1366*768!");
+		}
 		this.currentRouterPath = this.$route.meta.menuPath || this.$route.path;
 		Object.assign(this.currentRouter, {
 			fullPath: this.$route.fullPath, //当前路由路径
@@ -93,40 +88,26 @@ export default {
 </script>
 <style lang="less">
 .main {
-	min-height: 100%;
 	width: 100%;
+	height: 100%;
 	position: relative;
 	display: flex;
 	min-width: 1366px;
 	min-height: 768px;
+	padding-top: 60px;
 
-	.page-container {
-		width: 100%;
-		display: flex;
-		padding-left: 240px;
-		padding-top: 60px;
-		box-sizing: border-box;
-		.side-bar {
-			position: fixed;
-			left: 0;
-			width: 240px;
-			height: 100%;
-			z-index: 98;
-		}
+	.side-bar {
+		width: 240px;
+		height: 100%;
+		box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+		margin-right: 10px;
+	}
 
-		.page-content {
-			flex: 1;
-			width: 100%;
-			min-height: 100%;
-			padding-left: 20px;
-			background-color: #f4f4f4;
-			box-sizing: border-box;
-			.page-body {
-				background-color: #fff;
-				height: 100%;
-				width: 100%;
-			}
-		}
+	.page-content {
+		flex: 1;
+		height: 100%;
+		background-color: #fff;
+		overflow: hidden;
 	}
 }
 </style>

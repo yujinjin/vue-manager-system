@@ -44,15 +44,15 @@ export default {
 	computed: {
 		...mapState({
 			name: store => {
-				if (store.appData.locationInfo && store.appData.locationInfo.loginUserInfo) {
-					return store.appData.locationInfo.loginUserInfo.name;
+				if (store.data.locationInfo && store.data.locationInfo.loginUserInfo) {
+					return store.data.locationInfo.loginUserInfo.name;
 				} else {
 					return "";
 				}
 			},
 			role: store => {
-				if (store.appData.locationInfo && store.appData.locationInfo.loginUserInfo) {
-					return store.appData.locationInfo.loginUserInfo.role;
+				if (store.data.locationInfo && store.data.locationInfo.loginUserInfo) {
+					return store.data.locationInfo.loginUserInfo.role;
 				} else {
 					return "";
 				}
@@ -92,7 +92,7 @@ export default {
 	justify-content: space-between;
 
 	&.fixed-top {
-		position: fixed;
+		position: absolute;
 		left: 0px;
 		right: 0px;
 		top: 0px;

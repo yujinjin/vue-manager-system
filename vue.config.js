@@ -120,7 +120,6 @@ module.exports = {
 				$: "jquery",
 				jquery: "jquery",
 				jQuery: "jquery",
-				"window.jQuery": "jquery",
 				config: resolve("src/js/config/" + (process.env.VUE_APP_ENV ? process.env.VUE_APP_ENV : "DEV") + ".js"),
 				site: [resolve("src/js/site.js"), "default"]
 			}

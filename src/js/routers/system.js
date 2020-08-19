@@ -4,38 +4,15 @@
  * 描述：系统管理路由配置
  */
 // import modules from "../utils/modules";
+import pageFactory from "@js/page-factory/";
 
 export default [
 	{
 		path: "/",
 		name: "home",
 		meta: {
-			title: "dashboard"
+			title: "工作台"
 		},
-		component: resolve => require(["../../views/system/dashboard.vue"], component => resolve(component.default))
-	},
-	{
-		path: "/demo/common-table",
-		name: "commonTable",
-		meta: {
-			title: "commonTable"
-		},
-		component: resolve => require(["../../views/demo/common-table.vue"], component => resolve(component.default))
-	},
-	{
-		path: "/demo/common-form",
-		name: "commonForm",
-		meta: {
-			title: "commonForm"
-		},
-		component: resolve => require(["../../views/demo/common-form.vue"], component => resolve(component.default))
-	},
-	{
-		path: "/demo/customer-menu",
-		name: "customerMenu",
-		meta: {
-			title: "customerMenu"
-		},
-		component: resolve => require(["../../views/demo/customer-menu.vue"], component => resolve(component.default))
+		component: resolve => require(["@views/system/dashboard.vue"], pageFactory(resolve, { name: "dashboard" }))
 	}
 ];
