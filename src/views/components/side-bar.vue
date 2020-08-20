@@ -1,4 +1,7 @@
 <template>
+	<!--
+		本次侧边菜单栏只支持3级菜单，而且一级菜单的文案只能是2个字
+	-->
 	<div class="side-nav-bar" :class="{ 'side-fixed': isFixed }">
 		<div class="main-menu-panel" v-if="menuData">
 			<div class="menu-item" :class="{ active: menuItem.isActive, open: menuItem.isOpen }" v-for="menuItem in menuData" :key="menuItem.name" @click.stop.prevent="openMenu(menuItem)">

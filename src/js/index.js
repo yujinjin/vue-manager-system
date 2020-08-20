@@ -93,7 +93,7 @@ export default (function() {
 				logs.error(JSON.stringify({ message: "Vue errorHandler:" + err.message, stack: err.stack, type: info }));
 			};
 		}
-		Vue.use(ElementUI);
+		Vue.use(ElementUI, { size: "small", zIndex: 3000 });
 		Vue.use(VueRouter);
 		Object.keys(directives).forEach(key => {
 			Vue.directive(key, directives[key]);
