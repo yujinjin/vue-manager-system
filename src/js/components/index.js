@@ -6,7 +6,9 @@
 
 import Vue from "vue";
 import svgIcon from "./icons";
+import searchForm from "./views/search-form";
 
 export default function() {
 	Vue.component("svg-icon", svgIcon);
+	Vue.component("search-form", searchForm);
 }

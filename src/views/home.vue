@@ -108,6 +108,8 @@ export default {
 		height: 100%;
 		background-color: #fff;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 }
 </style>

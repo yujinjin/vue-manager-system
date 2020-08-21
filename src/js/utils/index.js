@@ -450,5 +450,80 @@ export default {
 			return true;
 		}
 	},
+
+	// 设置 object对象中对应 path 属性路径上的值，如果path不存在，则创建。 缺少的索引属性会创建为数组，而缺少的属性会创建为对象。
+	setObjectProperty(object, path, value) {
+		if (!path) {
+			throw new Error("path 属性路径上的值不能为空");
+		} else if (!object || typeof object !== "object") {
+			throw new Error("设置的目标必须是对象类型");
+		}
+		let keyArray = [];
+		if (typeof path == "string") {
+			//将a[b].c转换为a.b.c
+			path = path.replace(/\[(\w+)\]/g, ".$1");
+			path = path.replace(/^\./, "");
+			//将.a.b转换为a.b
+			keyArray = path.split(".");
+		} else if (path instanceof Array) {
+			keyArray = path;
+		} else {
+			throw new Error("path 属性路径只能为字符串类型或数组类型");
+		}
+		if (keyArray.length == 1) {
+			object[keyArray[0]] = value;
+			return { rootName: keyArray[0], rootValue: value, propertyName: null };
+		}
+		const getValue = function(targetObject, key, isArray) {
+			let value = targetObject[key];
+			if (value == undefined || value == null || typeof value != "object") {
+				targetObject[key] = value = isArray ? [] : {};
+			}
+			return value;
+		};
+
+		let targetValue = getValue(object, keyArray[0], /^\d+$/.test(keyArray[1]));
+		let rootName = keyArray[0];
+		let rootValue = targetValue;
+		for (let i = 1; i < keyArray.length - 1; i++) {
+			targetValue = getValue(targetValue, keyArray[i], /^\d+$/.test(keyArray[i + 1]));
+		}
+		targetValue[keyArray[keyArray.length - 1]] = value;
+		return { rootName, rootValue, propertyName: keyArray[1] };
+	},
+
+	// 根据 object对象的path路径获取值。 如果解析 value 是 undefined 会以 defaultValue 取代。
+	getObjectProperty(object, path, defaultValue) {
+		if (!path) {
+			throw new Error("path 属性路径上的值不能为空");
+		} else if (!object || typeof object !== "object") {
+			throw new Error("设置的目标必须是对象类型");
+		}
+		let keyArray = [];
+		if (typeof path == "string") {
+			//将a[b].c转换为a.b.c
+			path = path.replace(/\[(\w+)\]/g, ".$1");
+			path = path.replace(/^\./, "");
+			//将.a.b转换为a.b
+			keyArray = path.split(".");
+		} else if (path instanceof Array) {
+			keyArray = path;
+		} else {
+			throw "path 属性路径只能为字符串类型或数组类型";
+		}
+		let targetValue = object;
+		for (let i = 0; i < keyArray.length; i++) {
+			if (targetValue.hasOwnProperty(keyArray[i])) {
+				targetValue = targetValue[keyArray[i]];
+				if (targetValue == null) return null;
+			} else {
+				targetValue = undefined;
+			}
+			if (targetValue == undefined) {
+				return defaultValue;
+			}
+		}
+		return targetValue;
+	},
 	extend
 };

@@ -12,22 +12,35 @@ export default function(page, name) {
 		page.name = name;
 	}
 	return extend(
+		true,
 		{
 			methods: {
 				// 当前页面初始化
 				init() {
 					this.queryList();
-					site.log.warn("路由名称:" + moduleName + "的数据初始化没有具体实现，系统默认自动初始化");
+					site.log.warn("路由名称:" + this.$route.name + "的数据初始化没有具体实现，系统默认自动初始化");
 				},
 				// 数据列表查询，业务放要覆盖的
 				queryList() {
-					site.log.error("路由名称:" + moduleName + "的数据查询项没有具体实现");
+					site.log.error("路由名称:" + this.$route.name + "的数据查询项没有具体实现");
 				},
 				edit() {
-					site.log.error("路由名称:" + moduleName + "的编辑操作没有具体实现");
+					site.log.error("路由名称:" + this.$route.name + "的编辑操作没有具体实现");
 				},
 				delete() {
-					site.log.error("路由名称:" + moduleName + "的删除操作没有具体实现");
+					site.log.error("路由名称:" + this.$route.name + "的删除操作没有具体实现");
+				},
+				filterChange(filter, filterProperty) {
+					if (filterProperty) {
+						this.$set(this[filterProperty], filter.name, filter.value);
+					} else {
+						let propertyObject = site.utils.setObjectProperty(this, filter.name, filter.value);
+						if (propertyObject.propertyName != null) {
+							this.$set(this[propertyObject.rootName], propertyObject.propertyName, propertyObject.rootValue[propertyObject.propertyName]);
+						} else {
+							this[propertyObject.rootName] = propertyObject.rootValue;
+						}
+					}
 				}
 			}
 		},
@@ -39,10 +52,11 @@ export default function(page, name) {
 					data = page.data.call(this);
 				}
 				return extend(
+					true,
 					{
 						filters: {
 							filter: "", //默认关键词搜索名称
-							maxResultCount: 10, //最大结果集（等同每页记录数）
+							maxResultCount: site.constants.PAGE_ITEMS, //最大结果集（等同每页记录数）
 							skipCount: 0,
 							sorting: "creationTime desc" //默认按时间降序排序
 						},

@@ -14,5 +14,13 @@ export default [
 			title: "工作台"
 		},
 		component: resolve => require(["@views/system/dashboard.vue"], pageFactory(resolve, { name: "dashboard" }))
+	},
+	{
+		path: "/system/user-list",
+		name: "user-list",
+		meta: {
+			title: "工作台"
+		},
+		component: resolve => require(["@views/system/user-list.vue"], pageFactory(resolve, { name: "user-list", type: "query" }))
 	}
 ];
