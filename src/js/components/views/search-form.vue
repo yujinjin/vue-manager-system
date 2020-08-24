@@ -147,24 +147,26 @@ export default {
 			this.searchForm.forEach(filter => {
 				// 深拷贝过滤选项
 				filter = site.utils.extend(true, {}, filter);
-				if (!filter.type) {
-					// 默认输入框
-					filter.type = "input";
-				}
-				if (this.components[filter.type]) {
-					if (!filter.option) {
-						filter.option = {};
+				if (!filter.slot) {
+					if (!filter.type) {
+						// 默认输入框
+						filter.type = "input";
 					}
-					if (!filter.option.placeholder) {
-						filter.option.placeholder = this.components[filter.type].placeholder + (filter.label || "");
+					if (this.components[filter.type]) {
+						if (!filter.option) {
+							filter.option = {};
+						}
+						if (!filter.option.placeholder) {
+							filter.option.placeholder = this.components[filter.type].placeholder + (filter.label || "");
+						}
+						if (filter.label) {
+							filter.label = filter.label + "：";
+						}
+						filter.option = site.utils.extend(true, {}, this.components[filter.type], filter.option || {});
 					}
-					if (filter.label) {
-						filter.label = filter.label + "：";
+					if (!Object.prototype.hasOwnProperty.call(filter, "value")) {
+						filter.value = null;
 					}
-					filter.option = site.utils.extend(true, {}, this.components[filter.type], filter.option || {});
-				}
-				if (!Object.prototype.hasOwnProperty.call(filter, "value")) {
-					filter.value = null;
 				}
 				formFields.push(filter);
 			});

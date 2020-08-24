@@ -16,7 +16,7 @@
             时间：2019-01-21
             描述：列表操作栏
         -->
-		<div class="handle-box">2</div>
+		<action-bar :actionButtons="handleButtons" @click="handleButton"></action-bar>
 
 		<!--
             作者：yujinjin9@126.com
@@ -38,11 +38,38 @@ export default {
 				{
 					slot: "other"
 				}
+			],
+			handleButtons: [
+				{
+					action: "add",
+					label: "新增",
+					click: this.add,
+					option: {
+						type: "primary"
+					}
+				},
+				{
+					slot: "other"
+				}
 			]
 		};
 	},
 	methods: {
-		init() {}
+		init() {
+			for (let i = 0; i < 16; i++) {
+				this.handleButtons.push({
+					action: "add" + i,
+					label: "新增测试" + i,
+					click: this.add
+				});
+			}
+		},
+		add() {
+			console.info(this.searchForm);
+		},
+		handleButton(action) {
+			console.info(action);
+		}
 	}
 };
 </script>
