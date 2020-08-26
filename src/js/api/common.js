@@ -5,7 +5,7 @@
  */
 export default {
 	//图片上传
-	imageUpload: function(ajaxOptions, inputData) {
+	imageUpload: function(inputData, ajaxOptions) {
 		let formData = new FormData();
 		if (inputData && typeof inputData === "object") {
 			for (let key in inputData) {
@@ -13,7 +13,8 @@ export default {
 			}
 		}
 		return site.ajax.axios.post(
-			config.uploadImgServer,
+			// config.uploadImgServer,
+			"https://resource.jk724.com/Uploader/UploadImage",
 			formData,
 			Object.assign(
 				{

@@ -94,10 +94,14 @@
 					<el-input style="width: 250px;" v-model="userInfo.emailAddress" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="头像：">
-					<el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess">
+					<!-- <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess">
 						<img v-if="userInfo.headImgURL" :src="userInfo.headImgURL" class="avatar" />
 						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-					</el-upload>
+					</el-upload> -->
+					<img-upload :uploadAttributes="imgUpload" :cropp="true" v-model="userInfo.headImgURL">
+						<img v-if="userInfo.headImgURL" :src="userInfo.headImgURL" class="avatar" />
+						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+					</img-upload>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -167,6 +171,11 @@ export default {
 						trigger: "blur"
 					}
 				]
+			},
+			imgUpload: {
+				class: "avatar-uploader",
+				showFileList: false,
+				limit: 1
 			}
 		};
 	},

@@ -3,7 +3,7 @@
         说明：列表操作栏，超出一行默认隐藏
     -->
 	<div class="action-bar" v-if="buttons && buttons.length > 0" ref="action-bar">
-		<div class="button-list" :class="{ more: isShowMore }">
+		<div class="button-list" :class="{ more: isShowMore }" @resize="test">
 			<div v-for="(buttonItem, index) in buttons" :key="index" class="button-box" v-show="startHideButtonIndex == -1 || isShowMore || index <= startHideButtonIndex">
 				<template v-if="buttonItem.slot">
 					<!-- 自定义组件 -->
@@ -94,6 +94,9 @@ export default {
 				this.buttons[i].click();
 			}
 			this.$emit("click", this.buttons[i].action);
+		},
+		test(){
+			console.info("..............")
 		}
 	}
 };

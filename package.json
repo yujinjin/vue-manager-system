@@ -43,7 +43,8 @@
 		"vuex": "^3.5.1",
 		"axios": "0.19.2",
 		"element-ui": "^2.13.2",
-		"jquery": "^1.12.4"
+		"jquery": "^1.12.4",
+		"cropperjs": "^1.5.7"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "~4.4.0",
