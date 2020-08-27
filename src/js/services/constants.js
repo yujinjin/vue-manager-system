@@ -37,9 +37,10 @@ export default {
 			type: "datetime"
 		} // DateTimePicker 日期时间选择器（具体见DateTimePicker 日期时间文档）
 	},
+	// 当前表单弹窗中的dialog 默认属性
 	FORM_DIALOG_DEFAULT_ATTRIBUTES: {
 		title: "提示"
-	}, // 当前dialog 默认属性
+	},
 	// 操作栏中的按钮默认属性
 	ACTION_BAR_BUTTON_DEFAULT_ATTRIBUTES: {
 		size: "small"
@@ -48,7 +49,8 @@ export default {
 	FORM_DEFAULT_ATTRIBUTES: {
 		model: "formInput",
 		labelWidth: "80px",
-		size: "small"
+		size: "small",
+		ref: "formInput"
 	},
 	// 表单中常用的类型默认属性
 	FORM_FIELD_DEFAULT_ATTRIBUTES: {
@@ -97,6 +99,7 @@ export default {
 		rate: {}, // Rate 评分（具体见Rate 评分文档）
 		colorPicker: {
 			size: "small"
-		} // ColorPicker 颜色选择器（具体见ColorPicker 颜色选择器文档）
+		}, // ColorPicker 颜色选择器（具体见ColorPicker 颜色选择器文档）
+		htmlEditor: {} // html富文本框编辑器，TODO：该插件待实现
 	}
 };

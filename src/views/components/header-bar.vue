@@ -67,7 +67,7 @@
 			</div>
 		</div>
 		<!-- 用户信息 -->
-		<el-dialog title="我的账户" :visible="isShowUserInfo">
+		<el-dialog title="我的账户" :visible="isShowUserInfo" @close="isShowUserInfo = !isShowUserInfo">
 			<el-form label-width="200px" :model="userInfo">
 				<el-form-item label="登录名：">
 					<strong>admin</strong>
@@ -111,7 +111,7 @@
 		</el-dialog>
 
 		<!-- 修改密码 -->
-		<el-dialog title="修改密码" :visible="isShowPassword">
+		<el-dialog title="修改密码" :visible="isShowPassword" @close="isShowUserInfo = !isShowUserInfo">
 			<el-form :rules="passwordRules" :model="passwordInfo" ref="passwordInfoForm" label-width="200px">
 				<el-form-item label="原密码：" prop="password" :rules="[{ required: true, message: '密码不能为空' }]">
 					<el-input style="width: 250px;" type="password" v-model="passwordInfo.password" auto-complete="off"></el-input>
