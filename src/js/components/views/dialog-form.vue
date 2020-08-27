@@ -2,7 +2,7 @@
 	<!-- 
         弹窗form表单封装
     -->
-	<el-dialog v-bind="dialogDefaultAttributes" :visible.sync="isShow" @close="close">
+	<el-dialog v-bind="dialogDefaultAttributes" :visible.sync="isShow" @close="close(-1)">
 		<el-form v-bind="formAttributes">
 			<el-row :gutter="10" class="input-row" v-for="(groupItem, index) in groupFields" :key="index">
 				<el-col class="field-box" :span="fieldItem.span" v-for="(fieldItem, i) in groupItem" :key="i">
@@ -256,14 +256,34 @@ export default {
 		},
 		clickHandle(index) {
 			if (typeof this.buttons[index].click === "function") {
-				this.buttons[index].click();
+				this.buttons[index].click(index);
 			}
 			this.$emit(this.buttons[index].action + "Click", this.formInfo, index);
 		},
-		close() {
-			this.$emit("close");
+		close(index) {
+			let action = "cancel";
+			if (index != -1) {
+				action = this.buttons[index].action + "Click";
+			}
+			this.$emit("close", action);
 		},
-		submit() {}
+		submit(index) {
+			this.$refs[this.formAttributes.ref].validate(valid => {
+				if (!valid) {
+					return false;
+				}
+				if (this.isSubmiting) {
+					this.$message({
+						message: "当前数据正在提交，请耐心等待!",
+						type: "warning"
+					});
+					return;
+				}
+				this.submitForm().then(() => {
+					this.close(index);
+				});
+			});
+		}
 	}
 };
 </script>
