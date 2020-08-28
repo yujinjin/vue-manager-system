@@ -46,7 +46,7 @@
 						<div class="avatar-box">
 							<img src="../../imgs/test/head.png" height="24" width="24" />
 						</div>
-						<div class="user-name-text">{{ userInfo.name }}</div>
+						<div class="user-name-text">{{ userInfoDialogForm.fields[0].value }}</div>
 						<i class="el-icon-arrow-down el-icon--right"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
@@ -67,108 +67,119 @@
 			</div>
 		</div>
 		<!-- 用户信息 -->
-		<el-dialog title="我的账户" :visible="isShowUserInfo" @close="isShowUserInfo = !isShowUserInfo">
-			<el-form label-width="200px" :model="userInfo">
-				<el-form-item label="登录名：">
-					<strong>admin</strong>
-				</el-form-item>
-				<el-form-item
-					label="姓名："
-					prop="name"
-					:rules="[
-						{ required: true, message: '姓名不能为空' },
-						{ min: 2, max: 25, message: '长度在 2 到 25 个字符', trigger: 'blur' }
-					]"
-				>
-					<el-input style="width: 250px;" v-model="userInfo.name"></el-input>
-				</el-form-item>
-				<el-form-item
-					label="邮箱："
-					prop="emailAddress"
-					:rules="[
-						{ required: true, message: '邮箱不能为空' },
-						{ min: 6, max: 35, message: '长度在 6 到35 个字符', trigger: 'blur' },
-						{ type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
-					]"
-				>
-					<el-input style="width: 250px;" v-model="userInfo.emailAddress" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="头像：">
-					<!-- <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess">
-						<img v-if="userInfo.headImgURL" :src="userInfo.headImgURL" class="avatar" />
-						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-					</el-upload> -->
-					<img-upload :uploadAttributes="imgUpload" :cropp="true" v-model="userInfo.headImgURL">
-						<img v-if="userInfo.headImgURL" :src="userInfo.headImgURL" class="avatar" />
-						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-					</img-upload>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="isShowUserInfo = false">取 消</el-button>
-				<el-button type="primary" @click="isShowUserInfo = false">确 定</el-button>
-			</div>
-		</el-dialog>
+		<dialog-form v-bind="userInfoDialogForm" @close="userInfoDialogForm.isShow = false">
+			<template v-slot:headImg="{ formInput }">
+				<img-upload :uploadAttributes="imgUpload" :cropp="true" v-model="formInput.headImgURL">
+					<img v-if="formInput.headImgURL" :src="formInput.headImgURL" class="avatar" />
+					<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+				</img-upload>
+			</template>
+		</dialog-form>
 
 		<!-- 修改密码 -->
-		<el-dialog title="修改密码" :visible="isShowPassword" @close="isShowUserInfo = !isShowUserInfo">
-			<el-form :rules="passwordRules" :model="passwordInfo" ref="passwordInfoForm" label-width="200px">
-				<el-form-item label="原密码：" prop="password" :rules="[{ required: true, message: '密码不能为空' }]">
-					<el-input style="width: 250px;" type="password" v-model="passwordInfo.password" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item
-					label="新密码："
-					prop="newPassword"
-					:rules="[
-						{ required: true, message: '新密码不能为空' },
-						{ min: 6, max: 20, message: '长度在 6 到20 个字符', trigger: 'blur' }
-					]"
-				>
-					<el-input style="width: 250px;" type="password" v-model="passwordInfo.newPassword" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="确认新密码：" prop="confirmPassword" :required="true">
-					<el-input style="width: 250px;" type="password" v-model="passwordInfo.confirmPassword" auto-complete="off"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="isShowPassword = false">取 消</el-button>
-				<el-button type="primary" @click="isShowPassword = false">确 定</el-button>
-			</div>
-		</el-dialog>
+		<dialog-form v-bind="updatePasswordDialogForm" @close="updatePasswordDialogForm.isShow = false" @input-change="passwordInfoForm = arguments[0]"></dialog-form>
 	</div>
 </template>
 <script>
 export default {
 	data() {
 		return {
-			isShowUserInfo: false,
-			isShowPassword: false,
-			userInfo: {
-				name: null,
-				headImgURL: null,
-				emailAddress: null
-			},
-			passwordInfo: {
+			// 用户信息弹窗
+			userInfoDialogForm: {
+				dialog: {
+					title: "我的账户"
+				},
 				isShow: false,
-				password: "", //旧密码
-				newPassword: "", // 新密码
-				confirmPassword: "" // 确认密码
-			},
-			passwordRules: {
-				confirmPassword: [
+				submitForm: this.updateUserInfo,
+				fields: [
 					{
-						validator(rule, value, callback) {
-							if (value === "") {
-								callback(new Error("请输入原密码"));
-							} else if (value.length < 6 || value.length > 20) {
-								callback(new Error("长度在 6 到20 个字符"));
-							} else if (value !== _this.passwordInfo.newPassword) {
-								callback(new Error("两次输入密码不一致!"));
-							} else {
-								callback();
+						name: "userName",
+						value: null,
+						type: "label",
+						label: "登录名"
+					},
+					{
+						name: "name",
+						value: null,
+						label: "登录名",
+						rules: [
+							{ required: true, message: "姓名不能为空" },
+							{ min: 2, max: 25, message: "长度在 2 到 25 个字符", trigger: "blur" }
+						],
+						option: {
+							style: { width: "250px" }
+						}
+					},
+					{
+						name: "emailAddress",
+						value: null,
+						label: "邮箱",
+						rules: [
+							{ required: true, message: "邮箱不能为空" },
+							{ min: 6, max: 35, message: "长度在 6 到35 个字符", trigger: "blur" },
+							{ type: "email", message: "请输入正确的邮箱地址", trigger: "blur,change" }
+						],
+						option: {
+							style: { width: "250px" }
+						}
+					},
+					{
+						name: "headImgURL",
+						slot: "headImg",
+						label: "头像"
+					}
+				]
+			},
+			passwordInfoForm: null,
+			// 修改密码弹窗
+			updatePasswordDialogForm: {
+				dialog: {
+					title: "修改我的登录密码"
+				},
+				isShow: false,
+				form: {
+					rules: {
+						confirmPassword: [
+							{ required: true, message: "请确认新密码" },
+							{
+								validator: this.confirmPasswordValidator,
+								trigger: "blur"
 							}
-						},
-						trigger: "blur"
+						]
+					}
+				},
+				submitForm: this.updatePassword,
+				fields: [
+					{
+						name: "password",
+						value: "",
+						label: "原密码",
+						rules: [{ required: true, message: "密码不能为空" }],
+						option: {
+							type: "password"
+						}
+					},
+					{
+						name: "newPassword",
+						value: "",
+						label: "新密码",
+						rules: [
+							{ required: true, message: "新密码不能为空" },
+							{ min: 6, max: 20, message: "长度在 6 到20 个字符", trigger: "blur" }
+						],
+						option: {
+							type: "password",
+							style: { width: "250px" }
+						}
+					},
+					{
+						name: "confirmPassword",
+						value: "",
+						label: "确认新密码",
+						option: {
+							type: "password",
+							style: { width: "250px" }
+						}
 					}
 				]
 			},
@@ -180,8 +191,9 @@ export default {
 		};
 	},
 	created() {
-		this.userInfo.name = this.$store.state.data.locationInfo.loginUserInfo.name;
-		this.userInfo.headImgURL = this.$store.state.data.locationInfo.loginUserInfo.headImgURL || require("../../imgs/test/head.png");
+		this.userInfoDialogForm.fields[0].value = "admin";
+		this.userInfoDialogForm.fields[1].value = this.$store.state.data.locationInfo.loginUserInfo.name;
+		this.userInfoDialogForm.fields[3].value = this.$store.state.data.locationInfo.loginUserInfo.headImgURL || require("../../imgs/test/head.png");
 	},
 	methods: {
 		// 下拉菜单事件处理
@@ -191,13 +203,39 @@ export default {
 				site.globalService.logOut();
 				this.$router.push({ name: "login" });
 			} else if (command === "showUserInfoDialog") {
-				this.isShowUserInfo = true;
+				this.userInfoDialogForm.isShow = true;
 			} else if (command === "showUpdateInfoDialog") {
-				this.isShowPassword = true;
+				this.updatePasswordDialogForm.isShow = true;
 			}
 		},
 		handleAvatarSuccess(res, file) {
 			this.userInfo.headImgURL = URL.createObjectURL(file.raw);
+		},
+		// 确认密码验证
+		confirmPasswordValidator(rule, value, callback) {
+			if (value === "") {
+				callback(new Error("请输入原密码"));
+			} else if (value.length < 6 || value.length > 20) {
+				callback(new Error("长度在 6 到20 个字符"));
+			} else if (value !== this.passwordInfoForm.newPassword) {
+				callback(new Error("两次输入密码不一致!"));
+			} else {
+				callback();
+			}
+		},
+		// 修改用户信息
+		updateUserInfo(formInput) {
+			return new Promise((resolve, reject) => {
+				console.info(formInput);
+				resolve(true);
+			});
+		},
+		// 信息当前登录用户的密码
+		updatePassword(formInput) {
+			return new Promise((resolve, reject) => {
+				console.info(formInput);
+				resolve(true);
+			});
 		}
 	}
 };
@@ -274,6 +312,7 @@ export default {
 				.user-name-text,
 				.role-name-text {
 					padding: 0px 5px;
+					line-height: 24px;
 				}
 
 				.el-icon-arrow-down {

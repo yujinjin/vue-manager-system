@@ -47,8 +47,7 @@ export default {
 	},
 	// 表单默认属性
 	FORM_DEFAULT_ATTRIBUTES: {
-		model: "formInput",
-		labelWidth: "80px",
+		labelWidth: "200px",
 		size: "small",
 		ref: "formInput"
 	},

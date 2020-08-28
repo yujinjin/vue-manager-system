@@ -9,10 +9,12 @@ import svgIcon from "./icons";
 import searchForm from "./views/search-form";
 import actionBar from "./views/action-bar";
 import imgUpload from "./views/img-upload";
+import dialogForm from "./views/dialog-form";
 
 export default function() {
 	Vue.component("svg-icon", svgIcon);
 	Vue.component("search-form", searchForm);
 	Vue.component("action-bar", actionBar);
 	Vue.component("img-upload", imgUpload);
+	Vue.component("dialog-form", dialogForm);
 }

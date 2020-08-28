@@ -2,17 +2,17 @@
 	<!-- 
         弹窗form表单封装
     -->
-	<el-dialog v-bind="dialogDefaultAttributes" :visible.sync="isShow" @close="close(-1)">
-		<el-form v-bind="formAttributes">
+	<el-dialog v-bind="dialogAttributes" :visible="isShow" @close="close(-1)">
+		<el-form v-bind="formAttributes" :model="formInput">
 			<el-row :gutter="10" class="input-row" v-for="(groupItem, index) in groupFields" :key="index">
 				<el-col class="field-box" :span="fieldItem.span" v-for="(fieldItem, i) in groupItem" :key="i">
-					<el-form-item label="fieldItem.label" :prop="fieldItem.name" :rules="fieldItem.rules">
+					<el-form-item :label="fieldItem.label" :prop="fieldItem.name + ''" :rules="fieldItem.rules">
 						<!-- 自定义组件 -->
 						<template v-if="fieldItem.slot">
-							<slot :name="fieldItem.slot" v-bind:formInput="{ formInput }"></slot>
+							<slot :name="fieldItem.slot" v-bind:formInput="formInput"></slot>
 						</template>
 						<template v-else-if="fieldItem.type == 'label'">
-							{{ getValue(fieldItem.name) }}
+							<strong>{{ getValue(fieldItem.name) }}</strong>
 						</template>
 						<template v-else-if="fieldItem.type == 'input'">
 							<el-input v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-input>
@@ -67,8 +67,8 @@
 		<!-- 表单底部默认内容 -->
 		<slot name="form-bottom"></slot>
 		<!-- Dialog 按钮操作区的内容 -->
-		<div slot="footer" class="dialog-footer" v-if="buttons && buttons.length > 0">
-			<el-button v-for="(buttonItem, index) in buttons" :key="index" @click="clickHandle(index)">{{ buttonItem.label }}</el-button>
+		<div slot="footer" class="dialog-footer" v-if="actionButtons && actionButtons.length > 0">
+			<el-button v-for="(buttonItem, index) in actionButtons" v-bind="buttonItem.option" :key="index" @click="clickHandle(index)">{{ buttonItem.label }}</el-button>
 		</div>
 	</el-dialog>
 </template>
@@ -80,7 +80,8 @@ export default {
 			formAttributes: {}, // 当前form表单属性
 			isSubmiting: false, // 当前数据是否正在提交
 			formFields: [], // 表单字段列表
-			formInput: {} // 当前提交的表单数据
+			formInput: {}, // 当前提交的表单数据
+			actionButtons: [] // 弹窗底部操作按钮
 		};
 	},
 	props: {
@@ -100,27 +101,7 @@ export default {
 		// 针对于按钮的点击事件父级事件，其事件名格式：{action} + 'Click'
 		buttons: {
 			type: [Boolean, Array],
-			default() {
-				return [
-					{
-						label: "取 消",
-						action: "cancel",
-						click: this.close,
-						option: {
-							size: "small"
-						}
-					},
-					{
-						label: "确 定",
-						action: "submit",
-						click: this.submit,
-						option: {
-							size: "small",
-							type: "primary"
-						}
-					}
-				];
-			}
+			default: true
 		},
 		// 表单字段列表[{name: 表单项名称, label: 选项的标签名称, value: 选项的值, type: 组件的类型,
 		// data: 数据（比如：select的选项值列表）, option: 组件的自定义选项(可无), span: 占用的栅格数（布局）
@@ -164,6 +145,12 @@ export default {
 				this.generateFormAttributes();
 			},
 			deep: true
+		},
+		buttons: {
+			handler(val) {
+				this.generateButtons();
+			},
+			deep: true
 		}
 	},
 	computed: {
@@ -189,14 +176,18 @@ export default {
 				}
 				groupFields[i].push(fields);
 			});
-			return groupFilters;
+			return groupFields;
 		}
+	},
+	mounted() {
+		this.init();
 	},
 	methods: {
 		init() {
 			this.generateDialogAttributes();
 			this.generateFormAttributes();
 			this.generateFormFields();
+			this.generateButtons();
 		},
 		// 生成dialog属性配置
 		generateDialogAttributes() {
@@ -232,11 +223,11 @@ export default {
 						if (!field.option.placeholder) {
 							field.option.placeholder = site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type].placeholder + (field.label || "");
 						}
-						if (field.label) {
-							field.label = field.label + "：";
-						}
 						field.option = site.utils.extend(true, {}, site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type], field.option || {});
 					}
+				}
+				if (field.label) {
+					field.label = field.label + "：";
 				}
 				if (!field.span) {
 					// 计算当前字段所占的栅格数
@@ -246,6 +237,33 @@ export default {
 			});
 			this.formFields = formFields;
 		},
+		generateButtons() {
+			if (this.buttons == null || this.buttons == true || this.buttons === undefined) {
+				this.actionButtons = [
+					{
+						label: "取 消",
+						action: "cancel",
+						click: this.close,
+						option: {
+							size: "small"
+						}
+					},
+					{
+						label: "确 定",
+						action: "submit",
+						click: this.submit,
+						option: {
+							size: "small",
+							type: "primary"
+						}
+					}
+				];
+			} else if (this.buttons !== false && this.buttons.length > 0) {
+				this.actionButtons = site.utils.extend(true, {}, this.buttons);
+			} else {
+				this.actionButtons = [];
+			}
+		},
 		// 获取当前字段的值
 		getValue(name) {
 			return site.utils.getObjectProperty(this.formInput, name, null);
@@ -253,17 +271,18 @@ export default {
 		// 更改当前字段的值
 		changeValue(name, value) {
 			this.$set(this.formInput, name, value);
+			this.$emit("input-change", this.formInput);
 		},
 		clickHandle(index) {
-			if (typeof this.buttons[index].click === "function") {
-				this.buttons[index].click(index);
+			if (typeof this.actionButtons[index].click === "function") {
+				this.actionButtons[index].click(index);
 			}
-			this.$emit(this.buttons[index].action + "Click", this.formInfo, index);
+			this.$emit(this.actionButtons[index].action + "Click", this.formInfo, index);
 		},
 		close(index) {
 			let action = "cancel";
 			if (index != -1) {
-				action = this.buttons[index].action + "Click";
+				action = this.actionButtons[index].action + "Click";
 			}
 			this.$emit("close", action);
 		},
@@ -279,9 +298,15 @@ export default {
 					});
 					return;
 				}
-				this.submitForm().then(() => {
-					this.close(index);
-				});
+				this.isSubmiting = true;
+				this.submitForm(this.formInput)
+					.then(() => {
+						this.close(index);
+						this.isSubmiting = false;
+					})
+					.catch(error => {
+						this.isSubmiting = false;
+					});
 			});
 		}
 	}
