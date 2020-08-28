@@ -2,9 +2,9 @@
 	<!--
         说明：列表操作栏，超出一行默认隐藏
     -->
-	<div class="action-bar" v-if="buttons && buttons.length > 0" ref="action-bar">
-		<div class="button-list" :class="{ more: isShowMore }" @resize="test">
-			<div v-for="(buttonItem, index) in buttons" :key="index" class="button-box" v-show="startHideButtonIndex == -1 || isShowMore || index <= startHideButtonIndex">
+	<div class="action-bar" v-if="actionButtons && actionButtons.length > 0" ref="action-bar">
+		<div class="button-list" :class="{ more: isShowMore }">
+			<div v-for="(buttonItem, index) in actionButtons" :key="index" class="button-box" v-show="startHideButtonIndex == -1 || isShowMore || index <= startHideButtonIndex">
 				<template v-if="buttonItem.slot">
 					<!-- 自定义组件 -->
 					<slot :name="buttonItem.slot"></slot>
@@ -21,16 +21,13 @@
 export default {
 	data() {
 		return {
-			defaultAttribute: {
-				size: "small"
-			}, // 按钮默认属性
-			buttons: [], // 按钮列表
+			actionButtons: [], // 按钮列表
 			isShowMore: false, // 是否显示更多操作按钮
 			startHideButtonIndex: -1 // 开始隐藏按钮的起始位置
 		};
 	},
 	props: {
-		actionButtons: {
+		buttons: {
 			type: Array,
 			default() {
 				return [];
@@ -41,7 +38,7 @@ export default {
 		this.init();
 	},
 	watch: {
-		actionButtons(val) {
+		buttons(val) {
 			this.generateButtons();
 		}
 	},
@@ -50,18 +47,22 @@ export default {
 			this.generateButtons();
 		},
 		generateButtons() {
-			if (!this.actionButtons || this.actionButtons.length == 0) {
+			if (!this.buttons || this.buttons.length == 0) {
 				return;
 			}
-			let buttons = [];
-			this.actionButtons.forEach(buttonItem => {
+			let actionButtons = [];
+			this.buttons.forEach(buttonItem => {
 				if (!this.isShowButtonByPermission(buttonItem.permission)) {
 					return;
 				}
-				buttonItem = site.utils.extend(true, {}, { option: this.defaultAttribute }, buttonItem);
-				buttons.push(buttonItem);
+				buttonItem = site.utils.extend(true, {}, { option: site.constants.ACTION_BAR_BUTTON_DEFAULT_ATTRIBUTES }, buttonItem);
+				actionButtons.push(buttonItem);
 			});
-			this.buttons = buttons;
+			// 如果第一个按钮没有设置type，就默认设置为primary
+			if (!actionButtons[0].option.type) {
+				actionButtons[0].option.type = "primary";
+			}
+			this.actionButtons = actionButtons;
 			this.$nextTick(this.calculationButtons);
 		},
 		isShowButtonByPermission(permission) {
@@ -90,13 +91,10 @@ export default {
 			});
 		},
 		clickHandle(i) {
-			if (typeof this.buttons[i].click == "function") {
-				this.buttons[i].click();
+			if (typeof this.actionButtons[i].click == "function") {
+				this.actionButtons[i].click();
 			}
-			this.$emit("click", this.buttons[i].action);
-		},
-		test(){
-			console.info("..............")
+			this.$emit("click", this.actionButtons[i].action);
 		}
 	}
 };

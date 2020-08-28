@@ -16,7 +16,7 @@
             时间：2019-01-21
             描述：列表操作栏
         -->
-		<action-bar :actionButtons="handleButtons" @click="handleButton"></action-bar>
+		<action-bar :buttons="handleButtons" @click="handleButton"></action-bar>
 
 		<!--
             作者：yujinjin9@126.com
@@ -43,13 +43,7 @@ export default {
 				{
 					action: "add",
 					label: "新增",
-					click: this.add,
-					option: {
-						type: "primary"
-					}
-				},
-				{
-					slot: "other"
+					click: this.add
 				}
 			]
 		};
