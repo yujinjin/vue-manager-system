@@ -1,6 +1,6 @@
 <template>
 	<div class="img-upload">
-		<el-upload v-bind="upload">
+		<el-upload v-bind="uploadAttributes">
 			<slot>
 				<el-button size="small" type="primary">点击上传</el-button>
 				<div slot="tip" class="el-upload__tip">{{ tipsText }}</div>
@@ -32,7 +32,7 @@ import "cropperjs/dist/cropper.css";
 export default {
 	data() {
 		return {
-			upload: {
+			uploadAttributes: {
 				action: config.uploadImgServer, // 图片上传地址
 				fileList: [], // 文件列表
 				httpRequest: this.imgUpload,
@@ -53,7 +53,7 @@ export default {
 	},
 	props: {
 		// element上传组件的属性
-		uploadAttributes: Object,
+		upload: Object,
 		value: [String, Array],
 		imgMaxSize: {
 			type: Number,
@@ -65,7 +65,7 @@ export default {
 		} // 图片裁剪的配置选项，具体见（cropperjs文档）, 如果需要裁剪一次只能上传一张图片
 	},
 	watch: {
-		uploadAttributes(val) {
+		upload(val) {
 			this.generateUploadAttributes();
 		},
 		value(val) {
@@ -91,24 +91,24 @@ export default {
 			this.generateImgList();
 		},
 		generateUploadAttributes() {
-			site.utils.extend(true, this.upload, this.uploadAttributes);
+			site.utils.extend(true, this.uploadAttributes, this.upload);
 			if (this.cropp) {
 				// 如果当前图片需要剪切，那就一次只能上传一张图
-				this.upload.multiple = false;
+				this.uploadAttributes.multiple = false;
 				// 选取文件后不能立即进行上传，要先剪切
-				this.upload.autoUpload = false;
+				this.uploadAttributes.autoUpload = false;
 			}
-			if (this.upload.limit === 1) {
+			if (this.uploadAttributes.limit === 1) {
 				// 由于element的upload上传组件如果超过限制什么提示都没有，这里做一下稍稍的优化，新上传的文件去替换老的
-				this.upload.limit = 2;
-				this.upload.multiple = false;
+				this.uploadAttributes.limit = 2;
+				this.uploadAttributes.multiple = false;
 				this.isSingle = true;
 			}
 		},
 		// 图片转换成文件列表
 		generateImgList() {
 			if (!this.value) {
-				this.upload.fileList = [];
+				this.uploadAttributes.fileList = [];
 				return;
 			}
 			if (typeof this.value == "string") {
@@ -121,7 +121,7 @@ export default {
 						relativeUrl: img
 					});
 				});
-				this.upload.fileList = imgList;
+				this.uploadAttributes.fileList = imgList;
 			}
 		},
 		onImgChange(file, fileList) {
@@ -174,7 +174,7 @@ export default {
 			return site.api.common.imageUpload({ file }, { isShowLoading: true }).then(response => {
 				let img = response.data.imgUrl;
 				if (this.isSingle) {
-					this.upload.fileList = [
+					this.uploadAttributes.fileList = [
 						{
 							name: site.utils.parseUrl(img).file,
 							url: site.utils.perfectImageUrl(img),
@@ -182,7 +182,7 @@ export default {
 						}
 					];
 				} else {
-					this.upload.fileList.push({
+					this.uploadAttributes.fileList.push({
 						name: site.utils.parseUrl(img).file,
 						url: site.utils.perfectImageUrl(img),
 						relativeUrl: img
@@ -191,7 +191,7 @@ export default {
 			});
 		},
 		removeImg(file, fileList) {
-			console.info(this.upload.filelist);
+			console.info(this.uploadAttributes.filelist);
 			this.uploadImgChange();
 		},
 		uploadImgChange() {
@@ -199,14 +199,14 @@ export default {
 			if (typeof this.value == "string" || this.value === undefined || this.value === null) {
 				this.$emit(
 					"input",
-					this.upload.fileList
+					this.uploadAttributes.fileList
 						.map(function(item, index) {
 							return item.relativeUrl;
 						})
 						.join("|")
 				);
 			} else {
-				this.$emit("input", this.upload.filelist);
+				this.$emit("input", this.uploadAttributes.filelist);
 			}
 		},
 		// 开始显示裁剪图片的弹窗

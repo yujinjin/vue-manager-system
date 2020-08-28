@@ -69,7 +69,7 @@
 		<!-- 用户信息 -->
 		<dialog-form v-bind="userInfoDialogForm" @close="userInfoDialogForm.isShow = false">
 			<template v-slot:headImg="{ formInput }">
-				<img-upload :uploadAttributes="imgUpload" :cropp="true" v-model="formInput.headImgURL">
+				<img-upload :upload="imgUpload" :cropp="true" v-model="formInput.headImgURL">
 					<img v-if="formInput.headImgURL" :src="formInput.headImgURL" class="avatar" />
 					<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 				</img-upload>
