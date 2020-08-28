@@ -10,7 +10,7 @@
             时间：2019-01-21
             描述：列表过滤栏
         -->
-		<search-form :searchForm="searchForm" @search="queryList" @change="filterChange"></search-form>
+		<search-form :fields="fields" @search="queryList" @change="filterChange"></search-form>
 		<!--
             作者：yujinjin9@126.com
             时间：2019-01-21
@@ -30,7 +30,7 @@
 export default {
 	data() {
 		return {
-			searchForm: [
+			fields: [
 				{
 					name: "filter",
 					label: "系统用户"

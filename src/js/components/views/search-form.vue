@@ -4,9 +4,9 @@
         时间：2020-08-20
         描述：查询搜索表单
     -->
-	<div class="search-panel" v-if="groupFilters.length > 0">
+	<div class="search-panel" v-if="groupFields.length > 0">
 		<div class="search-form">
-			<el-row :gutter="10" class="search-row" v-for="(groupItem, index) in groupFilters" :key="index" v-show="index == 0 || isShowMore">
+			<el-row :gutter="10" class="search-row" v-for="(groupItem, index) in groupFields" :key="index" v-show="index == 0 || isShowMore">
 				<el-col class="field-box" :span="6" v-for="(filter, i) in groupItem" :key="i">
 					<div class="label-text" v-if="filter.label">{{ filter.label }}</div>
 					<div class="input-box">
@@ -37,7 +37,7 @@
 		</div>
 		<div class="button-box" v-if="!isInsideForButton">
 			<el-button size="small" @click="search" type="primary" icon="el-icon-search">查询</el-button>
-			<el-button size="small" v-if="groupFilters.length > 1" icon="el-icon-more" @click="isShowMore = !isShowMore">{{ isShowMore ? "隐藏" : "更多" }}</el-button>
+			<el-button size="small" v-if="groupFields.length > 1" icon="el-icon-more" @click="isShowMore = !isShowMore">{{ isShowMore ? "隐藏" : "更多" }}</el-button>
 		</div>
 	</div>
 </template>
@@ -46,44 +46,16 @@ export default {
 	data() {
 		return {
 			formFields: [], // form表单选项
-			isShowMore: false, // 是否显示更多选项
-			components: {
-				input: {
-					size: "small",
-					placeholder: "请输入"
-				}, // input 输入框默认配置选项(具体见element Input 输入框文档)
-				select: {
-					clearable: true,
-					size: "small",
-					placeholder: "请选择"
-				}, // select 选择器默认配置选项（具体见element Select 选择器文档）
-				timeSelect: {
-					clearable: true,
-					size: "small",
-					placeholder: "请选择"
-				}, // TimePicker 时间选择器默认配置（具体见TimePicker 时间选择器文档）
-				datePicker: {
-					clearable: true,
-					size: "small",
-					placeholder: "请选择",
-					type: "date"
-				}, // DatePicker 日期选择器默认配置（具体见DatePicker 日期选择器文档）
-				dateTimePicker: {
-					clearable: true,
-					size: "small",
-					placeholder: "请选择",
-					type: "datetime"
-				} // DateTimePicker 日期时间选择器（具体见DateTimePicker 日期时间文档）
-			} // 查询表单所支持的组件默认配置
+			isShowMore: false // 是否显示更多选项
 		};
 	},
 	props: {
-		searchForm: {
+		fields: {
 			type: Array,
 			default() {
 				return [];
 			}
-		}, // 查询表单项 [{name: 查询项的名称，同时也是父级组件的字段属性, label: 选项的标签名称, value: 选项的值, type: 组件的类型, data: 数据（比如：select的选项值列表）, option: 组件的自定义选项(可无), slot: 自定义插槽名称（可无，如有值其他选项无效）}]
+		}, // 查询表单字段列表 [{name: 查询项的名称，同时也是父级组件的字段属性, label: 选项的标签名称, value: 选项的值, type: 组件的类型, data: 数据（比如：select的选项值列表）, option: 组件的自定义选项(可无), slot: 自定义插槽名称（可无，如有值其他选项无效）}]
 		filterProperty: {
 			type: [Boolean, String],
 			default() {
@@ -92,7 +64,7 @@ export default {
 		} // 过滤器字段的属性值，用于双向绑定表单字段的值
 	},
 	watch: {
-		searchForm: {
+		fields: {
 			handler(val) {
 				this.generateFormFields();
 			},
@@ -101,21 +73,21 @@ export default {
 	},
 	computed: {
 		// 把formFields分成4个一组的二维数组，便于嵌套循环
-		groupFilters() {
-			let groupFilters = [];
-			this.formFields.forEach((filter, index) => {
+		groupFields() {
+			let groupFields = [];
+			this.formFields.forEach((field, index) => {
 				let i = parseInt(index / 4, 10);
-				if (!groupFilters[i]) {
-					groupFilters[i] = [];
+				if (!groupFields[i]) {
+					groupFields[i] = [];
 				}
-				groupFilters[i].push(filter);
+				groupFields[i].push(field);
 			});
-			return groupFilters;
+			return groupFields;
 		},
 		// 查询按钮是否在布局内展示（如果直接放在布局内展示24栅格，它得占4个空间，这样就占的太多了。
 		// 当查询项少于4个的时候操作按钮会放在最后面，显得太难看这样得放在栅格里面）
 		isInsideForButton() {
-			return this.searchForm.length < 3;
+			return this.fields.length < 3;
 		},
 		// 计算过滤器字段的属性值转换成String
 		filterPropertyString() {
@@ -139,12 +111,12 @@ export default {
 			this.generateFormFields();
 		},
 		generateFormFields() {
-			if (!this.searchForm || this.searchForm.length == 0) {
+			if (!this.fields || this.fields.length == 0) {
 				this.formFields = [];
 				return;
 			}
 			let formFields = [];
-			this.searchForm.forEach(filter => {
+			this.fields.forEach(filter => {
 				// 深拷贝过滤选项
 				filter = site.utils.extend(true, {}, filter);
 				if (!filter.slot) {
@@ -152,17 +124,17 @@ export default {
 						// 默认输入框
 						filter.type = "input";
 					}
-					if (this.components[filter.type]) {
+					if (site.constants.SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[filter.type]) {
 						if (!filter.option) {
 							filter.option = {};
 						}
 						if (!filter.option.placeholder) {
-							filter.option.placeholder = this.components[filter.type].placeholder + (filter.label || "");
+							filter.option.placeholder = site.constants.SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[filter.type].placeholder + (filter.label || "");
 						}
 						if (filter.label) {
 							filter.label = filter.label + "：";
 						}
-						filter.option = site.utils.extend(true, {}, this.components[filter.type], filter.option || {});
+						filter.option = site.utils.extend(true, {}, site.constants.SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[filter.type], filter.option || {});
 					}
 					if (!Object.prototype.hasOwnProperty.call(filter, "value")) {
 						filter.value = null;
