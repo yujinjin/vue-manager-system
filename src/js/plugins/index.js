@@ -4,11 +4,13 @@
  * 描述：系统自定义插件入口
  */
 
-// import Vue from "vue";
+import Vue from "vue";
 // import toastr from "./toastr";
 import loading from "./loading";
+import player from "./player";
 
 export default function() {
 	// Vue.use(toastr);
 	loading();
+	Vue.use(player());
 }

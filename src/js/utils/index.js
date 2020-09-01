@@ -221,16 +221,24 @@ export default {
 	},
 
 	//动态加载JS
-	loadScript(url, id, callback) {
-		//如果URL不存在或者该ID已经加载过了
-		if (!url || document.getElementById(id)) return;
-		let script = document.createElement("script");
-		script.type = "text/javascript";
-		if (id) script.id = id;
-		if (typeof callback == "function") {
+	loadScript(url, id) {
+		return new Promise((resolve, reject) => {
+			//如果URL不存在或者该ID不存在
+			if (!url || id) {
+				reject("加载的JS 地址或者ID不能为空!");
+				return;
+			}
+			if (document.getElementById(id)) {
+				// 如果当前JS已经加载过
+				resolve(true);
+				return;
+			}
+			let script = document.createElement("script");
+			script.type = "text/javascript";
+			script.id = id;
 			//默认10S超时就立即执行回调函数
 			let timer = setTimeout(function() {
-				callback(false);
+				reject("JS加载超时!");
 				timer = null;
 			}, 10000);
 			if (script.readyState) {
@@ -239,7 +247,7 @@ export default {
 						script.onreadystatechange = null;
 						if (timer) {
 							clearTimeout(timer);
-							callback(true);
+							resolve(true);
 						}
 					}
 				};
@@ -247,13 +255,13 @@ export default {
 				script.onload = function() {
 					if (timer) {
 						clearTimeout(timer);
-						callback(true);
+						resolve(true);
 					}
 				};
 			}
-		}
-		script.src = url;
-		document.body.appendChild(script);
+			script.src = url;
+			document.body.appendChild(script);
+		});
 	},
 
 	// 验证手机号

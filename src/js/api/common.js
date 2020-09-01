@@ -27,6 +27,26 @@ export default {
 		);
 	},
 
+	// 获取视频上传权限
+	getAuthForVideoUpload(inputData, ajaxOptions) {
+		// api/services/app/video/CreateUploadVideo
+		return site.ajax(
+			Object.assign(
+				{
+					url: "https://healthapiuat.betterhealth.cn/api/app/video/createUploadVideo",
+					method: "POST",
+					data: inputData
+				},
+				ajaxOptions || {}
+			)
+		);
+		// return new Promise(resolve => {
+		// 	setTimeout(() => {
+		// 		resolve();
+		// 	}, 500);
+		// });
+	},
+
 	sendValidateCode(ajaxOptions) {
 		return new Promise(resolve => {
 			setTimeout(() => {

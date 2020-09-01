@@ -9,6 +9,7 @@ import svgIcon from "./icons";
 import searchForm from "./views/search-form";
 import actionBar from "./views/action-bar";
 import imgUpload from "./views/img-upload";
+import videoUpload from "./views/video-upload";
 import dialogForm from "./views/dialog-form";
 
 export default function() {
@@ -16,5 +17,6 @@ export default function() {
 	Vue.component("search-form", searchForm);
 	Vue.component("action-bar", actionBar);
 	Vue.component("img-upload", imgUpload);
+	Vue.component("video-upload", videoUpload);
 	Vue.component("dialog-form", dialogForm);
 }

@@ -43,10 +43,10 @@ module.exports = {
 		config.plugins.delete("preload-index");
 		config.plugins.delete("prefetch-index");
 
-		// config.module
-		// 	.rule("js")
-		// 	.include.add(/node_modules/)
-		// 	.end();
+		config.module
+			.rule("js")
+			.exclude.add(resolve("src/js/lib/aliyun"))
+			.end();
 
 		config.module
 			.rule("svg")
