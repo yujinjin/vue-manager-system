@@ -23,13 +23,16 @@
             时间：2019-01-21
             描述：数据列表栏
         -->
-		<div class="data-table-box">3</div>
+		<div class="data-table-box">
+			<video-upload :fileList="fileList" :limit="3" @on-change="change"></video-upload>
+		</div>
 	</div>
 </template>
 <script>
 export default {
 	data() {
 		return {
+			fileList: [],
 			fields: [
 				{
 					name: "filter",
@@ -63,6 +66,9 @@ export default {
 		},
 		handleButton(action) {
 			console.info(action);
+		},
+		change(fileList) {
+			console.info(fileList);
 		}
 	}
 };

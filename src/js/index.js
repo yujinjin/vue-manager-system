@@ -1,4 +1,5 @@
 import "@style/less/site.less";
+import "@style/css/icomoon.css";
 import "@style/scss/element-variables.scss";
 import "element-ui/lib/theme-chalk/index.css";
 import Vue from "vue";

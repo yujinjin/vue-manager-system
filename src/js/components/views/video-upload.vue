@@ -20,8 +20,8 @@
 	</div>
 </template>
 <script>
-import OSS from "@js/lib/aliyun/aliyun-oss-sdk-5.3.1.min";
-import "@js/lib/aliyun/aliyun-upload-sdk-1.5.0.min.js";
+// import OSS from "@js/lib/aliyun/aliyun-oss-sdk-5.3.1.min";
+// import "@js/lib/aliyun/aliyun-upload-sdk-1.5.0.min.js";
 
 export default {
 	data() {
@@ -87,11 +87,17 @@ export default {
 			} else {
 				this.isSingle = true;
 			}
-			this.initSDK();
+			if (window.OSS) {
+				this.initSDK();
+			} else {
+				require(["@js/lib/aliyun/aliyun-oss-sdk-5.3.1.min", "@js/lib/aliyun/aliyun-upload-sdk-1.5.0.min.js"], OSS => {
+					window.OSS = OSS;
+					this.initSDK();
+				});
+			}
 			this.generateFileList();
 		},
 		initSDK() {
-			window.OSS = OSS;
 			this.uploaderInstance = new AliyunUpload.Vod({
 				// 上传到点播的地域， 默认值为'cn-shanghai',//eu-central-1,ap-southeast-1
 				region: "cn-shanghai",

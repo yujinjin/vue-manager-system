@@ -11,6 +11,7 @@ import actionBar from "./views/action-bar";
 import imgUpload from "./views/img-upload";
 import videoUpload from "./views/video-upload";
 import dialogForm from "./views/dialog-form";
+import webEditor from "./views/web-editor";
 
 export default function() {
 	Vue.component("svg-icon", svgIcon);
@@ -19,4 +20,5 @@ export default function() {
 	Vue.component("img-upload", imgUpload);
 	Vue.component("video-upload", videoUpload);
 	Vue.component("dialog-form", dialogForm);
+	Vue.component("web-editor", webEditor);
 }

@@ -170,7 +170,7 @@ export default {
 				});
 			}
 		},
-		imageUploadApi(file) {
+		imageUploadApi({ file }) {
 			return site.api.common.imageUpload({ file }, { isShowLoading: true }).then(response => {
 				let img = response.data.imgUrl;
 				if (this.isSingle) {
@@ -191,7 +191,6 @@ export default {
 			});
 		},
 		removeImg(file, fileList) {
-			console.info(this.uploadAttributes.filelist);
 			this.uploadImgChange();
 		},
 		uploadImgChange() {
