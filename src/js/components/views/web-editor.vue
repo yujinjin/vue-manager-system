@@ -38,7 +38,7 @@ import videoPreview from "@views/components/video-preview-for-editor";
 export default {
 	data() {
 		return {
-			content: null, // 当前编辑器内容
+			content: "", // 当前编辑器内容
 			editorInstance: null, // 当前编辑器实例
 			contentHtml: "", // 当前编辑器的动态内容（双向绑定值的中间件）
 			videoDialog: {

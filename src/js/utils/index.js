@@ -224,7 +224,7 @@ export default {
 	loadScript(url, id) {
 		return new Promise((resolve, reject) => {
 			//如果URL不存在或者该ID不存在
-			if (!url || id) {
+			if (!url || !id) {
 				reject("加载的JS 地址或者ID不能为空!");
 				return;
 			}

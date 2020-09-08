@@ -50,6 +50,9 @@
 						<template v-else-if="fieldItem.type == 'imgUpload'">
 							<img-upload v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></img-upload>
 						</template>
+						<template v-else-if="fieldItem.type == 'videoUpload'">
+							<video-upload v-bind="fieldItem.option" @on-change="changeValue(fieldItem.name, arguments[0])"></video-upload>
+						</template>
 						<template v-else-if="fieldItem.type == 'rate'">
 							<el-rate v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-rate>
 						</template>
@@ -57,8 +60,8 @@
 							<el-color-picker v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-color-picker>
 						</template>
 						<template v-else-if="fieldItem.type == 'htmlEditor'">
-							<!-- TODO：富文本框编辑器实现 -->
-							<!-- <el-color-picker v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-color-picker> -->
+							<!-- 富文本框编辑器实现 -->
+							<web-editor :editor="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></web-editor>
 						</template>
 					</el-form-item>
 				</el-col>

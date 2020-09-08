@@ -1,7 +1,7 @@
 <!-- 
     作者：yujinjin9@126.com
     时间：2020-09-02
-    描述：在富文本框中的插入的自定义视频预览 
+    描述：在富文本框中的插入的自定义视频预览组件 
 -->
 <template>
 	<div class="video-container" :class="{ active: isHover }" :data-id="dataId" @mouseover="isHover = true" @mouseout="isHover = false" :data-video-url="videoUrl" @click.stop.prevent :data-cover-url="coverImgUrl" contenteditable="false">

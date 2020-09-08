@@ -95,10 +95,13 @@ export default {
 			lazy: true
 		}, // Image 图片（具体见Image 图片文档）
 		imgUpload: {}, // 项目基于element 的upload再次封装的图片上传组件
+		videoUpload: {}, // 视频上传组件
 		rate: {}, // Rate 评分（具体见Rate 评分文档）
 		colorPicker: {
 			size: "small"
 		}, // ColorPicker 颜色选择器（具体见ColorPicker 颜色选择器文档）
-		htmlEditor: {} // html富文本框编辑器，TODO：该插件待实现
+		htmlEditor: {
+			placeholder: "请编辑"
+		} // html富文本框编辑器，TODO：该插件待实现
 	}
 };
