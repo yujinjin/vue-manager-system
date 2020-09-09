@@ -1,8 +1,7 @@
 <template>
 	<div class="dashboard">
-		工作台2 分析与报告
-		<el-button type="primary" @click="show">主要按钮</el-button>
-		<dialog-form v-bind="updatePasswordDialogForm" @close="updatePasswordDialogForm.isShow = false" @input-change="passwordInfoForm = arguments[0]"></dialog-form>
+		<!-- 工作台2 分析与报告 -->
+		<page-complex-form v-bind="updatePasswordDialogForm" @input-change="passwordInfoForm = arguments[0]"></page-complex-form>
 	</div>
 </template>
 
@@ -10,24 +9,55 @@
 export default {
 	data() {
 		return {
-			content: '<p><br></p><div data-v-c37a9a52="" data-id="fb735db0-3799-4443-9004-fde0c6b08091" data-video-url="dddd" data-cover-url="" contenteditable="false" class="video-container" style="display: none;"></div><p><br></p>',
+			passwordInfoForm: {},
 			updatePasswordDialogForm: {
-				dialog: {
-					title: "修改我的登录密码"
-				},
-				isShow: false,
 				form: {},
 				submitForm: this.updatePassword,
 				fields: [
 					{
+						division: {
+							title: "栏目1内容",
+							subTitle: "提示内容1"
+						}
+					},
+					{
 						name: "videoUpload",
 						type: "videoUpload",
 						value: [],
-						label: "视频上传测试",
+						label: "视频上传",
 						option: {}
 					},
 					{
+						name: "filter",
+						label: "系统用户"
+					},
+					{
+						name: "filter2",
+						label: "系统用户"
+					},
+					{
+						division: "栏目2内容"
+					},
+					{
 						name: "htmlEditor",
+						type: "htmlEditor",
+						value: "",
+						label: "内容"
+					},
+					{
+						division: "栏目3内容"
+					},
+					{
+						name: "htmlEditor2",
+						type: "htmlEditor",
+						value: "",
+						label: "内容"
+					},
+					{
+						division: "栏目4内容"
+					},
+					{
+						name: "htmlEditor3",
 						type: "htmlEditor",
 						value: "",
 						label: "内容"
@@ -40,10 +70,7 @@ export default {
 		change(fileList) {
 			console.info(fileList);
 		},
-		show() {
-			this.updatePasswordDialogForm.isShow = true;
-		},
-		updatePassword(){
+		updatePassword() {
 			return Promise.resolve();
 		}
 	}

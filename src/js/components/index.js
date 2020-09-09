@@ -10,8 +10,10 @@ import searchForm from "./views/search-form";
 import actionBar from "./views/action-bar";
 import imgUpload from "./views/img-upload";
 import videoUpload from "./views/video-upload";
-import dialogForm from "./views/dialog-form";
 import webEditor from "./views/web-editor";
+import dialogForm from "./views/dialog-form";
+import pageSimpleForm from "./views/page-simple-form";
+import pageComplexForm from "./views/page-complex-form";
 
 export default function() {
 	Vue.component("svg-icon", svgIcon);
@@ -21,4 +23,6 @@ export default function() {
 	Vue.component("video-upload", videoUpload);
 	Vue.component("dialog-form", dialogForm);
 	Vue.component("web-editor", webEditor);
+	Vue.component("page-simple-form", pageSimpleForm);
+	Vue.component("page-complex-form", pageComplexForm);
 }
