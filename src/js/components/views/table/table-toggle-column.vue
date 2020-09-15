@@ -1,14 +1,14 @@
 <template>
-	<div class="toggle-table-column" :class="className">
+	<div class="toggle-table-column">
 		<el-tooltip content="显示隐藏列" placement="top">
-			<el-button class="pull-right" @click="isShowToggleTableColumn = !isShowToggleTableColumn"><i class="icon-th-list"></i></el-button>
+			<el-button @click="isShowToggleTableColumn = !isShowToggleTableColumn" icon="el-icon-notebook-2"></el-button>
 		</el-tooltip>
 		<transition name="el-fade-in">
 			<div class="button-collection" v-show="isShowToggleTableColumn">
-				<div class="cover" @click="hideTableColumn"></div>
+				<div class="cover" @click="isShowToggleTableColumn = false"></div>
 				<div class="toggle-list">
 					<ul>
-						<li @click.stop="updateList(item)" :class="{ active: item.isShow }" v-for="(item, key) in columnList" :key="key">
+						<li @click.stop="toggleColumnShowState(item)" :class="{ active: item.isShow }" v-for="(item, key) in columnList" :key="key">
 							<span>{{ item.displayName }}</span>
 						</li>
 					</ul>
@@ -24,22 +24,28 @@
 export default {
 	data() {
 		return {
-			defaultColumnList: "", //默认列表数据
-			isShowToggleTableColumn: false,
-			stateName: null //状态名称
+			defaultColumnList: [], //默认列表数据
+			columnList: [],
+			isShowToggleTableColumn: false
 		};
 	},
 	props: {
-		columnList: {
-			type: Object
+		value: {
+			type: Array
 		}, // 列表数据
+		name: String, // 当前存储状态的名称
 		stateSave: {
 			type: Boolean,
 			default: true
-		}, //是否保存当前操作状态
-		className: {
-			default: "pull-right"
-		} //样式
+		} //是否保存当前操作状态
+	},
+	watch: {
+		value: {
+			handler(val) {
+				// TODO: 验证当前值的是否与this.columnList想等
+			},
+			deep: true
+		}
 	},
 	mounted() {
 		if (this.columnList) {
@@ -49,51 +55,45 @@ export default {
 	},
 	methods: {
 		initColumnList() {
-			if (this.stateSave) {
-				// 当前的状态名+路由名称+"table_column"
-				this.stateName = site.globalService.getLoginUserInfo().usernameOrEmailAddress + "-" + this.$route.name + "-" + "table-column-state";
-				let _site_local_storage = site.getSiteLocalStorage();
-				let _local_storage_column_list = _site_local_storage[this.stateName];
-				if (_local_storage_column_list) {
-					for (let key in this.columnList) {
-						if (_local_storage_column_list[key] == undefined) {
-							continue;
-						}
-						if (_local_storage_column_list[key].isShow === false) {
-							this.columnList[key].isShow = false;
-						} else if (_local_storage_column_list[key].isShow === true) {
-							this.columnList[key].isShow = true;
-						}
-					}
+			if (!this.stateSave || !this.value || this.value.length == 0) {
+				return;
+			}
+			this.defaultColumnList = site.utils.extend(true, this.value);
+			let tableColumnState = site.globalService.getTableColumnState({ tableName: this.name });
+			if (!tableColumnState) {
+				this.columnList = site.utils.extend(true, this.value);
+				return;
+			}
+			// 还原上次已经保存的数据列状态
+			let columnList = [];
+			for (let i = 0; i < this.defaultColumnList.length; i++) {
+				if (Object.prototype.hasOwnProperty.call(tableColumnState, this.defaultColumnList[i].name)) {
+					columnList.push(site.utils.extend(true, this.defaultColumnList[i], { isShow: tableColumnState[this.defaultColumnList[i].name].isShow }));
+				} else {
+					// 当前数据列表因为新版本开发的缘故，数据字段有变化抛弃以前已经保留的数据字段值的变化
+					columnList.push(site.utils.extend(true, { isShow: true }, this.defaultColumnList[i]));
 				}
 			}
+			this.columnList = columnList;
+			this.$emit("input", this.columnList);
 		},
-		hideTableColumn() {
-			this.isShowToggleTableColumn = false;
-		},
-		updateList(item) {
+		toggleColumnShowState(item) {
 			item.isShow = !item.isShow;
+			this.$emit("input", this.columnList);
 		},
 		restore() {
-			if (this.defaultColumnList) {
-				let _defaultColumnList = JSON.parse(this.defaultColumnList);
-				for (let key in _defaultColumnList) {
-					if (this.columnList[key] == undefined) {
-						continue;
-					}
-					if (_defaultColumnList[key].isShow === false) {
-						this.columnList[key].isShow = false;
-					} else if (_defaultColumnList[key].isShow === true) {
-						this.columnList[key].isShow = true;
-					}
-				}
-			}
-			this.$toastr.success("恢复默认成功...");
+			this.columnList = site.utils.extend(true, this.defaultColumnList);
+			this.$emit("input", this.columnList);
 		}
 	},
 	destroyed() {
-		if (this.stateSave) {
-			site.setSiteLocalStorage(this.stateName, this.columnList);
+		if (this.stateSave && this.columnList && this.columnList.length > 0) {
+			let tableColumnState = {};
+			for (let i = 0; i < this.columnList.length; i++) {
+				tableColumnState[this.columnList[i].name] = site.utils.extend(true, this.columnList[i]);
+				delete tableColumnState[this.columnList[i].name].name;
+			}
+			site.setTableColumnState(tableColumnState, { tableName: this.name });
 		}
 	}
 };

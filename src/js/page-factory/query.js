@@ -16,20 +16,17 @@ export default function(page, name) {
 		{
 			methods: {
 				// 当前页面初始化
-				init() {
-					this.queryList();
-					site.log.warn("路由名称:" + this.$route.name + "的数据初始化没有具体实现，系统默认自动初始化");
+				init() {},
+				// 页面通过手动事件触发的的方法
+				triggerResizeChange() {
+					this.$nextTick(() => {
+						this.$store.dispatch("trigger", {
+							eventName: this.resizeChangeEventName,
+							args: []
+						});
+					});
 				},
-				// 数据列表查询，业务放要覆盖的
-				queryList() {
-					site.log.error("路由名称:" + this.$route.name + "的数据查询项没有具体实现");
-				},
-				edit() {
-					site.log.error("路由名称:" + this.$route.name + "的编辑操作没有具体实现");
-				},
-				delete() {
-					site.log.error("路由名称:" + this.$route.name + "的删除操作没有具体实现");
-				},
+				// 查询表单中的值有变化
 				filterChange(filter, filterProperty) {
 					if (filterProperty) {
 						this.$set(this[filterProperty], filter.name, filter.value);
@@ -54,38 +51,14 @@ export default function(page, name) {
 				return extend(
 					true,
 					{
-						filters: {
-							filter: "", //默认关键词搜索名称
-							maxResultCount: site.constants.PAGE_ITEMS, //最大结果集（等同每页记录数）
-							skipCount: 0,
-							sorting: "creationTime desc" //默认按时间降序排序
-						},
-						tableData: [], // 数据列表
-						pagination: {
-							total: 0, // 总记录数
-							pageSize: 10, // 每页记录数
-							currentPage: 1 //当前页记录数
-						}, //分页信息
+						filters: {},
 						selectRows: [], // 用户选择的列表数据
-						hideCarefulConfirms: {} // 是否隐藏列操作确认框提示(根据列名来判断)
+						resizeChangeEventName: this.$route.name + "resizeChange" // 当前页面通过手动事件触发导致页面尺寸有变化的事件名称
 					},
 					data
 				);
 			},
-			watch: {
-				// 监控当前过滤项的值
-				filters: {
-					handler(val) {
-						this.queryList();
-					},
-					deep: true
-				}
-			},
 			mounted() {
-				// 判断当前的分页数据是否和查询的结果集是否相同
-				if (this.pagination.pageSize != this.filters.maxResultCount) {
-					this.filters.maxResultCount = this.pagination.pageSize;
-				}
 				if (page.mounted && typeof page.mounted == "function") {
 					page.mounted.call(this);
 				}

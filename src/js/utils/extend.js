@@ -75,7 +75,7 @@ export default (function() {
 		}
 		// extend jQuery itself if only one argument is passed
 		if (i === length) {
-			target = this;
+			// target = this;
 			i--;
 		}
 		for (; i < length; i++) {

@@ -51,10 +51,10 @@ export default {
 					callbacks[i].apply(this, args);
 				}
 			}
-			callbackFuns = state.onceEvents[eventName];
-			if (callbackFuns && callbackFuns.length > 0) {
-				for (let i = 0; i < callbackFuns.length; i++) {
-					callbackFuns[i].apply(this, args);
+			callbacks = state.onceEvents[eventName];
+			if (callbacks && callbacks.length > 0) {
+				for (let i = 0; i < callbacks.length; i++) {
+					callbacks[i].apply(this, args);
 				}
 				delete state.onceEvents[eventName];
 			}

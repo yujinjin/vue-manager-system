@@ -7,26 +7,26 @@
 	<div class="search-panel" v-if="groupFields.length > 0">
 		<div class="search-form">
 			<el-row :gutter="10" class="search-row" v-for="(groupItem, index) in groupFields" :key="index" v-show="index == 0 || isShowMore">
-				<el-col class="field-box" :span="6" v-for="(filter, i) in groupItem" :key="i">
-					<div class="label-text" v-if="filter.label">{{ filter.label }}</div>
+				<el-col class="field-box" :span="field.span" v-for="(field, i) in groupItem" :key="i">
+					<div class="label-text" v-if="field.label">{{ field.label }}</div>
 					<div class="input-box">
 						<!-- 自定义组件 -->
-						<template v-if="filter.slot">
-							<slot :name="filter.slot" v-bind:formFields="{ formFields }"></slot>
+						<template v-if="field.slot">
+							<slot :name="field.slot" v-bind:formFields="{ formFields }"></slot>
 						</template>
-						<template v-else-if="filter.type == 'input'">
-							<el-input v-bind="filter.option" v-model="filter.value" @keyup.enter="change(filter)" @change="change(filter)"></el-input>
+						<template v-else-if="field.type == 'input'">
+							<el-input v-bind="field.option" v-model="field.value" @keyup.enter="change(field)" @change="change(field)"></el-input>
 						</template>
-						<template v-else-if="filter.type == 'select'">
-							<el-select v-model="filter.value" v-bind="filter.option" @change="change(filter)">
-								<el-option v-for="item in filter.data" :key="item.value" :label="item.label" :value="item.value"></el-option>
+						<template v-else-if="field.type == 'select'">
+							<el-select v-model="field.value" v-bind="field.option" @change="change(field)">
+								<el-option v-for="item in field.data" :key="item.value" :label="item.label" :value="item.value"></el-option>
 							</el-select>
 						</template>
-						<template v-else-if="filter.type == 'timeSelect'">
-							<el-time-select v-model="filter.value" v-bind="filter.option" @change="change(filter)"></el-time-select>
+						<template v-else-if="field.type == 'timeSelect'">
+							<el-time-select v-model="field.value" v-bind="field.option" @change="change(field)"></el-time-select>
 						</template>
-						<template v-else-if="filter.type == 'datePicker' || filter.type == 'dateTimePicker'">
-							<el-date-picker v-model="filter.value" v-bind="filter.option" @change="change(filter)"></el-date-picker>
+						<template v-else-if="field.type == 'datePicker' || field.type == 'dateTimePicker'">
+							<el-date-picker v-model="field.value" v-bind="field.option" @change="change(field)"></el-date-picker>
 						</template>
 					</div>
 				</el-col>
@@ -37,7 +37,7 @@
 		</div>
 		<div class="button-box" v-if="!isInsideForButton">
 			<el-button size="small" @click="search" type="primary" icon="el-icon-search">查询</el-button>
-			<el-button size="small" v-if="groupFields.length > 1" icon="el-icon-more" @click="isShowMore = !isShowMore">{{ isShowMore ? "隐藏" : "更多" }}</el-button>
+			<el-button size="small" v-if="groupFields.length > 1" icon="el-icon-more" @click="changeShowMoreState">{{ isShowMore ? "隐藏" : "更多" }}</el-button>
 		</div>
 	</div>
 </template>
@@ -61,7 +61,11 @@ export default {
 			default() {
 				return "filters";
 			}
-		} // 过滤器字段的属性值，用于双向绑定表单字段的值
+		}, // 过滤器字段的属性值，用于双向绑定表单字段的值
+		column: {
+			type: Number,
+			default: 4
+		}
 	},
 	watch: {
 		fields: {
@@ -116,39 +120,47 @@ export default {
 				return;
 			}
 			let formFields = [];
-			this.fields.forEach(filter => {
+			this.fields.forEach(field => {
 				// 深拷贝过滤选项
-				filter = site.utils.extend(true, {}, filter);
-				if (!filter.slot) {
-					if (!filter.type) {
+				field = site.utils.extend(true, {}, field);
+				if (!field.slot) {
+					if (!field.type) {
 						// 默认输入框
-						filter.type = "input";
+						field.type = "input";
 					}
-					if (site.constants.SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[filter.type]) {
-						if (!filter.option) {
-							filter.option = {};
+					if (site.constants.SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[field.type]) {
+						if (!field.option) {
+							field.option = {};
 						}
-						if (!filter.option.placeholder) {
-							filter.option.placeholder = site.constants.SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[filter.type].placeholder + (filter.label || "");
+						if (!field.option.placeholder) {
+							field.option.placeholder = site.constants.SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[field.type].placeholder + (field.label || "");
 						}
-						if (filter.label) {
-							filter.label = filter.label + "：";
-						}
-						filter.option = site.utils.extend(true, {}, site.constants.SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[filter.type], filter.option || {});
+						field.option = site.utils.extend(true, {}, site.constants.SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES[field.type], field.option || {});
 					}
-					if (!Object.prototype.hasOwnProperty.call(filter, "value")) {
-						filter.value = null;
+					if (!Object.prototype.hasOwnProperty.call(field, "value")) {
+						field.value = null;
 					}
 				}
-				formFields.push(filter);
+				if (field.label) {
+					field.label = field.label + "：";
+				}
+				if (!field.span) {
+					// 计算当前字段所占的栅格数
+					field.span = parseInt(24 / this.column, 10);
+				}
+				formFields.push(field);
 			});
 			this.formFields = formFields;
 		},
 		search() {
 			this.$emit("search");
 		},
-		change(filter) {
-			this.$emit("change", filter, this.filterPropertyString);
+		change(field) {
+			this.$emit("change", field, this.filterPropertyString);
+		},
+		changeShowMoreState() {
+			this.isShowMore = !this.isShowMore;
+			this.$parent.triggerResizeChange();
 		}
 	}
 };
@@ -159,7 +171,6 @@ export default {
 	border-bottom: 1px solid #ddd;
 	line-height: 34px;
 	max-width: 100%;
-	overflow: hidden;
 	padding: 12px;
 
 	.search-form {
@@ -176,6 +187,8 @@ export default {
 				.label-text {
 					width: 60px;
 					font-size: 12px;
+					text-align: right;
+					flex-shrink: 0;
 				}
 
 				.input-box {

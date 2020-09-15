@@ -19,7 +19,7 @@ export default [
 		path: "/system/user-list",
 		name: "user-list",
 		meta: {
-			title: "工作台"
+			title: "用户管理"
 		},
 		component: resolve => require(["@views/system/user-list.vue"], pageFactory(resolve, { name: "user-list", type: "query" }))
 	}

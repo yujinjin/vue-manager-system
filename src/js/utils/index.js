@@ -86,6 +86,17 @@ export default {
 		}
 	},
 
+	// 格式化字符串
+	stringFormat() {
+		if (arguments.length == 0) return null;
+		let str = arguments[0];
+		for (var i = 1; i < arguments.length; i++) {
+			var re = new RegExp("\\{" + (i - 1) + "\\}", "gm");
+			str = str.replace(re, arguments[i]);
+		}
+		return str;
+	},
+
 	//将数字转换成大写汉字
 	changeNumMoneyToChinese(money) {
 		let cnNums = new Array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"); //汉字的数字

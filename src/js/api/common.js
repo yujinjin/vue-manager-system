@@ -53,5 +53,14 @@ export default {
 				resolve();
 			}, 500);
 		});
+	},
+
+	queryList(inputData, ajaxOptions) {
+		console.info(inputData);
+		return new Promise(resolve => {
+			setTimeout(() => {
+				resolve(require("@js/data/data-list.json").result);
+			}, 500);
+		});
 	}
 };

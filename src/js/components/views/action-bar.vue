@@ -12,8 +12,9 @@
 				<el-button v-else v-bind="buttonItem.option" @click="clickHandle(index)">{{ buttonItem.label }}</el-button>
 			</div>
 		</div>
-		<div class="more-box" v-if="startHideButtonIndex != -1">
-			<el-button type="success" @click="isShowMore = !isShowMore" size="small" icon="el-icon-more">{{ isShowMore ? "隐藏" : "更多" }}</el-button>
+		<div class="more-box" v-if="startHideButtonIndex != -1 || isShowTableToggleColumn">
+			<el-button type="success" v-if="startHideButtonIndex != -1" @click="isShowMore = !isShowMore" size="small" icon="el-icon-more">{{ isShowMore ? "隐藏" : "更多" }}</el-button>
+			<div v-show="isShowTableToggleColumn && !isShowMore" style="width: 60px;"></div>
 		</div>
 	</div>
 </template>
@@ -32,7 +33,11 @@ export default {
 			default() {
 				return [];
 			}
-		} // 操作按钮列表 [{action: 动作名称, click: 自定义函数, label: 按钮文案, permission: 操作权限, option: 按钮的自定义选项(可无), slot: 自定义插槽名称（可无，如有值其他选项无效）}]
+		}, // 操作按钮列表 [{action: 动作名称, click: 自定义函数, label: 按钮文案, permission: 操作权限, option: 按钮的自定义选项(可无), slot: 自定义插槽名称（可无，如有值其他选项无效）}]
+		isShowTableToggleColumn: {
+			type: Boolean,
+			default: false
+		} // 是否显示数据table的列操作栏
 	},
 	created() {
 		this.init();
@@ -80,7 +85,7 @@ export default {
 				for (let i = 0; i < buttonBoxs.length; i++) {
 					realWidth += $(buttonBoxs[i]).outerWidth();
 					if (realWidth > allWidth) {
-						if (realWidth - $(buttonBoxs[i]).outerWidth() + 80 < allWidth) {
+						if (realWidth - $(buttonBoxs[i]).outerWidth() + 80 + (this.isShowTableToggleColumn ? 55 : 0) < allWidth) {
 							this.startHideButtonIndex = i - 1;
 						} else {
 							this.startHideButtonIndex = i - 2;
@@ -104,8 +109,7 @@ export default {
 	width: 100%;
 	display: flex;
 	padding: 4px 0px;
-	border-bottom: 1px solid #ddd;
-	overflow: hidden;
+	// border-bottom: 1px solid #ddd;
 
 	.button-list {
 		flex: 1;
@@ -122,9 +126,11 @@ export default {
 	}
 
 	.more-box {
-		width: 100px;
+		// width: 100px;
+		height: 40px;
 		padding: 4px 0px;
 		text-align: center;
+		display: flex;
 	}
 }
 </style>

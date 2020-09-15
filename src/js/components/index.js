@@ -12,6 +12,7 @@ import imgUpload from "./views/img-upload";
 import videoUpload from "./views/video-upload";
 import webEditor from "./views/web-editor";
 import dialogForm from "./views/dialog-form";
+import dataTable from "./views/data-table";
 import pageSimpleForm from "./views/page-simple-form";
 import pageComplexForm from "./views/page-complex-form";
 
@@ -21,8 +22,9 @@ export default function() {
 	Vue.component("action-bar", actionBar);
 	Vue.component("img-upload", imgUpload);
 	Vue.component("video-upload", videoUpload);
-	Vue.component("dialog-form", dialogForm);
 	Vue.component("web-editor", webEditor);
+	Vue.component("dialog-form", dialogForm);
+	Vue.component("data-table", dataTable);
 	Vue.component("page-simple-form", pageSimpleForm);
 	Vue.component("page-complex-form", pageComplexForm);
 }

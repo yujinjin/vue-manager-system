@@ -9,9 +9,10 @@
  *  menuPath: 当前页面所属的菜单，默认情况下是当前路由的path。主要用于部分页面（特别是详情页）无法找到左边对应的菜单所处理。也可以手动处理home中的currentSelectMenuPath属性
  * }
  */
-import system from "./system";
 import globalService from "@js/services/global-service";
 import pageFactory from "@js/page-factory/";
+import system from "./system";
+import example from "./example";
 
 let routers = {
 	// 当前路由存放在site.vue下的路由
@@ -107,4 +108,5 @@ let routers = {
 	}
 };
 routers.routes[0].children.push(...system);
+routers.routes[0].children.push(...example);
 export default routers;

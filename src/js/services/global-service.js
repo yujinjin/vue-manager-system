@@ -82,6 +82,17 @@ export default (function() {
 			controler.setLoginUserInfo({});
 		},
 
+		// 设置当前用户的权限
+		setPermissionValue(key, value) {
+			// TODO: 实现
+		},
+
+		// 根据权限值判断当前是否有权限
+		hasPermission(permissionValue) {
+			// TODO: 实现
+			return true;
+		},
+
 		// 获取当前登录用户的token
 		getLoginUserToken() {
 			if (controler.isLogin()) {

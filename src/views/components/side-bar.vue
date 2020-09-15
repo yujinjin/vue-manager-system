@@ -24,7 +24,7 @@
 					</div>
 				</div>
 				<div class="child-menu-panel" :key="menuItem.name + '_child'" v-if="menuItem.items && menuItem.items.length > 0" v-show="menuItem.isOpen">
-					<div class="menu-item" :class="{ active: childMenItem.isActive }" v-for="childMenItem in menuItem.items" :key="childMenItem.name" @click.stop.prevent="activeSubMenu(menuItem)">
+					<div class="menu-item" :class="{ active: childMenItem.isActive }" v-for="childMenItem in menuItem.items" :key="childMenItem.name" @click.stop.prevent="activeSubMenu(childMenItem)">
 						<div class="menu-text">
 							{{ childMenItem.displayName }}
 						</div>
