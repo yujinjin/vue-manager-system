@@ -280,8 +280,9 @@ export default {
 			if (!column || column.type == "selection") {
 				return;
 			}
+			let isChecked = this.selectRows.length > 0 && this.selectRows.findIndex(item => item == row) !== -1;
 			this.$refs["data-table"].clearSelection();
-			this.$refs["data-table"].toggleRowSelection(row);
+			this.$refs["data-table"].toggleRowSelection(row, !isChecked);
 		},
 		// 行双击事件
 		rowDbClickEvent(row, column, event) {
