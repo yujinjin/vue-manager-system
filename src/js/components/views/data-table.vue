@@ -30,7 +30,7 @@
 					</template>
 					<template v-else-if="column.type == 'enum'" v-slot="{ row }">
 						<!-- 枚举列 -->
-						<table-column-enum v-bind="column.enumOptions" @input="setColumnValue(index, row, $event)" :value="getColumnValue(index, row)"></table-column-enum>
+						<table-column-enum v-bind="column.enumOptions" @change-show-confirm-tips="column.enumOptions.isShowConfirmTips = arguments[0]" @input="setColumnValue(index, row, $event)" :value="getColumnValue(index, row)"></table-column-enum>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -266,7 +266,7 @@ export default {
 		},
 		// 设置当前列的值
 		setColumnValue(columnIndex, row, value) {
-			row[this.tableColumnList[columnIndex].options.prop].value = value;
+			row[this.tableColumnList[columnIndex].options.prop] = value;
 		},
 		// 渲染行样式
 		rowClassName({ row, rowIndex }) {
@@ -280,7 +280,6 @@ export default {
 			if (!column || column.type == "selection") {
 				return;
 			}
-			this.selectRows = [];
 			this.$refs["data-table"].clearSelection();
 			this.$refs["data-table"].toggleRowSelection(row);
 		},

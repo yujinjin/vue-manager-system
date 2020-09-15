@@ -1,12 +1,10 @@
 <template>
 	<!-- 数据列表中图片列，最大120px -->
 	<div class="table-column-img">
-		<template v-if="imgList">
-			<div class="no-date">没有图片</div>
+		<template v-if="imgList && imgList.length > 0">
+			<el-image class="img-column" @click.stop.prevent :src="img" :preview-src-list="imgList" fit="cover" v-for="(img, index) in imgList" :key="index" />
 		</template>
-		<template v-else>
-			<el-image style="width: 80px; height: 50px;" :src="img" :preview-src-list="imgList" fit="cover" v-for="(img, index) in imgList" :key="index" />
-		</template>
+		<div class="no-date" v-else>没有图片</div>
 	</div>
 </template>
 <script>
@@ -33,11 +31,19 @@ export default {
 </script>
 <style lang="less" scoped>
 .table-column-img {
-	max-width: 120px;
+	// max-width: 120px;
 	overflow-x: auto;
+	display: flex;
 
 	&::-webkit-scrollbar {
 		display: none;
+	}
+
+	.img-column {
+		flex-shrink: 0;
+		width: 60px;
+		height: 50px;
+		margin-right: 5px;
 	}
 
 	.no-date {

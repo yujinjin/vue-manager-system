@@ -1,9 +1,9 @@
 <template>
 	<div class="table-column-tags">
 		<template v-if="tags.length > 0">
-			<el-tag v-for="(tag, index) in tags" :key="index">{{ tag }}</el-tag>
+			<el-tag class="tag" v-for="(tag, index) in tags" :key="index">{{ tag }}</el-tag>
 		</template>
-		<template>
+		<template v-else>
 			<el-tag effect="plain" type="info">无标签</el-tag>
 		</template>
 	</div>
@@ -41,4 +41,15 @@ export default {
 	}
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.table-column-tags {
+	.tag {
+		margin-bottom: 5px;
+		display: inline-block;
+
+		&:not(:first-child) {
+			margin-left: 5px;
+		}
+	}
+}
+</style>

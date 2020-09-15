@@ -4,12 +4,12 @@
 		<el-button type="text" disabled v-if="!actionButtons || actionButtons.length == 0">无操作</el-button>
 		<template v-else>
 			<template v-for="(button, index) in showButtons">
-				<a v-if="button.url" :href="button.url" target="_blank" :key="index">{{ button.label }}</a>
-				<a v-else :key="index" @click="buttonClickEvent(index)">{{ button.label }}</a>
+				<a v-if="button.url" @click.stop.prevent :href="button.url" target="_blank" :key="index">{{ button.label }}</a>
+				<a v-else :key="index" @click.stop.prevent="buttonClickEvent(index)">{{ button.label }}</a>
 			</template>
 			<template v-if="dropdownButtons.length > 0">
-				<el-dropdown :hide-on-click="false" @command="dropdownClickEvent">
-					<span class="el-dropdown-link"> 更多操作<i class="el-icon-arrow-down el-icon--right"></i> </span>
+				<el-dropdown :hide-on-click="false" @command="dropdownClickEvent" size="small">
+					<span class="el-dropdown-link"> 更多<i class="el-icon-arrow-down el-icon--right"></i> </span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item v-for="(button, index) in dropdownButtons" :key="index" :command="index">{{ button.label }}</el-dropdown-item>
 					</el-dropdown-menu>
@@ -37,7 +37,7 @@ export default {
 	},
 	computed: {
 		showButtons() {
-			if (this.actionButtons > this.maxShow) {
+			if (this.actionButtons.length > this.maxShow) {
 				return this.actionButtons.slice(0, this.maxShow - 1);
 			} else {
 				return this.actionButtons;
@@ -47,8 +47,13 @@ export default {
 			return this.actionButtons.slice(this.maxShow - 1);
 		}
 	},
+	mounted() {
+		this.init();
+	},
 	methods: {
-		init() {},
+		init() {
+			this.generationButtons();
+		},
 		generationButtons() {
 			if (!this.buttons || !this.row) {
 				return;
@@ -67,9 +72,9 @@ export default {
 			buttons.forEach(button => {
 				let actionButton = { label: button.label };
 				if (button.route) {
-					actionButton.url = site.config.localDomain + this.$router.resolve(typeof button.route == "function" ? button.route(row) : button.route).href;
+					actionButton.url = site.config.localDomain + this.$router.resolve(typeof button.route == "function" ? button.route(this.row) : button.route).href;
 				} else if (button.url) {
-					actionButton.url = typeof button.url == "function" ? button.url(row) : button.url;
+					actionButton.url = typeof button.url == "function" ? button.url(this.row) : button.url;
 				} else {
 					actionButton.click = button.click;
 				}
@@ -80,7 +85,7 @@ export default {
 			if (this.actionButtons[index].url) {
 				window.open(this.actionButtons[index].url);
 			} else {
-				this.actionButtons[index].click(row);
+				this.actionButtons[index].click(this.row);
 			}
 		},
 		dropdownClickEvent(command) {
@@ -89,4 +94,22 @@ export default {
 	}
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.table-column-action {
+	a {
+		display: inline-block;
+		cursor: pointer;
+		color: #20a0ff;
+		&:not(:first-child) {
+			padding-left: 5px;
+		}
+	}
+
+	.el-dropdown-link {
+		font-size: 12px;
+		color: #20a0ff;
+		padding-left: 5px;
+		display: inline-block;
+	}
+}
+</style>

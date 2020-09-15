@@ -1,17 +1,17 @@
 <template>
 	<!-- 带有枚举的信息列，支持改变值状态操作 -->
 	<div class="table-column-enum">
-		<el-tag @click.stop.prevent="clickEvent" v-bind="tag">{{ label }}</el-tag>
-		<el-dialog :title="isHasCheckbox ? '确认消息提示' : tipsText" :visible.sync="isShow">
+		<el-tag @click="clickEvent" v-bind="tag">{{ label }}</el-tag>
+		<el-dialog :title="isHasCheckbox ? '确认消息提示' : tipsText" :visible.sync="isShow" :append-to-body="true">
 			<div class="careful-container">
 				<template v-if="isHasCheckbox">
 					<div class="message-contents">{{ tipsText }}</div>
 					<div class="choose">
-						<el-checkbox @change="confirmCheckChange">本页操作不再显示该提示确认信息!</el-checkbox>
+						<el-checkbox v-model="checked">本页操作不再显示该提示确认信息!</el-checkbox>
 					</div>
 				</template>
 				<el-radio-group v-model="inputValue" v-else>
-					<el-radio-button label="item.value" v-for="(item, index) in enumList" :key="index">{{ item.name }}</el-radio-button>
+					<el-radio :label="item.key" v-for="(item, index) in enumList" :key="index">{{ item.name }}</el-radio>
 				</el-radio-group>
 			</div>
 			<div slot="footer" class="dialog-footer">
@@ -31,6 +31,7 @@ export default {
 				effect: "dark"
 			},
 			isShow: false,
+			checked: false, // 本页操作不再显示该提示确认信息复选框
 			inputValue: null, // 输入的值
 			enumList: [], // 枚举值列表
 			isSubmiting: false
@@ -71,7 +72,7 @@ export default {
 				return "修改当前" + this.columnLabel + "值";
 			} else {
 				i = i == 0 ? 1 : 0;
-				return this.tips ? "确定要" + site.utils.stringFormat(this.tips, this.columnLabel) + "吗?" : "确定要修改当前" + this.columnLabel + "值为" + this.enumList[i].name + "吗?";
+				return this.tips ? "确定要" + site.utils.stringFormat(this.tips, this.enumList[i].name) + "吗?" : "确定要修改当前" + this.columnLabel + "值为" + this.enumList[i].name + "吗?";
 			}
 		},
 		isHasCheckbox() {
@@ -120,14 +121,13 @@ export default {
 				this.tag.type = this.isBooleanEnum && i == 0 ? "success" : "";
 			}
 		},
-		confirmCheckChange(val) {
-			this.$emit("change-show-confirm-tips", val);
-		},
 		// 状态点击事件
-		clickEvent() {
+		clickEvent(e) {
 			if (!this.click || !this.hasPermission) {
 				return;
 			}
+			e.preventDefault();
+			e.stopPropagation();
 			if (this.isShowConfirmTips || !this.isHasCheckbox) {
 				this.isShow = true;
 			} else {
@@ -143,17 +143,17 @@ export default {
 			let selectValue = null;
 			if (this.isHasCheckbox) {
 				// 变成另外一个值
-				let i = this.list.findIndex(item => item.key == this.value);
+				let i = this.enumList.findIndex(item => item.key == this.value);
 				if (i == 0) {
 					i = 1;
 				} else {
 					i = 0;
 				}
-				selectValue = this.list[i].key;
+				selectValue = this.enumList[i].key;
 			} else {
 				selectValue = this.inputValue;
 			}
-			if (this.value == this.inputValue) {
+			if (this.value == selectValue) {
 				this.$message.error("需要修改的数值没有变化，请选择！");
 				return;
 			}
@@ -161,6 +161,9 @@ export default {
 			this.click(selectValue)
 				.then(result => {
 					this.$emit("input", selectValue);
+					if (this.isShowConfirmTips) {
+						this.$emit("change-show-confirm-tips", !this.checked);
+					}
 					this.isShow = false;
 					this.isSubmiting = false;
 				})
@@ -171,4 +174,22 @@ export default {
 	}
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+/** 谨慎操作提示信息 **/
+.careful-container {
+	padding-left: 20px;
+
+	.message-contents {
+		color: #000;
+	}
+
+	.choose {
+		margin-top: 25px;
+
+		.el-checkbox__label {
+			font-size: 12px;
+			color: #48576a;
+		}
+	}
+}
+</style>

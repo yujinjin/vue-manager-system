@@ -104,7 +104,7 @@ export default {
 					{
 						type: "action",
 						label: "操作",
-						buttons: function(row) {
+						buttons: row => {
 							return [
 								{
 									label: "编辑",
@@ -113,6 +113,18 @@ export default {
 								{
 									label: "查看",
 									route: { name: "home" }
+								},
+								{
+									label: "查看2",
+									route: { name: "home" }
+								},
+								{
+									label: "查看3",
+									route: { name: "home" }
+								},
+								{
+									label: "查看5",
+									click: this.edit
 								}
 							];
 						}
@@ -204,7 +216,9 @@ export default {
 		change(fileList) {
 			console.info(fileList);
 		},
-		changeStatus(status) {}
+		changeStatus(status) {
+            return Promise.resolve(true);
+        }
 	}
 };
 </script>
