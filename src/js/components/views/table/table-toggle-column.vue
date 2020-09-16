@@ -28,7 +28,8 @@ export default {
 	data() {
 		return {
 			defaultColumnList: [], //默认列表数据
-			isShowToggleTableColumn: false
+			isShowToggleTableColumn: false,
+			tableColumnStateName: null // 数据列表列隐藏或显示的状态名称
 		};
 	},
 	props: {
@@ -59,6 +60,7 @@ export default {
 	},
 	methods: {
 		init() {
+			this.tableColumnStateName = site.globalService.generateTableColumnStateName(this.name);
 			new Inertia(this.$refs["inertia"], { edge: false });
 			this.initColumnList();
 		},
@@ -70,7 +72,7 @@ export default {
 			if (!this.stateSave) {
 				return;
 			}
-			let tableColumnState = site.globalService.getTableColumnState({ tableName: this.name });
+			let tableColumnState = site.globalService.getTableColumnState(this.tableColumnStateName);
 			if (!tableColumnState) {
 				return;
 			}
@@ -100,7 +102,7 @@ export default {
 				tableColumnState[this.cloumns[i].name] = site.utils.extend(true, this.cloumns[i]);
 				delete tableColumnState[this.cloumns[i].name].name;
 			}
-			site.globalService.setTableColumnState(tableColumnState, { tableName: this.name });
+			site.globalService.setTableColumnState(tableColumnState, this.tableColumnStateName);
 		}
 	}
 };

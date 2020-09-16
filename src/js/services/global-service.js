@@ -148,19 +148,19 @@ export default (function() {
 			}
 		},
 
-		// 设置数据表列状态
-		setTableColumnState(value, { tableName = null, fullTableName = null } = {}) {
-			if (!fullTableName) {
-				if (!controler.isLogin()) {
-					// 如果没有指定数据列表全称，需要判断当前用户登录状态
-					site.log.error("当前用户还未登录，不能设置数据列表状态~");
-					return;
-				}
-				// 当前的userId最好是int类型，如果是guid那最好就换个
-				fullTableName = config.env + "_" + this.getStoreLoginUserInfo().userId + "_" + site.vueApp.$route.name + "_table-column-state" + (tableName ? "_" + tableName : "");
-			} else {
-				fullTableName = config.env + "_" + fullTableName;
+		// 生成当前数据列表列隐藏或显示的状态名称
+		generateTableColumnStateName(tableName) {
+			if (!controler.isLogin()) {
+				// 如果没有指定数据列表全称，需要判断当前用户登录状态
+				site.log.error("当前用户还未登录，不能设置数据列表状态~");
+				return;
 			}
+			// 当前的userId最好是int类型，如果是guid那最好就换个
+			return this.getStoreLoginUserInfo().userId + "_" + site.vueApp.$route.name + "_table-column-state" + (tableName ? "_" + tableName : "");
+		},
+
+		// 设置数据表列状态
+		setTableColumnState(value, tableColumnStateName) {
 			let tableColumnStateList = localStorage.getSiteLocalStorage(localStorage.LOCAL_STORAGE_KEY.TABLE_COLUMN_STATE_List);
 			if (!tableColumnStateList) {
 				tableColumnStateList = [];
@@ -181,14 +181,14 @@ export default (function() {
 							min = item.order;
 							minIndex = index;
 						}
-						if (item.fullTableName == fullTableName) {
+						if (item.tableColumnStateName == tableColumnStateName) {
 							findIndex = index;
 						}
 					});
 				}
 				if (findIndex == -1) {
 					tableColumnStateList.push({
-						fullTableName,
+						tableColumnStateName,
 						order: max + 1,
 						value
 					});
@@ -201,7 +201,7 @@ export default (function() {
 				}
 			} else {
 				// 删除数据列表状态
-				findIndex = tableColumnStateList.findIndex(item => item.fullTableName == fullTableName);
+				findIndex = tableColumnStateList.findIndex(item => item.tableColumnStateName == tableColumnStateName);
 				if (findIndex != -1) {
 					tableColumnStateList.splice(findIndex, 1);
 				}
@@ -210,18 +210,7 @@ export default (function() {
 		},
 
 		// 设置数据表列状态
-		getTableColumnState({ tableName = null, fullTableName = null } = {}) {
-			if (!fullTableName) {
-				if (!controler.isLogin()) {
-					// 如果没有指定数据列表全称，需要判断当前用户登录状态
-					site.log.error("当前用户还未登录，不能设置数据列表状态~");
-					return;
-				}
-				// 当前的userId最好是int类型，如果是guid那最好就换个
-				fullTableName = config.env + "_" + this.getStoreLoginUserInfo().userId + "_" + site.vueApp.$route.name + "table-column-state" + (tableName ? "_" + tableName : "");
-			} else {
-				fullTableName = config.env + "_" + fullTableName;
-			}
+		getTableColumnState(tableColumnStateName) {
 			let tableColumnStateList = localStorage.getSiteLocalStorage(localStorage.LOCAL_STORAGE_KEY.TABLE_COLUMN_STATE_List);
 			if (!tableColumnStateList || tableColumnStateList.length == 0) {
 				return null;
@@ -232,7 +221,7 @@ export default (function() {
 				if (item.order > max) {
 					max = item.order;
 				}
-				if (item.fullTableName == fullTableName) {
+				if (item.tableColumnStateName == tableColumnStateName) {
 					findIndex = index;
 				}
 			});
