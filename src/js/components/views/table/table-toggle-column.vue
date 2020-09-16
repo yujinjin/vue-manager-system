@@ -1,15 +1,17 @@
 <template>
 	<div class="toggle-table-column">
-		<el-tooltip content="显示隐藏列" placement="top">
-			<el-button @click="isShowToggleTableColumn = !isShowToggleTableColumn" icon="el-icon-notebook-2"></el-button>
-		</el-tooltip>
+		<div class="icon-column-box" ref="inertia" @click="isShowToggleTableColumn = !isShowToggleTableColumn">
+			<el-tooltip content="显示隐藏列" placement="top">
+				<i class="el-icon-notebook-2" />
+			</el-tooltip>
+		</div>
 		<transition name="el-fade-in">
 			<div class="button-collection" v-show="isShowToggleTableColumn">
 				<div class="cover" @click="isShowToggleTableColumn = false"></div>
 				<div class="toggle-list">
 					<ul>
-						<li @click.stop="toggleColumnShowState(item)" :class="{ active: item.isShow }" v-for="(item, key) in columnList" :key="key">
-							<span>{{ item.displayName }}</span>
+						<li @click.stop="toggleColumnShowState(i, item)" :class="{ active: item.isShow }" v-for="(item, i) in cloumns" :key="item.name">
+							<span>{{ item.label }}</span>
 						</li>
 					</ul>
 					<div class="operation">
@@ -21,16 +23,16 @@
 	</div>
 </template>
 <script>
+import Inertia from "@js/lib/Inertia.js";
 export default {
 	data() {
 		return {
 			defaultColumnList: [], //默认列表数据
-			columnList: [],
 			isShowToggleTableColumn: false
 		};
 	},
 	props: {
-		value: {
+		cloumns: {
 			type: Array
 		}, // 列表数据
 		name: String, // 当前存储状态的名称
@@ -40,66 +42,91 @@ export default {
 		} //是否保存当前操作状态
 	},
 	watch: {
-		value: {
+		cloumns: {
 			handler(val) {
-				// TODO: 验证当前值的是否与this.columnList想等
+				if (!val || val.length == 0) {
+					return;
+				}
+				if (this.defaultColumnList.length == 0 || this.defaultColumnList.length != val.length) {
+					this.initColumnList();
+				}
 			},
 			deep: true
 		}
 	},
 	mounted() {
-		if (this.columnList) {
-			this.defaultColumnList = JSON.stringify(this.columnList);
-		}
-		this.initColumnList();
+		this.init();
 	},
 	methods: {
+		init() {
+			new Inertia(this.$refs["inertia"], { edge: false });
+			this.initColumnList();
+		},
 		initColumnList() {
-			if (!this.stateSave || !this.value || this.value.length == 0) {
+			if (!this.cloumns || this.cloumns.length == 0) {
 				return;
 			}
-			this.defaultColumnList = site.utils.extend(true, this.value);
+			this.defaultColumnList = JSON.parse(JSON.stringify(this.cloumns));
+			if (!this.stateSave) {
+				return;
+			}
 			let tableColumnState = site.globalService.getTableColumnState({ tableName: this.name });
 			if (!tableColumnState) {
-				this.columnList = site.utils.extend(true, this.value);
 				return;
 			}
 			// 还原上次已经保存的数据列状态
-			let columnList = [];
-			for (let i = 0; i < this.defaultColumnList.length; i++) {
-				if (Object.prototype.hasOwnProperty.call(tableColumnState, this.defaultColumnList[i].name)) {
-					columnList.push(site.utils.extend(true, this.defaultColumnList[i], { isShow: tableColumnState[this.defaultColumnList[i].name].isShow }));
-				} else {
-					// 当前数据列表因为新版本开发的缘故，数据字段有变化抛弃以前已经保留的数据字段值的变化
-					columnList.push(site.utils.extend(true, { isShow: true }, this.defaultColumnList[i]));
+			this.cloumns.forEach((column, i) => {
+				if (Object.prototype.hasOwnProperty.call(tableColumnState, this.cloumns[i].name)) {
+					this.$emit("change", i, tableColumnState[column.name].isShow);
 				}
-			}
-			this.columnList = columnList;
-			this.$emit("input", this.columnList);
+			});
 		},
-		toggleColumnShowState(item) {
-			item.isShow = !item.isShow;
-			this.$emit("input", this.columnList);
+		toggleColumnShowState(i, item) {
+			this.$emit("change", i, !item.isShow);
 		},
 		restore() {
-			this.columnList = site.utils.extend(true, this.defaultColumnList);
-			this.$emit("input", this.columnList);
+			// 还原初始化是的列状态
+			this.cloumns.forEach((column, i) => {
+				if (this.defaultColumnList[i].isShow != column.isShow) {
+					this.$emit("change", i, this.defaultColumnList[i].isShow);
+				}
+			});
 		}
 	},
-	destroyed() {
-		if (this.stateSave && this.columnList && this.columnList.length > 0) {
+	beforeDestroy() {
+		if (this.stateSave && this.cloumns && this.cloumns.length > 0) {
 			let tableColumnState = {};
-			for (let i = 0; i < this.columnList.length; i++) {
-				tableColumnState[this.columnList[i].name] = site.utils.extend(true, this.columnList[i]);
-				delete tableColumnState[this.columnList[i].name].name;
+			for (let i = 0; i < this.cloumns.length; i++) {
+				tableColumnState[this.cloumns[i].name] = site.utils.extend(true, this.cloumns[i]);
+				delete tableColumnState[this.cloumns[i].name].name;
 			}
-			site.setTableColumnState(tableColumnState, { tableName: this.name });
+			site.globalService.setTableColumnState(tableColumnState, { tableName: this.name });
 		}
 	}
 };
 </script>
 <style lang="less" rel="stylesheet/less" type="text/css" scoped>
 .toggle-table-column {
+	.icon-column-box {
+		position: fixed;
+		z-index: 99;
+		top: 50%;
+		right: 20px;
+		width: 45px;
+		height: 45px;
+		text-align: center;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 25px;
+		background-clip: padding-box;
+		box-shadow: 0px 2px 9px #e2e2e2;
+		color: #666;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 20px;
+	}
+
 	.button-collection {
 		position: fixed;
 		top: 0;

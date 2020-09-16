@@ -1,38 +1,38 @@
 <template>
 	<div class="data-table">
-		<div class="toggle-column-box" v-if="isShowToggleColumnButton">
-			<table-toggle-column v-model="toggleColumnList"></table-toggle-column>
-		</div>
+		<table-toggle-column v-if="isShowToggleColumnButton" :cloumns="toggleColumnList" @change="changeColumnState" />
 		<div class="data-table-box">
 			<el-table ref="data-table" :height="tableHeight" v-bind="tableOptions" :data="data" v-if="tableColumnList && tableColumnList.length > 0" :row-class-name="rowClassName" @row-click="rowClickEvent" @row-dblclick="rowDbClickEvent" @selection-change="change" style="width: 100%;" v-loading="isLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading">
-				<el-table-column v-bind="column.options" v-for="(column, index) in tableColumnList" :key="index">
-					<template v-if="column.slot" v-slot="{ row, $index, column }">
-						<!-- 自定义列 -->
-						<slot :name="column.slot" v-bind="{ row, $index, column }" />
-					</template>
-					<template v-else-if="column.type == 'expand'" v-slot="{ row, $index, column }">
-						<!-- 展开列 -->
-						<el-table-column type="expand">
-							<slot name="expand" v-bind="{ row, $index, column }" />
-						</el-table-column>
-					</template>
-					<template v-else-if="column.type == 'action'" v-slot="{ row }">
-						<!-- 按钮操作列 -->
-						<table-column-action :buttons="column.buttons" :row="row" />
-					</template>
-					<template v-else-if="column.type == 'image'" v-slot="{ row }">
-						<!-- 图片列 -->
-						<table-column-img :imgs="getColumnValue(index, row)"></table-column-img>
-					</template>
-					<template v-else-if="column.type == 'tags'" v-slot="{ row }">
-						<!-- 标签列 -->
-						<table-column-tags :value="getColumnValue(index, row)"></table-column-tags>
-					</template>
-					<template v-else-if="column.type == 'enum'" v-slot="{ row }">
-						<!-- 枚举列 -->
-						<table-column-enum v-bind="column.enumOptions" @change-show-confirm-tips="column.enumOptions.isShowConfirmTips = arguments[0]" @input="setColumnValue(index, row, $event)" :value="getColumnValue(index, row)"></table-column-enum>
-					</template>
-				</el-table-column>
+				<template v-for="(column, index) in tableColumnList">
+					<el-table-column v-bind="column.options" :key="index" v-if="toggleColumnList[index].isShow">
+						<template v-if="column.slot" v-slot="{ row, $index, column }">
+							<!-- 自定义列 -->
+							<slot :name="column.slot" v-bind="{ row, $index, column }" />
+						</template>
+						<template v-else-if="column.type == 'expand'" v-slot="{ row, $index, column }">
+							<!-- 展开列 -->
+							<el-table-column type="expand">
+								<slot name="expand" v-bind="{ row, $index, column }" />
+							</el-table-column>
+						</template>
+						<template v-else-if="column.type == 'action'" v-slot="{ row }">
+							<!-- 按钮操作列 -->
+							<table-column-action :buttons="column.buttons" :row="row" />
+						</template>
+						<template v-else-if="column.type == 'image'" v-slot="{ row }">
+							<!-- 图片列 -->
+							<table-column-img :imgs="getColumnValue(index, row)"></table-column-img>
+						</template>
+						<template v-else-if="column.type == 'tags'" v-slot="{ row }">
+							<!-- 标签列 -->
+							<table-column-tags :value="getColumnValue(index, row)"></table-column-tags>
+						</template>
+						<template v-else-if="column.type == 'enum'" v-slot="{ row }">
+							<!-- 枚举列 -->
+							<table-column-enum v-bind="column.enumOptions" @change-show-confirm-tips="column.enumOptions.isShowConfirmTips = arguments[0]" @input="setColumnValue(index, row, $event)" :value="getColumnValue(index, row)"></table-column-enum>
+						</template>
+					</el-table-column>
+				</template>
 			</el-table>
 		</div>
 		<div class="pagination-box">
@@ -147,6 +147,11 @@ export default {
 				} else {
 					column = { options: site.utils.extend(true, column) };
 				}
+				if (Object.prototype.hasOwnProperty.call(column.options, "isShow")) {
+					column.isShow = column.options.isShow;
+					delete column.options.isShow;
+				}
+				column.label = column.options.label;
 				if (column.options.type) {
 					column.type = column.options.type;
 					if (column.type == "action") {
@@ -194,10 +199,13 @@ export default {
 					} else if (column.type == "selection") {
 						column.options.width = column.options.width || "43px";
 						column.options.align = column.options.align || "center";
+						column.label = column.label || "选择";
 					} else if (column.type == "index") {
 						column.options.width = column.options.width || "50px";
+						column.label = column.label || "序号";
 					} else if (column.type == "expand") {
 						column.options.width = column.options.width || "30px";
+						column.label = column.label || "详细";
 					}
 					if (column.options.value) {
 						column.value = column.options.value;
@@ -212,11 +220,11 @@ export default {
 			this.tableColumnList = tableColumnList;
 			if (this.isShowToggleColumnButton) {
 				let toggleColumnList = [];
-				this.columns.forEach((column, i) => {
+				this.tableColumnList.forEach((column, i) => {
 					toggleColumnList.push({
-						name: column.prop,
+						name: (column.options.prop || column.options.type || "name") + i, // 加序号是为了name的唯一性
 						label: column.label,
-						isShow: typeof column.isShow == "boolean" ? column.isShow : i < 12
+						isShow: typeof column.isShow == "boolean" ? column.isShow : true
 					});
 				});
 				this.toggleColumnList = toggleColumnList;
@@ -277,7 +285,7 @@ export default {
 			event.stopPropagation();
 			event.preventDefault();
 			// 鼠标滑动点击获取到的column是undefined
-			if (!column || column.type == "selection") {
+			if (!column || column.type == "selection" || column.type == "expand") {
 				return;
 			}
 			let isChecked = this.selectRows.length > 0 && this.selectRows.findIndex(item => item == row) !== -1;
@@ -320,6 +328,16 @@ export default {
 			} else {
 				this.queryList();
 			}
+		},
+		// 修改当前数据表中列的显示或隐藏状态
+		changeColumnState(i, isShow) {
+			if (this.toggleColumnList[i].isShow == isShow) {
+				return;
+			}
+			this.toggleColumnList[i].isShow = isShow;
+			this.$nextTick(() => {
+				this.$refs["data-table"].doLayout();
+			});
 		}
 	},
 	beforeDestroy(){
@@ -338,12 +356,6 @@ export default {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-
-	.toggle-column-box {
-		position: absolute;
-		right: 10px;
-		top: -41px;
-	}
 
 	.data-table-box {
 		flex: 1;

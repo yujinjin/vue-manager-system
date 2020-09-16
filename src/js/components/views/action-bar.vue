@@ -12,9 +12,8 @@
 				<el-button v-else v-bind="buttonItem.option" @click="clickHandle(index)">{{ buttonItem.label }}</el-button>
 			</div>
 		</div>
-		<div class="more-box" v-if="startHideButtonIndex != -1 || isShowTableToggleColumn">
-			<el-button type="success" v-if="startHideButtonIndex != -1" @click="isShowMore = !isShowMore" size="small" icon="el-icon-more">{{ isShowMore ? "隐藏" : "更多" }}</el-button>
-			<div v-show="isShowTableToggleColumn && !isShowMore" style="width: 60px;"></div>
+		<div class="more-box" v-if="startHideButtonIndex != -1">
+			<el-button type="success" v-if="startHideButtonIndex != -1" @click="changeShowMoreState" size="small" icon="el-icon-more">{{ isShowMore ? "隐藏" : "更多" }}</el-button>
 		</div>
 	</div>
 </template>
@@ -33,11 +32,7 @@ export default {
 			default() {
 				return [];
 			}
-		}, // 操作按钮列表 [{action: 动作名称, click: 自定义函数, label: 按钮文案, permission: 操作权限, option: 按钮的自定义选项(可无), slot: 自定义插槽名称（可无，如有值其他选项无效）}]
-		isShowTableToggleColumn: {
-			type: Boolean,
-			default: false
-		} // 是否显示数据table的列操作栏
+		} // 操作按钮列表 [{action: 动作名称, click: 自定义函数, label: 按钮文案, permission: 操作权限, option: 按钮的自定义选项(可无), slot: 自定义插槽名称（可无，如有值其他选项无效）}]
 	},
 	created() {
 		this.init();
@@ -85,11 +80,14 @@ export default {
 				for (let i = 0; i < buttonBoxs.length; i++) {
 					realWidth += $(buttonBoxs[i]).outerWidth();
 					if (realWidth > allWidth) {
-						if (realWidth - $(buttonBoxs[i]).outerWidth() + 80 + (this.isShowTableToggleColumn ? 55 : 0) < allWidth) {
-							this.startHideButtonIndex = i - 1;
-						} else {
-							this.startHideButtonIndex = i - 2;
+						let moreWidth = 80;
+						--i;
+						realWidth = realWidth - $(buttonBoxs[i]).outerWidth() + moreWidth;
+						while (realWidth > allWidth) {
+							--i;
+							realWidth = realWidth - $(buttonBoxs[i]).outerWidth();
 						}
+						this.startHideButtonIndex = i;
 						break;
 					}
 				}
@@ -100,6 +98,10 @@ export default {
 				this.actionButtons[i].click();
 			}
 			this.$emit("click", this.actionButtons[i].action);
+		},
+		changeShowMoreState() {
+			this.isShowMore = !this.isShowMore;
+			this.$parent.triggerResizeChange();
 		}
 	}
 };

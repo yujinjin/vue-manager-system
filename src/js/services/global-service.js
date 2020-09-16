@@ -157,7 +157,9 @@ export default (function() {
 					return;
 				}
 				// 当前的userId最好是int类型，如果是guid那最好就换个
-				fullTableName = this.getStoreLoginUserInfo().userId + "_" + site.vueApp.$route.name + "table-column-state" + (tableName ? "_" + tableName : "");
+				fullTableName = config.env + "_" + this.getStoreLoginUserInfo().userId + "_" + site.vueApp.$route.name + "_table-column-state" + (tableName ? "_" + tableName : "");
+			} else {
+				fullTableName = config.env + "_" + fullTableName;
 			}
 			let tableColumnStateList = localStorage.getSiteLocalStorage(localStorage.LOCAL_STORAGE_KEY.TABLE_COLUMN_STATE_List);
 			if (!tableColumnStateList) {
@@ -216,7 +218,9 @@ export default (function() {
 					return;
 				}
 				// 当前的userId最好是int类型，如果是guid那最好就换个
-				fullTableName = this.getStoreLoginUserInfo().userId + "_" + site.vueApp.$route.name + "table-column-state" + (tableName ? "_" + tableName : "");
+				fullTableName = config.env + "_" + this.getStoreLoginUserInfo().userId + "_" + site.vueApp.$route.name + "table-column-state" + (tableName ? "_" + tableName : "");
+			} else {
+				fullTableName = config.env + "_" + fullTableName;
 			}
 			let tableColumnStateList = localStorage.getSiteLocalStorage(localStorage.LOCAL_STORAGE_KEY.TABLE_COLUMN_STATE_List);
 			if (!tableColumnStateList || tableColumnStateList.length == 0) {
