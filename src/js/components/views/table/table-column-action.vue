@@ -4,7 +4,7 @@
 		<el-button type="text" disabled v-if="!actionButtons || actionButtons.length == 0">无操作</el-button>
 		<template v-else>
 			<template v-for="(button, index) in showButtons">
-				<a v-if="button.url" @click.stop.prevent :href="button.url" target="_blank" :key="index">{{ button.label }}</a>
+				<a v-if="button.url" @click.stop :href="button.url" target="_blank" :key="index">{{ button.label }}</a>
 				<a v-else :key="index" @click.stop.prevent="buttonClickEvent(index)">{{ button.label }}</a>
 			</template>
 			<template v-if="dropdownButtons.length > 0">

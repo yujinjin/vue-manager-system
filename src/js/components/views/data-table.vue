@@ -4,7 +4,7 @@
 		<div class="data-table-box">
 			<el-table ref="data-table" :height="tableHeight" v-bind="tableOptions" :data="data" v-if="tableColumnList && tableColumnList.length > 0" :row-class-name="rowClassName" @row-click="rowClickEvent" @row-dblclick="rowDbClickEvent" @selection-change="change" style="width: 100%;" v-loading="isLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading">
 				<template v-for="(column, index) in tableColumnList">
-					<el-table-column v-bind="column.options" :key="index" v-if="toggleColumnList[index].isShow">
+					<el-table-column v-bind="column.options" :key="index" v-if="!isShowToggleColumnButton || toggleColumnList[index].isShow">
 						<template v-if="column.slot" v-slot="{ row, $index, column }">
 							<!-- 自定义列 -->
 							<slot :name="column.slot" v-bind="{ row, $index, column }" />
@@ -66,7 +66,7 @@ export default {
 				pageSize: site.constants.PAGE_ITEMS, // 每页记录数
 				currentPage: 1, //当前页记录数
 				layout: "total, sizes, prev, pager, next, jumper",
-				pageSizes: [10, 30, 50, 100]
+				pageSizes: [10, 20, 30, 50, 100]
 			}, //分页信息
 			tableOptions: {
 				height: 0
@@ -102,8 +102,8 @@ export default {
 			deep: true
 		},
 		parameters: {
-			handler(val) {
-				if (!this.lazeQuery) {
+			handler(val, oldVal) {
+				if (!this.lazeQuery || val.queryId != oldVal.queryId) {
 					this.queryList();
 				}
 			},
@@ -239,7 +239,9 @@ export default {
 		// 数据查询列表
 		queryList() {
 			this.isLoading = true;
-			return this.query(this.parameters)
+			let parameters = site.utils.extend(true, {}, this.parameters);
+			delete parameters.queryId;
+			return this.query(parameters)
 				.then(data => {
 					this.isLoading = false;
 					let totalPageSize = data.totalCount / this.pagination.pageSize;
@@ -369,8 +371,8 @@ export default {
 	}
 
 	.pagination-box {
-		padding: 8px 5px;
-		height: 60px;
+		padding: 5px;
+		height: 45px;
 	}
 }
 </style>

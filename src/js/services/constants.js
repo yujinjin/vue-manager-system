@@ -113,7 +113,7 @@ export default {
 	// 默认数据查询列表配置
 	QUERY_TABLE_DEFAULT_PARAMETERS: {
 		filter: "", //默认关键词搜索名称
-		maxResultCount: 10, //最大结果集（等同每页记录数）
+		maxResultCount: 20, //最大结果集（等同每页记录数）
 		skipCount: 0,
 		sorting: "creationTime desc" //默认按时间降序排序
 	},

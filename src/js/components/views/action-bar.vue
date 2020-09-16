@@ -80,7 +80,7 @@ export default {
 				for (let i = 0; i < buttonBoxs.length; i++) {
 					realWidth += $(buttonBoxs[i]).outerWidth();
 					if (realWidth > allWidth) {
-						let moreWidth = 80;
+						let moreWidth = 85;
 						--i;
 						realWidth = realWidth - $(buttonBoxs[i]).outerWidth() + moreWidth;
 						while (realWidth > allWidth) {
@@ -130,7 +130,7 @@ export default {
 	.more-box {
 		// width: 100px;
 		height: 40px;
-		padding: 4px 0px;
+		padding: 4px 5px;
 		text-align: center;
 		display: flex;
 	}
