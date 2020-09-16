@@ -217,8 +217,8 @@ export default {
 			console.info(fileList);
 		},
 		changeStatus(status) {
-            return Promise.resolve(true);
-        }
+			return Promise.resolve(true);
+		}
 	}
 };
 </script>

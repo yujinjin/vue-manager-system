@@ -340,7 +340,7 @@ export default {
 			});
 		}
 	},
-	beforeDestroy(){
+	beforeDestroy() {
 		this.$store.dispatch("off", {
 			eventName: this.$parent.resizeChangeEventName,
 			callback: this.initTableHeight
