@@ -61,6 +61,7 @@ export default {
 				});
 			}
 		},
+		queryList() {},
 		add() {
 			console.info(this.searchForm);
 		},

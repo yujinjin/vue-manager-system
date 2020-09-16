@@ -87,6 +87,10 @@ export default {
 		}, // 当前数据表的列
 		table: Object, // 当前element的数据列表组件的配置属性
 		name: String, // 当前数据表的名称，可以不传（用于保存数据列显示或隐藏状态的方式，如果isShowToggleColumnButton为false，则无需提供name值）
+		lazeQuery: {
+			type: Boolean,
+			default: false
+		}, // 是否懒查询，如果是true只能手动的触发查询
 		isShowToggleColumnButton: Boolean // 是否显示切换列展示或隐藏的按钮，如果不传会自动判断
 	},
 	watch: {
@@ -99,7 +103,9 @@ export default {
 		},
 		parameters: {
 			handler(val) {
-				this.queryList();
+				if (!this.lazeQuery) {
+					this.queryList();
+				}
 			},
 			deep: true
 		}

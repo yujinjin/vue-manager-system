@@ -55,6 +55,15 @@ export default {
 					label: "编号"
 				},
 				{
+					name: "state",
+					label: "状态",
+					type: "select",
+					data: [
+						{ label: "激活", value: true },
+						{ label: "冻结", value: false }
+					]
+				},
+				{
 					name: "orderNo",
 					label: "联系人"
 				},
