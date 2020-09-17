@@ -10,7 +10,7 @@ export default [
 		path: "/simple-query",
 		name: "simple-query",
 		meta: {
-			title: "页面普通查询示例"
+			title: "普通查询页面示例"
 		},
 		component: resolve => require(["@views/example/simple-query.vue"], pageFactory(resolve, { name: "simple-query", type: "query" }))
 	},
@@ -18,7 +18,7 @@ export default [
 		path: "/complex-query",
 		name: "complex-query",
 		meta: {
-			title: "页面复杂查询示例"
+			title: "复杂查询页面示例"
 		},
 		component: resolve => require(["@views/example/complex-query.vue"], pageFactory(resolve, { name: "complex-query", type: "query" }))
 	},
@@ -26,8 +26,16 @@ export default [
 		path: "/simple-form",
 		name: "simple-form",
 		meta: {
-			title: "普通页面示例"
+			title: "普通表单页面示例"
 		},
 		component: resolve => require(["@views/example/simple-form.vue"], pageFactory(resolve, { name: "simple-form", type: "form" }))
+	},
+	{
+		path: "/complex-form",
+		name: "complex-form",
+		meta: {
+			title: "复制表单页面示例"
+		},
+		component: resolve => require(["@views/example/complex-form.vue"], pageFactory(resolve, { name: "complex-form", type: "form" }))
 	}
 ];

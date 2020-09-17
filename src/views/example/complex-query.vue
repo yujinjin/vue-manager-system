@@ -23,7 +23,7 @@
             时间：2020-09-14
             描述：列表操作栏
         -->
-		<action-bar :buttons="handleButtons" @click="handleButton" :isShowTableToggleColumn="true"></action-bar>
+		<action-bar :buttons="handleButtons" @click="handleButtonEvent" :isShowTableToggleColumn="true"></action-bar>
 
 		<!--
             作者：yujinjin9@126.com
@@ -220,7 +220,7 @@ export default {
 		},
 		refuse() {},
 		delete() {},
-		handleButton(action) {
+		handleButtonEvent(action) {
 			console.info(action);
 		},
 		change(fileList) {

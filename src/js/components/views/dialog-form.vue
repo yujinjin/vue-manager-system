@@ -6,7 +6,7 @@
 		<el-form v-bind="formAttributes" :model="formInput">
 			<el-row :gutter="10" class="input-row" v-for="(groupItem, index) in groupFields" :key="index">
 				<el-col class="field-box" :span="fieldItem.span" v-for="(fieldItem, i) in groupItem" :key="i">
-					<el-form-item :label="fieldItem.label" :prop="fieldItem.name + ''" :rules="fieldItem.rules">
+					<el-form-item :label="fieldItem.label" :label-width="fieldItem.labelWidth || fieldItem.label ? fieldItem.labelWidth || formAttributes.labelWidth : '15px'" :prop="fieldItem.name + ''" :rules="fieldItem.rules">
 						<!-- 自定义组件 -->
 						<template v-if="fieldItem.slot">
 							<slot :name="fieldItem.slot" v-bind:formInput="formInput"></slot>
