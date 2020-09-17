@@ -48,7 +48,8 @@ export default {
 			cropperInstance: null, // 图片裁剪实例化对象
 			currentCropperImg: null, // 当前裁剪图片的地址
 			directionCropper: true, // 剪切图片的方向
-			isSingle: false // 是否单独一个图片上传
+			isSingle: false, // 是否单独一个图片上传
+			transitionValue: null // 中间过渡的值，用于判断value的变化
 		};
 	},
 	props: {
@@ -69,7 +70,10 @@ export default {
 			this.generateUploadAttributes();
 		},
 		value(val) {
-			this.generateImgList();
+			if (val != this.transitionValue) {
+				this.generateImgList();
+				this.transitionValue = val;
+			}
 		}
 	},
 	computed: {
@@ -78,7 +82,7 @@ export default {
 			if (size < 1) {
 				return "只能上传图片文件，且不超过" + this.imgMaxSize + "kb";
 			} else {
-				return "只能上传图片文件，且不超过" + site.utils.numberFormat(this.imgMaxSize, 1) + "M";
+				return "只能上传图片文件，且不超过" + site.utils.numberFormat(size, 1) + "M";
 			}
 		}
 	},
@@ -157,16 +161,15 @@ export default {
 		},
 		imgUpload(file) {
 			if (this.cropperInstance) {
-				this.cropperInstance.getCroppedCanvas().toBlob(blob => {
+				return this.cropperInstance.getCroppedCanvas().toBlob(blob => {
 					this.imageUploadApi(blob).then(() => {
 						this.uploadImgChange();
 						this.closeCroppDialog();
 					});
 				}, "image/jpeg");
 			} else {
-				this.imageUploadApi(file).then(() => {
+				return this.imageUploadApi(file).then(() => {
 					this.uploadImgChange();
-					this.closeCroppDialog();
 				});
 			}
 		},
@@ -178,35 +181,36 @@ export default {
 						{
 							name: site.utils.parseUrl(img).file,
 							url: site.utils.perfectImageUrl(img),
-							relativeUrl: img
+							relativeUrl: img,
+							uid: file.uid
 						}
 					];
 				} else {
 					this.uploadAttributes.fileList.push({
-						name: site.utils.parseUrl(img).file,
+						name: file.name,
 						url: site.utils.perfectImageUrl(img),
-						relativeUrl: img
+						relativeUrl: img,
+						uid: file.uid
 					});
 				}
 			});
 		},
 		removeImg(file, fileList) {
+			this.uploadAttributes.fileList = fileList;
 			this.uploadImgChange();
 		},
 		uploadImgChange() {
 			// 双向绑定
 			if (typeof this.value == "string" || this.value === undefined || this.value === null) {
-				this.$emit(
-					"input",
-					this.uploadAttributes.fileList
-						.map(function(item, index) {
-							return item.relativeUrl;
-						})
-						.join("|")
-				);
+				this.transitionValue = this.uploadAttributes.fileList
+					.map(function(item, index) {
+						return item.relativeUrl;
+					})
+					.join("|");
 			} else {
-				this.$emit("input", this.uploadAttributes.filelist);
+				this.transitionValue = this.uploadAttributes.fileList;
 			}
+			this.$emit("input", this.transitionValue);
 		},
 		// 开始显示裁剪图片的弹窗
 		showCroppDialog() {

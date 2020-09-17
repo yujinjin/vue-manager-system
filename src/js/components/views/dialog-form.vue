@@ -224,7 +224,7 @@ export default {
 							field.option = {};
 						}
 						if (!field.option.placeholder) {
-							field.option.placeholder = site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type].placeholder + (field.label || "");
+							field.option.placeholder = (site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type].placeholder || "") + (field.label || "");
 						}
 						field.option = site.utils.extend(true, {}, site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type], field.option || {});
 					}

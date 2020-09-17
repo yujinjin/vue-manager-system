@@ -21,5 +21,13 @@ export default [
 			title: "页面复杂查询示例"
 		},
 		component: resolve => require(["@views/example/complex-query.vue"], pageFactory(resolve, { name: "complex-query", type: "query" }))
+	},
+	{
+		path: "/simple-form",
+		name: "simple-form",
+		meta: {
+			title: "普通页面示例"
+		},
+		component: resolve => require(["@views/example/simple-form.vue"], pageFactory(resolve, { name: "simple-form", type: "form" }))
 	}
 ];

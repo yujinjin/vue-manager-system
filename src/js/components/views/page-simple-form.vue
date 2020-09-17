@@ -32,7 +32,7 @@
 							<el-switch v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-switch>
 						</template>
 						<template v-else-if="fieldItem.type == 'checkbox'">
-							<el-checkbox-group v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)">
+							<el-checkbox-group v-bind="fieldItem.option" :value="getValue(fieldItem.name) || []" @input="changeValue(fieldItem.name, $event)">
 								<el-checkbox v-for="item in fieldItem.data" :key="item.value" :label="item.value">{{ item.label }}</el-checkbox>
 							</el-checkbox-group>
 						</template>
@@ -203,7 +203,7 @@ export default {
 							field.option = {};
 						}
 						if (!field.option.placeholder) {
-							field.option.placeholder = site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type].placeholder + (field.label || "");
+							field.option.placeholder = (site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type].placeholder || "") + (field.label || "");
 						}
 						field.option = site.utils.extend(true, {}, site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type], field.option || {});
 					}
@@ -213,7 +213,7 @@ export default {
 				}
 				if (!field.span) {
 					// 计算当前字段所占的栅格数
-					if (field.type == "htmlEditor") {
+					if (field.type == "htmlEditor" || field.type == "imgUpload" || field.type == "videoUpload") {
 						field.span = 24;
 					} else {
 						field.span = parseInt(24 / this.column, 10);
@@ -303,6 +303,7 @@ export default {
 	height: 100%;
 	width: 100%;
 	padding-top: 15px;
+	padding-right: 10px;
 	overflow-y: auto;
 	overflow-x: hidden;
 

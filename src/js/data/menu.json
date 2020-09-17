@@ -76,7 +76,7 @@
 					"name": "simple-form",
 					"displayName": "普通表单",
 					"route": {
-						"name": "user-manager"
+						"name": "simple-form"
 					}
 				}, {
 					"name": "complex-form",
