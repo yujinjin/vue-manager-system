@@ -1,80 +1,72 @@
 <template>
-	<div class="dashboard">
-		<!-- 工作台2 分析与报告 -->
-		<page-complex-form v-bind="updatePasswordDialogForm" @input-change="passwordInfoForm = arguments[0]"></page-complex-form>
+	<div class="dashboard" ref="dashboard">
+		<el-row>
+			<el-col :span="24">
+				<!-- 报表1 -->
+				<div style="border: 1px solid #e4e4e4; margin: 10px 5px; padding: 10px" class="echarts1" ref="echarts1" :style="{ height: height / 2 + 'px' }"></div>
+			</el-col>
+		</el-row>
+		<el-row>
+			<el-col :span="12">
+				<!-- 报表2 -->
+				<div style="border: 1px solid #e4e4e4; margin: 0px 5px; padding: 10px" class="echarts2" ref="echarts2" :style="{ height: height / 2 + 'px' }"></div>
+			</el-col>
+			<el-col :span="12">
+				<!-- 报表3 -->
+				<div style="border: 1px solid #e4e4e4; margin: 0px 5px; padding: 10px" class="echarts3" ref="echarts3" :style="{ height: height / 2 + 'px' }"></div>
+			</el-col>
+		</el-row>
 	</div>
 </template>
-
 <script>
+import echarts1Option from "@js/data/echarts1.js";
+import echarts2Option from "@js/data/echarts2.js";
+import echarts3Option from "@js/data/echarts3.js";
 export default {
 	data() {
 		return {
-			passwordInfoForm: {},
-			updatePasswordDialogForm: {
-				form: {},
-				submitForm: this.updatePassword,
-				fields: [
-					{
-						division: {
-							title: "栏目1内容",
-							subTitle: "提示内容1"
-						}
-					},
-					{
-						name: "videoUpload",
-						type: "videoUpload",
-						value: [],
-						label: "视频上传",
-						option: {}
-					},
-					{
-						name: "filter",
-						label: "系统用户"
-					},
-					{
-						name: "filter2",
-						label: "系统用户"
-					},
-					{
-						division: "栏目2内容"
-					},
-					{
-						name: "htmlEditor",
-						type: "htmlEditor",
-						value: "",
-						label: "内容"
-					},
-					{
-						division: "栏目3内容"
-					},
-					{
-						name: "htmlEditor2",
-						type: "htmlEditor",
-						value: "",
-						label: "内容"
-					},
-					{
-						division: "栏目4内容"
-					},
-					{
-						name: "htmlEditor3",
-						type: "htmlEditor",
-						value: "",
-						label: "内容"
-					}
-				]
-			}
+			// 报表实例1
+			echarts1: null,
+			// 报表实例1
+			echarts2: null,
+			// 报表实例3
+			echarts3: null,
+			height: 0
 		};
 	},
+	mounted() {
+		this.init();
+	},
 	methods: {
-		change(fileList) {
-			console.info(fileList);
-		},
-		updatePassword() {
-			return Promise.resolve();
+		init() {
+			this.height = $(this.$refs["dashboard"]).height() - 50;
+			require(["echarts"], echarts => {
+				// 订单报表实例
+				this.echarts1 = echarts.init(this.$refs["echarts1"]);
+				this.echarts1.setOption(echarts1Option);
+				this.echarts2 = echarts.init(this.$refs["echarts2"]);
+				this.echarts2.setOption(echarts2Option);
+				this.echarts3 = echarts.init(this.$refs["echarts3"]);
+				this.echarts3.setOption(echarts3Option);
+				console.info(this.echarts1);
+			});
+		}
+	},
+	destroyed() {
+		if (this.echarts1) {
+			this.echarts1.dispose();
+		}
+		if (this.echarts2) {
+			this.echarts2.dispose();
+		}
+		if (this.echarts3) {
+			this.echarts3.dispose();
 		}
 	}
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.dashboard {
+}
+</style>
