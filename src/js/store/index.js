@@ -6,6 +6,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import data from "./data";
+import tagsView from "./tagsView";
 import event from "./event";
 
 Vue.use(Vuex);
@@ -14,6 +15,11 @@ export default new Vuex.Store({
 	strict: config.ENV !== "PRD", //在非生产环境下，使用严格模式
 	modules: {
 		data,
-		event
+		event,
+		tagsView
 	}
+	// getters: {
+	// 	visitedViews: state => state.tagsView.visitedViews,
+	// 	cachedViews: state => state.tagsView.cachedViews
+	// }
 });

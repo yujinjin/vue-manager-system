@@ -6,6 +6,9 @@
 			</div>
 			<div class="title-text">后台管理系统框架</div>
 		</div>
+		<div class="center-inner">
+			<tags-view />
+		</div>
 		<div class="right-inner">
 			<div class="message-box">
 				<el-dropdown @command="handleCommand">
@@ -81,7 +84,11 @@
 	</div>
 </template>
 <script>
+import TagsView from "./tags-view";
 export default {
+	components: {
+		TagsView
+	},
 	data() {
 		return {
 			// 用户信息弹窗
@@ -273,6 +280,10 @@ export default {
 			padding: 15px 0px;
 			color: #fff;
 		}
+	}
+
+	.center-inner {
+		flex: 1 1 auto;
 	}
 
 	.right-inner {

@@ -2,7 +2,7 @@
 	<div class="main">
 		<header-bar></header-bar>
 		<side-bar class="side-bar" :customMenuName="customMenuName"></side-bar>
-		<keep-alive :include="$store.state.data.cachedViews">
+		<keep-alive :include="$store.state.tagsView.cachedViews">
 			<router-view :key="routeKey" class="page-content"></router-view>
 		</keep-alive>
 	</div>
@@ -10,6 +10,7 @@
 <script>
 import headerBar from "./components/header-bar.vue";
 import sideBar from "./components/side-bar.vue";
+import routers from "@/js/routers"
 
 export default {
 	data: function() {
@@ -40,6 +41,9 @@ export default {
 		// 	store.dispatch("updatePermissions", data.items);
 		// 	next();
 		// });
+		// console.log(this)
+		// to.$store.dispatch("updatePermissions", routers.routes);
+		// console.log()
 		next();
 	},
 	beforeRouteUpdate(to, from, next) {
@@ -50,6 +54,7 @@ export default {
 			params: JSON.parse(JSON.stringify(to.params)), // 当前路由params参数
 			title: to.meta.title // 当前路由名称
 		});
+		debugger;
 		next();
 	},
 	watch: {
@@ -66,6 +71,7 @@ export default {
 		}
 	},
 	created() {
+		this.$store.dispatch("updatePermissions", routers.routes);
 		if ($(window).height() < 766 || $(window).width() < 1366) {
 			this.$message.warning("当前管理系统屏幕分辨率最佳体验不低于1366*768!");
 		}
@@ -78,6 +84,9 @@ export default {
 			title: this.$route.meta.title // 当前路由名称
 		});
 	},
+	// mounted() {
+		
+	// },
 	methods: {
 		// 修改当前路由path
 		changeRouterPath(path) {
