@@ -86,9 +86,9 @@ export default {
 		.el-scrollbar__bar {
 			bottom: 0px;
 		}
-		.el-scrollbar__wrap {
-			height: 49px;
-		}
+		// .el-scrollbar__wrap {
+		// 	height: 49px;
+		// }
 	}
 }
 </style>

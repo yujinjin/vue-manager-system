@@ -26,6 +26,12 @@ let routers = {
 			children: []
 		},
 		{
+			path: "/redirect/:path*",
+			name: "redirect",
+			component: resolve => require(["@views/error/redirect.vue"], pageFactory(resolve, { name: "home" })),
+			children: []
+		},
+		{
 			path: "/login",
 			name: "login",
 			meta: {

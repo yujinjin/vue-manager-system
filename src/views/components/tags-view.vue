@@ -1,17 +1,17 @@
 <template>
 	<div id="tags-view-container" class="tags-view-container">
-		<!-- <scroll-pane ref="scrollPane" class="tags-view-wrapper" @scroll="handleScroll">
+		<scroll-pane ref="scrollPane" class="tags-view-wrapper" @scroll="handleScroll">
 			<router-link v-for="tag in visitedViews" ref="tag" :key="tag.path" :class="isActive(tag) ? 'active' : ''" :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }" tag="span" class="tags-view-item" @click.middle.native="!isAffix(tag) ? closeSelectedTag(tag) : ''" @contextmenu.prevent.native="openMenu(tag, $event)">
 				{{ tag.title }}
 				<span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
 			</router-link>
 		</scroll-pane>
 		<ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
-			<li @click="refreshSelectedTag(selectedTag)">Refresh</li>
-			<li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">Close</li>
-			<li @click="closeOthersTags">Close Others</li>
-			<li @click="closeAllTags(selectedTag)">Close All</li>
-		</ul> -->
+			<li @click="refreshSelectedTag(selectedTag)">刷新</li>
+			<li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">关闭</li>
+			<li @click="closeOthersTags">关闭其它</li>
+			<li @click="closeAllTags(selectedTag)">关闭所有</li>
+		</ul>
 	</div>
 </template>
 
@@ -40,7 +40,6 @@ export default {
 	},
 	watch: {
 		$route() {
-      		debugger;
 			this.addTags();
 			this.moveToCurrentTag();
 		},
@@ -53,9 +52,8 @@ export default {
 		}
 	},
 	mounted() {
-		// this.initTags();
+		this.initTags();
 		this.addTags();
-		console.log("天价完毕")
 	},
 	methods: {
 		isActive(route) {
@@ -95,7 +93,6 @@ export default {
 			}
 		},
 		addTags() {
-			debugger
 			const { name } = this.$route;
 			if (name) {
 				this.$store.dispatch("tagsView/addView", this.$route);
@@ -192,25 +189,27 @@ export default {
 
 <style lang="scss" scoped>
 .tags-view-container {
-	height: 34px;
+	min-height: 40px;
 	width: 100%;
-	background: #fff;
-	border-bottom: 1px solid #d8dce5;
+	// background: #fff;
+	// border-bottom: 1px solid #d8dce5;
 	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
 	.tags-view-wrapper {
 		.tags-view-item {
+			min-width: 100px;
 			display: inline-block;
 			position: relative;
 			cursor: pointer;
-			height: 26px;
-			line-height: 26px;
-			border: 1px solid #d8dce5;
-			color: #495060;
-			background: #fff;
+			height: 40px;
+			line-height: 40px;
+			// border: 1px solid #d8dce5;
+			color: #FFF;
+			background: #1A344B;
 			padding: 0 8px;
 			font-size: 12px;
-			margin-left: 5px;
+			margin-left: 1px;
 			margin-top: 4px;
+			border-radius: 8px 8px 0px 0px;
 			&:first-of-type {
 				margin-left: 15px;
 			}
@@ -218,8 +217,8 @@ export default {
 				margin-right: 15px;
 			}
 			&.active {
-				background-color: #42b983;
-				color: #fff;
+				background: #FFF;
+				color: #333333;
 				border-color: #42b983;
 				&::before {
 					content: "";
@@ -271,7 +270,7 @@ export default {
 			transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 			transform-origin: 100% 50%;
 			&:before {
-				transform: scale(0.6);
+				// transform: scale(0.6);
 				display: inline-block;
 				vertical-align: -3px;
 			}

@@ -10,7 +10,7 @@
 <script>
 import headerBar from "./components/header-bar.vue";
 import sideBar from "./components/side-bar.vue";
-import routers from "@/js/routers"
+import routers from "@/js/routers";
 
 export default {
 	data: function() {
@@ -54,7 +54,6 @@ export default {
 			params: JSON.parse(JSON.stringify(to.params)), // 当前路由params参数
 			title: to.meta.title // 当前路由名称
 		});
-		debugger;
 		next();
 	},
 	watch: {
@@ -84,9 +83,6 @@ export default {
 			title: this.$route.meta.title // 当前路由名称
 		});
 	},
-	// mounted() {
-		
-	// },
 	methods: {
 		// 修改当前路由path
 		changeRouterPath(path) {

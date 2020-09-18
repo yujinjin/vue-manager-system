@@ -284,6 +284,9 @@ export default {
 
 	.center-inner {
 		flex: 1 1 auto;
+		display: flex;
+		align-items: flex-end;
+		position: relative;
 	}
 
 	.right-inner {

@@ -5,11 +5,13 @@ const state = {
 
 const mutations = {
 	ADD_VISITED_VIEW: (state, view) => {
-		debugger;
 		if (state.visitedViews.some(v => v.path === view.path)) return;
-		const t = Object.assign({}, view, {
+		let t = Object.assign({}, view, {
 			title: view.meta.title || "no-name"
 		});
+		delete t.matched;
+		t = JSON.parse(JSON.stringify(t));
+		console.log(t);
 		state.visitedViews.push(t);
 	},
 	ADD_CACHED_VIEW: (state, view) => {
