@@ -13,10 +13,10 @@
 					"name": "home"
 				}
 			}, {
-				"name": "user-manage",
-				"displayName": "用户管理",
+				"name": "menu-manage",
+				"displayName": "菜单管理",
 				"route": {
-					"name": "user-list"
+					"name": "menu-manager"
 				}
 			}, {
 				"name": "role-manage",
@@ -25,10 +25,10 @@
 					"name": "role-list"
 				}
 			}, {
-				"name": "menu-manage",
-				"displayName": "菜单管理",
+				"name": "user-manage",
+				"displayName": "用户管理",
 				"route": {
-					"name": "menu-manager"
+					"name": "user-list"
 				}
 			}, {
 				"name": "audit-logs",
@@ -62,12 +62,6 @@
 					"route": {
 						"name": "complex-query"
 					}
-				}, {
-					"name": "special-query",
-					"displayName": "特殊查询",
-					"route": {
-						"name": "special-query"
-					}
 				}]
 			}, {
 				"name": "form",
@@ -83,12 +77,6 @@
 					"displayName": "复杂表单",
 					"route": {
 						"name": "complex-form"
-					}
-				}, {
-					"name": "special-form",
-					"displayName": "特殊表单",
-					"route": {
-						"name": "special-form"
 					}
 				}]
 			}]

@@ -1,0 +1,175 @@
+{
+    "result": [{
+        "id": 1000,
+        "name": "系统",
+        "value": "system",
+        "children": [{
+            "id": 1010,
+            "name": "工作台",
+            "value": "system.dashboard"
+        }, {
+            "id": 1020,
+            "name": "菜单管理",
+            "value": "system.menuManagers",
+            "children": [{
+                "id": 1021,
+                "name": "新增",
+                "value": "system.menuManagers.add"
+            }, {
+                "id": 1022,
+                "name": "修改",
+                "value": "system.menuManagers.update"
+            }, {
+                "id": 1023,
+                "name": "删除",
+                "value": "system.menuManagers.delete"
+            }]
+        }, {
+            "id": 1030,
+            "name": "部门管理",
+            "value": "system.departmentManagers",
+            "children": [{
+                "id": 1031,
+                "name": "新增",
+                "value": "system.departmentManagers.add"
+            }, {
+                "id": 1032,
+                "name": "修改",
+                "value": "system.departmentManagers.update"
+            }, {
+                "id": 1033,
+                "name": "删除",
+                "value": "system.departmentManagers.delete"
+            }]
+        }, {
+            "id": 1040,
+            "name": "角色管理",
+            "value": "system.roleManagers",
+            "children": [{
+                "id": 1041,
+                "name": "新增",
+                "value": "system.roleManagers.add"
+            }, {
+                "id": 1042,
+                "name": "修改",
+                "value": "system.roleManagers.update"
+            }, {
+                "id": 1043,
+                "name": "删除",
+                "value": "system.roleManagers.delete"
+            }]
+        }, {
+            "id": 1050,
+            "name": "用户管理",
+            "value": "system.userManagers",
+            "children": [{
+                "id": 1051,
+                "name": "新增",
+                "value": "system.userManagers.add"
+            }, {
+                "id": 1052,
+                "name": "修改",
+                "value": "system.userManagers.update"
+            }, {
+                "id": 1053,
+                "name": "删除",
+                "value": "system.userManagers.delete"
+            }]
+        }, {
+            "id": 1060,
+            "name": "审计日记",
+            "value": "system.logManagers"
+        }, {
+            "id": 1070,
+            "name": "设置",
+            "value": "system.set"
+        }]
+    }, {
+        "id": 2000,
+        "name": "示例",
+        "value": "example",
+        "children": [
+            {
+                "id": 2010,
+                "name": "数据查询",
+                "value": "example.query",
+                "children": [
+                    {
+                        "id": 2011,
+                        "name": "普通查询",
+                        "value": "example.query.common",
+                        "children": [
+                            {
+                                "id": 2012,
+                                "name": "新增",
+                                "value": "example.query.common.add"
+                            }, {
+                                "id": 2013,
+                                "name": "拒绝",
+                                "value": "example.query.common.refuse"
+                            }, {
+                                "id": 2014,
+                                "name": "删除",
+                                "value": "example.query.common.delete"
+                            }, {
+                                "id": 2015,
+                                "name": "编辑",
+                                "value": "example.query.common.update"
+                            }, {
+                                "id": 2016,
+                                "name": "查看",
+                                "value": "example.query.common.view"
+                            }
+                        ]
+                    }, {
+                        "id": 2021,
+                        "name": "复杂查询",
+                        "value": "example.query.complex",
+                        "children": [{
+                            "id": 2022,
+                            "name": "新增",
+                            "value": "example.query.common.add"
+                        }, {
+                            "id": 2023,
+                            "name": "拒绝",
+                            "value": "example.query.common.refuse"
+                        }, {
+                            "id": 2024,
+                            "name": "删除",
+                            "value": "example.query.common.delete"
+                        }, {
+                            "id": 2025,
+                            "name": "编辑",
+                            "value": "example.query.common.update"
+                        }, {
+                            "id": 2026,
+                            "name": "查看",
+                            "value": "example.query.common.view"
+                        }, {
+                            "id": 2027,
+                            "name": "状态",
+                            "value": "example.query.common.state"
+                        }]
+                    }, {
+                        "id": 2031,
+                        "name": "普通表单",
+                        "value": "example.form.common"
+                    }, {
+                        "id": 2041,
+                        "name": "复杂表单",
+                        "value": "example.form.complex"
+                    }
+                ]
+            }, {
+                "id": 170,
+                "name": "设置",
+                "value": "system.set"
+            }
+        ]
+    }],
+    "targetUrl": null,
+    "success": true,
+    "error": null,
+    "unAuthorizedRequest": false,
+    "__abp": true
+}

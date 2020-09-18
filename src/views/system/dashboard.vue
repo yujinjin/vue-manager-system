@@ -48,7 +48,6 @@ export default {
 				this.echarts2.setOption(echarts2Option);
 				this.echarts3 = echarts.init(this.$refs["echarts3"]);
 				this.echarts3.setOption(echarts3Option);
-				console.info(this.echarts1);
 			});
 		}
 	},

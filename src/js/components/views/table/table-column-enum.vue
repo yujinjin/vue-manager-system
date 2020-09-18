@@ -175,6 +175,9 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.el-tag {
+	cursor: pointer;
+}
 /** 谨慎操作提示信息 **/
 .careful-container {
 	padding-left: 20px;

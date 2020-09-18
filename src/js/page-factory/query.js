@@ -43,63 +43,63 @@ export default function(page, name) {
 				search() {
 					this.filters.queryId = site.utils.generateGuid();
 				},
-				// 刷新当前列表数据
-				refresh() {
-					// TODO: 实现
+				/**
+				 * 刷新当前列表数据
+				 * @param isReset 是否重置当前的查询选项(暂时不用)
+				 */
+				refresh(isReset = true) {
+					// 目前和普通的查询本质其实很是一样的
+					this.filters.queryId = site.utils.generateGuid();
 				},
 				// 确认提示操作
 				confirmHandle(yesHandler) {
 					// TODO: 实现
 				},
 				// 批量删除预处理
-				// TODO: review
 				preBatchDelete(deleteHandler) {
 					if (this.selectRows.length == 0) {
 						this.$toastr.warning("请选择需要删除的列表信息");
 						return false;
 					}
-					var _this = this;
 					this.$confirm("确定要删除当前列表信息吗?", "提示", {
 						confirmButtonText: "确定",
 						cancelButtonText: "取消",
 						type: "warning"
-					})
-						.then(() => {
-							Promise.all(
-								this.selectRows.map(function(item) {
-									return deleteHandler(
-										{
-											id: item.id
-										},
-										{
-											isShowError: false,
-											isResultData: false
-										}
-									)
-										.then(result => {
-											return result.data;
-										})
-										.catch(error => {
-											// 自己把异常吃掉,返回到数据提示
-											return error.response.data;
-										});
-								})
-							).then(results => {
-								if (results && results.length) {
-									results.forEach((item, index) => {
-										if (item.success) {
-											this.$toastr.success((this.selectRows[index].name || "") + "删除成功", null, { timeOut: 3000 });
-										} else {
-											this.$toastr.error((this.selectRows[index].name || "") + item.error.message, null, { timeOut: 3000 });
-										}
+					}).then(() => {
+						Promise.all(
+							this.selectRows.map(item => {
+								return deleteHandler(
+									{
+										id: item.id
+									},
+									{
+										isShowError: false,
+										isResultData: false
+									}
+								)
+									.then(() => {
+										return true;
+									})
+									.catch(error => {
+										// 自己把异常吃掉,返回到数据提示
+										return error;
 									});
-								} else {
-									this.$toastr.success("删除成功");
-								}
-								this.queryList();
-							});
-						})
-						.catch(() => {});
+							})
+						).then(results => {
+							if (results && results.length) {
+								results.forEach((item, index) => {
+									if (item == true) {
+										this.$toastr.success((this.selectRows[index].name || "") + "删除成功");
+									} else {
+										this.$toastr.error((this.selectRows[index].name || "") + ((item.error && item.error.message) || "删除失败"));
+									}
+								});
+							} else {
+								this.$toastr.success("删除成功");
+							}
+							this.search(true);
+						});
+					});
 				},
 
 				/**
@@ -108,14 +108,15 @@ export default function(page, name) {
 				 * @param {String} handlerName 操作的名称,可以不传默认为"操作"
 				 * @param {Function} handerSuccessAction 批量操作成功后的回调函数,可以不传默认为"this.queryList"
 				 * @param {handerRows} handerRows 批量操作的列表信息,可以不传,默认为"this.selectRows"当前选中列
-				 **/
+				 *
+				 */
 				// TODO: review
 				handlerBatch(handerAction, handlerName, handerSuccessAction, handerRows) {
 					if (typeof handerRows === "undefined") {
 						handerRows = this.selectRows;
 					}
 					if (!handerSuccessAction) {
-						handerSuccessAction = this.queryList;
+						handerSuccessAction = this.search;
 					}
 					handlerName = handlerName || "操作";
 					if (!handerRows || handerRows.length === 0) {
@@ -177,8 +178,9 @@ export default function(page, name) {
 						filters: {
 							queryId: null // 当前查询ID，手动事件会触发前端随机生成此ID。用于手动查询（search-form组件的search事件）
 						},
+						initParameters: {}, // 初始化时的参数，用于重置查询选项刷新的数据
 						selectRows: [], // 用户选择的列表数据
-						resizeChangeEventName: this.$route.name + "resizeChange" // 当前页面通过手动事件触发导致页面尺寸有变化的事件名称
+						resizeChangeEventName: this.$route.name + "resize-change" // 当前页面通过手动事件触发导致页面尺寸有变化的事件名称
 					},
 					data
 				);
@@ -188,6 +190,7 @@ export default function(page, name) {
 					page.mounted.call(this);
 				}
 				this.init();
+				this.initParameters = site.utils.extend(true, {}, site.constants.QUERY_TABLE_DEFAULT_PARAMETERS, this.filters);
 			}
 		}
 	);
