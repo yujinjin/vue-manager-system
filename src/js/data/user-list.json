@@ -1,0 +1,39 @@
+{
+	"success": true,
+	"unAuthorizedRequest": false,
+	"error": null,
+	"result": {
+        "totalCount": 3,
+		"items": [{
+            "id": 1,
+            "name": "有俭",
+            "loginName": "youjian",
+            "mobile": "13654127833",
+            "email": "youjian@test.com",
+            "state": true,
+            "departmentName": "研发部",
+            "lastLoginTime": "2018-08-03T11:11:09.94+08:00",
+            "createTime": "2018-07-03T21:11:09.94+08:00"
+        }, {
+            "id": 2,
+            "name": "沈陇",
+            "loginName": "shenlong",
+            "mobile": "13654127822",
+            "email": "shenlong@test.com",
+            "state": true,
+            "departmentName": "营销部",
+            "lastLoginTime": "2018-08-13T11:11:09.94+08:00",
+            "createTime": "2018-07-03T21:11:09.94+08:00"
+        }, {
+            "id": 3,
+            "name": "张瘭",
+            "loginName": "zhangbiao",
+            "mobile": "13654127812",
+            "email": "zhangbiao@test.com",
+            "state": false,
+            "departmentName": "市场部",
+            "lastLoginTime": "2018-08-13T11:11:09.94+08:00",
+            "createTime": "2018-07-03T21:11:09.94+08:00"
+        }]
+    }
+}

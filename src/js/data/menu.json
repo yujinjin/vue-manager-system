@@ -25,6 +25,12 @@
 					"name": "role-list"
 				}
 			}, {
+				"name": "department-manager",
+				"displayName": "部门管理",
+				"route": {
+					"name": "department-list"
+				}
+			}, {
 				"name": "user-manage",
 				"displayName": "用户管理",
 				"route": {

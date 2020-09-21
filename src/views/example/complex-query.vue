@@ -30,7 +30,7 @@
             时间：2020-09-14
             描述：数据列表栏
         -->
-		<data-table v-bind="dataTable" :filters="filters" @selection-change="selectRows = arguments[0]">
+		<data-table v-bind="dataTable" :filters="filters" :select-rows.sync="selectRows">
 			<template v-slot:expand="{ row }">
 				<div>订单备注：{{ row["remark"] }}</div>
 			</template>

@@ -39,7 +39,8 @@ export default {
 	},
 	// 当前表单弹窗中的dialog 默认属性
 	FORM_DIALOG_DEFAULT_ATTRIBUTES: {
-		title: "提示"
+		title: "提示",
+		closeOnClickModal: false
 	},
 	// 操作栏中的按钮默认属性
 	ACTION_BAR_BUTTON_DEFAULT_ATTRIBUTES: {

@@ -59,7 +59,8 @@ export default {
 				skipCount: 0,
 				sorting: "creationTime desc" //默认按时间降序排序
 			}, // 当前查询列表参数
-			selectRows: [], // 所选中列的数据
+			// selectRows: [], // 所选中列的数据
+			selectRowsChangeType: -1, // 当前选中行的变化类型，-1: 谁都可以变化，0:父组件中的变化，1: 组件table的事件触发的变化
 			pagination: {
 				total: 0, // 总记录数
 				pageSize: site.constants.PAGE_ITEMS, // 每页记录数
@@ -67,12 +68,10 @@ export default {
 				layout: "total, sizes, prev, pager, next, jumper",
 				pageSizes: [10, 20, 30, 50, 100]
 			}, //分页信息
-			tableOptions: {
-				height: 0
-			}, // 当前element的数据列表组件的配置属性
+			tableOptions: {}, // 当前element的数据列表组件的配置属性
 			tableColumnList: [], // 当前数据表中的列
 			tableInstance: null, // 当前element的数据列表组件实例
-			tableHeight: 0, // 当前数据列表的高度
+			tableHeight: "0px", // 当前数据列表的高度
 			toggleColumnList: [] // 当前数据列显示或隐藏的状态列表
 		};
 	},
@@ -94,7 +93,13 @@ export default {
 			type: Boolean,
 			default: true
 		}, // 当前列表查询是否有分页查询
-		isShowToggleColumnButton: Boolean // 是否显示切换列展示或隐藏的按钮，如果不传会自动判断
+		isShowToggleColumnButton: Boolean, // 是否显示切换列展示或隐藏的按钮，如果不传会自动判断
+		selectRows: {
+			type: Array,
+			default() {
+				return [];
+			}
+		}
 	},
 	watch: {
 		// 监控当前过滤项的值
@@ -111,6 +116,12 @@ export default {
 				}
 			},
 			deep: true
+		},
+		selectRows: {
+			handler(val) {
+				this.selectRowsChangeByParent();
+			},
+			deep: true
 		}
 	},
 	mounted() {
@@ -118,18 +129,22 @@ export default {
 	},
 	methods: {
 		init() {
-			this.initTableHeight();
 			this.generateTableOptions();
 			this.generateParameters();
 			this.generateColumns();
-			this.$store.dispatch("on", {
-				eventName: this.$parent.resizeChangeEventName,
-				callback: this.initTableHeight
-			});
+			this.initTableHeight();
 		},
 		// 初始化数据列表的高度
 		initTableHeight() {
-			this.tableHeight = $(".data-table > .data-table-box").height() - 2 + "px";
+			if (this.tableOptions.height) {
+				this.tableHeight = this.tableOptions.height;
+			} else {
+				this.tableHeight = $(".data-table > .data-table-box").height() - 2 + "px";
+				this.$store.dispatch("on", {
+					eventName: this.$parent.resizeChangeEventName,
+					callback: this.initTableHeight
+				});
+			}
 		},
 		// 生成element的数据列表组件的配置属性
 		generateTableOptions() {
@@ -238,6 +253,29 @@ export default {
 				this.toggleColumnList = toggleColumnList;
 			}
 		},
+		// 父组件中的选中的行有变化
+		selectRowsChangeByParent() {
+			if (!this.data || this.data.length == 0 || this.selectRowsChangeType == 1) {
+				return;
+			}
+			this.selectRowsChangeType = 0;
+			if (!this.selectRows || this.selectRows.length == 0) {
+				this.$refs["data-table"].clearSelection();
+			} else {
+				this.selectRows.forEach(item => {
+					let find_row = item;
+					if (typeof item == "string" || typeof item == "number") {
+						find_row = this.data.find(row => row[this.tableOptions.rowKey] == item);
+					}
+					if (find_row) {
+						this.$refs["data-table"].toggleRowSelection(find_row, true);
+					}
+				});
+			}
+			this.$nextTick(() => {
+				this.selectRowsChangeType = -1;
+			});
+		},
 		// 数据查询列表
 		queryList() {
 			this.isLoading = true;
@@ -265,6 +303,9 @@ export default {
 						this.pagination.total = data.totalCount;
 					}
 					this.data = data.items;
+					if (this.selectRows && this.selectRows.length > 0) {
+						this.$nextTick(this.selectRowsChangeByParent);
+					}
 				})
 				.catch(error => {
 					this.isLoading = false;
@@ -317,8 +358,14 @@ export default {
 		},
 		// 当前数据表有变化
 		change(rows, oldRows) {
-			this.selectRows = rows;
-			this.$emit("selection-change", rows);
+			if (this.selectRowsChangeType == 0) {
+				return;
+			}
+			this.selectRowsChangeType = 1;
+			this.$emit("update:select-rows", rows);
+			this.$nextTick(() => {
+				this.selectRowsChangeType = -1;
+			});
 		},
 		// 分页中每页条目数据变换
 		pageSizeChange(val) {
@@ -349,10 +396,12 @@ export default {
 		}
 	},
 	beforeDestroy() {
-		this.$store.dispatch("off", {
-			eventName: this.$parent.resizeChangeEventName,
-			callback: this.initTableHeight
-		});
+		if (!this.tableOptions.height) {
+			this.$store.dispatch("off", {
+				eventName: this.$parent.resizeChangeEventName,
+				callback: this.initTableHeight
+			});
+		}
 	}
 };
 </script>

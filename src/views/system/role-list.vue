@@ -18,10 +18,10 @@
             时间：2020-09-17
             描述：数据列表栏
         -->
-		<data-table v-bind="dataTable" :filters="filters" @selection-change="selectRows = arguments[0]" />
+		<data-table v-bind="dataTable" :filters="filters" :select-rows.sync="selectRows" />
 
 		<!-- 修改或者新增角色信息 -->
-		<el-dialog :title="roleDialog.title" :visible.sync="roleDialog.isShow" width="50%" heigth="60%">
+		<el-dialog :title="roleDialog.title" :visible.sync="roleDialog.isShow" width="50%">
 			<el-form ref="role-dialog-form" class="role-dialog-form" :model="roleDialog.formInput" label-width="80px">
 				<el-tabs type="border-card">
 					<el-tab-pane label="角色名称">
@@ -68,7 +68,7 @@ export default {
 				{
 					action: "refresh",
 					label: "刷新",
-					click: () => this.refresh(true)
+					click: this.refresh
 				}
 			],
 			dataTable: {

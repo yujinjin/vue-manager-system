@@ -35,5 +35,13 @@ export default {
 
 	queryRoleList(inputData, ajaxOptions) {
 		return Promise.resolve(require("@js/data/role-list.json").result);
+	},
+
+	queryUserList(inputData, ajaxOptions) {
+		return Promise.resolve(require("@js/data/user-list.json").result);
+	},
+
+	queryDepartmentList(inputData, ajaxOptions) {
+		return Promise.resolve(require("@js/data/departments.json").result);
 	}
 };
