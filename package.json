@@ -44,6 +44,7 @@
 		"axios": "0.19.2",
 		"element-ui": "^2.13.2",
 		"jquery": "^1.12.4",
+		"toastr": "^2.1.4",
 		"cropperjs": "^1.5.7",
 		"echarts": "^4.9.0"
 	},

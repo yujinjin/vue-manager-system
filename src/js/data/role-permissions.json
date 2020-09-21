@@ -1,0 +1,15 @@
+{
+    "success": true,
+    "unAuthorizedRequest": false,
+    "error": null,
+    "result": [
+        "system",
+        "system.dashboard",
+        "system.menuManagers",
+        "system.menuManagers.add",
+        "system.menuManagers.update",
+        "system.menuManagers.delete",
+        "system.departmentManagers",
+        "system.departmentManagers.add"
+    ]
+}

@@ -10,19 +10,30 @@ export default {
 		});
 	},
 	// 查询当前登录用户的操作权限
-	queryPermission() {
+	queryUserPermission() {
 		// return site.ajax(Object.assign({
 		// 	url: "",
 		// 	method: "GET",
 		// 	params: params
 		// }, ajaxOptions || {}));
 		return new Promise(resolve => {
-			resolve(require("@js/data/permission.json").result);
+			resolve(require("@js/data/role-permissions.json").result);
+		});
+	},
+
+	// 查询当前系统的所有菜单及操作列表，用于设置角色的权限
+	queryAllPermissions() {
+		return new Promise(resolve => {
+			resolve(require("@js/data/permissions.json").result);
 		});
 	},
 
 	// 查询登录用户的菜单权限
 	queryMenus() {
 		return Promise.resolve(require("@js/data/menu.json").result);
+	},
+
+	queryRoleList(inputData, ajaxOptions) {
+		return Promise.resolve(require("@js/data/role-list.json").result);
 	}
 };

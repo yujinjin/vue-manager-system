@@ -35,7 +35,7 @@
 				</template>
 			</el-table>
 		</div>
-		<div class="pagination-box">
+		<div class="pagination-box" v-if="hasPagination">
 			<el-pagination class="pagination-box" v-bind="pagination" @size-change="pageSizeChange" @current-change="handleCurrentChange" />
 		</div>
 	</div>
@@ -53,7 +53,6 @@ export default {
 		return {
 			data: [], // 当前列表数据
 			isLoading: true, // 当前数据是否正在加载
-			initParameters: {}, // 初始化时的参数，用于重置查询选项刷新的数据
 			parameters: {
 				filter: "", //默认关键词搜索名称
 				maxResultCount: site.constants.PAGE_ITEMS, //最大结果集（等同每页记录数）
@@ -91,6 +90,10 @@ export default {
 			type: Boolean,
 			default: false
 		}, // 是否懒查询，如果是true只能手动的触发查询
+		hasPagination: {
+			type: Boolean,
+			default: true
+		}, // 当前列表查询是否有分页查询
 		isShowToggleColumnButton: Boolean // 是否显示切换列展示或隐藏的按钮，如果不传会自动判断
 	},
 	watch: {
@@ -115,7 +118,6 @@ export default {
 	},
 	methods: {
 		init() {
-			this.initParameters = site.utils.extend(true, {}, site.constants.QUERY_TABLE_DEFAULT_PARAMETERS, this.filters);
 			this.initTableHeight();
 			this.generateTableOptions();
 			this.generateParameters();
@@ -241,21 +243,28 @@ export default {
 			this.isLoading = true;
 			let parameters = site.utils.extend(true, {}, this.parameters);
 			delete parameters.queryId;
+			if (!this.hasPagination) {
+				delete parameters.maxResultCount;
+				delete parameters.skipCount;
+			}
 			return this.query(parameters)
 				.then(data => {
 					this.isLoading = false;
-					let totalPageSize = data.totalCount / this.pagination.pageSize;
-					if (data.totalCount % this.pagination.pageSize != 0) {
-						++totalPageSize;
-					}
-					if (this.pagination.currentPage > totalPageSize) {
-						// 由于查询的页面总数和分页数对应不上，所以再次重新查询数据，使用正确的数据分页
-						this.pagination.currentPage = totalPageSize;
-						this.parameters.skipCount = this.pagination.pageSize * (this.pagination.currentPage - 1);
-						return;
+					if (this.hasPagination) {
+						// 当前页面有分页数据
+						let totalPageSize = data.totalCount / this.pagination.pageSize;
+						if (data.totalCount % this.pagination.pageSize != 0) {
+							++totalPageSize;
+						}
+						if (this.pagination.currentPage > totalPageSize) {
+							// 由于查询的页面总数和分页数对应不上，所以再次重新查询数据，使用正确的数据分页
+							this.pagination.currentPage = totalPageSize;
+							this.parameters.skipCount = this.pagination.pageSize * (this.pagination.currentPage - 1);
+							return;
+						}
+						this.pagination.total = data.totalCount;
 					}
 					this.data = data.items;
-					this.pagination.total = data.totalCount;
 				})
 				.catch(error => {
 					this.isLoading = false;
@@ -328,15 +337,6 @@ export default {
 			this.pagination.currentPage = val;
 			this.parameters.skipCount = this.pagination.pageSize * (this.pagination.currentPage - 1);
 		},
-		// 刷新当前列表数据
-		refresh(isReset = true) {
-			if (this.isReset) {
-				// 重置过滤项的数据
-				this.parameters = site.utils.extend(true, {}, this.initParameters);
-			} else {
-				this.queryList();
-			}
-		},
 		// 修改当前数据表中列的显示或隐藏状态
 		changeColumnState(i, isShow) {
 			if (this.toggleColumnList[i].isShow == isShow) {
@@ -368,6 +368,7 @@ export default {
 	.data-table-box {
 		flex: 1;
 		overflow-y: auto;
+		padding-right: 10px;
 	}
 
 	.pagination-box {
