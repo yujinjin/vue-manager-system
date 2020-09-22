@@ -10,9 +10,10 @@ export default {
 		permissions: [], // 用户的操作权限列表数据
 		tabBarViews: [], // 标签页栏 {name, title, fullPath, query, params, active, keepAlive}
 		cachedViews: [], // 当前可缓存的路由列表
+		/* app临时数据*/
 		locationInfo: {
 			loginUserInfo: null // 当前登录用户信息
-		} //app临时数据
+		}
 	},
 	mutations: {
 		//修改app临时数据

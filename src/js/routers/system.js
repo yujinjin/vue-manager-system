@@ -11,7 +11,8 @@ export default [
 		path: "/",
 		name: "home",
 		meta: {
-			title: "工作台"
+			title: "工作台",
+			affix: true
 		},
 		component: resolve => require(["@views/system/dashboard.vue"], pageFactory(resolve, { name: "dashboard" }))
 	},
