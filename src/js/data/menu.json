@@ -14,7 +14,7 @@
 				}
 			}, {
 				"name": "menu-manage",
-				"displayName": "菜单管理",
+				"displayName": "菜单与权限",
 				"route": {
 					"name": "menu-manager"
 				}

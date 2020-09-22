@@ -1,5 +1,17 @@
 # vue-manager-system
 后台管理系统
+
+ABP ZERO 演示示例
+http://gudufy.demo.aspnetzero.com/
+admin
+123456
+
+导入导出功能demo演示
+http://www.axureux.com/demo/Templates013/%E7%B3%BB%E7%BB%9F%E6%A1%86%E6%9E%B6.html
+https://hc.jiandaoyun.com/doc/9084
+https://www.jiandaoyun.com/dashboard/app/5e030905c24fa60006e5f4d6/form/5d5e533a6118a1037f0bf5fe/edit#/data
+
+
 ### 封装的独立组件列表
 1.图片上传（img-upload）
 2.视频上传（video-upload）

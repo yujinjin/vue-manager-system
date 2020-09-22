@@ -43,5 +43,13 @@ export default {
 
 	queryDepartmentList(inputData, ajaxOptions) {
 		return Promise.resolve(require("@js/data/departments.json").result);
+	},
+
+	queryMenuPermissionList(inputData, ajaxOptions) {
+		return Promise.resolve(require("@js/data/menu-permission.json").result);
+	},
+
+	queryAuditLogs(inputData, ajaxOptions) {
+		return Promise.resolve(require("@js/data/audit-logs.json").result);
 	}
 };

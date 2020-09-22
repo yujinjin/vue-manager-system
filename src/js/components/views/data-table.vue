@@ -2,12 +2,12 @@
 	<div class="data-table">
 		<table-toggle-column v-if="isShowToggleColumnButton" :cloumns="toggleColumnList" @change="changeColumnState" />
 		<div class="data-table-box">
-			<el-table ref="data-table" :height="tableHeight" v-bind="tableOptions" :data="data" v-if="tableColumnList && tableColumnList.length > 0" :row-class-name="rowClassName" @row-click="rowClickEvent" @row-dblclick="rowDbClickEvent" @selection-change="change" style="width: 100%;" v-loading="isLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading">
+			<el-table ref="data-table" :height="tableHeight" v-bind="tableOptions" :data="data" v-if="tableColumnList && tableColumnList.length > 0" :row-class-name="rowClassName" @row-click="rowClickEvent" @row-dblclick="rowDbClickEvent" @selection-change="change" v-loading="isLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading">
 				<template v-for="(column, index) in tableColumnList">
 					<el-table-column v-bind="column.options" :key="index" v-if="!isShowToggleColumnButton || toggleColumnList[index].isShow">
-						<template v-if="column.slot" v-slot="{ row, $index, column }">
+						<template v-if="column.slot" v-slot="scope">
 							<!-- 自定义列 -->
-							<slot :name="column.slot" v-bind="{ row, $index, column }" />
+							<slot :name="column.slot" v-bind="scope" />
 						</template>
 						<template v-else-if="column.type == 'expand'" v-slot="{ row, $index, column }">
 							<!-- 展开列 -->
@@ -78,6 +78,7 @@ export default {
 	props: {
 		filters: Object, // 当前列表查询滤参数
 		query: Function, // 当前列表查询函数
+		queryDataHandle: Function, // 列表数据查询后数据处理，用于可识别的数据结构
 		dbClick: Function, // 数据列表双击时间函数
 		columns: {
 			type: Array,
@@ -169,6 +170,10 @@ export default {
 					column = { slot: column, options: {} };
 				} else {
 					column = { options: site.utils.extend(true, column) };
+				}
+				if (column.options.slot) {
+					column.slot = column.options.slot;
+					delete column.options.slot;
 				}
 				if (Object.prototype.hasOwnProperty.call(column.options, "isShow")) {
 					column.isShow = column.options.isShow;
@@ -287,6 +292,9 @@ export default {
 			}
 			return this.query(parameters)
 				.then(data => {
+					if (this.queryDataHandle) {
+						data = this.queryDataHandle(data);
+					}
 					this.isLoading = false;
 					if (this.hasPagination) {
 						// 当前页面有分页数据
@@ -417,7 +425,7 @@ export default {
 	.data-table-box {
 		flex: 1;
 		overflow-y: auto;
-		padding-right: 10px;
+		padding-right: 5px;
 	}
 
 	.pagination-box {

@@ -17,6 +17,14 @@ export default [
 		component: resolve => require(["@views/system/dashboard.vue"], pageFactory(resolve, { name: "dashboard" }))
 	},
 	{
+		path: "/system/menu-manager",
+		name: "menu-manager",
+		meta: {
+			title: "菜单与权限"
+		},
+		component: resolve => require(["@views/system/menu-manager.vue"], pageFactory(resolve, { name: "menu-manager", type: "query" }))
+	},
+	{
 		path: "/system/role-list",
 		name: "role-list",
 		meta: {
