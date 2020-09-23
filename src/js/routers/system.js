@@ -55,5 +55,13 @@ export default [
 			title: "审计日志"
 		},
 		component: resolve => require(["@views/system/audit-logs.vue"], pageFactory(resolve, { name: "audit-logs", type: "query" }))
+	},
+	{
+		path: "/system/settings",
+		name: "settings",
+		meta: {
+			title: "设置"
+		},
+		component: resolve => require(["@views/system/settings.vue"], pageFactory(resolve, { name: "settings", type: "other" }))
 	}
 ];
