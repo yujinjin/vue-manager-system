@@ -325,6 +325,34 @@ export default {
 						this.isSubmiting = false;
 					});
 			});
+		},
+
+		/**
+		 * 设置当前表单的字段数据（外部应用方法）
+		 * @param {Object} fieldsValue 设置的字段数据对象，如果该对象为null就设置所有的字段为null
+		 * @param {Array} otherProperties 设置formInput其他属性值的数组，比如：["id"],修改的时候需要formInput拥有id属性
+		 */
+		setFieldsValue(fieldsValue, otherProperties) {
+			if (!this.formFields || this.formFields.length == 0) {
+				site.log.error("当前表单没有任何字段数据！");
+			}
+			this.formInput = {};
+			this.formFields.forEach(field => {
+				if (!field.name) {
+					return;
+				}
+				let value = null;
+				if (fieldsValue) {
+					value = site.utils.getObjectProperty(fieldsValue, field.name, null);
+				}
+				field.value = value;
+				this.$set(this.formInput, field.name, value);
+			});
+			if (otherProperties && otherProperties.length > 0) {
+				otherProperties.forEach(propertyItem => {
+					this.$set(this.formInput, propertyItem, site.utils.getObjectProperty(fieldsValue, propertyItem, null));
+				});
+			}
 		}
 	}
 };

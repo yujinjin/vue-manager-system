@@ -14,18 +14,14 @@
                 "permissions": "system.dashboard",
                 "icon": null,
                 "type": "menu",
-				"route": {
-					"name": "home"
-				}
+				"route": "{ \"name\": \"home\" }"
 			}, {
 				"name": "menu-manage",
 				"displayName": "菜单与权限",
                 "permissions": "system.menuManagers",
                 "icon": null,
                 "type": "menu",
-				"route": {
-					"name": "menu-manager"
-                },
+                "route": "{ \"name\": \"menu-manager\" }",
                 "items": [{
                     "label": "新增",
                     "permissions": "system.menuManagers.add",
@@ -45,9 +41,7 @@
                 "permissions": "system.roleManagers",
                 "icon": null,
                 "type": "menu",
-				"route": {
-					"name": "role-list"
-                },
+				"route": "{ \"name\": \"role-list\" }",
                 "items": [{
                     "label": "新增",
                     "permissions": "system.roleManagers.add",
@@ -67,9 +61,7 @@
                 "permissions": "system.departmentManagers",
                 "icon": null,
                 "type": "menu",
-				"route": {
-					"name": "department-list"
-				},
+				"route": "{ \"name\": \"department-list\" }",
                 "items": [{
                     "label": "新增",
                     "permissions": "system.departmentManagers.add",
@@ -89,9 +81,7 @@
                 "permissions": "system.userManagers",
                 "icon": null,
                 "type": "menu",
-				"route": {
-					"name": "user-list"
-				},
+				"route": "{ \"name\": \"user-list\" }",
                 "items": [{
                     "label": "新增",
                     "permissions": "system.userManagers.add",
@@ -115,18 +105,14 @@
                 "permissions": "system.logManagers",
                 "icon": null,
                 "type": "menu",
-				"route": {
-					"name": "audit-logs"
-				}
+				"route": "{ \"name\": \"audit-logs\" }"
 			}, {
 				"name": "settings",
 				"displayName": "设置",
                 "permissions": "system.settings",
                 "icon": null,
                 "type": "menu",
-				"route": {
-					"name": "settings"
-				}
+				"route": "{ \"name\": \"settings\" }"
 			}]
 		}, {
 			"name": "example",
@@ -146,9 +132,7 @@
                     "permissions": "example.query.common",
                     "icon": null,
                     "type": "menu",
-					"route": {
-						"name": "simple-query"
-                    },
+					"route": "{ \"name\": \"simple-query\" }",
                     "items": [{
                         "label": "新增",
                         "permissions": "example.query.common.add",
@@ -176,9 +160,7 @@
                     "permissions": "example.query.complex",
                     "icon": null,
                     "type": "menu",
-					"route": {
-						"name": "complex-query"
-					},
+					"route": "{ \"name\": \"complex-query\" }",
                     "items": [{
                         "label": "新增",
                         "permissions": "example.query.complex.add",
@@ -217,18 +199,14 @@
                     "permissions": "example.form.common",
                     "icon": null,
                     "type": "menu",
-					"route": {
-						"name": "simple-form"
-					}
+					"route": "{ \"name\": \"simple-form\" }"
 				}, {
 					"name": "complex-form",
 					"displayName": "复杂表单",
                     "permissions": "example.form.complex",
                     "icon": null,
                     "type": "menu",
-					"route": {
-						"name": "complex-form"
-					}
+					"route": "{ \"name\": \"complex-form\" }"
 				}]
 			}]
 		}

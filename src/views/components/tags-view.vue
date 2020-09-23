@@ -203,8 +203,8 @@ export default {
 			height: 40px;
 			line-height: 40px;
 			// border: 1px solid #d8dce5;
-			color: #FFF;
-			background: #1A344B;
+			color: #fff;
+			background: #1a344b;
 			padding: 0 8px;
 			font-size: 12px;
 			margin-left: 1px;
@@ -217,7 +217,7 @@ export default {
 				margin-right: 15px;
 			}
 			&.active {
-				background: #FFF;
+				background: #fff;
 				color: #333333;
 				border-color: #42b983;
 				&::before {
