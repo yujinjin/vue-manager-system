@@ -11,7 +11,7 @@
             时间：2020-09-17
             描述：数据列表栏
         -->
-		<data-table v-bind="dataTable" :select-rows.sync="selectRows">
+		<data-table v-bind="dataTable">
 			<template v-slot:icon="{ row }">
 				<svg-icon style="font-size: 20px" v-if="row.icon" :value="row.icon"></svg-icon>
 			</template>
@@ -79,11 +79,6 @@ export default {
 		return {
 			handleButtons: [
 				{
-					action: "delete",
-					label: "删除",
-					click: this.delete
-				},
-				{
 					action: "refresh",
 					label: "刷新",
 					click: this.refresh
@@ -104,9 +99,6 @@ export default {
 					}
 				},
 				columns: [
-					{
-						type: "selection"
-					},
 					{
 						prop: "name",
 						label: "名称",
@@ -138,7 +130,7 @@ export default {
 					{
 						type: "action",
 						label: "操作",
-						width: "180px",
+						width: "220px",
 						buttons: this.generatorActionButtons
 					}
 				]
@@ -188,11 +180,16 @@ export default {
 	},
 	methods: {
 		init() {},
-		delete() {
-			this.preBatchDelete(inputData => {
-				console.info(inputData);
-				return Promise.resolve(true);
-			});
+		delete(row) {
+			this.$confirm("确定要删除" + (row.displayName ? row.displayName + "菜单" : row.label + "按钮") + "吗?", "提示", {
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				type: "warning"
+			})
+				.then(() => {
+					return Promise.resolve(true);
+				})
+				.catch(() => {});
 		},
 		generatorActionButtons(row) {
 			let buttons = [];
@@ -208,10 +205,16 @@ export default {
 					}
 				];
 			}
-			buttons.push({
-				label: "编辑",
-				click: this.gotoUpdate
-			});
+			buttons.push(
+				{
+					label: "编辑",
+					click: this.gotoUpdate
+				},
+				{
+					label: "删除",
+					click: this.delete
+				}
+			);
 			return buttons;
 		},
 		nameFormatter(row, column, cellValue, index) {
@@ -288,7 +291,7 @@ export default {
 					}
 				];
 				this.updateMenuDialogForm.dialog.title = "修改菜单信息:" + row.displayName;
-			} else if(row.type == "button") {
+			} else if (row.type == "button") {
 				this.updateMenuDialogForm.fields = [
 					{
 						name: "label",

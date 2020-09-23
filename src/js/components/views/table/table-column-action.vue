@@ -44,7 +44,11 @@ export default {
 			}
 		},
 		dropdownButtons() {
-			return this.actionButtons.slice(this.maxShow - 1);
+			if (this.actionButtons.length > this.maxShow) {
+				return this.actionButtons.slice(this.maxShow - 1);
+			} else {
+				return [];
+			}
 		}
 	},
 	mounted() {

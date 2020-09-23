@@ -33,6 +33,14 @@ export default [
 		component: resolve => require(["@views/system/role-list.vue"], pageFactory(resolve, { name: "role-list", type: "query" }))
 	},
 	{
+		path: "/system/department-list",
+		name: "department-list",
+		meta: {
+			title: "部门管理"
+		},
+		component: resolve => require(["@views/system/department-list.vue"], pageFactory(resolve, { name: "department-list", type: "query" }))
+	},
+	{
 		path: "/system/user-list",
 		name: "user-list",
 		meta: {
