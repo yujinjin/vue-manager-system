@@ -47,5 +47,13 @@ export default [
 			title: "用户管理"
 		},
 		component: resolve => require(["@views/system/user-list.vue"], pageFactory(resolve, { name: "user-list", type: "query" }))
+	},
+	{
+		path: "/system/audit-logs",
+		name: "audit-logs",
+		meta: {
+			title: "审计日志"
+		},
+		component: resolve => require(["@views/system/audit-logs.vue"], pageFactory(resolve, { name: "audit-logs", type: "query" }))
 	}
 ];

@@ -93,7 +93,6 @@
 export default {
 	data() {
 		return {
-			fileList: [],
 			queryFields: [
 				{
 					name: "filter",
@@ -296,9 +295,6 @@ export default {
 		},
 		changeStatus(val) {
 			return Promise.resolve(true);
-		},
-		change(fileList) {
-			console.info(fileList);
 		},
 		departmentSelectChange(row) {
 			this.userDialog.formInput.departmentId = row.id;
