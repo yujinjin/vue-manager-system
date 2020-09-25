@@ -1,52 +1,32 @@
 <template>
-	<!-- 
-        弹窗form表单封装
-    -->
-	<el-dialog v-bind="dialogAttributes" :visible="isShow" @close="close">
+	<div class="page-form-components" :class="{ 'fixed-bottom': isFixedBottom }">
 		<form-input :fields="fields" :form="form" :column="column" ref="form-input" @input-change="formInputChange">
 			<template v-for="slotName in formInputSlotNameList" v-slot:[slotName]="{ formInput }">
 				<slot :name="slotName" v-bind:formInput="formInput"></slot>
 			</template>
 		</form-input>
-		<!-- 表单底部默认内容 -->
-		<slot name="form-bottom"></slot>
-		<!-- Dialog 按钮操作区的内容 -->
-		<div slot="footer" class="dialog-footer" v-if="actionButtons && actionButtons.length > 0">
+		<div class="footer" v-if="isFixedBottom">
 			<el-button v-for="(buttonItem, index) in actionButtons" v-bind="buttonItem.option" :key="index" @click="clickHandle(index)">{{ buttonItem.label }}</el-button>
 		</div>
-	</el-dialog>
+	</div>
 </template>
 <script>
 export default {
 	data() {
 		return {
-			formInput: {}, // 当前表单的值
 			formInputSlotNameList: [], // form-input组件中的插槽名称列表
-			dialogAttributes: {}, // 当前dialog属性
 			isSubmiting: false, // 当前数据是否正在提交
 			actionButtons: [] // 弹窗底部操作按钮
 		};
 	},
 	props: {
-		// dialog的属性（具体见Elemnet Dialog 对话框文档）
-		dialog: {
-			type: Object,
-			default() {
-				return null;
-			}
-		},
-		// 是否显示弹窗
-		isShow: {
-			type: Boolean,
-			default: false
-		},
 		// 弹窗底部操作按钮，如果是false、null就不展示
 		// 针对于按钮的点击事件父级事件，其事件名格式：{action} + 'Click'
 		buttons: {
 			type: [Boolean, Array],
 			default: true
 		},
-		// 表单字段列表[{name: 表单项名称, label: 选项的标签名称, value: 选项的值, type: 组件的类型,
+		// 表单字段列表[{division: { title: "分组后的卡片标题", subTitle: "分组后的卡片标题"}--组分割栏, name: 表单项名称, label: 选项的标签名称, value: 选项的值, type: 组件的类型,
 		// data: 数据（比如：select的选项值列表）, option: 组件的自定义选项(可无), span: 占用的栅格数（布局）
 		// rules: 表单的验证方式, slot: 自定义插槽名称（可无，如有值其他选项无效）}]
 		fields: {
@@ -67,16 +47,14 @@ export default {
 		// 表单每栏显示数目，不要初始化后又有变化，这里不做监控
 		column: {
 			type: Number,
-			default: 1
-		}
+			default: 3
+		},
+		isShowFooter: {
+			type: Boolean,
+			default: true
+		} // 是否显示底部操作按钮
 	},
 	watch: {
-		dialog: {
-			handler(val) {
-				this.generateDialogAttributes();
-			},
-			deep: true
-		},
 		buttons: {
 			handler(val) {
 				this.generateButtons();
@@ -85,22 +63,16 @@ export default {
 		},
 		fields: {
 			handler(val) {
-				this.$nextTick(() => {
-					if (this.$refs["form-input"]) {
-						this.formInputSlotNameList = this.$refs["form-input"].getSlotNameList();
-					}
-				});
+				if (this.$refs["form-input"]) {
+					this.formInputSlotNameList = this.$refs["form-input"].getSlotNameList();
+				}
 			},
 			deep: true
-		},
-		isShow(val) {
-			if (val) {
-				this.$nextTick(() => {
-					if (this.$refs["form-input"]) {
-						this.formInputSlotNameList = this.$refs["form-input"].getSlotNameList();
-					}
-				});
-			}
+		}
+	},
+	computed: {
+		isFixedBottom() {
+			return this.isShowFooter && this.actionButtons && this.actionButtons.length > 0;
 		}
 	},
 	mounted() {
@@ -108,12 +80,10 @@ export default {
 	},
 	methods: {
 		init() {
-			this.generateDialogAttributes();
 			this.generateButtons();
-		},
-		// 生成dialog属性配置
-		generateDialogAttributes() {
-			this.dialogAttributes = site.utils.extend(true, {}, site.constants.FORM_DIALOG_DEFAULT_ATTRIBUTES, this.dialog);
+			if (this.$refs["form-input"]) {
+				this.formInputSlotNameList = this.$refs["form-input"].getSlotNameList();
+			}
 		},
 		generateButtons() {
 			if (this.buttons == null || this.buttons == true || this.buttons === undefined) {
@@ -137,7 +107,7 @@ export default {
 					}
 				];
 			} else if (this.buttons !== false && this.buttons.length > 0) {
-				this.actionButtons = site.utils.extend(true, this.buttons);
+				this.actionButtons = site.utils.extend(true, {}, this.buttons);
 			} else {
 				this.actionButtons = [];
 			}
@@ -170,7 +140,7 @@ export default {
 			}
 		},
 		close() {
-			this.$emit("update:isShow", false);
+			this.$emit("close");
 		},
 		formInputChange(formInput, name, value) {
 			this.$emit("input-change", formInput, name, value);
@@ -194,6 +164,7 @@ export default {
 					this.isSubmiting = false;
 				});
 		},
+
 		/**
 		 * 设置当前表单的字段数据（外部应用方法）
 		 * @param {Object} fieldsValue 设置的字段数据对象，如果该对象为null就设置所有的字段为null，
@@ -218,4 +189,26 @@ export default {
 	}
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.page-form-components {
+	height: 100%;
+	width: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 10px 10px 0px 0px;
+
+	&.fixed-bottom {
+		padding-bottom: 50px;
+	}
+
+	.footer {
+		position: absolute;
+		left: -10px;
+		right: 0px;
+		bottom: 0px;
+		padding-bottom: 15px;
+		text-align: center;
+		background-color: rgba(255, 255, 255, 0.8);
+	}
+}
+</style>

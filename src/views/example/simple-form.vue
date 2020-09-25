@@ -1,6 +1,6 @@
 <template>
 	<div class="simple-form">
-		<page-simple-form v-bind="pageForm"></page-simple-form>
+		<page-form v-bind="pageForm"></page-form>
 	</div>
 </template>
 <script>

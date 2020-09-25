@@ -15,8 +15,7 @@ import viewInfo from "./views/view-info";
 import formInput from "./views/form-input";
 import dialogForm from "./views/dialog-form";
 import dataTable from "./views/data-table";
-import pageSimpleForm from "./views/page-simple-form";
-import pageComplexForm from "./views/page-complex-form";
+import pageForm from "./views/page-form";
 
 export default function() {
 	Vue.component("svg-icon", svgIcon);
@@ -29,6 +28,5 @@ export default function() {
 	Vue.component("form-input", formInput);
 	Vue.component("dialog-form", dialogForm);
 	Vue.component("data-table", dataTable);
-	Vue.component("page-simple-form", pageSimpleForm);
-	Vue.component("page-complex-form", pageComplexForm);
+	Vue.component("page-form", pageForm);
 }

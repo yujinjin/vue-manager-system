@@ -236,6 +236,17 @@ export default {
 				return false;
 			}
 			return this.fields.findIndex(item => !!item.division) != -1;
+		},
+		formLabelWidth() {
+			if (this.form && this.form.labelWidth) {
+				return this.form.labelWidth;
+			} else if (this.column == 1) {
+				return "200px";
+			} else if (this.column == 2) {
+				return "150px";
+			} else {
+				return "100px";
+			}
 		}
 	},
 	mounted() {
@@ -248,7 +259,7 @@ export default {
 		},
 		// 生成dialog属性配置
 		generateFormAttributes() {
-			this.formAttributes = site.utils.extend(true, {}, site.constants.FORM_DEFAULT_ATTRIBUTES, this.form);
+			this.formAttributes = site.utils.extend(true, {}, site.constants.FORM_DEFAULT_ATTRIBUTES, { labelWidth: this.formLabelWidth }, this.form);
 		},
 		// 生成form表单字段
 		generateFormFields() {
@@ -365,8 +376,45 @@ export default {
 				}
 			});
 			return nameList;
+		},
+		getFormInput() {
+			return this.formInput;
 		}
 	}
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.form-input-components {
+	.card {
+		border: 1px solid #dfe6ec;
+		border-radius: 5px;
+		margin: 10px;
+		overflow: hidden;
+
+		&:hover {
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);
+		}
+
+		.header {
+			background: #eef1f6;
+			line-height: 40px;
+			padding-left: 10px;
+			font-size: 16px;
+			font-weight: bold;
+
+			.tips-text {
+				font-weight: normal;
+				font-size: 12px;
+				display: inline-block;
+				padding-left: 5px;
+				color: #f56c6c;
+			}
+		}
+
+		.body {
+			padding-top: 15px;
+			padding-right: 15px;
+		}
+	}
+}
+</style>

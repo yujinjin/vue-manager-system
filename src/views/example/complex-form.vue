@@ -1,6 +1,6 @@
 <template>
 	<div class="complex-form">
-		<page-complex-form v-bind="pageForm">
+		<page-form v-bind="pageForm">
 			<!-- 自定义数据列表内容 -->
 			<template v-slot:table="{ formInput }">
 				<el-table :data="tableData" height="250" border style="width: 100%">
@@ -14,7 +14,7 @@
 					<el-button type="primary" size="small" @click="addGoods(formInput)">添加</el-button>
 				</div>
 			</template>
-		</page-complex-form>
+		</page-form>
 	</div>
 </template>
 <script>
