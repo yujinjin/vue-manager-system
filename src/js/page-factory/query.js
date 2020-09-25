@@ -55,6 +55,26 @@ export default function(page, name) {
 				confirmHandle(yesHandler) {
 					// TODO: 实现
 				},
+				getNextRow(row, tableRef = "data-table"){
+					if(!row) return;
+					if (!this.$refs[tableRef]) {
+						// throw Error("请指定数据列表ref属性");
+						site.log.error("请指定数据列表ref属性!");
+						return;
+					}
+					console.info("getNextRow------------");
+					return this.$refs[tableRef].getNearestRow(row, 1);
+				},
+				getPrevRow(row, tableRef = "data-table"){
+					if (!row) return;
+					if (!this.$refs[tableRef]) {
+						// throw Error("请指定数据列表ref属性");
+						site.log.error("请指定数据列表ref属性!");
+						return;
+					}
+					// console.info(this.$refs[tableRef].getNearestRow(row, -1), "------------");
+					return this.$refs[tableRef].getNearestRow(row, -1);
+				},
 				// 批量删除预处理
 				preBatchDelete(deleteHandler) {
 					if (this.selectRows.length == 0) {
@@ -180,7 +200,7 @@ export default function(page, name) {
 						},
 						initParameters: {}, // 初始化时的参数，用于重置查询选项刷新的数据
 						selectRows: [], // 用户选择的列表数据
-						resizeChangeEventName: this.$route.name + "resize-change" // 当前页面通过手动事件触发导致页面尺寸有变化的事件名称
+						resizeChangeEventName: this.$route.name + "_resize-change" // 当前页面通过手动事件触发导致页面尺寸有变化的事件名称
 					},
 					data
 				);

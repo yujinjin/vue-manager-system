@@ -12,7 +12,7 @@
 				"price": "4148.42",
 				"orderNo": "NO0001",
 				"receiveManTel": "1458560455",
-				"remark": "订单详情，这是一个测试数据的订单详情！",
+				"remark": "订单详情，这是一个测试数据的订单详情！<div class=\"field-img2\"><div class=\"el-image img-column\"><img src=\"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg\" class=\"el-image__inner el-image__preview\" style=\"object-fit: cover;\"><!----></div><div class=\"el-image img-column\"><img src=\"https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg\" class=\"el-image__inner el-image__preview\" style=\"object-fit: cover;\"><!----></div><div class=\"el-image img-column\"><img src=\"https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg\" class=\"el-image__inner el-image__preview\" style=\"object-fit: cover;\"><!----></div></div>",
 				"sendMan": "申屠圳",
 				"fromAbroad": true,
 				"tags": "01|测试|04",

@@ -134,6 +134,10 @@ export default {
 			this.generateParameters();
 			this.generateColumns();
 			this.initTableHeight();
+			this.$store.dispatch("on", {
+				eventName: this.$parent.resizeChangeEventName,
+				callback: this.initTableHeight
+			});
 		},
 		// 初始化数据列表的高度
 		initTableHeight() {
@@ -141,10 +145,6 @@ export default {
 				this.tableHeight = this.tableOptions.height;
 			} else {
 				this.tableHeight = $(".data-table > .data-table-box").height() - 2 + "px";
-				this.$store.dispatch("on", {
-					eventName: this.$parent.resizeChangeEventName,
-					callback: this.initTableHeight
-				});
 			}
 		},
 		// 生成element的数据列表组件的配置属性
@@ -401,6 +401,27 @@ export default {
 			this.$nextTick(() => {
 				this.$refs["data-table"].doLayout();
 			});
+		},
+		// 根据当前数据获取最近一条数据
+		getNearestRow(currentRow, index) {
+			if (!currentRow || !this.data || this.data.length == 0) {
+				return null;
+			}
+			let key;
+			if (typeof currentRow == "string" || typeof currentRow == "number") {
+				key = currentRow;
+			} else {
+				key = currentRow[this.tableOptions.rowKey];
+			}
+			let i = this.data.findIndex(row => row[this.tableOptions.rowKey] == key);
+			if (i == -1) {
+				return null;
+			}
+			i += index;
+			if (i < 0 || this.data.length < i) {
+				return null;
+			}
+			return this.data[i];
 		}
 	},
 	beforeDestroy() {

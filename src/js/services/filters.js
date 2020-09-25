@@ -13,7 +13,7 @@ export default {
 		return utils.dateFormat(data, format);
 	},
 
-	currencyFormat(data, digit = 2) {
+	currencyFormat(num, digit = 2) {
 		if (typeof num != "number" && !num) {
 			num = 0;
 		}
@@ -27,7 +27,7 @@ export default {
 			// 如果金额格式化2位，判断当前的数字是否有一位小数位，如果没有就直接显示整数
 			digit = 1;
 		}
-		return utils.numberFormat(data, digit);
+		return utils.numberFormat(num, digit);
 	},
 
 	changeNumMoneyToChinese(money) {

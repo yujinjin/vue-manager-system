@@ -114,6 +114,7 @@ export default {
 					{
 						type: "action",
 						label: "操作",
+						width: "160px",
 						buttons: row => {
 							return [
 								{

@@ -1,8 +1,8 @@
 <template>
 	<!-- 数据列表中图片列，最大120px -->
-	<div class="table-column-img">
+	<div class="table-column-img" @click.stop.prevent>
 		<template v-if="imgList && imgList.length > 0">
-			<el-image class="img-column" @click.stop.prevent :src="img" :preview-src-list="imgList" fit="cover" v-for="(img, index) in imgList" :key="index" />
+			<el-image class="img-column" :src="img" :preview-src-list="imgList" fit="cover" v-for="(img, index) in imgList" :key="index" />
 		</template>
 		<div class="no-date" v-else>没有图片</div>
 	</div>

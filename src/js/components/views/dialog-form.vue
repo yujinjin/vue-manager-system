@@ -262,7 +262,7 @@ export default {
 					}
 				];
 			} else if (this.buttons !== false && this.buttons.length > 0) {
-				this.actionButtons = site.utils.extend(true, {}, this.buttons);
+				this.actionButtons = site.utils.extend(true, this.buttons);
 			} else {
 				this.actionButtons = [];
 			}
