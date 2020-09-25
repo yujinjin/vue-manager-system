@@ -2,71 +2,12 @@
 	<!-- 
         弹窗form表单封装
     -->
-	<el-dialog v-bind="dialogAttributes" :visible="isShow" @close="close(-1)">
-		<el-form v-bind="formAttributes" :model="formInput">
-			<el-row :gutter="10" class="input-row" v-for="(groupItem, index) in groupFields" :key="index">
-				<el-col class="field-box" :span="fieldItem.span" v-for="(fieldItem, i) in groupItem" :key="i">
-					<el-form-item :label="fieldItem.label" :label-width="fieldItem.labelWidth || fieldItem.label ? fieldItem.labelWidth || formAttributes.labelWidth : '15px'" :prop="fieldItem.name + ''" :rules="fieldItem.rules">
-						<!-- 自定义组件 -->
-						<template v-if="fieldItem.slot">
-							<slot :name="fieldItem.slot" v-bind:formInput="formInput"></slot>
-						</template>
-						<template v-else-if="fieldItem.type == 'label'">
-							<strong>{{ getValue(fieldItem.name) }}</strong>
-						</template>
-						<template v-else-if="fieldItem.type == 'input'">
-							<el-input v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-input>
-						</template>
-						<template v-else-if="fieldItem.type == 'select'">
-							<el-select v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)">
-								<el-option v-for="item in fieldItem.data" :key="item.value" :label="item.label" :value="item.value"></el-option>
-							</el-select>
-						</template>
-						<template v-else-if="fieldItem.type == 'timeSelect'">
-							<el-time-select v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-time-select>
-						</template>
-						<template v-else-if="fieldItem.type == 'datePicker' || fieldItem.type == 'dateTimePicker'">
-							<el-date-picker v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-date-picker>
-						</template>
-						<template v-else-if="fieldItem.type == 'inputNumber'">
-							<el-input-number v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-input-number>
-						</template>
-						<template v-else-if="fieldItem.type == 'switch'">
-							<el-switch v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-switch>
-						</template>
-						<template v-else-if="fieldItem.type == 'checkbox'">
-							<el-checkbox-group v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)">
-								<el-checkbox v-for="item in fieldItem.data" :key="item.value" :label="item.value">{{ item.label }}</el-checkbox>
-							</el-checkbox-group>
-						</template>
-						<template v-else-if="fieldItem.type == 'radio'">
-							<el-radio-group v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)">
-								<el-radio v-for="item in fieldItem.data" :key="item.value" :label="item.value">{{ item.label }}</el-radio>
-							</el-radio-group>
-						</template>
-						<template v-else-if="fieldItem.type == 'image'">
-							<el-image v-bind="fieldItem.option" :src="getValue(fieldItem.name) | imageUrl"></el-image>
-						</template>
-						<template v-else-if="fieldItem.type == 'imgUpload'">
-							<img-upload v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></img-upload>
-						</template>
-						<template v-else-if="fieldItem.type == 'videoUpload'">
-							<video-upload v-bind="fieldItem.option" @on-change="changeValue(fieldItem.name, arguments[0])"></video-upload>
-						</template>
-						<template v-else-if="fieldItem.type == 'rate'">
-							<el-rate v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-rate>
-						</template>
-						<template v-else-if="fieldItem.type == 'colorPicker'">
-							<el-color-picker v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></el-color-picker>
-						</template>
-						<template v-else-if="fieldItem.type == 'htmlEditor'">
-							<!-- 富文本框编辑器实现 -->
-							<web-editor :editor="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)"></web-editor>
-						</template>
-					</el-form-item>
-				</el-col>
-			</el-row>
-		</el-form>
+	<el-dialog v-bind="dialogAttributes" :visible="isShow" @close="close">
+		<form-input :fields="fields" :form="form" :column="column" ref="form-input" @input-change="formInputChange">
+			<template v-for="slotName in formInputSlotNameList" v-slot:[slotName]="{ formInput }">
+				<slot :name="slotName" v-bind:formInput="formInput"></slot>
+			</template>
+		</form-input>
 		<!-- 表单底部默认内容 -->
 		<slot name="form-bottom"></slot>
 		<!-- Dialog 按钮操作区的内容 -->
@@ -79,11 +20,9 @@
 export default {
 	data() {
 		return {
+			formInputSlotNameList: [], // form-input组件中的插槽名称列表
 			dialogAttributes: {}, // 当前dialog属性
-			formAttributes: {}, // 当前form表单属性
 			isSubmiting: false, // 当前数据是否正在提交
-			formFields: [], // 表单字段列表
-			formInput: {}, // 当前提交的表单数据
 			actionButtons: [] // 弹窗底部操作按钮
 		};
 	},
@@ -137,49 +76,30 @@ export default {
 			},
 			deep: true
 		},
-		fields: {
-			handler(val) {
-				this.generateFormFields();
-			},
-			deep: true
-		},
-		form: {
-			handler(val) {
-				this.generateFormAttributes();
-			},
-			deep: true
-		},
 		buttons: {
 			handler(val) {
 				this.generateButtons();
 			},
 			deep: true
-		}
-	},
-	computed: {
-		// 把formFields分成二维数组，便于嵌套循环
-		groupFields() {
-			if (!this.formFields || this.formFields.length == 0) {
-				return;
+		},
+		fields: {
+			handler(val) {
+				this.$nextTick(() => {
+					if (this.$refs["form-input"]) {
+						this.formInputSlotNameList = this.$refs["form-input"].getSlotNameList();
+					}
+				});
+			},
+			deep: true
+		},
+		isShow(val) {
+			if (val) {
+				this.$nextTick(() => {
+					if (this.$refs["form-input"]) {
+						this.formInputSlotNameList = this.$refs["form-input"].getSlotNameList();
+					}
+				});
 			}
-			// 当前分组的二维数据
-			let groupFields = [];
-			// 当前分组的二维数下标
-			let i = 0;
-			// 当前行所占的栅格数
-			let currentColumnNumber = 0;
-			this.formFields.forEach(fields => {
-				currentColumnNumber += fields.span;
-				if (currentColumnNumber > 24) {
-					++i;
-					currentColumnNumber = fields.span;
-				}
-				if (!groupFields[i]) {
-					groupFields[i] = [];
-				}
-				groupFields[i].push(fields);
-			});
-			return groupFields;
 		}
 	},
 	mounted() {
@@ -188,57 +108,11 @@ export default {
 	methods: {
 		init() {
 			this.generateDialogAttributes();
-			this.generateFormAttributes();
-			this.generateFormFields();
 			this.generateButtons();
 		},
 		// 生成dialog属性配置
 		generateDialogAttributes() {
 			this.dialogAttributes = site.utils.extend(true, {}, site.constants.FORM_DIALOG_DEFAULT_ATTRIBUTES, this.dialog);
-		},
-		// 生成dialog属性配置
-		generateFormAttributes() {
-			this.formAttributes = site.utils.extend(true, {}, site.constants.FORM_DEFAULT_ATTRIBUTES, this.form);
-		},
-		// 生成form表单字段
-		generateFormFields() {
-			if (!this.fields || this.fields.length == 0) {
-				return;
-			}
-			let formFields = [];
-			this.fields.forEach(field => {
-				field = site.utils.extend(true, {}, field);
-				// 表单字段列表[{name: 表单项名称, label: 选项的标签名称, value: 选项的值, type: 组件的类型,
-				// data: 数据（比如：select的选项值列表）, option: 组件的自定义选项(可无), span: 占用的栅格数（布局）
-				// rules: 表单的验证方式, slot: 自定义插槽名称（可无，如有值其他选项无效）}]
-				if (field.name) {
-					this.$set(this.formInput, field.name, field.value === undefined ? null : field.value);
-				}
-				if (!field.slot) {
-					if (!field.type) {
-						// 默认输入框
-						field.type = "input";
-					}
-					if (site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type]) {
-						if (!field.option) {
-							field.option = {};
-						}
-						if (!field.option.placeholder) {
-							field.option.placeholder = (site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type].placeholder || "") + (field.label || "");
-						}
-						field.option = site.utils.extend(true, {}, site.constants.FORM_FIELD_DEFAULT_ATTRIBUTES[field.type], field.option || {});
-					}
-				}
-				if (field.label) {
-					field.label = field.label + "：";
-				}
-				if (!field.span) {
-					// 计算当前字段所占的栅格数
-					field.span = parseInt(24 / this.column, 10);
-				}
-				formFields.push(field);
-			});
-			this.formFields = formFields;
 		},
 		generateButtons() {
 			if (this.buttons == null || this.buttons == true || this.buttons === undefined) {
@@ -267,77 +141,57 @@ export default {
 				this.actionButtons = [];
 			}
 		},
-		// 获取当前字段的值
-		getValue(name) {
-			return site.utils.getObjectProperty(this.formInput, name, null);
-		},
-		// 更改当前字段的值
-		changeValue(name, value) {
-			this.$set(this.formInput, name, value);
-			this.$emit("input-change", this.formInput);
-		},
 		clickHandle(index) {
 			if (typeof this.actionButtons[index].click === "function") {
 				this.actionButtons[index].click(index);
 			}
 			this.$emit(this.actionButtons[index].action + "Click", this.formInfo, index);
 		},
-		close(index) {
-			let action = "cancel";
-			if (index != -1) {
-				action = this.actionButtons[index].action + "Click";
-			}
-			this.$emit("close", action);
+		close() {
+			this.$emit("update:isShow", false);
 		},
-		submit(index) {
-			this.$refs[this.formAttributes.ref].validate(valid => {
-				if (!valid) {
-					return false;
-				}
-				if (this.isSubmiting) {
-					this.$message({
-						message: "当前数据正在提交，请耐心等待!",
-						type: "warning"
-					});
-					return;
-				}
-				this.isSubmiting = true;
-				this.submitForm(this.formInput)
-					.then(() => {
-						this.close(index);
-						this.isSubmiting = false;
-					})
-					.catch(error => {
-						this.isSubmiting = false;
-					});
-			});
+		formInputChange(formInput, name, value) {
+			this.$emit("input-change", formInput, name, value);
+		},
+		async submit(index) {
+			let formInput = await this.$refs["form-input"].validate();
+			if (this.isSubmiting) {
+				this.$message({
+					message: "当前数据正在提交，请耐心等待!",
+					type: "warning"
+				});
+				return;
+			}
+			this.isSubmiting = true;
+			this.submitForm(this.formInput)
+				.then(() => {
+					this.close();
+					this.isSubmiting = false;
+				})
+				.catch(error => {
+					this.isSubmiting = false;
+				});
 		},
 		/**
 		 * 设置当前表单的字段数据（外部应用方法）
-		 * @param {Object} fieldsValue 设置的字段数据对象，如果该对象为null就设置所有的字段为null
-		 * @param {Array} otherProperties 设置formInput其他属性值的数组，比如：["id"],修改的时候需要formInput拥有id属性
+		 * @param {Object} fieldsValue 设置的字段数据对象，如果该对象为null就设置所有的字段为null，
+		 * 注意：如果fieldsValue中的的属性值是个对象，会被直接引用，因而跟踪其值的变化，设置此值时要注意
+		 * @param {Boolean} setAll 是否把fieldsValue的值全部重置到当前的数据值中
 		 */
-		setFieldsValue(fieldsValue, otherProperties) {
-			if (!this.formFields || this.formFields.length == 0) {
-				site.log.error("当前表单没有任何字段数据！");
-			}
-			this.formInput = {};
-			this.formFields.forEach(field => {
-				if (!field.name) {
-					return;
-				}
-				let value = null;
-				if (fieldsValue) {
-					value = site.utils.getObjectProperty(fieldsValue, field.name, null);
-				}
-				field.value = value;
-				this.$set(this.formInput, field.name, value);
+		setFieldsValue(fieldsValue, setAll = true) {
+			this.$nextTick(() => {
+				this.$refs["form-input"].setFieldsValue(fieldsValue, setAll);
 			});
-			if (otherProperties && otherProperties.length > 0) {
-				otherProperties.forEach(propertyItem => {
-					this.$set(this.formInput, propertyItem, site.utils.getObjectProperty(fieldsValue, propertyItem, null));
-				});
-			}
+		},
+		/**
+		 * 设置某个字段的数值（外部应用方法）
+		 * @param {String} name 字段名，比如："orderNo", "goods[0].id"
+		 * @param {any} value 字段的数值
+		 */
+		setFieldValue(name, value) {
+			this.$nextTick(() => {
+				this.$refs["form-input"].setFieldsValue(name, value);
+			});
 		}
 	}
 };

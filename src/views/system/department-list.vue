@@ -13,7 +13,7 @@
         -->
 		<data-table v-bind="dataTable"></data-table>
 		<!-- 修改或新增菜单信息 -->
-		<dialog-form v-bind="updateDepartmentDialogForm" ref="update-department-dialog-form" @close="updateDepartmentDialogForm.isShow = false" />
+		<dialog-form v-bind="updateDepartmentDialogForm" ref="update-department-dialog-form" :isShow.sync="updateDepartmentDialogForm.isShow" />
 	</div>
 </template>
 <script>
@@ -100,7 +100,7 @@ export default {
 		gotoUpdate(row) {
 			this.updateDepartmentDialogForm.isShow = true;
 			this.updateDepartmentDialogForm.dialog.title = "修改部门：" + row.name;
-			this.$refs["update-department-dialog-form"].setFieldsValue(row, ["id"]);
+			this.$refs["update-department-dialog-form"].setFieldsValue(row);
 		},
 		updateDepartment(formInput) {
 			return new Promise((resolve, reject) => {

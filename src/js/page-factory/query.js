@@ -55,8 +55,8 @@ export default function(page, name) {
 				confirmHandle(yesHandler) {
 					// TODO: 实现
 				},
-				getNextRow(row, tableRef = "data-table"){
-					if(!row) return;
+				getNextRow(row, tableRef = "data-table") {
+					if (!row) return;
 					if (!this.$refs[tableRef]) {
 						// throw Error("请指定数据列表ref属性");
 						site.log.error("请指定数据列表ref属性!");
@@ -65,7 +65,7 @@ export default function(page, name) {
 					console.info("getNextRow------------");
 					return this.$refs[tableRef].getNearestRow(row, 1);
 				},
-				getPrevRow(row, tableRef = "data-table"){
+				getPrevRow(row, tableRef = "data-table") {
 					if (!row) return;
 					if (!this.$refs[tableRef]) {
 						// throw Error("请指定数据列表ref属性");

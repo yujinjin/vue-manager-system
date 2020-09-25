@@ -17,7 +17,7 @@
 			</template>
 		</data-table>
 		<!-- 修改或新增菜单信息 -->
-		<dialog-form v-bind="updateMenuDialogForm" ref="update-menu-dialog-form" @close="updateMenuDialogForm.isShow = false">
+		<dialog-form v-bind="updateMenuDialogForm" ref="update-menu-dialog-form" :isShow.sync="updateMenuDialogForm.isShow">
 			<template v-slot:permissions="{ formInput }">
 				<el-input placeholder="请输入权限值" v-model="formInput.permissions">
 					<template slot="prepend" v-if="updateMenuDialogForm.permissionsPrefix">{{ updateMenuDialogForm.permissionsPrefix }}</template>

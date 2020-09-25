@@ -70,7 +70,7 @@
 			</div>
 		</div>
 		<!-- 用户信息 -->
-		<dialog-form v-bind="userInfoDialogForm" @close="userInfoDialogForm.isShow = false">
+		<dialog-form v-bind="userInfoDialogForm" :isShow.sync="userInfoDialogForm.isShow">
 			<template v-slot:headImg="{ formInput }">
 				<img-upload :upload="imgUpload" :cropp="true" v-model="formInput.headImgURL">
 					<img v-if="formInput.headImgURL" :src="formInput.headImgURL" class="avatar" />
@@ -80,7 +80,7 @@
 		</dialog-form>
 
 		<!-- 修改密码 -->
-		<dialog-form v-bind="updatePasswordDialogForm" @close="updatePasswordDialogForm.isShow = false" @input-change="passwordInfoForm = arguments[0]"></dialog-form>
+		<dialog-form v-bind="updatePasswordDialogForm" :isShow.sync="updatePasswordDialogForm.isShow" @input-change="passwordInfoForm = arguments[0]"></dialog-form>
 	</div>
 </template>
 <script>

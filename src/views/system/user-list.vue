@@ -26,7 +26,7 @@
 		<data-table v-bind="dataTable" :filters="filters" :select-rows.sync="selectRows" />
 
 		<!-- 修改密码 -->
-		<dialog-form v-bind="updatePasswordDialogForm" @close="updatePasswordDialogForm.isShow = false" @input-change="updatePasswordDialogForm.formInput = arguments[0]"></dialog-form>
+		<dialog-form v-bind="updatePasswordDialogForm" :isShow.sync="updatePasswordDialogForm.isShow" @input-change="updatePasswordDialogForm.formInput = arguments[0]"></dialog-form>
 
 		<!-- 用户信息弹窗 -->
 		<!-- 修改或者新增角色信息 -->
@@ -207,10 +207,10 @@ export default {
 				isShow: false,
 				form: {
 					rules: {
-						confirmPassword: [
+						passwordRepeat: [
 							{ required: true, message: "请确认新密码" },
 							{
-								validator: this.confirmPasswordValidator,
+								validator: this.passwordValidator,
 								trigger: "blur"
 							}
 						]
@@ -307,17 +307,6 @@ export default {
 			});
 		},
 		// 确认密码验证
-		confirmPasswordValidator(rule, value, callback) {
-			if (value === "") {
-				callback(new Error("请输入原密码"));
-			} else if (value.length < 6 || value.length > 20) {
-				callback(new Error("长度在 6 到20 个字符"));
-			} else if (value !== this.updatePasswordDialogForm.formInput.passwordRepeat) {
-				callback(new Error("两次输入密码不一致!"));
-			} else {
-				callback();
-			}
-		},
 		passwordValidator(rule, value, callback) {
 			if (value === "") {
 				callback(new Error("请再次输入密码"));
