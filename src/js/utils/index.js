@@ -86,13 +86,25 @@ export default {
 		}
 	},
 
-	// 格式化字符串
+	// 格式化字符串,字符串替换格式：{0}，{name}
 	stringFormat() {
 		if (arguments.length == 0) return null;
 		let str = arguments[0];
-		for (var i = 1; i < arguments.length; i++) {
-			var re = new RegExp("\\{" + (i - 1) + "\\}", "gm");
-			str = str.replace(re, arguments[i]);
+		if (arguments.length == 1) return str;
+		let reg = null;
+		if (arguments.length == 2 && typeof arguments[1] == "object") {
+			// 字符串是{key}格式
+			let args = arguments[1];
+			for (let key in args) {
+				reg = new RegExp("\\{" + key + "\\}", "gm");
+				str = str.replace(reg, args[key]);
+			}
+		} else {
+			// 字符串是{0}格式
+			for (var i = 1; i < arguments.length; i++) {
+				reg = new RegExp("\\{" + (i - 1) + "\\}", "gm");
+				str = str.replace(reg, arguments[i]);
+			}
 		}
 		return str;
 	},

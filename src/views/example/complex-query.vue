@@ -59,10 +59,7 @@ export default {
 					name: "state",
 					label: "状态",
 					type: "select",
-					data: [
-						{ label: "激活", value: true },
-						{ label: "冻结", value: false }
-					]
+					data: site.constants.ENUM["ACTIVE_FROZEN"]
 				},
 				{
 					name: "orderNo",

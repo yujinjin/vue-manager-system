@@ -56,10 +56,7 @@ export default {
 					name: "state",
 					label: "是否成功",
 					type: "select",
-					data: [
-						{ label: "是", value: true },
-						{ label: "否", value: false }
-					]
+					data: site.constants.ENUM["YES_NO"]
 				}
 			],
 			handleButtons: [
@@ -106,6 +103,13 @@ export default {
 						}
 					},
 					{
+						prop: "orderNo",
+						label: "订单编号",
+						width: "75px",
+						type: "link",
+						url: "/#/complex-query?orderNo={orderNo}"
+					},
+					{
 						prop: "activeStatus",
 						label: "状态",
 						type: "enum",
@@ -118,11 +122,6 @@ export default {
 						label: "价格",
 						width: "100px",
 						type: "money"
-					},
-					{
-						prop: "orderNo",
-						label: "订单编号",
-						width: "75px"
 					},
 					{
 						prop: "tags",
