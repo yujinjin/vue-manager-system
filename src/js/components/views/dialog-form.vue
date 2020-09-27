@@ -3,13 +3,15 @@
         弹窗form表单封装
     -->
 	<el-dialog v-bind="dialogAttributes" :visible="isShow" @close="close">
-		<form-input :fields="fields" :form="form" :column="column" ref="form-input" @input-change="formInputChange">
-			<template v-for="slotName in formInputSlotNameList" v-slot:[slotName]="{ formInput }">
-				<slot :name="slotName" v-bind:formInput="formInput"></slot>
-			</template>
-		</form-input>
-		<!-- 表单底部默认内容 -->
-		<slot name="form-bottom"></slot>
+		<div class="dialog-form-body">
+			<form-input :fields="fields" :form="form" :column="column" ref="form-input" @input-change="formInputChange">
+				<template v-for="slotName in formInputSlotNameList" v-slot:[slotName]="{ formInput }">
+					<slot :name="slotName" v-bind:formInput="formInput"></slot>
+				</template>
+			</form-input>
+			<!-- 表单底部默认内容 -->
+			<slot name="form-bottom"></slot>
+		</div>
 		<!-- Dialog 按钮操作区的内容 -->
 		<div slot="footer" class="dialog-footer" v-if="actionButtons && actionButtons.length > 0">
 			<el-button v-for="(buttonItem, index) in actionButtons" v-bind="buttonItem.option" :key="index" @click="clickHandle(index)">{{ buttonItem.label }}</el-button>
@@ -176,23 +178,13 @@ export default {
 			this.$emit("input-change", formInput, name, value);
 		},
 		async submit(index) {
-			let formInput = await this.$refs["form-input"].validate();
-			if (this.isSubmiting) {
-				this.$message({
-					message: "当前数据正在提交，请耐心等待!",
-					type: "warning"
-				});
-				return;
+			try {
+				let formInput = await this.$refs["form-input"].validate();
+				await this.submitForm(formInput);
+				this.close();
+			} catch (error) {
+				site.log.error(error);
 			}
-			this.isSubmiting = true;
-			this.submitForm(this.formInput)
-				.then(() => {
-					this.close();
-					this.isSubmiting = false;
-				})
-				.catch(error => {
-					this.isSubmiting = false;
-				});
 		},
 		/**
 		 * 设置当前表单的字段数据（外部应用方法）
@@ -218,4 +210,10 @@ export default {
 	}
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.form-dialog .dialog-form-body {
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 500px;
+}
+</style>

@@ -25,7 +25,7 @@
 									</template>
 									<template v-else-if="fieldItem.type == 'select'">
 										<el-select v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)">
-											<el-option v-for="item in fieldItem.data" :key="item.value" :label="item.label" :value="item.value"></el-option>
+											<el-option v-for="item in fieldItem.data" :key="item[fieldItem.option.optionValueKey]" :label="item[fieldItem.option.optionLabelKey]" :value="item[fieldItem.option.optionValueKey]"></el-option>
 										</el-select>
 									</template>
 									<template v-else-if="fieldItem.type == 'timeSelect'">
@@ -42,12 +42,12 @@
 									</template>
 									<template v-else-if="fieldItem.type == 'checkbox'">
 										<el-checkbox-group v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)">
-											<el-checkbox v-for="item in fieldItem.data" :key="item.value" :label="item.value">{{ item.label }}</el-checkbox>
+											<el-checkbox v-for="item in fieldItem.data" :key="item[fieldItem.option.optionValueKey]" :label="item[fieldItem.option.optionValueKey]">{{ item[fieldItem.option.optionLabelKey] }}</el-checkbox>
 										</el-checkbox-group>
 									</template>
 									<template v-else-if="fieldItem.type == 'radio'">
 										<el-radio-group v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)">
-											<el-radio v-for="item in fieldItem.data" :key="item.value" :label="item.value">{{ item.label }}</el-radio>
+											<el-radio v-for="item in fieldItem.data" :key="item[fieldItem.option.optionValueKey]" :label="item[fieldItem.option.optionValueKey]">{{ item[fieldItem.option.optionLabelKey] }}</el-radio>
 										</el-radio-group>
 									</template>
 									<template v-else-if="fieldItem.type == 'image'">
@@ -91,7 +91,7 @@
 							</template>
 							<template v-else-if="fieldItem.type == 'select'">
 								<el-select v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)">
-									<el-option v-for="item in fieldItem.data" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in fieldItem.data" :key="item[fieldItem.option.optionValueKey]" :label="item[fieldItem.option.optionLabelKey]" :value="item[fieldItem.option.optionValueKey]"></el-option>
 								</el-select>
 							</template>
 							<template v-else-if="fieldItem.type == 'timeSelect'">
@@ -108,12 +108,12 @@
 							</template>
 							<template v-else-if="fieldItem.type == 'checkbox'">
 								<el-checkbox-group v-bind="fieldItem.option" :value="getValue(fieldItem.name) || []" @input="changeValue(fieldItem.name, $event)">
-									<el-checkbox v-for="item in fieldItem.data" :key="item.value" :label="item.value">{{ item.label }}</el-checkbox>
+									<el-checkbox v-for="item in fieldItem.data" :key="item[fieldItem.option.optionValueKey]" :label="item[fieldItem.option.optionValueKey]">{{ item[fieldItem.option.optionLabelKey] }}</el-checkbox>
 								</el-checkbox-group>
 							</template>
 							<template v-else-if="fieldItem.type == 'radio'">
 								<el-radio-group v-bind="fieldItem.option" :value="getValue(fieldItem.name)" @input="changeValue(fieldItem.name, $event)">
-									<el-radio v-for="item in fieldItem.data" :key="item.value" :label="item.value">{{ item.label }}</el-radio>
+									<el-radio v-for="item in fieldItem.data" :key="item[fieldItem.option.optionValueKey]" :label="item[fieldItem.option.optionValueKey]">{{ item[fieldItem.option.optionLabelKey] }}</el-radio>
 								</el-radio-group>
 							</template>
 							<template v-else-if="fieldItem.type == 'image'">

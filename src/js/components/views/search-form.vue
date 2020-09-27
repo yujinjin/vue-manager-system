@@ -19,7 +19,7 @@
 						</template>
 						<template v-else-if="field.type == 'select'">
 							<el-select v-model="field.value" v-bind="field.option" @change="change(field)">
-								<el-option v-for="item in field.data" :key="item.value" :label="item.label" :value="item.value"></el-option>
+								<el-option v-for="item in field.data" :key="item[field.option.optionValueKey]" :label="item[field.option.optionLabelKey]" :value="item[field.option.optionValueKey]"></el-option>
 							</el-select>
 						</template>
 						<template v-else-if="field.type == 'timeSelect'">

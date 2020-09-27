@@ -65,6 +65,9 @@ export default {
 			if (newVal != this.contentHtml) {
 				this.content = newVal;
 				this.contentHtml = newVal;
+				if (!$.summernote) {
+					return;
+				}
 				if (this.editorInstance) {
 					this.editorInstance.summernote("code", newVal);
 					this.renderEditorContent();
@@ -74,7 +77,7 @@ export default {
 			}
 		}
 	},
-	created() {
+	mounted() {
 		this.init();
 	},
 	methods: {

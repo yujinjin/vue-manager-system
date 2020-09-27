@@ -17,7 +17,9 @@ export default {
 		select: {
 			clearable: true,
 			size: "small",
-			placeholder: "请选择"
+			placeholder: "请选择",
+			optionValueKey: "key",
+			optionLabelKey: "name"
 		}, // select 选择器默认配置选项（具体见element Select 选择器文档）
 		timeSelect: {
 			clearable: true,
@@ -40,7 +42,8 @@ export default {
 	// 当前表单弹窗中的dialog 默认属性
 	FORM_DIALOG_DEFAULT_ATTRIBUTES: {
 		title: "提示",
-		closeOnClickModal: false
+		closeOnClickModal: false,
+		customClass: "form-dialog"
 	},
 	// 操作栏中的按钮默认属性
 	ACTION_BAR_BUTTON_DEFAULT_ATTRIBUTES: {
@@ -62,7 +65,9 @@ export default {
 		select: {
 			clearable: true,
 			size: "small",
-			placeholder: "请选择"
+			placeholder: "请选择",
+			optionValueKey: "key",
+			optionLabelKey: "name"
 		}, // select 选择器默认配置选项（具体见element Select 选择器文档）
 		timeSelect: {
 			clearable: true,
@@ -87,10 +92,14 @@ export default {
 		}, // InputNumber 计数器（具体见InputNumber 计数器文档）
 		switch: {}, // switch 开关（具体见Switch 开关文档）
 		checkbox: {
-			size: "small"
+			size: "small",
+			optionValueKey: "key",
+			optionLabelKey: "name"
 		}, // Checkbox 多选框（具体见Checkbox 多选框文档）
 		radio: {
-			size: "small"
+			size: "small",
+			optionValueKey: "key",
+			optionLabelKey: "name"
 		}, // Radio 单选框（具体见Radio 单选框文档）
 		image: {
 			lazy: true

@@ -34,7 +34,12 @@
 				<el-button size="small" @click="viewDialogForm.isShow = false">关闭</el-button>
 			</div>
 		</el-dialog>
-		<!-- <dialog-form v-bind="viewDialogForm" ref="view-dialog-form" @close="viewDialogForm.isShow = false" @input-change="viewDialogForm.formInput = arguments[0]"> </dialog-form> -->
+		<!--
+			作者：yujinjin9@126.com
+            时间：2020-09-25
+            描述：编辑
+		-->
+		<dialog-form v-bind="updateDialogForm" ref="update-dialog-form" :isShow.sync="updateDialogForm.isShow" @input-change="updateDialogForm.formInput = arguments[0]"> </dialog-form>
 	</div>
 </template>
 <script>
@@ -91,7 +96,7 @@ export default {
 							return [
 								{
 									label: "编辑",
-									click: this.edit
+									click: this.gotoEdit
 								},
 								{
 									label: "查看",
@@ -174,7 +179,7 @@ export default {
 					{
 						name: "fromAbroad",
 						label: "是否跨境",
-						type: "enum",
+						type: "select",
 						list: "YES_NO"
 					},
 					{
@@ -210,15 +215,91 @@ export default {
 						type: "html"
 					}
 				]
+			},
+			updateDialogForm: {
+				formInput: {},
+				isShow: false,
+				column: 2,
+				submitForm: this.save,
+				dialog: {
+					title: null,
+					width: "80%"
+				},
+				fields: [
+					{
+						name: "orderNo",
+						label: "订单号",
+						rules: [{ required: true, message: "请填写订单号" }]
+					},
+					{
+						name: "receiveMan",
+						label: "收货人",
+						rules: [{ required: true, message: "请填写收货人" }]
+					},
+					{
+						name: "price",
+						label: "价格"
+					},
+					{
+						name: "receiveManTel",
+						label: "收货人手机号"
+					},
+					{
+						name: "sendMan",
+						label: "购买人"
+					},
+					{
+						name: "fromAbroad",
+						label: "是否跨境",
+						type: "select",
+						data: site.constants.ENUM["YES_NO"]
+					},
+					{
+						name: "tags",
+						label: "标签",
+						placeholder: "标签，多个用'|'分割"
+					},
+					{
+						name: "sex",
+						label: "性别",
+						type: "radio",
+						data: site.constants.ENUM["SEX"]
+					},
+					{
+						name: "imgs",
+						label: "图片",
+						type: "imgUpload",
+						span: 24
+					},
+					{
+						name: "activeStatus",
+						label: "状态",
+						type: "select",
+						data: site.constants.ENUM["ACTIVE_FROZEN"]
+					},
+					{
+						name: "remark",
+						label: "备注",
+						type: "htmlEditor"
+					}
+				]
 			}
 		};
 	},
 	methods: {
 		init() {},
 		search() {},
-		edit(row) {},
+		gotoEdit(row) {
+			this.updateDialogForm.isShow = true;
+			this.updateDialogForm.dialog.title = "编辑信息，编号：" + row.orderNo;
+			this.$refs["update-dialog-form"].setFieldsValue(row);
+		},
 		add() {
 			console.info(this.searchForm);
+		},
+		save(formInput) {
+			console.info("save", formInput);
+			return Promise.resolve(true);
 		},
 		gotoView(row) {
 			this.viewDialogForm.dialog.title = "查看页面信息，编号：" + row.orderNo;
