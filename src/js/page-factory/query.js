@@ -52,8 +52,15 @@ export default function(page, name) {
 					this.filters.queryId = site.utils.generateGuid();
 				},
 				// 确认提示操作
-				confirmHandle(yesHandler) {
+				confirmHandle(yesHandler, actionName) {
 					// TODO: 实现
+					this.$confirm("确定要" + (actionName || "操作") + "当前列表信息吗?", "提示", {
+						confirmButtonText: "确定",
+						cancelButtonText: "取消",
+						type: "warning"
+					}).then(() => {
+						return yesHandler();
+					});
 				},
 				getNextRow(row, tableRef = "data-table") {
 					if (!row) return;
@@ -62,7 +69,6 @@ export default function(page, name) {
 						site.log.error("请指定数据列表ref属性!");
 						return;
 					}
-					console.info("getNextRow------------");
 					return this.$refs[tableRef].getNearestRow(row, 1);
 				},
 				getPrevRow(row, tableRef = "data-table") {
@@ -72,7 +78,6 @@ export default function(page, name) {
 						site.log.error("请指定数据列表ref属性!");
 						return;
 					}
-					// console.info(this.$refs[tableRef].getNearestRow(row, -1), "------------");
 					return this.$refs[tableRef].getNearestRow(row, -1);
 				},
 				// 批量删除预处理
@@ -170,13 +175,13 @@ export default function(page, name) {
 								if (results && results.length) {
 									results.forEach((item, index) => {
 										if (item.success != false) {
-											this.$toastr.success((handerRows[index].name || "") + handlerName + "成功", null, { timeOut: 3000 });
+											this.$toastr.success((handerRows[index].name || "") + handlerName + "操作成功", null, { timeOut: 3000 });
 										} else {
 											this.$toastr.error((handerRows[index].name || "") + item.error.message, null, { timeOut: 3000 });
 										}
 									});
 								} else {
-									this.$toastr.success(handlerName + "成功");
+									this.$toastr.success(handlerName + "操作成功");
 								}
 								handerSuccessAction();
 							});

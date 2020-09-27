@@ -12,7 +12,7 @@
             时间：2020-09-16
             描述：列表操作栏
         -->
-		<action-bar :buttons="handleButtons" @click="handleButtonClick" :isShowTableToggleColumn="true" />
+		<action-bar :buttons="handleButtons" />
 
 		<!--
             作者：yujinjin9@126.com
@@ -28,7 +28,7 @@
 		-->
 		<el-dialog :title="viewDialogForm.dialog.title" :visible.sync="viewDialogForm.isShow" width="50%" :close-on-click-modal="false">
 			<view-info :fields="viewDialogForm.fields" :value="viewDialogForm.value"></view-info>
-			<div slot="footer" class="dialog-footer">
+			<div slot="footer" class="dialog-footer" v-if="viewDialogForm.isShow">
 				<el-button type="primary" :disabled="!getPrevRow(viewDialogForm.value)" size="small" @click="showPreRow">上一条</el-button>
 				<el-button type="primary" :disabled="!getNextRow(viewDialogForm.value)" size="small" @click="showNextRow">下一条</el-button>
 				<el-button size="small" @click="viewDialogForm.isShow = false">关闭</el-button>
@@ -66,7 +66,7 @@ export default {
 				{
 					action: "add",
 					label: "新增",
-					click: this.add
+					click: this.gotoAdd
 				},
 				{
 					action: "refuse",
@@ -288,14 +288,15 @@ export default {
 	},
 	methods: {
 		init() {},
-		search() {},
 		gotoEdit(row) {
 			this.updateDialogForm.isShow = true;
 			this.updateDialogForm.dialog.title = "编辑信息，编号：" + row.orderNo;
 			this.$refs["update-dialog-form"].setFieldsValue(row);
 		},
-		add() {
-			console.info(this.searchForm);
+		gotoAdd() {
+			this.updateDialogForm.isShow = true;
+			this.updateDialogForm.dialog.title = "新增信息";
+			this.$refs["update-dialog-form"].setFieldsValue(null);
 		},
 		save(formInput) {
 			console.info("save", formInput);
@@ -312,8 +313,12 @@ export default {
 		showNextRow() {
 			this.viewDialogForm.value = this.getNextRow(this.viewDialogForm.value);
 		},
-		refuse() {},
-		delete() {},
+		refuse() {
+			this.handlerBatch(() => Promise.resolve(true), "拒绝状态");
+		},
+		delete() {
+			this.preBatchDelete(() => Promise.resolve(true));
+		},
 		handleButtonClick(action) {
 			console.info(action);
 		}

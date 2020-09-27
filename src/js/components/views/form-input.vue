@@ -331,15 +331,18 @@ export default {
 				for (let key in this.formInput) {
 					this.formInput[key] = null;
 				}
-				return;
+			} else {
+				fieldsValue = JSON.parse(JSON.stringify(fieldsValue));
+				if (setAll) {
+					this.formInput = {};
+				}
+				for (let key in fieldsValue) {
+					this.$set(this.formInput, key, fieldsValue[key]);
+				}
 			}
-			fieldsValue = JSON.parse(JSON.stringify(fieldsValue));
-			if (setAll) {
-				this.formInput = {};
-			}
-			for (let key in fieldsValue) {
-				this.$set(this.formInput, key, fieldsValue[key]);
-			}
+			this.$nextTick(() => {
+				this.$refs[this.formAttributes.ref].clearValidate();
+			});
 		},
 		/**
 		 * 设置某个字段的数值（外部应用方法）
@@ -348,6 +351,7 @@ export default {
 		 */
 		setFieldValue(name, value) {
 			this.$set(this.formInput, name, value);
+			this.$refs[this.formAttributes.ref].clearValidate(name);
 		},
 		// 验证当前表单数据（外部应用方法）
 		validate(callbackFun) {
