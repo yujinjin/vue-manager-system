@@ -22,10 +22,7 @@ export default {
 						name: "state",
 						label: "状态",
 						type: "select",
-						data: [
-							{ label: "激活", value: true },
-							{ label: "冻结", value: false }
-						]
+						data: site.constants.ENUM["ACTIVE_FROZEN"]
 					},
 					{
 						name: "videoUpload",
@@ -71,7 +68,11 @@ export default {
 							{ label: "上海", value: 1 },
 							{ label: "北京", value: 2 },
 							{ label: "广州", value: 3 }
-						]
+						],
+						option: {
+							optionValueKey: "value",
+							optionLabelKey: "label"
+						}
 					},
 					{
 						name: "sendCity",
@@ -81,7 +82,11 @@ export default {
 							{ label: "上海", value: 1 },
 							{ label: "北京", value: 2 },
 							{ label: "广州", value: 3 }
-						]
+						],
+						option: {
+							optionValueKey: "value",
+							optionLabelKey: "label"
+						}
 					},
 					{
 						name: "htmlEditor",

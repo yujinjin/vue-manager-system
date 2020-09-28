@@ -11,7 +11,6 @@ const mutations = {
 		});
 		delete t.matched;
 		t = JSON.parse(JSON.stringify(t));
-		console.log(t);
 		state.visitedViews.push(t);
 	},
 	ADD_CACHED_VIEW: (state, view) => {
@@ -71,7 +70,6 @@ const mutations = {
 const actions = {
 	addView({ dispatch }, view) {
 		dispatch("addVisitedView", view);
-		console.log(2);
 		dispatch("addCachedView", view);
 	},
 	addVisitedView({ commit }, view) {

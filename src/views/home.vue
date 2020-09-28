@@ -1,7 +1,7 @@
 <template>
 	<div class="main">
 		<header-bar></header-bar>
-		<side-bar class="side-bar" :customMenuName="customMenuName"></side-bar>
+		<side-bar class="side-bar" :customMenuName="customMenuName" :currentRouter="currentRouter"></side-bar>
 		<keep-alive :include="$store.state.tagsView.cachedViews">
 			<router-view :key="routeKey" class="page-content"></router-view>
 		</keep-alive>
@@ -24,9 +24,9 @@ export default {
 				name: null, // 当前路由名称
 				query: {}, // 当前路由query参数
 				params: {}, // 当前路由params参数
-				title: null // 当前路由名称
+				title: null, // 当前路由名称
+				menuName: null // 自定义菜单名称
 			}, // 当前路由信息
-			currentRouterPath: null, // 当前指定路由的path
 			customMenuName: null, // 自定义菜单标识，这是针对于某些页面不知道是属于哪个菜单，然后在页面里去指定属于某个菜单的标识
 			isLoading: true // 当前数据是否正在加载
 		};
@@ -47,22 +47,15 @@ export default {
 		next();
 	},
 	beforeRouteUpdate(to, from, next) {
+		next();
 		Object.assign(this.currentRouter, {
 			fullPath: to.fullPath, //当前路由路径
 			name: to.name, // 当前路由名称
 			query: JSON.parse(JSON.stringify(to.query)), // 当前路由query参数
 			params: JSON.parse(JSON.stringify(to.params)), // 当前路由params参数
-			title: to.meta.title // 当前路由名称
+			title: to.meta.title, // 当前路由页面标题
+			menuName: to.meta.menuName // 当前页面所属的菜单,可为null
 		});
-		next();
-	},
-	watch: {
-		customMenuId(val) {
-			if (val) {
-				this.currentRouterPath = val;
-				// this.selectMenuSidebarItem();
-			}
-		}
 	},
 	computed: {
 		routeKey() {
@@ -74,19 +67,19 @@ export default {
 		if ($(window).height() < 700 || $(window).width() < 1366) {
 			this.$message.warning("当前管理系统屏幕分辨率最佳体验不低于1366*768!");
 		}
-		this.currentRouterPath = this.$route.meta.menuPath || this.$route.path;
 		Object.assign(this.currentRouter, {
 			fullPath: this.$route.fullPath, //当前路由路径
 			name: this.$route.name, // 当前路由名称
 			query: JSON.parse(JSON.stringify(this.$route.query)), // 当前路由query参数
 			params: JSON.parse(JSON.stringify(this.$route.params)), // 当前路由params参数
-			title: this.$route.meta.title // 当前路由名称
+			title: this.$route.meta.title, // 当前路由页面标题
+			menuName: this.$route.meta.menuName // 当前页面所属的菜单,可为null
 		});
 	},
 	methods: {
-		// 修改当前路由path
-		changeRouterPath(path) {
-			this.currentRouterPath = path;
+		// 修改当前页面所属的菜单名称
+		changeMenuName(name) {
+			this.customMenuName = name;
 		}
 	}
 };

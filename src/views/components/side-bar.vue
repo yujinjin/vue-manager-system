@@ -41,6 +41,8 @@ export default {
 			isFixed: true, // 边栏是否固定
 			menuData: null, // 菜单数据
 			subMenuData: null, // 子菜单数据
+			currentActiveMenu: null, // 当前激活的菜单数据
+			currentMenuName: null, // 当前自定义菜单的名称
 			isHasMenuEventTrigger: false // 是否有手动的菜单事件触发
 		};
 	},
@@ -48,14 +50,26 @@ export default {
 		customMenuName: {
 			type: String,
 			default: null
+		},
+		currentRouter: {
+			type: Object,
+			default: null
 		}
 	},
 	watch: {
-		customMenuName() {
-			if (!this.isHasMenuEventTrigger && this.menuData) {
-				// 如果没有手动菜单事件触发过，可以重新初始化激活菜单
-				this.initActiveMenuData();
-			}
+		customMenuName(val) {
+			this.currentMenuName = val;
+			this.$nextTick(() => {
+				this.activeMenuData();
+			});
+		},
+		currentRouter: {
+			handler() {
+				this.$nextTick(() => {
+					this.activeMenuData();
+				});
+			},
+			deep: true
 		}
 	},
 	created() {
@@ -87,47 +101,24 @@ export default {
 			};
 			initMenuStatus(menuData);
 			this.menuData = menuData;
-			this.initActiveMenuData();
+			this.activeMenuData();
 		},
 
 		// 初始化激活菜单数据
-		initActiveMenuData() {
-			let menuName = this.customMenuName;
-			if (!menuName) {
-				let currentRouter = { name: this.$route.name, query: this.$route.query, params: this.$route.params };
-				if (JSON.stringify(currentRouter.query) == "{}") {
-					delete currentRouter.query;
+		activeMenuData() {
+			if (!this.menuData || this.menuData.length == 0) {
+				return;
+			}
+			if (!this.currentMenuName && !this.currentRouter) {
+				return;
+			}
+			if (this.currentMenuName) {
+				if (this.currentActiveMenu && this.currentActiveMenu.name == this.currentMenuName) {
+					return;
 				}
-				if (JSON.stringify(currentRouter.params) == "{}") {
-					delete currentRouter.params;
-				}
-				let activeMenuDataByRoute = (menus, level) => {
-					for (let i = 0; i < menus.length; i++) {
-						if (menus[i].route && site.utils.isEqual(currentRouter, JSON.parse(JSON.stringify(menus[i].route)))) {
-							menus[i].isOpen = true;
-							menus[i].isActive = true;
-							if (level == 1) {
-								// 找到第二菜单层级
-								this.subMenuData = menus[i].items;
-							}
-							return true;
-						} else if (menus[i].items && menus[i].items.length > 0 && activeMenuDataByRoute(menus[i].items, level + 1)) {
-							menus[i].isOpen = true;
-							menus[i].isActive = true;
-							if (level == 1) {
-								// 找到第二菜单层级
-								this.subMenuData = menus[i].items;
-							}
-							return true;
-						}
-					}
-					return false;
-				};
-				activeMenuDataByRoute(this.menuData, 1);
-			} else {
 				let activeMenuDataByName = (menus, level) => {
 					for (let i = 0; i < menus.length; i++) {
-						if (menus[i].name == menuName) {
+						if (menus[i].name == this.currentMenuName) {
 							menus[i].isOpen = true;
 							menus[i].isActive = true;
 							if (level == 1) {
@@ -142,38 +133,67 @@ export default {
 								// 找到第二菜单层级
 								this.subMenuData = menus[i].items;
 							}
-							return true;
 						}
 					}
 					return false;
 				};
 				activeMenuDataByName(this.menuData, 1);
-			}
-		},
-
-		// 激活菜单事件状态
-		avtiveMenuEventTriggerStatus() {
-			if (!this.isHasMenuEventTrigger) {
-				this.isHasMenuEventTrigger = true;
+				this.currentMenuName = null;
+			} else {
+				let currentRouter = { name: this.currentRouter.name, query: this.currentRouter.query, params: this.currentRouter.params };
+				if (JSON.stringify(currentRouter.query) == "{}") {
+					delete currentRouter.query;
+				}
+				if (JSON.stringify(currentRouter.params) == "{}") {
+					delete currentRouter.params;
+				}
+				if (this.currentActiveMenu && (this.currentRouter.menuName == this.currentActiveMenu.name || site.utils.isEqual(currentRouter, JSON.parse(JSON.stringify(this.currentActiveMenu.route))))) {
+					return;
+				}
+				let activeMenuDataByRoute = (menus, level) => {
+					for (let i = 0; i < menus.length; i++) {
+						if (menus[i].route && site.utils.isEqual(currentRouter, JSON.parse(JSON.stringify(menus[i].route)))) {
+							this.frozenMenuStatus(this.menuData);
+							if (level == 1) {
+								// 找到第二菜单层级
+								this.subMenuData = menus[i].items;
+							}
+							menus[i].isOpen = true;
+							menus[i].isActive = true;
+							this.currentActiveMenu = menus[i];
+							return true;
+						} else if (menus[i].items && menus[i].items.length > 0 && activeMenuDataByRoute(menus[i].items, level + 1)) {
+							menus[i].isOpen = true;
+							menus[i].isActive = true;
+							if (level == 1) {
+								// 找到第二菜单层级
+								this.subMenuData = menus[i].items;
+							}
+							return true;
+						}
+					}
+					return false;
+				};
+				activeMenuDataByRoute(this.menuData, 1);
 			}
 		},
 
 		openMenu(menuItem) {
-			this.avtiveMenuEventTriggerStatus();
 			if (menuItem.isOpen) return;
 			// 把已经open状态的关闭掉
 			this.menuData.find(item => {
 				if (item.isOpen) {
 					item.isOpen = false;
+					item.isActive = false;
 					return true;
 				}
 			});
 			menuItem.isOpen = true;
+			menuItem.isActive = true;
 			this.subMenuData = menuItem.items;
 		},
 
 		activeSubMenu(menuItem) {
-			this.avtiveMenuEventTriggerStatus();
 			if (!menuItem.items || menuItem.items.length == 0) {
 				// 没有子菜单的菜单
 				if (menuItem.isActive) {
@@ -185,30 +205,27 @@ export default {
 					this.$message.error("当前菜单没有配置路由地址，请去配置路由地址");
 					return;
 				}
-				this.changeMenuStatus();
+				if (this.currentActiveMenu) {
+					this.currentActiveMenu.isActive = false;
+				}
+				this.currentActiveMenu = menuItem;
 				menuItem.isActive = true;
 				this.$router.push(menuItem.route);
 			} else {
 				menuItem.isOpen = !menuItem.isOpen;
 			}
 		},
-		changeMenuStatus() {
-			let activeMenuData = this.menuData.find(item => item.isActive);
-			if (activeMenuData) {
-				activeMenuData.isActive = false;
-				activeMenuData.items.find(item => {
-					if (item.items && item.items.length > 0) {
-						item = item.items.find(childItem => childItem.isActive);
-					}
-					if (item && item.isActive) {
-						item.isActive = false;
-						return true;
-					}
-				});
+		// 冻结所有的菜单
+		frozenMenuStatus(menuData) {
+			if (!menuData || menuData.length == 0) {
+				return;
 			}
-			let openMenuData = this.menuData.find(item => item.isOpen);
-			if (openMenuData) {
-				openMenuData.isActive = true;
+			for (let i = 0; i < menuData.length; i++) {
+				menuData[i].isActive = false;
+				menuData[i].isOpen = false;
+				if (menuData[i].items && menuData[i].items.length > 0) {
+					this.frozenMenuStatus(menuData[i].items);
+				}
 			}
 		}
 	},

@@ -6,7 +6,7 @@
  *  title: 页面标题
  *  auth: 当前页面的登录权限，默认情况下是true
  *  keepAlive: 是否是需要缓存的页面，默认情况下是true
- *  menuPath: 当前页面所属的菜单，默认情况下是当前路由的path。主要用于部分页面（特别是详情页）无法找到左边对应的菜单所处理。也可以手动处理home中的currentSelectMenuPath属性
+ *  menuName: 当前页面所属的菜单。主要用于部分页面（特别是详情页）无法找到左边对应的菜单所处理。也可以手动处理home中的currentSelectMenuPath属性
  * }
  */
 import globalService from "@js/services/global-service";
