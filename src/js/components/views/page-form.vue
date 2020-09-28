@@ -183,7 +183,7 @@ export default {
 		 */
 		setFieldValue(name, value) {
 			this.$nextTick(() => {
-				this.$refs["form-input"].setFieldsValue(name, value);
+				this.$refs["form-input"].setFieldValue(name, value);
 			});
 		}
 	}

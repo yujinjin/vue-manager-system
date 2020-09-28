@@ -1,18 +1,44 @@
 <template>
 	<div class="complex-form">
-		<page-form v-bind="pageForm">
+		<page-form v-bind="pageForm" ref="page-form">
 			<!-- 自定义数据列表内容 -->
 			<template v-slot:table="{ formInput }">
-				<el-table :data="tableData" height="250" border style="width: 100%">
-					<el-table-column type="selection" width="55"></el-table-column>
-					<el-table-column prop="date" label="日期" width="180"> </el-table-column>
-					<el-table-column prop="name" label="姓名" width="180"> </el-table-column>
-					<el-table-column prop="address" label="地址"> </el-table-column>
+				<el-table v-if="formInput && formInput.table" :data="formInput.table" border style="width: 100%" height="300">
+					<el-table-column label="日期">
+						<template slot-scope="{ $index }">
+							<div class="form-column">
+								<el-form-item :prop="'table.' + $index + '.date'" :rules="{ required: true, message: '请选择日期' }">
+									<el-date-picker v-model="formInput.table[$index].date" type="date" placeholder="选择日期"></el-date-picker>
+								</el-form-item>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column label="姓名">
+						<template slot-scope="{ $index }">
+							<div class="form-column">
+								<el-form-item :prop="'table.' + $index + '.name'" :rules="{ required: true, message: '请输入姓名' }">
+									<el-input v-model="formInput.table[$index].name" placeholder="请输入姓名"></el-input>
+								</el-form-item>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column label="地址">
+						<template slot-scope="{ $index }">
+							<div class="form-column">
+								<el-form-item :prop="'table.' + $index + '.address'" :rules="{ required: true, message: '请输入地址' }">
+									<el-input v-model="formInput.table[$index].address" placeholder="请输入地址"></el-input>
+								</el-form-item>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column label="操作">
+						<template slot-scope="{ $index }">
+							<el-button size="small" @click="moveButton(formInput.table, $index, -1)" v-if="$index != 0">上移</el-button>
+							<el-button size="small" @click="moveButton(formInput.table, $index, 1)" v-if="$index != formInput.table.length - 1">下移</el-button>
+							<el-button size="small" @click="gotoAdd(formInput.table)" type="primary" v-else>添加</el-button>
+						</template>
+					</el-table-column>
 				</el-table>
-				<div class="table-footer">
-					<el-button size="small" @click="deleteGoods">删除</el-button>
-					<el-button type="primary" size="small" @click="addGoods(formInput)">添加</el-button>
-				</div>
 			</template>
 		</page-form>
 	</div>
@@ -21,43 +47,6 @@
 export default {
 	data() {
 		return {
-			tableData: [
-				{
-					date: "2016-05-03",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1518 弄"
-				},
-				{
-					date: "2016-05-02",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1518 弄"
-				},
-				{
-					date: "2016-05-04",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1518 弄"
-				},
-				{
-					date: "2016-05-01",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1518 弄"
-				},
-				{
-					date: "2016-05-08",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1518 弄"
-				},
-				{
-					date: "2016-05-06",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1518 弄"
-				},
-				{
-					date: "2016-05-07",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1518 弄"
-				}
-			],
 			pageForm: {
 				submitForm: this.submit,
 				fields: [
@@ -127,6 +116,7 @@ export default {
 					},
 					{
 						slot: "table",
+						name: "table",
 						span: 24
 					},
 					{
@@ -144,8 +134,45 @@ export default {
 			}
 		};
 	},
+	mounted(){
+		this.init();
+	},
 	methods: {
-		init() {},
+		init() {
+			this.$refs["page-form"].setFieldValue("table", [
+				{
+					date: "2016-05-03",
+					name: "王小虎",
+					address: "上海市普陀区金沙江路 1518 弄"
+				},
+				{
+					date: "2016-05-02",
+					name: "王小虎",
+					address: "上海市普陀区金沙江路 1518 弄"
+				},
+				{
+					date: "",
+					name: "",
+					address: ""
+				}
+			]);
+		},
+		moveButton(table, index, number){
+			if (number > 0) {
+				table.splice(index + number + 1, 0, table[index]);
+				table.splice(index, 1);
+			} else if (number < 0) {
+				table.splice(index + number, 0, table[index]);
+				table.splice(index + 1, 1);
+			}
+		},
+		gotoAdd(table){
+			table.push({
+				date: "",
+				name: "",
+				address: ""
+			});
+		},
 		deleteGoods() {},
 		addGoods(formInput) {
 			console.info(formInput);
@@ -158,9 +185,9 @@ export default {
 </script>
 <style lang="less" scoped>
 .complex-form {
-	.table-footer {
-		padding: 10px 0px;
-		text-align: center;
+
+	.form-column {
+		padding-top: 18px;
 	}
 }
 </style>
