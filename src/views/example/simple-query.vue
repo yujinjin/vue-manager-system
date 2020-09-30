@@ -40,10 +40,19 @@
             描述：编辑
 		-->
 		<dialog-form v-bind="updateDialogForm" ref="update-dialog-form" :isShow.sync="updateDialogForm.isShow" @input-change="updateDialogForm.formInput = arguments[0]"> </dialog-form>
+		<!--
+			作者：yujinjin9@126.com
+            时间：2020-09-29
+            描述：excel导入
+		-->
+		<excel-import-dialog v-bind="simpleExcelImportDialog" :isShow.sync="simpleExcelImportDialog.isShow"></excel-import-dialog>
 	</div>
 </template>
 <script>
+import excelImportDialog from "@views/components/excel-import-dialog";
+
 export default {
+	components: { excelImportDialog },
 	data() {
 		return {
 			// 查询表单字段
@@ -64,6 +73,11 @@ export default {
 					action: "add",
 					label: "新增",
 					click: this.gotoAdd
+				},
+				{
+					action: "import",
+					label: "导入",
+					click: this.importExcel
 				},
 				{
 					action: "refuse",
@@ -282,6 +296,11 @@ export default {
 						type: "htmlEditor"
 					}
 				]
+			},
+			simpleExcelImportDialog: {
+				dialog: {},
+				isShow: true,
+				upload: {}
 			}
 		};
 	},
@@ -314,6 +333,9 @@ export default {
 		},
 		refuse() {
 			this.handlerBatch(() => Promise.resolve(true), "拒绝状态");
+		},
+		importExcel(){
+			this.simpleExcelImportDialog.isShow = true;
 		},
 		delete() {
 			this.preBatchDelete(() => Promise.resolve(true));

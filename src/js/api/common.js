@@ -62,5 +62,24 @@ export default {
 				resolve(require("@js/data/data-list.json").result);
 			}, 500);
 		});
+	},
+
+	// excel数据上传
+	excelUpload(inputData, ajaxOptions){
+		console.info(inputData);
+		return new Promise(resolve => {
+			setTimeout(() => {
+				resolve(require("@js/data/excel-import.json").result);
+			}, 2000);
+		});
+	},
+
+	// excel数据最终的导入
+	excelImport(inputData, ajaxOptions){
+		return new Promise(resolve => {
+			setTimeout(() => {
+				resolve(true);
+			}, 5000);
+		});
 	}
 };
