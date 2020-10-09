@@ -23,10 +23,10 @@ export default {
 		row: Object
 	},
 	watch: {
-		url(){
+		url() {
 			this.genteratorLink();
 		},
-		row(){
+		row() {
 			this.genteratorLink();
 		}
 	},

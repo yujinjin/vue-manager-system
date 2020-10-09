@@ -39,7 +39,9 @@
                 -->
 				<div class="import-result-text">
 					<i class="el-icon-warning"></i>
-					共<span>{{ importData.length }}</span>条数据，导入<span>{{ selectColumns.length }}</span>列/共<span>{{ columnList.length }}</span>列
+					共 <span>{{ importData.length }}</span> 条数据， 导入<span>{{ selectColumns.length }}</span
+					>列 /共<span>{{ columnList.length }}</span
+					>列
 				</div>
 				<el-table :data="importData" border style="width: 100%" height="350">
 					<el-table-column v-bind="column" :key="index" v-for="(column, index) in columnList">
@@ -55,13 +57,16 @@
 					<i class="el-icon-success"></i>
 					<div class="title-text">批量导入完成</div>
 					<div class="subtitle-text">
-						您已成功导入<span>{{ importData.length }}</span>条，<span>{{ selectColumns.length }}</span>列数据
+						您已成功导入<span>{{ importData.length }}</span
+						>条，<span>{{ selectColumns.length }}</span
+						>列数据
 					</div>
 				</div>
 				<div class="importing-box" v-else>
 					<el-progress :text-inside="true" :stroke-width="26" :percentage="progress.percentage"></el-progress>
 					<div class="state-text">
-						正在导入数据<span>{{ importData.length }}</span>条
+						正在导入数据<span>{{ importData.length }}</span
+						>条
 					</div>
 				</div>
 			</template>

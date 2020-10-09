@@ -334,7 +334,7 @@ export default {
 		refuse() {
 			this.handlerBatch(() => Promise.resolve(true), "拒绝状态");
 		},
-		importExcel(){
+		importExcel() {
 			this.simpleExcelImportDialog.isShow = true;
 		},
 		delete() {

@@ -65,7 +65,7 @@ export default {
 	},
 
 	// excel数据上传
-	excelUpload(inputData, ajaxOptions){
+	excelUpload(inputData, ajaxOptions) {
 		console.info(inputData);
 		return new Promise(resolve => {
 			setTimeout(() => {
@@ -75,7 +75,7 @@ export default {
 	},
 
 	// excel数据最终的导入
-	excelImport(inputData, ajaxOptions){
+	excelImport(inputData, ajaxOptions) {
 		return new Promise(resolve => {
 			setTimeout(() => {
 				resolve(true);
