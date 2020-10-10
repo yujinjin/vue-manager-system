@@ -102,7 +102,7 @@ export default {
 					{
 						type: "action",
 						label: "操作",
-						width: "75px",
+						width: "105px",
 						buttons: row => {
 							return [
 								{
@@ -112,6 +112,15 @@ export default {
 								{
 									label: "查看",
 									click: this.gotoView
+								},
+								{
+									label: "预览",
+									action: "qrcode",
+									isImg: true,
+									url: row => {
+										console.info(row);
+										return Promise.resolve("https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg");
+									}
 								}
 							];
 						}
@@ -123,6 +132,17 @@ export default {
 						type: "link",
 						url: "/#/complex-query?orderNo={orderNo}"
 					},
+					// {
+					// 	prop: "orderNo",
+					// 	label: "订单编号",
+					// 	width: "75px",
+					// 	type: "qrcode",
+					// 	isImg: true,
+					// 	url: row => {
+					// 		console.info(row);
+					// 		return Promise.resolve("https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg");
+					// 	}
+					// },
 					{
 						prop: "activeStatus",
 						label: "状态",
@@ -299,7 +319,7 @@ export default {
 			},
 			simpleExcelImportDialog: {
 				dialog: {},
-				isShow: true,
+				isShow: false,
 				upload: {}
 			}
 		};

@@ -23,6 +23,10 @@
 							<!-- 链接 -->
 							<table-column-link :url="column.url" :label="getColumnValue(index, row)" :row="row" :target="column.target"></table-column-link>
 						</template>
+						<template v-else-if="column.type == 'qrcode'" v-slot="{ row }">
+							<!-- 二维码 -->
+							<table-column-qrcode :url="column.url" :label="getColumnValue(index, row)" :row="row" :isImg="column.isImg"></table-column-qrcode>
+						</template>
 						<template v-else-if="column.type == 'image'" v-slot="{ row }">
 							<!-- 图片列 -->
 							<table-column-img :imgs="getColumnValue(index, row)"></table-column-img>
@@ -51,9 +55,10 @@ import tableColumnTags from "./table/table-column-tags";
 import tableColumnEnum from "./table/table-column-enum";
 import tableColumnAction from "./table/table-column-action";
 import tableColumnLink from "./table/table-column-link";
+import tableColumnQrcode from "./table/table-column-qrcode";
 
 export default {
-	components: { tableToggleColumn, tableColumnImg, tableColumnTags, tableColumnEnum, tableColumnAction, tableColumnLink },
+	components: { tableToggleColumn, tableColumnImg, tableColumnTags, tableColumnEnum, tableColumnAction, tableColumnLink, tableColumnQrcode },
 	data() {
 		return {
 			data: [], // 当前列表数据
@@ -193,8 +198,13 @@ export default {
 					} else if (column.type == "link") {
 						column.url = column.options.url;
 						column.target = column.options.target;
-						delete column.options.link;
+						delete column.options.url;
 						delete column.options.target;
+					} else if (column.type == "qrcode") {
+						column.url = column.options.url;
+						column.isImg = column.options.isImg;
+						delete column.options.isImg;
+						delete column.options.url;
 					} else if (column.type == "date") {
 						column.options.formatter = column.options.formatter || this.dateFormat;
 						column.options.width = column.options.width || "";

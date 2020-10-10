@@ -23,10 +23,10 @@ export default {
 		row: Object
 	},
 	watch: {
-		url(){
+		url() {
 			this.genteratorLink();
 		},
-		row(){
+		row() {
 			this.genteratorLink();
 		}
 	},
@@ -35,7 +35,6 @@ export default {
 	},
 	methods: {
 		genteratorLink() {
-			console.info(this.url);
 			if (!this.url) {
 				this.link = "";
 				return;
@@ -43,7 +42,7 @@ export default {
 			if (typeof this.url == "string") {
 				this.link = site.utils.stringFormat(this.url, this.row);
 			} else if (typeof this.url == "function") {
-				this.link = this.url(row);
+				this.link = this.url(this.row);
 				if (typeof this.link == "object") {
 					this.link = this.$router.resolve(this.link).href;
 				}
