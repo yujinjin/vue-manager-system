@@ -134,7 +134,7 @@ export default {
 			}
 		};
 	},
-	mounted(){
+	mounted() {
 		this.init();
 	},
 	methods: {
@@ -157,7 +157,7 @@ export default {
 				}
 			]);
 		},
-		moveButton(table, index, number){
+		moveButton(table, index, number) {
 			if (number > 0) {
 				table.splice(index + number + 1, 0, table[index]);
 				table.splice(index, 1);
@@ -166,7 +166,7 @@ export default {
 				table.splice(index + 1, 1);
 			}
 		},
-		gotoAdd(table){
+		gotoAdd(table) {
 			table.push({
 				date: "",
 				name: "",
@@ -185,7 +185,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .complex-form {
-
 	.form-column {
 		padding-top: 18px;
 	}

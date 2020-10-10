@@ -266,7 +266,7 @@ export default {
 
 	.left-inner {
 		display: flex;
-
+		flex: 0 0 260px;
 		.logo-box {
 			width: 100px;
 			text-align: center;
@@ -283,13 +283,15 @@ export default {
 	}
 
 	.center-inner {
-		flex: 1 1 auto;
+		width: calc(100% - 460px);
+		flex: 0 0 calc(100% - 460px);
 		display: flex;
 		align-items: flex-end;
 		position: relative;
 	}
 
 	.right-inner {
+		flex: 0 0 190px;
 		display: flex;
 		padding: 10px 20px;
 		color: #fff;
