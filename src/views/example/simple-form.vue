@@ -36,7 +36,10 @@ export default {
 						name: "expressNo",
 						label: "快递单",
 						span: 12,
-						type: "imgUpload"
+						type: "imgUpload",
+						option: {
+							cropp: true
+						}
 					},
 					{
 						name: "sendMan",

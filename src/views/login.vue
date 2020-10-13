@@ -75,7 +75,7 @@
 			</div>
 		</div>
 		<div class="footer">
-			南京蜜家健康科技公司所有 Copyright Right @2020
+			软件科技有限公司所有 Copyright Right @2020
 		</div>
 	</div>
 </template>

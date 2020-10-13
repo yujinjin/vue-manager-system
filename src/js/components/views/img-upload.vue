@@ -162,7 +162,8 @@ export default {
 		imgUpload(file) {
 			if (this.cropperInstance) {
 				return this.cropperInstance.getCroppedCanvas().toBlob(blob => {
-					this.imageUploadApi(blob).then(() => {
+					blob.name = file.file.name;
+					this.imageUploadApi({ file: blob }).then(() => {
 						this.uploadImgChange();
 						this.closeCroppDialog();
 					});

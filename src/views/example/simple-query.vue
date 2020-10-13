@@ -116,11 +116,11 @@ export default {
 								{
 									label: "预览",
 									action: "qrcode",
-									isImg: true,
-									url: row => {
-										console.info(row);
-										return Promise.resolve("https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg");
-									}
+									url: "https://www.baidu.com"
+									// url: row => {
+									// 	console.info(row);
+									// 	return Promise.resolve("https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg");
+									// }
 								}
 							];
 						}
