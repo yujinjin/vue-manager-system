@@ -46,13 +46,21 @@
             描述：excel导入
 		-->
 		<excel-import-dialog v-bind="simpleExcelImportDialog" :isShow.sync="simpleExcelImportDialog.isShow"></excel-import-dialog>
+
+		<!--
+			作者：yujinjin9@126.com
+            时间：2020-10-13
+            描述：excel导出
+		-->
+		<excel-export-dialog v-bind="simpleExcelExportDialog" :isShow.sync="simpleExcelExportDialog.isShow"></excel-export-dialog>
 	</div>
 </template>
 <script>
 import excelImportDialog from "@views/components/excel-import-dialog";
+import excelExportDialog from "@views/components/excel-export-dialog";
 
 export default {
-	components: { excelImportDialog },
+	components: { excelImportDialog, excelExportDialog },
 	data() {
 		return {
 			// 查询表单字段
@@ -78,6 +86,11 @@ export default {
 					action: "import",
 					label: "导入",
 					click: this.importExcel
+				},
+				{
+					action: "export",
+					label: "导出",
+					click: this.exportExcel
 				},
 				{
 					action: "refuse",
@@ -321,6 +334,68 @@ export default {
 				dialog: {},
 				isShow: false,
 				upload: {}
+			},
+			simpleExcelExportDialog: {
+				isShow: false,
+				excelExport: site.api.common.excelExport,
+				fields: [
+					{
+						name: "filter",
+						label: "关键词"
+					},
+					{
+						name: "state",
+						label: "是否成功",
+						type: "select",
+						data: site.constants.ENUM["YES_NO"]
+					}
+				],
+				exportFields: [
+					{
+						name: "orderNo",
+						label: "订单号"
+					},
+					{
+						name: "receiveMan",
+						label: "收货人"
+					},
+					{
+						name: "price",
+						label: "价格"
+					},
+					{
+						name: "receiveManTel",
+						label: "收货人手机号"
+					},
+					{
+						name: "sendMan",
+						label: "购买人"
+					},
+					{
+						name: "fromAbroad",
+						label: "是否跨境"
+					},
+					{
+						name: "tags",
+						label: "标签"
+					},
+					{
+						name: "sex",
+						label: "性别"
+					},
+					{
+						name: "imgs",
+						label: "图片"
+					},
+					{
+						name: "activeStatus",
+						label: "状态"
+					},
+					{
+						name: "remark",
+						label: "备注"
+					}
+				]
 			}
 		};
 	},
@@ -356,6 +431,9 @@ export default {
 		},
 		importExcel() {
 			this.simpleExcelImportDialog.isShow = true;
+		},
+		exportExcel() {
+			this.simpleExcelExportDialog.isShow = true;
 		},
 		delete() {
 			this.preBatchDelete(() => Promise.resolve(true));

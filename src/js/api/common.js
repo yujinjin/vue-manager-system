@@ -81,5 +81,14 @@ export default {
 				resolve(true);
 			}, 5000);
 		});
+	},
+
+	// excel 数据导出功能
+	excelExport(inputData, ajaxOptions) {
+		return new Promise(resolve => {
+			setTimeout(() => {
+				resolve("https://pan.baidu.com/s/1aJwp2kV8AIXG0t4BXyL7NA");
+			}, 10000);
+		});
 	}
 };
