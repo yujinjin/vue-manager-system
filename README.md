@@ -65,7 +65,7 @@
 - jquery(v1.12.4,部分插件需要依赖于jquery)
 - toastr(由于element-ui中的Message组件同时调用多次显示有问题，所以采用了它，[官方文档](https://github.com/CodeSeven/toastr))
 - cropperjs(图片裁剪，[官方文档](https://github.com/fengyuanchen/cropperjs))
-- echarts(百度echarts，[官方文档](httpshttps://echarts.apache.org/zh/index.html))
+- echarts(百度echarts，[官方文档](https://echarts.apache.org/zh/index.html))
 - aliyun-oss-sdk(阿里云OSS SDK)
 - aliyun-upload-sdk(阿里云OSS 上传)
 - summernote(一个不依赖于boostrap的富文本框组件，发现部分功能有BUG，所以把源代码做了修复改动。因此如果使用该插件就不能再升级版本了)
