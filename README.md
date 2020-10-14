@@ -1,7 +1,43 @@
 ## [vue-manager-system](https://github.com/yujinjin/vue-manager-system)(后台管理系统)
 
 ## 目录
-[TOC]
+
+- [目录](#目录)
+- [介绍](#介绍)
+- [快速开始](#快速开始)
+- [组件的API文档](#组件的api文档)
+- [项目所用到的第三方组件列表](#项目所用到的第三方组件列表)
+- [项目UI及页面示例](#项目ui及页面示例)
+    - [1.登录界面](#1登录界面)
+    - [2.主界面布局](#2主界面布局)
+    - [3.简单查询页面示例](#3简单查询页面示例)
+    - [4.复杂查询页面示例](#4复杂查询页面示例)
+    - [5.普通页面表单示例](#5普通页面表单示例)
+    - [6.复杂表单](#6复杂表单)
+- [独立组件示例](#独立组件示例)
+    - [1. 图片上传（img-upload）](#1-图片上传img-upload)
+    - [2. 视频上传（video-upload）](#2-视频上传video-upload)
+    - [3. 视频播放（web-player）](#3-视频播放web-player)
+    - [4. 富文本框（web-editor）](#4-富文本框web-editor)
+    - [5. 数据列表栏显示隐藏状态的切换（toggle-table-column）](#5-数据列表栏显示隐藏状态的切换toggle-table-column)
+    - [6. 数据列表的操作列（table-column-action）](#6-数据列表的操作列table-column-action)
+    - [7. 数据列表的枚举列（table-column-enum）](#7-数据列表的枚举列table-column-enum)
+    - [8. 数据列表的图片列（table-column-img）](#8-数据列表的图片列table-column-img)
+    - [9. 数据列表的链接列（table-column-link）](#9-数据列表的链接列table-column-link)
+    - [10. 数据列表的标签列（table-column-tags）](#10-数据列表的标签列table-column-tags)
+    - [11. 数据列表的二维码预览（table-column-qrcode）](#11-数据列表的二维码预览table-column-qrcode)
+- [页面级组件示例](#页面级组件示例)
+    - [1. 查询表单（search-form）](#1-查询表单search-form)
+    - [2. 操作栏（action-bar）](#2-操作栏action-bar)
+    - [3. 数据列表（table-data)](#3-数据列表table-data)
+    - [4. form表单（form-input)](#4-form表单form-input)
+    - [5. 信息表单（view-info)](#5-信息表单view-info)
+    - [6. 弹窗表单（dialog-form)](#6-弹窗表单dialog-form)
+    - [7. 页面表单（page-form)](#7-页面表单page-form)
+    - [8.excel导入（excel-import-dialog）](#8excel导入excel-import-dialog)
+    - [9.excel导出（excel-export-dialog）](#9excel导出excel-export-dialog)
+- [项目框架的目录规范说明](#项目框架的目录规范说明)
+- [最后](#最后)
 
 ## 介绍
 > 这是一个使用vue-cli作为脚手架，基于vue、elementUI搭建的一套后台管理系统。
@@ -36,7 +72,7 @@
 - qrcode(二维码)
 
 ## 项目UI及页面示例
-### 1.登录界面
+#### 1.登录界面
 > 用户名密码登录
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/D7ABD0716EA347D7B1FEC79B15A28D84/21970)
@@ -85,7 +121,7 @@
 分组的方式展示表单信息
 ```
 
-### 独立组件示例
+## 独立组件示例
 #### 1. 图片上传（img-upload）
 > 表单字段展示
 
@@ -199,7 +235,8 @@
 说明：当前列数据点击展示一个二维码。
 ```
 
-## 新增页面级组件列表
+## 页面级组件示例
+
 #### 1. 查询表单（search-form）
 
 > 查询项较少时
