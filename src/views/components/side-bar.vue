@@ -84,6 +84,25 @@ export default {
 		top: 0px;
 		bottom: 0px;
 		z-index: 10;
+		overflow-y: auto;
+		overflow-x: hidden;
+
+		&::-webkit-scrollbar {
+			width: 4px;
+			height: 1px;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			border-radius: 6px;
+			-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+			background: #BEBEBE;
+		}
+
+		&::-webkit-scrollbar-track {
+			-webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0);
+			border-radius: 6px;
+			background: #EDEDED;
+		}
 
 		> .menu-item {
 			position: relative;
