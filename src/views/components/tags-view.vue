@@ -116,11 +116,8 @@ export default {
 		},
 		refreshSelectedTag(view) {
 			this.$store.dispatch("tagsView/delCachedView", view).then(() => {
-				const { fullPath } = view;
 				this.$nextTick(() => {
-					this.$router.replace({
-						path: "/redirect" + fullPath
-					});
+					this.$router.replace({ name: "redirect", query: { route: JSON.stringify({ name: view.name, query: view.query, params: view.params }) } });
 				});
 			});
 		},
