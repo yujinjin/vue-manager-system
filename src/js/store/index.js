@@ -6,7 +6,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import data from "./data";
-import tagsView from "./tagsView";
+import pageTabs from "./page-tabs";
 import event from "./event";
 
 Vue.use(Vuex);
@@ -16,7 +16,7 @@ export default new Vuex.Store({
 	modules: {
 		data,
 		event,
-		tagsView
+		pageTabs
 	}
 	// getters: {
 	// 	visitedViews: state => state.tagsView.visitedViews,

@@ -2,12 +2,26 @@
 	<div class="header">
 		<div class="left-inner">
 			<div class="logo-box">
-				<img src="../../imgs/static/logo.png" height="40" width="40" />
+				<img src="../../imgs/static/logo.png" height="45" width="45" />
 			</div>
 			<div class="title-text">后台管理系统框架</div>
+			<div class="icon-box" @click="toggleMenuCollapseState">
+				<svg-icon :value="menuCollapseState ? 'hand-right' : 'hand-left'"></svg-icon>
+			</div>
 		</div>
 		<div class="center-inner">
-			<tags-view />
+			<div class="menu-list" ref="menu-list">
+				<div class="menus-inner" v-if="menuData && menuData.length > 0">
+					<!-- <div class="menu-item" @click="menuClickEvent($event, {})">
+						<svg-icon value="comment"></svg-icon>
+						<span class="menu-text">产品中心</span>
+					</div> -->
+					<div class="menu-item" v-for="menuItem in menuData" :class="{ active: menuItem.isOpen }" :key="menuItem.name" @click="menuClickEvent(menuItem)">
+						<svg-icon :value="menuItem.icon"></svg-icon>
+						<span class="menu-text">{{ menuItem.displayName }}</span>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="right-inner">
 			<div class="message-box">
@@ -84,13 +98,11 @@
 	</div>
 </template>
 <script>
-import TagsView from "./tags-view";
+import IScroll from "iscroll";
 export default {
-	components: {
-		TagsView
-	},
 	data() {
 		return {
+			menuSrollInstance: null,
 			// 用户信息弹窗
 			userInfoDialogForm: {
 				dialog: {
@@ -197,12 +209,73 @@ export default {
 			}
 		};
 	},
+	props: {
+		menuData: {
+			type: Array,
+			require: true
+		},
+		menuCollapseState: {
+			type: Boolean,
+			default: false
+		}
+	},
+	watch: {
+		menuData() {
+			this.initMenuScroll();
+		}
+	},
 	created() {
+		$(window).off("load resize", this.initMenuScroll);
 		this.userInfoDialogForm.fields[0].value = "admin";
 		this.userInfoDialogForm.fields[1].value = this.$store.state.data.locationInfo.loginUserInfo.name;
 		this.userInfoDialogForm.fields[3].value = this.$store.state.data.locationInfo.loginUserInfo.headImgURL || require("../../imgs/test/head.png");
 	},
+	mounted() {
+		this.initMenuScroll();
+	},
 	methods: {
+		initMenuScroll() {
+			if (!this.menuData || this.menuData.length == 0) {
+				return;
+			}
+			this.$nextTick(() => {
+				let allWidth = $(this.$refs["menu-list"]).outerWidth();
+				let buttonBoxs = $(this.$refs["menu-list"]).find(".menu-item");
+				let realWidth = 0;
+				for (let i = 0; i < buttonBoxs.length; i++) {
+					realWidth += buttonBoxs[i].getBoundingClientRect().width;
+				}
+				if (realWidth >= allWidth) {
+					$(this.$refs["menu-list"])
+						.find(".menus-inner")
+						.width(realWidth);
+					if (!this.menuSrollInstance) {
+						this.menuSrollInstance = new IScroll(this.$refs["menu-list"], {
+							eventPassthrough: true,
+							scrollX: true,
+							scrollY: false,
+							preventDefault: false
+						});
+					} else {
+						this.menuSrollInstance.refresh();
+					}
+				} else if (realWidth < allWidth) {
+					if (this.menuSrollInstance) {
+						this.menuSrollInstance.destroy();
+						this.menuSrollInstance = null;
+					}
+				}
+			});
+		},
+		menuClickEvent(menuItem) {
+			if (menuItem.isOpen) {
+				return;
+			}
+			this.$emit("menuClick", menuItem);
+		},
+		toggleMenuCollapseState() {
+			this.$emit("toggleMenuCollapseState");
+		},
 		// 下拉菜单事件处理
 		handleCommand(command) {
 			// 处理退出事件
@@ -244,6 +317,12 @@ export default {
 				resolve(true);
 			});
 		}
+	},
+	destroyed() {
+		$(window).off("load resize", this.initMenuScroll);
+		if (this.menuSrollInstance) {
+			this.menuSrollInstance.destroy();
+		}
 	}
 };
 </script>
@@ -253,8 +332,8 @@ export default {
 	padding: 0;
 	margin: 0;
 	border: none;
-	height: 60px;
-	background: linear-gradient(270deg, rgba(0, 47, 83, 1) 0%, rgba(0, 21, 41, 1) 100%);
+	height: 45px;
+	background-color: #2dc3e8;
 	box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 	display: flex;
 	justify-content: space-between;
@@ -266,41 +345,110 @@ export default {
 
 	.left-inner {
 		display: flex;
-		flex: 0 0 260px;
+		flex: 0 0 224px;
 		.logo-box {
-			width: 100px;
+			width: 51px;
 			text-align: center;
-			padding-top: 10px;
 		}
 
 		.title-text {
 			flex: 1;
-			font-size: 20px;
-			line-height: 30px;
-			padding: 15px 0px;
+			font-size: 15px;
+			padding-left: 5px;
+			line-height: 45px;
 			color: #fff;
+			display: -webkit-box;
+			word-break: break-all;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+		}
+
+		.icon-box {
+			width: 30px;
+			color: #fff;
+			cursor: pointer;
+			font-size: 20px;
+			transition: color 0.318s ease 0s;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			&:hover {
+				box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+			}
 		}
 	}
 
 	.center-inner {
-		width: calc(100% - 460px);
-		flex: 0 0 calc(100% - 460px);
+		width: calc(100% - 384px);
+		flex: 0 0 calc(100% - 384px);
 		display: flex;
 		align-items: flex-end;
 		position: relative;
+
+		.menu-list {
+			width: 100%;
+			overflow: hidden;
+
+			.menus-inner {
+				height: 45px;
+				width: 100%;
+
+				.menu-item {
+					line-height: 45px;
+					height: 45px;
+					border-left: 1px solid #b6cbd8;
+					min-width: 50px;
+					padding: 0 10px;
+					cursor: pointer;
+					background-position: 0% 0%;
+					background-image: linear-gradient(to bottom, #2dc3e8 0, #57a1d5 100%);
+					background-repeat: repeat-x;
+					filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff75b5e6', endColorstr='#ff57a1d5', GradientType=0);
+					background-color: #68adde;
+					background-attachment: scroll;
+					color: #fff;
+					display: inline-flex;
+
+					&.active {
+						background-image: linear-gradient(to bottom, #2dc3b1 0, #57a1d5 100%);
+					}
+
+					&:last-child {
+						border-right: 1px solid #b6cbd8;
+					}
+
+					.menu-text {
+						margin-left: 5px;
+						display: inline-block;
+						font-weight: 600;
+						font-size: 13px;
+					}
+
+					i {
+						font-size: 20px;
+						display: inline-block;
+						width: auto;
+						height: auto;
+					}
+				}
+			}
+		}
 	}
 
 	.right-inner {
-		flex: 0 0 190px;
+		flex: 0 0 160px;
 		display: flex;
-		padding: 10px 20px;
+		padding: 0px 10px;
 		color: #fff;
 		font-size: 12px;
 		align-items: center;
 
 		.message-box {
 			cursor: pointer;
-			padding-right: 20px;
+			padding-right: 10px;
 
 			i.icon {
 				font-size: 22px;

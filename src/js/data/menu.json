@@ -86,6 +86,372 @@
 					}
 				}]
 			}]
+		},
+		{
+			"name": "many-leve-menu",
+			"displayName": "多级菜单测试",
+			"icon": "table",
+			"items": [{
+				"name": "menu-leve-01",
+				"displayName": "菜单01",
+				"icon": "table",
+				"items": [{
+					"name": "menu-leve-0101",
+					"displayName": "菜单0101",
+					"icon": "table",
+					"items": [{
+						"name": "menu-leve-010101",
+						"displayName": "菜单010101",
+						"icon": "table",
+						"items": [{
+							"name": "menu-leve-01010101",
+							"displayName": "菜单01010101",
+							"icon": "table",
+							"route": {
+								"name": "test",
+								"params": {"id": "01010101"}
+							}
+						}, {
+							"name": "menu-leve-01010102",
+							"displayName": "菜单01010102",
+							"icon": "table",
+							"route": {
+								"name": "test",
+								"params": {"id": "01010102"}
+							}
+						}, {
+							"name": "menu-leve-01010103",
+							"displayName": "菜单01010103",
+							"icon": "table",
+							"route": {
+								"name": "test",
+								"params": {"id": "01010103"}
+							}
+						}]
+					}, {
+						"name": "menu-leve-010102",
+						"displayName": "菜单010102",
+						"icon": "table",
+						"items": [{
+							"name": "menu-leve-01010201",
+							"displayName": "菜单01010201",
+							"icon": "table",
+							"route": {
+								"name": "test",
+								"params": {"id": "01010201"}
+							}
+						}, {
+							"name": "menu-leve-01010202",
+							"displayName": "菜单01010202",
+							"icon": "table",
+							"route": {
+								"name": "test",
+								"params": {"id": "01010202"}
+							}
+						}, {
+							"name": "menu-leve-01010203",
+							"displayName": "菜单01010203",
+							"icon": "table",
+							"route": {
+								"name": "test",
+								"params": {"id": "01010203"}
+							}
+						}]
+					}, {
+						"name": "menu-leve-010103",
+						"displayName": "菜单010103",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010103"}
+						}
+					}]
+				}, {
+					"name": "menu-leve-0102",
+					"displayName": "菜单0102",
+					"icon": "table",
+					"items": [{
+						"name": "menu-leve-010201",
+						"displayName": "菜单010201",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010201"}
+						}
+					}, {
+						"name": "menu-leve-010202",
+						"displayName": "菜单010202",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010202"}
+						}
+					}, {
+						"name": "menu-leve-010203",
+						"displayName": "菜单010203",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010203"}
+						}
+					}]
+				}, {
+					"name": "menu-leve-0103",
+					"displayName": "菜单0103",
+					"icon": "table",
+					"items": [{
+						"name": "menu-leve-010301",
+						"displayName": "菜单010301",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010301"}
+						}
+					}, {
+						"name": "menu-leve-010302",
+						"displayName": "菜单010302",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010302"}
+						}
+					}, {
+						"name": "menu-leve-010303",
+						"displayName": "菜单010303",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010303"}
+						}
+					}]
+				}, {
+					"name": "menu-leve-0104",
+					"displayName": "菜单0104",
+					"icon": "table",
+					"items": [{
+						"name": "menu-leve-010401",
+						"displayName": "菜单010401",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010401"}
+						}
+					}, {
+						"name": "menu-leve-010402",
+						"displayName": "菜单010402",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010402"}
+						}
+					}, {
+						"name": "menu-leve-010403",
+						"displayName": "菜单010403",
+						"icon": "table",
+						"route": {
+							"name": "test",
+							"params": {"id": "010403"}
+						}
+					}]
+				}]
+			}, {
+				"name": "menu-leve-02",
+				"displayName": "菜单02",
+				"icon": "table",
+				"items": [{
+					"name": "menu-leve-0201",
+					"displayName": "菜单0201",
+					"icon": "table",
+					"route": {
+						"name": "test",
+						"params": {"id": "0201"}
+					}
+				}, {
+					"name": "menu-leve-0202",
+					"displayName": "菜单0202",
+					"icon": "table",
+					"route": {
+						"name": "test",
+						"params": {"id": "0202"}
+					}
+				}]
+			}, {
+				"name": "menu-leve-03",
+				"displayName": "菜单03",
+				"icon": "table",
+				"items": [{
+					"name": "menu-leve-0301",
+					"displayName": "菜单0301",
+					"icon": "table",
+					"route": {
+						"name": "test",
+						"params": {"id": "0301"}
+					}
+				}, {
+					"name": "menu-leve-0302",
+					"displayName": "菜单0302",
+					"icon": "table",
+					"route": {
+						"name": "test",
+						"params": {"id": "0302"}
+					}
+				}]
+			}, {
+				"name": "menu-leve-04",
+				"displayName": "菜单04",
+				"icon": "table",
+				"items": [{
+					"name": "menu-leve-0401",
+					"displayName": "菜单0201",
+					"icon": "table",
+					"route": {
+						"name": "test",
+						"params": {"id": "0401"}
+					}
+				}, {
+					"name": "menu-leve-0402",
+					"displayName": "菜单0402",
+					"icon": "table",
+					"route": {
+						"name": "test",
+						"params": {"id": "0402"}
+					}
+				}]
+			}]
+		},
+		{
+			"name": "router-menu",
+			"displayName": "页面路由测试",
+			"icon": "table",
+			"items": [{
+				"name": "router-menu-01",
+				"displayName": "路由测试01",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": {"id": "001"}
+				}
+			}, {
+				"name": "router-menu-02",
+				"displayName": "路由测试02",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": {"id": "002"}
+				}
+			}, {
+				"name": "router-menu-03",
+				"displayName": "路由测试03",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": {"id": "003"}
+				}
+			}, {
+				"name": "router-menu-04",
+				"displayName": "路由测试04",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params":  {"id": "004"}
+				}
+			}, {
+				"name": "router-menu-05",
+				"displayName": "路由测试05",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": {"id": "005"}
+				}
+			}, {
+				"name": "router-menu-06",
+				"displayName": "路由测试06",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": {"id": "006"}
+				}
+			}, {
+				"name": "router-menu-07",
+				"displayName": "路由测试07",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": {"id": "007"}
+				}
+			}, {
+				"name": "router-menu-08",
+				"displayName": "路由测试08",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": {"id": "008"}
+				}
+			}, {
+				"name": "router-menu-09",
+				"displayName": "路由测试09",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": {"id": "009"}
+				}
+			}, {
+				"name": "router-menu-10",
+				"displayName": "路由测试10",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": {"id": "010"}
+				}
+			}, {
+				"name": "router-menu-11",
+				"displayName": "路由测试11",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": "011"
+				}
+			}, {
+				"name": "router-menu-12",
+				"displayName": "路由测试12",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": "012"
+				}
+			}, {
+				"name": "router-menu-13",
+				"displayName": "路由测试13",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": "013"
+				}
+			}, {
+				"name": "router-menu-14",
+				"displayName": "路由测试14",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": "014"
+				}
+			}, {
+				"name": "router-menu-15",
+				"displayName": "路由测试15",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": "015"
+				}
+			}, {
+				"name": "router-menu-16",
+				"displayName": "路由测试16",
+				"icon": "table",
+				"route": {
+					"name": "test",
+					"params": "016"
+				}
+			}]
 		}
 	]
 }

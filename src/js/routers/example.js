@@ -34,8 +34,16 @@ export default [
 		path: "/complex-form",
 		name: "complex-form",
 		meta: {
-			title: "复制表单页面示例"
+			title: "复杂表单页面示例"
 		},
 		component: resolve => require(["@views/example/complex-form.vue"], pageFactory(resolve, { name: "complex-form", type: "form" }))
+	},
+	{
+		path: "/test/:id",
+		name: "test",
+		meta: {
+			title: "菜单测试"
+		},
+		component: resolve => require(["@views/example/test.vue"], pageFactory(resolve, { name: "test" }))
 	}
 ];
