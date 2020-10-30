@@ -203,12 +203,17 @@ export default {
 
 	.footer {
 		position: absolute;
-		left: -10px;
+		left: 0px;
 		right: 0px;
 		bottom: 0px;
-		padding-bottom: 15px;
+		padding: 8px 0px;
 		text-align: center;
-		background-color: rgba(255, 255, 255, 0.8);
+		// background-color: rgba(239, 243, 248, 0.8);
+		// background-color: rgba(51, 122, 183, 0.3);
+		background-color: rgba(247, 247, 249, 0.8);
+		box-shadow: 4px 2px 4px 4px rgba(0, 0, 0, 0.1);
+		// border-top-left-radius: 10px;
+		// border-top-right-radius: 10px;
 	}
 }
 </style>
