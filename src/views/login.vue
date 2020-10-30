@@ -194,7 +194,7 @@ export default {
 		go() {
 			// 默认情况下当路由跳转的路径是：A->B(登录页,replace)->C，此时必须要传toName参数。toName(参数):跳转的页面路由名称, toParams（参数）:命令路由的参数对象，query:默认参数
 			// 传入goBack参数是表示返回跳转：A->B(登录页,back)->A
-			let [_this, _toName, _go, _current_query, _current_params] = [this, this.$route.query.toName, this.$route.query.goBack, this.$route.toQuery, this.$route.query.toParams];
+			let [_toName, _go, _current_query, _current_params] = [this.$route.query.toName, this.$route.query.goBack, this.$route.query.toQuery, this.$route.query.toParams];
 			if (_toName) {
 				if (_current_query) {
 					try {
@@ -202,8 +202,6 @@ export default {
 					} catch (e) {
 						_current_query = {};
 					}
-				} else {
-					_current_params = {};
 				}
 				if (_current_params) {
 					try {
@@ -211,8 +209,6 @@ export default {
 					} catch (e) {
 						_current_params = {};
 					}
-				} else {
-					_current_params = {};
 				}
 				this.$router.replace({ name: _toName, query: _current_query, params: _current_params });
 			} else if (_go) {
