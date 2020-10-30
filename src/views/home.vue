@@ -103,7 +103,7 @@ export default {
 	created() {
 		this.queryMenuList();
 		// this.$store.dispatch("updatePermissions", routers.routes);
-		if ($(window).height() < 700 || $(window).width() < 1366) {
+		if ($(window).height() < 650 || $(window).width() < 1366) {
 			this.$message.warning("当前管理系统屏幕分辨率最佳体验不低于1366*768!");
 		}
 		Object.assign(this.currentRouter, {
@@ -338,7 +338,7 @@ export default {
 	position: relative;
 	display: flex;
 	min-width: 1366px;
-	min-height: 700px;
+	min-height: 650px;
 	padding-top: 45px;
 
 	.side-bar {
@@ -373,6 +373,7 @@ export default {
 			display: flex;
 			flex-direction: column;
 			position: relative;
+			padding-left: 8px;
 		}
 	}
 }
