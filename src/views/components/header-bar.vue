@@ -253,7 +253,7 @@ export default {
 	padding: 0;
 	margin: 0;
 	border: none;
-	height: 60px;
+	height: 50px;
 	background: linear-gradient(270deg, rgba(0, 47, 83, 1) 0%, rgba(0, 21, 41, 1) 100%);
 	box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 	display: flex;
@@ -262,7 +262,7 @@ export default {
 	left: 0px;
 	right: 0px;
 	top: 0px;
-	// z-index: 99;
+	z-index: 1;
 
 	.left-inner {
 		display: flex;
@@ -270,14 +270,14 @@ export default {
 		.logo-box {
 			width: 100px;
 			text-align: center;
-			padding-top: 10px;
+			padding-top: 5px;
 		}
 
 		.title-text {
 			flex: 1;
 			font-size: 20px;
 			line-height: 30px;
-			padding: 15px 0px;
+			padding: 10px 0px;
 			color: #fff;
 		}
 	}
@@ -293,7 +293,7 @@ export default {
 	.right-inner {
 		flex: 0 0 190px;
 		display: flex;
-		padding: 10px 20px;
+		padding: 0px 20px;
 		color: #fff;
 		font-size: 12px;
 		align-items: center;

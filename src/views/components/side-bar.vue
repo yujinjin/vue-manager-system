@@ -2,7 +2,7 @@
 	<!--
 		本次侧边菜单栏只支持3级菜单，而且一级菜单的文案只能是2个字
 	-->
-	<div class="side-nav-bar" :class="{ 'side-fixed': isFixed }">
+	<div class="side-nav-bar">
 		<div class="main-menu-panel" v-if="menuData">
 			<div class="menu-item" :class="{ active: menuItem.isActive, open: menuItem.isOpen }" v-for="menuItem in menuData" :key="menuItem.name" @click.stop.prevent="openMenu(menuItem)">
 				<div class="icons-box">
@@ -38,7 +38,6 @@
 export default {
 	data() {
 		return {
-			isFixed: true, // 边栏是否固定
 			menuData: null, // 菜单数据
 			subMenuData: null, // 子菜单数据
 			currentActiveMenu: null, // 当前激活的菜单数据
@@ -234,15 +233,19 @@ export default {
 </script>
 <style lang="less" scoped>
 .side-nav-bar {
-	height: 100%;
 	display: flex;
+	position: relative;
 
-	.side-fixed {
-		position: fixed;
-		left: 0px;
+	&::after {
+		content: "";
+		position: absolute;
+		left: 5px;
+		right: 0px;
 		top: 0px;
 		bottom: 0px;
-		padding-top: 60px;
+		background-color: #fff;
+		box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+		z-index: 1;
 	}
 
 	.main-menu-panel,
@@ -251,10 +254,12 @@ export default {
 		line-height: 40px;
 		height: 100%;
 		font-weight: 500;
+		position: relative;
+		z-index: 10;
 
 		.menu-item {
 			height: 40px;
-			padding: 0px 20px;
+			padding: 0px 10px;
 			display: flex;
 			cursor: pointer;
 
@@ -265,7 +270,7 @@ export default {
 	}
 
 	.main-menu-panel {
-		width: 100px;
+		width: 80px;
 		background-color: #001529;
 		height: 100%;
 		// padding: 10px 0px;
