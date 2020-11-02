@@ -8,11 +8,13 @@ import Vue from "vue";
 import toastr from "./toastr";
 import loading from "./loading";
 import player from "./player";
+import message from "./message";
 import dialogPlayer from "./dialog-player";
 
 export default function() {
 	Vue.use(toastr);
 	loading();
+	message();
 	Vue.use(player());
 	Vue.use(dialogPlayer());
 }
