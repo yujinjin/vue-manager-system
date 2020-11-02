@@ -88,10 +88,14 @@ let routers = {
 	//访问之前的函数
 	beforeEach(to, from, next) {
 		if (to.meta.auth !== false && !globalService.isLogin()) {
-			next({
-				name: "login",
-				query: { toName: to.name, toQuery: JSON.stringify(to.query), toParams: JSON.stringify(to.params) }
-			});
+			if (from.name == "login") {
+				next(false);
+			} else {
+				next({
+					name: "login",
+					query: { toName: to.name, toQuery: JSON.stringify(to.query), toParams: JSON.stringify(to.params) }
+				});
+			}
 			return;
 		}
 		switch (to.name) {

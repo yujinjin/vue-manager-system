@@ -358,6 +358,11 @@ export default {
 						&:focus {
 							outline: none;
 						}
+
+						&:-webkit-autofill {
+							-webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+							-webkit-text-fill-color: #333;
+						}
 					}
 				}
 
