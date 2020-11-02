@@ -262,7 +262,6 @@ export default {
 	left: 0px;
 	right: 0px;
 	top: 0px;
-	z-index: 1;
 
 	.left-inner {
 		display: flex;
