@@ -49,8 +49,7 @@ export default function() {
 			// 在响应请求数据的函数
 			before: function(response) {
 				//对响应数据做些事
-				let _response = response,
-					isSuccess = true;
+				let _response = response;
 				if (response.config.isResultData === false) {
 					_response = response;
 				} else if (response.data && response.data.success) {
@@ -59,7 +58,6 @@ export default function() {
 					_response = response.data;
 				}
 				if (response.config.isShowError && response.data && response.data.success === false) {
-					isSuccess = false;
 					if (response.data.error && response.data.error.message) {
 						site.message({
 							message: response.data.error.message,
@@ -176,6 +174,19 @@ export default function() {
 		responseType: "json",
 		//定义允许的http响应内容的最大大小
 		maxContentLength: 200000,
+		transformRequest: [
+			function(data, headers) {
+				if (headers["Content-Type"] == "application/x-www-form-urlencoded") {
+					// 将数据转换为表单数据
+					let formData = [];
+					for (let key in data) {
+						formData.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
+					}
+					return formData.join("&");
+				}
+				return data;
+			}
+		],
 		// 允许返回的数据传入then/catch之前进行处理
 		transformResponse: [
 			function(data) {
