@@ -176,6 +176,9 @@ export default function() {
 		maxContentLength: 200000,
 		transformRequest: [
 			function(data, headers) {
+				if (!data) {
+					return data;
+				}
 				if (headers["Content-Type"] == "application/x-www-form-urlencoded") {
 					// 将数据转换为表单数据
 					let formData = [];
@@ -184,7 +187,7 @@ export default function() {
 					}
 					return formData.join("&");
 				}
-				return data;
+				return JSON.stringify(data);
 			}
 		],
 		// 允许返回的数据传入then/catch之前进行处理
