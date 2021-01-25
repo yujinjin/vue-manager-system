@@ -163,7 +163,8 @@ export default {
 						label: "原密码",
 						rules: [{ required: true, message: "密码不能为空" }],
 						option: {
-							type: "password"
+							type: "password",
+							style: { width: "250px" }
 						}
 					},
 					{
