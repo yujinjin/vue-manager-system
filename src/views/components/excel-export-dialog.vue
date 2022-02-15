@@ -13,7 +13,7 @@
 						</template>
 					</form-input>
 				</el-card>
-				<el-card class="box-card" style="margin-top: 10px;" shadow="hover" v-if="exportFields && exportFields.length > 0">
+				<el-card class="box-card" style="margin-top: 10px" shadow="hover" v-if="exportFields && exportFields.length > 0">
 					<div slot="header" class="clearfix">
 						<span>请选择导出的字段</span>
 					</div>
@@ -32,9 +32,7 @@
 			<!-- 导入中 -->
 			<div class="exporting-box" v-else-if="loadType == 1">
 				<el-progress :text-inside="true" :stroke-width="26" :percentage="progress.percentage"></el-progress>
-				<div class="state-text">
-					正在批量导出数据，请稍后...
-				</div>
+				<div class="state-text">正在批量导出数据，请稍后...</div>
 			</div>
 			<!-- 导入成功 -->
 			<div class="succes-box" v-else-if="loadType == 2">

@@ -11,7 +11,7 @@ import player from "./player";
 import message from "./message";
 import dialogPlayer from "./dialog-player";
 
-export default function() {
+export default function () {
 	Vue.use(toastr);
 	loading();
 	message();

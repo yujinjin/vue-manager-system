@@ -6,7 +6,7 @@
 import store from "../store";
 import constants from "./constants";
 
-export default (function() {
+export default (function () {
 	let localStorage = {
 		// 本地存储的key值(轻易不要改值，会影响线上业务)
 		LOCAL_STORAGE_KEY: {

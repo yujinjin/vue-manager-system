@@ -3,26 +3,26 @@
  * 时间：2020-08-13
  * 描述：对象深复制，创建对象和继承 (完全复制jquery的方法)
  */
-export default (function() {
+export default (function () {
 	let class2type = {};
 	let toString = class2type.toString;
 	let hasOwn = class2type.hasOwnProperty;
-	"Boolean Number String Function Array Date RegExp Object Error Symbol".split(" ").forEach(function(item) {
+	"Boolean Number String Function Array Date RegExp Object Error Symbol".split(" ").forEach(function (item) {
 		class2type["[object " + item + "]"] = item.toLowerCase();
 	});
-	let type = function(obj) {
+	let type = function (obj) {
 		if (obj == null) {
 			return obj + "";
 		}
 		return typeof obj === "object" || typeof obj === "function" ? class2type[toString.call(obj)] || "object" : typeof obj;
 	};
-	let isFunction = function(obj) {
+	let isFunction = function (obj) {
 		return type(obj) === "function";
 	};
-	let isWindow = function(obj) {
+	let isWindow = function (obj) {
 		return obj != null && obj == obj.window;
 	};
-	let isPlainObject = function(obj) {
+	let isPlainObject = function (obj) {
 		var key;
 		// Must be an Object.
 		// Because of IE, we also have to check the presence of the constructor property.
@@ -47,10 +47,10 @@ export default (function() {
 	};
 	let isArray =
 		Array.isArray ||
-		function(obj) {
+		function (obj) {
 			return type(obj) === "array";
 		};
-	let extend = function() {
+	let extend = function () {
 		var src,
 			copyIsArray,
 			copy,

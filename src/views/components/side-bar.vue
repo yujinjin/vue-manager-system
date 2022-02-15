@@ -95,13 +95,13 @@ export default {
 		&::-webkit-scrollbar-thumb {
 			border-radius: 6px;
 			-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-			background: #BEBEBE;
+			background: #bebebe;
 		}
 
 		&::-webkit-scrollbar-track {
 			-webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0);
 			border-radius: 6px;
-			background: #EDEDED;
+			background: #ededed;
 		}
 
 		> .menu-item {

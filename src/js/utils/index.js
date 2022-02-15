@@ -197,7 +197,7 @@ export default {
 			protocol: _a_el.protocol.replace(":", ""), //协议
 			host: _a_el.hostname, //域名
 			port: _a_el.port,
-			query: (function() {
+			query: (function () {
 				if (_a_el.search) {
 					return _a_el.search;
 				}
@@ -207,7 +207,7 @@ export default {
 				}
 				return "";
 			})(),
-			params: (function() {
+			params: (function () {
 				let ret = {},
 					seg = _a_el.search;
 				//兼容http://xxxx/#/id=xxx这种格式
@@ -236,7 +236,7 @@ export default {
 	},
 
 	generateGuid() {
-		return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+		return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
 			let r = (Math.random() * 16) | 0,
 				v = c == "x" ? r : (r & 0x3) | 0x8;
 			return v.toString(16);
@@ -260,12 +260,12 @@ export default {
 			script.type = "text/javascript";
 			script.id = id;
 			//默认10S超时就立即执行回调函数
-			let timer = setTimeout(function() {
+			let timer = setTimeout(function () {
 				reject("JS加载超时!");
 				timer = null;
 			}, 10000);
 			if (script.readyState) {
-				script.onreadystatechange = function() {
+				script.onreadystatechange = function () {
 					if (script.readyState == "loaded" || script.readyState == "complete") {
 						script.onreadystatechange = null;
 						if (timer) {
@@ -275,7 +275,7 @@ export default {
 					}
 				};
 			} else {
-				script.onload = function() {
+				script.onload = function () {
 					if (timer) {
 						clearTimeout(timer);
 						resolve(true);
@@ -505,7 +505,7 @@ export default {
 			object[keyArray[0]] = value;
 			return { rootName: keyArray[0], rootValue: value, propertyName: null };
 		}
-		const getValue = function(targetObject, key, isArray) {
+		const getValue = function (targetObject, key, isArray) {
 			let value = targetObject[key];
 			if (value == undefined || value == null || typeof value != "object") {
 				targetObject[key] = value = isArray ? [] : {};

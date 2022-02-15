@@ -12,12 +12,12 @@ import store from "@js/store/";
 
 export default {
 	focus: {
-		inserted: function(el, { value, arg }) {
+		inserted: function (el, { value, arg }) {
 			if (value === true || value === "true" || value === arg) {
 				el.focus();
 			}
 		},
-		update: function(el, { value, arg }) {
+		update: function (el, { value, arg }) {
 			if (el.tagName != "INPUT") {
 				// 判断当前元素是否有包含input表单
 				el = el.querySelector("input");
@@ -29,7 +29,7 @@ export default {
 	},
 
 	// 用户操作权限指令
-	permission: function(el, binding) {
+	permission: function (el, binding) {
 		let permissionValue = binding.arg || binding.value;
 		if (permissionValue) {
 			permissionValue = permissionValue.replace(/-/g, ".");

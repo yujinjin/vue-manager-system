@@ -247,9 +247,7 @@ export default {
 					realWidth += buttonBoxs[i].getBoundingClientRect().width;
 				}
 				if (realWidth >= allWidth) {
-					$(this.$refs["menu-list"])
-						.find(".menus-inner")
-						.width(realWidth);
+					$(this.$refs["menu-list"]).find(".menus-inner").width(realWidth);
 					if (!this.menuSrollInstance) {
 						this.menuSrollInstance = new IScroll(this.$refs["menu-list"], {
 							eventPassthrough: true,

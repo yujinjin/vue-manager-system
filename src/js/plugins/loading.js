@@ -5,16 +5,16 @@
  */
 import { Loading } from "element-ui";
 
-export default function() {
+export default function () {
 	site = site || {};
 	let loadingInstance = null;
 	let showTimes = 0;
-	site.showLoading = function(options) {
+	site.showLoading = function (options) {
 		++showTimes;
 		loadingInstance = Loading.service(Object.assign({}, options || {}, { target: ".page-body" }));
 	};
 
-	site.hideLoading = function() {
+	site.hideLoading = function () {
 		--showTimes;
 		if (loadingInstance && showTimes == 0) {
 			loadingInstance.close();

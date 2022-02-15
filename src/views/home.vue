@@ -18,7 +18,7 @@ import store from "@js/store/";
 import routers from "@/js/routers";
 
 export default {
-	data: function() {
+	data: function () {
 		return {
 			menuData: [], // 菜单数据
 			menuSidebarData: [], // 侧边栏菜单数据
@@ -293,7 +293,7 @@ export default {
 			} else if (menuData.items && menuData.items.length > 0) {
 				// 当前点击的是子菜单
 				if (!menuData.isOpen) {
-					parentMenuItem.find(function(item, index) {
+					parentMenuItem.find(function (item, index) {
 						// 如果点击的菜单不是当前菜单且同级的菜单中有open状态的
 						if (item.name != menuData.name && item.isOpen) {
 							// 如果当前的菜单是激活状态

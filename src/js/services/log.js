@@ -3,7 +3,7 @@
  * 时间：2020-08-13
  * 描述：站点log日志
  */
-export default function() {
+export default function () {
 	const [levels, level] = [
 		{
 			DEBUG: 1,

@@ -8,7 +8,7 @@
 </template>
 <script>
 export default {
-	data: function() {
+	data: function () {
 		return {
 			videoUrl: "", // 视频地址
 			videoCover: "", // 视频封面图地址

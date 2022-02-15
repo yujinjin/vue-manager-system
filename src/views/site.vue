@@ -6,7 +6,7 @@
 
 <script>
 export default {
-	data: function() {
+	data: function () {
 		return {
 			browserType: null // 当前浏览器类型，Opera|Firefox|Chrome|Safari|IE|Edge
 		};
@@ -19,7 +19,7 @@ export default {
 		this.initBrowser();
 	},
 	methods: {
-		init: function() {},
+		init: function () {},
 		initBrowser() {
 			let userAgent = navigator.userAgent,
 				isShowBrowserWarning = true; //取得浏览器的userAgent字符串

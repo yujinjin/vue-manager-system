@@ -74,9 +74,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="footer">
-			软件科技有限公司所有 Copyright Right @2020
-		</div>
+		<div class="footer">软件科技有限公司所有 Copyright Right @2020</div>
 	</div>
 </template>
 <script>

@@ -5,13 +5,13 @@
 		<el-dialog title="视频插入" :visible.sync="videoDialog.isShow" custom-class="video-dialog">
 			<el-tabs v-model="videoDialog.type">
 				<el-tab-pane label="视频地址" name="0">
-					<el-form :model="videoDialog" label-width="100px" ref="videoForm" style="padding-top: 20px;">
+					<el-form :model="videoDialog" label-width="100px" ref="videoForm" style="padding-top: 20px">
 						<el-form-item label="视频地址" prop="url" :rules="[{ required: true, message: '请输入视频地址', trigger: 'blur' }]">
-							<el-input style="max-width: 300px;" v-model="videoDialog.url" auto-complete="off" placeholder="视频文件的网络地址"></el-input>
+							<el-input style="max-width: 300px" v-model="videoDialog.url" auto-complete="off" placeholder="视频文件的网络地址"></el-input>
 						</el-form-item>
 						<el-form-item label="视频预览图" prop="cover">
 							<div class="input-box">
-								<el-input style="max-width: 300px; margin-right: 10px;" v-model="videoDialog.cover" auto-complete="off" placeholder="视频预览图网络地址"></el-input>
+								<el-input style="max-width: 300px; margin-right: 10px" v-model="videoDialog.cover" auto-complete="off" placeholder="视频预览图网络地址"></el-input>
 								<img-upload :upload="{ showFileList: false, limit: 1 }" v-model="videoDialog.cover">
 									<el-button size="small" type="primary">点击上传</el-button>
 								</img-upload>

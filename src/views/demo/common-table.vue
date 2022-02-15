@@ -69,7 +69,7 @@
 						<el-radio-group v-model="goodsStatus">
 							<el-radio-button v-for="item in goodsStatusOptions" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
 						</el-radio-group>
-						<el-button style="margin-left: 20px;" type="primary" icon="el-icon-plus">新增商品</el-button>
+						<el-button style="margin-left: 20px" type="primary" icon="el-icon-plus">新增商品</el-button>
 					</div>
 					<el-divider></el-divider>
 					<el-table ref="multipleTable" :data="tableData" :header-cell-style="{ backgroundColor: '#FAFAFA' }">

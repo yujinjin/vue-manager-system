@@ -15,11 +15,11 @@
 		<data-table v-bind="dataTable" :filters="filters">
 			<template v-slot:expand="{ row }">
 				<div>
-					<span style="width: 80px; text-align: right; display: inline-block;">浏览器：</span>
+					<span style="width: 80px; text-align: right; display: inline-block">浏览器：</span>
 					{{ row["browser"] }}
 				</div>
 				<div>
-					<span style="width: 80px; text-align: right; display: inline-block;">参数：</span>
+					<span style="width: 80px; text-align: right; display: inline-block">参数：</span>
 					{{ row["parameters"] }}
 				</div>
 			</template>

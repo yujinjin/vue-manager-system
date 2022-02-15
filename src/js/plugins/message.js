@@ -5,7 +5,7 @@
  */
 import { Message } from "element-ui";
 
-export default function() {
+export default function () {
 	site = site || {};
 	site.message = Message;
 }

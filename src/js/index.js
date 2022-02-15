@@ -19,9 +19,9 @@ import routers from "@js/routers/";
 import components from "@js/components/";
 import plugins from "@js/plugins/";
 
-export default (function() {
+export default (function () {
 	// 初始化配置
-	let initConfig = function() {
+	let initConfig = function () {
 		// 只要不是生产环境的build，全部认为是调试版本
 		site.config.isDebug = process.env.NODE_ENV === "development" || process.env.VUE_APP_ENV != "PRD";
 		if (site.config.isDebug) {
@@ -36,7 +36,7 @@ export default (function() {
 	};
 
 	// 初始化本地存储
-	let initInfo = function() {
+	let initInfo = function () {
 		// 把当前localstorage存储登录用户信息放入内存里
 		let loginUserInfo = globalService.getLocalLoginUserInfo();
 		if (loginUserInfo && loginUserInfo.token) {
@@ -54,7 +54,7 @@ export default (function() {
 	};
 
 	// 设置APP对象
-	let setSite = function() {
+	let setSite = function () {
 		// 设置app 对象下的constants常量对象
 		site.constants = constants;
 		// 设置app对象下的logs日志
@@ -70,7 +70,7 @@ export default (function() {
 	};
 
 	// 初始化vue
-	let initVue = function() {
+	let initVue = function () {
 		let vueDebugger = site.config.isDebug;
 		// 是否取消 Vue 所有的日志与警告。
 		Vue.config.silent = !vueDebugger;
@@ -87,10 +87,10 @@ export default (function() {
 			 * @param {Long}    columnNumber   出错代码的列号
 			 * @param {Object}  errorObj       错误的详细信息，Anything
 			 */
-			window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, errorObj) {
+			window.onerror = function (errorMessage, scriptURI, lineNumber, columnNumber, errorObj) {
 				logs.error({ errorMessage, scriptURI, lineNumber, columnNumber, errorObj });
 			};
-			Vue.config.errorHandler = function(err, vm, info) {
+			Vue.config.errorHandler = function (err, vm, info) {
 				logs.error(JSON.stringify({ message: "Vue errorHandler:" + err.message, stack: err.stack, type: info }));
 			};
 		}
@@ -110,7 +110,7 @@ export default (function() {
 	};
 
 	// 初始化
-	let init = function() {
+	let init = function () {
 		initConfig();
 		initInfo();
 		setSite();

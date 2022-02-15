@@ -74,9 +74,7 @@ export default {
 						realWidth += buttonBoxs[i].getBoundingClientRect().width;
 					}
 					if (realWidth >= allWidth) {
-						$(this.$refs["page-tabs"])
-							.find(".page-tabs-inner")
-							.width(realWidth);
+						$(this.$refs["page-tabs"]).find(".page-tabs-inner").width(realWidth);
 						if (!this.iscrollInstance) {
 							this.iscrollInstance = new IScroll(this.$refs["page-tabs"], {
 								eventPassthrough: true,
@@ -118,14 +116,7 @@ export default {
 			if (direction == "left") {
 				this.iscrollInstance.scrollTo(0, 0, 1000);
 			} else if (direction == "right") {
-				this.iscrollInstance.scrollTo(
-					$(this.$refs["page-tabs"]).outerWidth() -
-						$(this.$refs["page-tabs"])
-							.find(".page-tabs-inner")
-							.outerWidth(),
-					0,
-					1000
-				);
+				this.iscrollInstance.scrollTo($(this.$refs["page-tabs"]).outerWidth() - $(this.$refs["page-tabs"]).find(".page-tabs-inner").outerWidth(), 0, 1000);
 			}
 		},
 		// 关闭当前页面

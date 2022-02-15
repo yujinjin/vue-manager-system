@@ -5,7 +5,7 @@
  */
 export default {
 	//图片上传
-	imageUpload: function(inputData, ajaxOptions) {
+	imageUpload: function (inputData, ajaxOptions) {
 		let formData = new FormData();
 		if (inputData && typeof inputData === "object") {
 			for (let key in inputData) {
