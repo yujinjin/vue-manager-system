@@ -17,7 +17,7 @@ import dialogForm from "./views/dialog-form";
 import dataTable from "./views/data-table";
 import pageForm from "./views/page-form";
 
-export default function() {
+export default function () {
 	Vue.component("svg-icon", svgIcon);
 	Vue.component("search-form", searchForm);
 	Vue.component("action-bar", actionBar);

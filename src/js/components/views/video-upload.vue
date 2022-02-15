@@ -3,7 +3,7 @@
 	<div class="video-upload">
 		<div class="el-upload el-upload--picture">
 			<el-button @click="handleClick" size="small" type="primary">选取文件</el-button>
-			<el-button style="margin-left: 10px;" size="small" type="success" @click="submit" :disabled="isUploading">上传到服务器</el-button>
+			<el-button style="margin-left: 10px" size="small" type="success" @click="submit" :disabled="isUploading">上传到服务器</el-button>
 			<input ref="input" :accept="accept" @change="handChange($event)" class="el-upload__input" type="file" name="file" :multiple="isMultiple" />
 		</div>
 		<div slot="tip" class="el-upload__tip">只能上传视频文件，且不超过{{ videoMaxSize }}MB</div>

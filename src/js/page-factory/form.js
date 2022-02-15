@@ -7,7 +7,7 @@
  */
 import extend from "../utils/extend";
 
-export default function(page, name) {
+export default function (page, name) {
 	if (!page.name && name) {
 		page.name = name;
 	}

@@ -30,7 +30,7 @@
 						<svg-icon style="font-size: 20px; float: right" :value="item"></svg-icon>
 					</el-option>
 				</el-select>
-				<svg-icon v-if="formInput.icon" style="font-size: 20px; margin-left: 20px;" :value="formInput.icon"></svg-icon>
+				<svg-icon v-if="formInput.icon" style="font-size: 20px; margin-left: 20px" :value="formInput.icon"></svg-icon>
 			</template>
 		</dialog-form>
 		<!-- 批量新增按钮 -->

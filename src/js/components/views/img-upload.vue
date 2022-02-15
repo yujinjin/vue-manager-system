@@ -204,7 +204,7 @@ export default {
 			// 双向绑定
 			if (typeof this.value == "string" || this.value === undefined || this.value === null) {
 				this.transitionValue = this.uploadAttributes.fileList
-					.map(function(item, index) {
+					.map(function (item, index) {
 						return item.relativeUrl;
 					})
 					.join("|");

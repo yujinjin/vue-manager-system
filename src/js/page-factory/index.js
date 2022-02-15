@@ -8,23 +8,23 @@
 import query from "./query";
 import form from "./form";
 
-export default function(resolve, { type = "other", name = null } = {}) {
+export default function (resolve, { type = "other", name = null } = {}) {
 	if (type == "query") {
 		// return function(resolve) {
 		// 	return require([path], component => resolve(query(component.default, name)));
 		// };
-		return function(component) {
+		return function (component) {
 			return resolve(query(component.default, name));
 		};
 	} else if (type == "form") {
 		// return function(resolve) {
 		// 	return require([path], component => resolve(form(component.default, name)));
 		// };
-		return function(component) {
+		return function (component) {
 			return resolve(form(component.default, name));
 		};
 	} else {
-		return function(component) {
+		return function (component) {
 			return resolve(component.default);
 		};
 	}

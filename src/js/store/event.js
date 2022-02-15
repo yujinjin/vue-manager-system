@@ -26,7 +26,7 @@ export default {
 		off(state, { eventName, callback }) {
 			let callbacks = state.events[eventName];
 			if (callbacks) {
-				callbacks.find(function(value, index) {
+				callbacks.find(function (value, index) {
 					if (value === callback) {
 						callbacks.splice(index, 1);
 						return true;
@@ -35,7 +35,7 @@ export default {
 			}
 			callbacks = state.onceEvents[eventName];
 			if (callbacks) {
-				callbacks.find(function(value, index) {
+				callbacks.find(function (value, index) {
 					if (value === callback) {
 						callbacks.splice(index, 1);
 						return true;

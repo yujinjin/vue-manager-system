@@ -8,7 +8,7 @@ import svgIcon from "./svg-icon.vue";
 // 加载所有svg文件
 let svgs = require.context("./svg", true, /\.svg$/);
 // 生成所有的svg样式
-(function(requireContext) {
+(function (requireContext) {
 	return requireContext.keys().map(requireContext);
 })(svgs);
 export default svgIcon;

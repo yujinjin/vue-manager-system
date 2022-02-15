@@ -13,7 +13,7 @@ import sideBar from "./components/side-bar.vue";
 import routers from "@/js/routers";
 
 export default {
-	data: function() {
+	data: function () {
 		return {
 			menuData: [], // 菜单数据
 			menuSidebarData: {}, // 侧边栏菜单数据

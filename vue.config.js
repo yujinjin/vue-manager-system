@@ -7,7 +7,7 @@ if (rawArgv.split(",")[0] === "build") {
 	process.env.NODE_ENV = "production";
 }
 
-let resolve = function(pathStr) {
+let resolve = function (pathStr) {
 	return path.resolve(__dirname, "./", pathStr);
 };
 
@@ -43,15 +43,9 @@ module.exports = {
 		config.plugins.delete("preload-index");
 		config.plugins.delete("prefetch-index");
 
-		config.module
-			.rule("js")
-			.exclude.add(resolve("src/js/lib/aliyun"))
-			.end();
+		config.module.rule("js").exclude.add(resolve("src/js/lib/aliyun")).end();
 
-		config.module
-			.rule("svg")
-			.exclude.add(resolve("src/js/components/icons"))
-			.end();
+		config.module.rule("svg").exclude.add(resolve("src/js/components/icons")).end();
 
 		config.module
 			.rule("icons")

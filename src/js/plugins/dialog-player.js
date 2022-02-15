@@ -6,17 +6,17 @@
 import Vue from "vue";
 import dialogPlayer from "./views/dialog-player";
 
-export default (function() {
+export default (function () {
 	let DialogPlayerConstructor = Vue.extend(dialogPlayer);
 	let dialogPlayerInstance = null;
 
 	//创建实例
-	const createInstance = function(options) {
+	const createInstance = function (options) {
 		dialogPlayerInstance = new DialogPlayerConstructor({
 			el: document.createElement("div"),
 			data: options
 		});
-		dialogPlayerInstance.onClose = function() {
+		dialogPlayerInstance.onClose = function () {
 			dialogPlayerInstance.$el.parentNode.removeChild(dialogPlayerInstance.$el);
 			if (dialogPlayerInstance) {
 				dialogPlayerInstance = null;
@@ -28,7 +28,7 @@ export default (function() {
 	return {
 		install(Vue) {
 			site = site || {};
-			site.dialogPlayer = Vue.prototype.$dialogPlayer = function(options) {
+			site.dialogPlayer = Vue.prototype.$dialogPlayer = function (options) {
 				if (!dialogPlayerInstance) {
 					createInstance(options);
 					document.body.appendChild(dialogPlayerInstance.$el);

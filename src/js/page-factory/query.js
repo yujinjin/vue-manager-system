@@ -7,7 +7,7 @@
  */
 import extend from "../utils/extend";
 
-export default function(page, name) {
+export default function (page, name) {
 	if (!page.name && name) {
 		page.name = name;
 	}
@@ -155,7 +155,7 @@ export default function(page, name) {
 					})
 						.then(() => {
 							Promise.all(
-								handerRows.map(function(item) {
+								handerRows.map(function (item) {
 									return handerAction(item)
 										.then(result => {
 											if (result && result.data) {

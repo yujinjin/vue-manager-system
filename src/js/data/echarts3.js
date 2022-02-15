@@ -1,4 +1,4 @@
-export default (function() {
+export default (function () {
 	return {
 		title: {
 			text: "某站点用户访问来源",

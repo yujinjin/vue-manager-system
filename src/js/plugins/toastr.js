@@ -7,7 +7,7 @@
 import toastr from "toastr";
 import "toastr/toastr.less";
 
-export default (function() {
+export default (function () {
 	let defaults = {
 		closeButton: true, // 是否显示关闭图标
 		debug: false, // 是否使用debug模式
@@ -27,7 +27,7 @@ export default (function() {
 		hideMethod: "fadeOut", // 消失时的动画方式
 		closeOnHover: true //鼠标mouseout时自动关闭
 	};
-	let execute = function(type, msg, title, options) {
+	let execute = function (type, msg, title, options) {
 		return toastr[type](msg, title, options || {});
 	};
 	return {
@@ -38,7 +38,7 @@ export default (function() {
 			// }
 			site.toastr = Vue.prototype.$toastr = {
 				// 成功提示绑定
-				success: function(msg, title, options) {
+				success: function (msg, title, options) {
 					if (!msg) {
 						msg = "成功了！";
 					}
@@ -46,7 +46,7 @@ export default (function() {
 				},
 
 				// 信息提示绑定
-				info: function(msg, title, options) {
+				info: function (msg, title, options) {
 					if (!msg) {
 						msg = "提示信息！";
 					}
@@ -54,7 +54,7 @@ export default (function() {
 				},
 
 				// 敬告提示绑定
-				warning: function(msg, title, options) {
+				warning: function (msg, title, options) {
 					if (!msg) {
 						msg = "警告！";
 					}
@@ -62,7 +62,7 @@ export default (function() {
 				},
 
 				// 错语提示绑定
-				error: function(msg, title, options) {
+				error: function (msg, title, options) {
 					if (!msg) {
 						msg = "出错了！";
 					}
@@ -70,12 +70,12 @@ export default (function() {
 				},
 
 				// 清除窗口绑定
-				clearAll: function() {
+				clearAll: function () {
 					toastr.clear();
 				},
 
 				// 移除消息提示
-				remove: function() {
+				remove: function () {
 					toastr.remove();
 				}
 			};

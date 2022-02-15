@@ -6,7 +6,7 @@
 import axios from "axios";
 import globalService from "@js/services/global-service";
 
-export default function() {
+export default function () {
 	// 自定义非axios的配置
 	let customer_options = {
 		// 是否让框架自动显示错误提示信息
@@ -19,12 +19,12 @@ export default function() {
 
 	// 自定义拦截器配置
 	let customer_interceptor = {
-		before: function(ajaxConfig) {
+		before: function (ajaxConfig) {
 			return Promise.resolve(true);
 		}, // 开始请求数据时的函数，返回Promise,如果是false就不再去请求数据
 		request: {
 			// 在发送请求之前的函数
-			before: function(axiosConfig) {
+			before: function (axiosConfig) {
 				//在发送请求之前做某事
 				if (globalService.getLoginUserToken()) {
 					axiosConfig.headers["Authorization"] = globalService.getLoginUserToken();
@@ -39,7 +39,7 @@ export default function() {
 				return axiosConfig;
 			},
 			// 在发送请求之前的error函数
-			error: function(error) {
+			error: function (error) {
 				if (error.config) {
 					// 直接JSON error对象在app环境中会报错，现在只能做config、xhr实例
 					site.log.error("接口出错:" + JSON.stringify({ config: error.config }));
@@ -50,7 +50,7 @@ export default function() {
 		},
 		response: {
 			// 在响应请求数据的函数
-			before: function(response) {
+			before: function (response) {
 				//对响应数据做些事
 				//如果配置传入显示加载选项就显示加载项
 				if (response.config.isShowLoading === true) {
@@ -78,7 +78,7 @@ export default function() {
 				return response.data;
 			},
 			// 在发送请求数据的error函数
-			error: function(error) {
+			error: function (error) {
 				//请求错误时做些事
 				const xhr = error.response && error.response.data;
 				if (error.config.isShowError) {
@@ -155,7 +155,7 @@ export default function() {
 		//定义允许的http响应内容的最大大小
 		maxContentLength: 200000,
 		transformRequest: [
-			function(data, headers) {
+			function (data, headers) {
 				if (!data) {
 					return data;
 				}
@@ -183,7 +183,7 @@ export default function() {
 		//auth: {},
 		//指示是否跨站点访问控制请求,应该是用证书
 		withCredentials: false,
-		validateStatus: function(status) {
+		validateStatus: function (status) {
 			return status >= 200 && status < 300; // default
 		},
 		//作为请求主体发送的数据,仅适用于请求方法“PUT”，“POST”和“PATCH”
@@ -201,13 +201,13 @@ export default function() {
 
 	//添加请求拦截器
 	instance.interceptors.request.use(
-		function(axiosConfig) {
+		function (axiosConfig) {
 			if (customer_interceptor.request && customer_interceptor.request.before) {
 				return customer_interceptor.request.before(axiosConfig);
 			}
 			return axiosConfig;
 		},
-		function(error) {
+		function (error) {
 			if (customer_interceptor.request && customer_interceptor.request.error) {
 				return customer_interceptor.request.error(error);
 			}
@@ -217,20 +217,20 @@ export default function() {
 
 	//添加响应拦截器
 	instance.interceptors.response.use(
-		function(response) {
+		function (response) {
 			if (customer_interceptor.response && customer_interceptor.response.before) {
 				return customer_interceptor.response.before(response);
 			}
 			return response;
 		},
-		function(error) {
+		function (error) {
 			if (customer_interceptor.response && customer_interceptor.response.error) {
 				return customer_interceptor.response.error(error);
 			}
 		}
 	);
 
-	let ajax = function(ajaxConfig) {
+	let ajax = function (ajaxConfig) {
 		// 处理自定义参数
 		if (ajaxConfig.inputData) {
 			if (!ajaxConfig.method || ajaxConfig.method.toLowerCase() === "get") {
