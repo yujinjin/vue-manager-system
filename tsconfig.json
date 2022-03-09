@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+        "target": "esnext", // 指定ECMAScript目标版本
+        "module": "esnext", // 指定生成哪个模块系统代码
+        "moduleResolution": "node", // 决定如何处理模块。
+        "isolatedModules": true,
+        // 启用所有严格类型检查选项。
+        // 启用 --strict相当于启用 --noImplicitAny, --noImplicitThis, --alwaysStrict，--strictNullChecks和 --strictFunctionTypes和--strictPropertyInitialization。
+        "strict": true,
+        // "noLib": false, // 不包含默认的库文件（ lib.d.ts）
+        "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true, // 允许从没有设置默认导出的模块中默认导入。这并不影响代码的输出，仅为了类型检查。
+        "strictFunctionTypes": false,
+        "jsx": "preserve",
+        "outDir": "./",
+        "baseUrl": ".", // 解析非相对模块名的基准目录
+        "allowJs": true,
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "noUnusedLocals": true, // 有未使用的变量时，抛出错误
+        "noUnusedParameters": false, // 有未使用的参数时，不抛出错误
+        "experimentalDecorators": true,
+        "noImplicitAny": false,
+        "skipLibCheck": true, // 忽略所有的声明文件（ *.d.ts）的类型检查。
+        "removeComments": true,
+        "importHelpers": true,
+        "types": ["webpack-env", "node", "element-plus/global"],
+        "typeRoots": ["./typings"],
+        "paths": {
+            "@/*": ["src/*"],
+            "@views/*": ["src/views/*"],
+            "@components/*": ["src/components/*"],
+            "@style/*": ["src/assets/style/*"],
+            "@imgs/*": ["src/assets/images/*"],
+            "@api/*": ["src/api/*"],
+            "/#/*": ["types/*"]
+        }, // 模块名到基于 baseUrl的路径映射的列表。
+        "lib": ["esnext", "dom", "dom.iterable", "scripthost"] // 编译过程中需要引入的库文件的列表。
+    },
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts", "types/**/*.ts", "mock/**/*.ts"],
+    "exclude": ["node_modules", "dist", "**/*.js"]
+}
