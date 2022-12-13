@@ -1,0 +1,74 @@
+html,
+body {
+    overflow: auto;
+}
+
+html,
+body,
+#app {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    margin: 0;
+    font-size: 14px;
+    color: #333333;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+    scrollbar-color: #ddd #fafafa;
+    scrollbar-track-color: #fafafa;
+    scrollbar-width: thin;
+}
+
+/*滚动条整体样式*/
+::-webkit-scrollbar {
+    width: 6px; /*竖向滚动条的宽度*/
+    height: 6px; /*横向滚动条的高度*/
+}
+::-webkit-scrollbar-thumb {
+    /*滚动条里面的小方块*/
+    background: #ddd;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+    /*滚动条轨道的样式*/
+    background: #fafafa;
+    border-radius: 5px;
+}
+
+[v-cloak] {
+    display: block;
+}
+
+img {
+    max-width: 100%;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+a {
+    color: #337ab7;
+    text-decoration: none;
+}

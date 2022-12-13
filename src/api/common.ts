@@ -69,8 +69,8 @@ export default {
      * @param type 下载使用的技术方案
      * @param inputData 请求的参数
      */
-    // download({ url = "", method = <"get" | "post">"get", type = <"iframe" | "form" | "a" | "open">"iframe", fileName = "", inputData = <Record<string, any> | null>null } = {}) {
-    download(downloadConfig: Http.DownloadConfig) {
+    // download({ url = "", method = <"get" | "post">"get", type = <"iframe" | "form" | "a" | "open" | "blob">"iframe", fileName = "", inputData = <Record<string, any> | null>null } = {}) {
+    async download(downloadConfig: Http.DownloadConfig) {
         // DownloadConfig
         downloadConfig = Object.assign({ mehthod: "get", type: "iframe" }, downloadConfig);
         const iframeElement: HTMLIFrameElement = document.createElement("iframe");
@@ -121,6 +121,22 @@ export default {
                 aElement.setAttribute("target", iframeElement.name);
                 aElement.click();
                 break;
+            }
+            case "blob": {
+                const {
+                    data,
+                    headers: { "content-disposition": fileName }
+                } = await ajax({
+                    url: downloadConfig.url,
+                    method: downloadConfig.method,
+                    data: downloadConfig.inputData,
+                    responseType: "blob"
+                });
+                const aElement = document.createElement("a");
+                aElement.setAttribute("download", downloadConfig.fileName || fileName || String(new Date().getTime()));
+                aElement.setAttribute("href", window.URL.createObjectURL(data));
+                aElement.setAttribute("target", iframeElement.name);
+                aElement.click();
             }
         }
         iframeElement.onload = function () {

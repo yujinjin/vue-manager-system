@@ -1,6 +1,7 @@
-<template>
-    <div class="tpl"></div>
-</template>
+<!-- 外部页面 -->
+<!-- <template>
+    <div class="external"></div>
+</template> -->
 <script setup lang="ts">
 // import { onMounted, onUnmounted, ref, reactive, watch, computed, nextTick } from "vue";
 // import type { Ref, ComputedRef } from "vue";
@@ -11,7 +12,7 @@
 // vuex
 // const store = useStore();
 </script>
-<style lang="less" scoped>
-.tpl {
+<!-- <style lang="less" scoped>
+.external {
 }
-</style>
+</style> -->

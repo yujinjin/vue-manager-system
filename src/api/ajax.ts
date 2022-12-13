@@ -58,20 +58,20 @@ export default function (requestConfig: Http.RequestConfig) {
                         loading.hide();
                     }
                 }
-                if (response.config.isResultData && response.data.success === true) {
-                    return response.data.data;
+                if (response.config.responseType === "blob") {
+                    return response;
+                } else if (response.data.success === true) {
+                    return response.config.isResultData ? response.data.data : response.data;
+                } else {
+                    if (response.config.isShowError) {
+                        ElMessage({
+                            message: (response.data.error && response.data.error.message) || "很抱歉，服务出错，请稍后再试~",
+                            type: "error"
+                        });
+                        logs.warn("接口出错:" + JSON.stringify(response.data));
+                    }
+                    return Promise.reject(response.config.isResultData ? response.data.data : response.data);
                 }
-                if (response.config.isShowError && response.data.success === false) {
-                    ElMessage({
-                        message: (response.data.error && response.data.error.message) || "很抱歉，服务出错，请稍后再试~",
-                        type: "error"
-                    });
-                    logs.warn("接口出错:" + JSON.stringify(response.data));
-                }
-                if (response.config.isResultData && response.data.success === false) {
-                    return Promise.reject(response.data);
-                }
-                return response.data;
             },
             // 在发送请求数据的error函数
             error: function (error: Http.Error) {
@@ -79,15 +79,6 @@ export default function (requestConfig: Http.RequestConfig) {
                 const xhr: Http.ResponseData | undefined = error.response && error.response.data;
                 if (error.config.isShowError) {
                     let errorMessage = "";
-                    if (xhr && xhr.error) {
-                        if (xhr.error.message) {
-                            errorMessage = xhr.error.message;
-                        } else if (xhr.error.validationErrors && xhr.error.validationErrors.length > 0) {
-                            xhr.error.validationErrors.forEach(errorItem => {
-                                errorMessage += errorItem.message + " ";
-                            });
-                        }
-                    }
                     if (!errorMessage) {
                         switch (error.request.status) {
                             case 401:
@@ -131,7 +122,7 @@ export default function (requestConfig: Http.RequestConfig) {
                     // 直接JSON error对象在app环境中会报错，现在只能做config、xhr实例
                     logs.warn("接口出错:" + JSON.stringify({ config: error.config, data: xhr }));
                 }
-                return Promise.reject(error);
+                return Promise.reject(xhr);
             }
         }
     };
@@ -159,7 +150,7 @@ export default function (requestConfig: Http.RequestConfig) {
                         formData.push(encodeURIComponent(String(key)) + "=" + encodeURIComponent(String(data[key])));
                     });
                     return formData.join("&");
-                } else if (headers["Content-Type"].indexOf("multipart/form-data") != -1) {
+                } else if ((headers["Content-Type"] as String)?.indexOf("multipart/form-data") != -1) {
                     return data;
                 }
                 return JSON.stringify(data);

@@ -62,9 +62,9 @@ export function parseUrl(url: string): Record<string, any> {
         port: _a_el.port,
         query: (function () {
             let search: string = _a_el.search || "";
-            if (!search && url.indexOf("?") !== -1) {
+            if (!search) {
                 //兼容http://xxxx/#/?id=xxx这种格式
-                return url.substring(url.indexOf("?"));
+                search = url.indexOf("?") === -1 ? "" : url.substring(url.indexOf("?"));
             } else if (url.indexOf("?") !== url.lastIndexOf("?")) {
                 // 兼容http://xxxx/?orderNo=xxx#/?id=xxx这种格式
                 search += (search.indexOf("?") === -1 ? "?" : "&") + url.substring(url.lastIndexOf("?") + 1);
@@ -74,9 +74,9 @@ export function parseUrl(url: string): Record<string, any> {
         params: (function () {
             const params: Record<string, any> = {};
             let search: string | string[] = _a_el.search || "";
-            if (!search && url.indexOf("?") !== -1) {
+            if (!search) {
                 //兼容http://xxxx/#/?id=xxx这种格式
-                return url.substring(url.indexOf("?"));
+                search = url.indexOf("?") === -1 ? "" : url.substring(url.indexOf("?"));
             } else if (url.indexOf("?") !== url.lastIndexOf("?")) {
                 // 兼容http://xxxx/?orderNo=xxx#/?id=xxx这种格式
                 search += (search.indexOf("?") === -1 ? "?" : "&") + url.substring(url.lastIndexOf("?") + 1);

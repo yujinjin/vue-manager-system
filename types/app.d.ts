@@ -26,6 +26,9 @@ declare namespace App {
         /** 应该构建时间 */
         readonly buildTime: Date;
 
+        /** 本地web服务地址 */
+        readonly localDomain: string;
+
         /** web站点的接口地址 */
         readonly webApiDomain: string;
 
@@ -36,18 +39,6 @@ declare namespace App {
         readonly uploadDomain: string;
     }
 
-    /** 站点本地存储 */
-    interface Storage {
-        /** 获取站点本地存储信息 */
-        getSiteLocalStorage(key: string): undefined | Record<string, any>;
-
-        /** 设置站点本地存储信息 */
-        setSiteLocalStorage(key: string, value: Record<string, any>): void;
-
-        /** 本地存储 */
-        localStorage(key: string, value?: string);
-    }
-
     interface StoreStateType {
         data: {
             locationInfo: LocationInfo;
@@ -56,6 +47,10 @@ declare namespace App {
         event: {
             events: Record<string, Array<Function>>;
             onceEvents: Record<string, Array<Function>>;
+        };
+        pageViews: {
+            cachedViews: string[];
+            visitedViews: PageView[];
         };
     }
 
@@ -75,6 +70,36 @@ declare namespace App {
 
         /** 用户授权码 */
         authAccessCode: string;
+    }
+
+    /** 访问的页面视图 */
+    interface PageView {
+        /** 页面视图ID(自动生成唯一值) */
+        id: string;
+
+        /** 菜单ID(如果当前页面来自左边的菜单) */
+        menuId?: string;
+
+        /** 来自页面视图ID(如果当前页面通过已经点开的页面内部触发的) */
+        fromPageId?: string;
+
+        /** 路由的名称 */
+        routeName: string;
+
+        /** 当前页面路由地址 http://xxxx.com/#/XXX?fromMenuId(来自菜单ID参数)|fromPageId（来自页面ID参数） */
+        routePath: string;
+
+        /** 页面的标题 */
+        title: string;
+
+        /** 页面实际全路径地址(如果当前页面是外部页面，指实际iframe的url地址) */
+        fullPath: string;
+
+        /** 是否是iframe页面 */
+        isIframe: boolean;
+
+        /** 是否固定展示(每次登录都自动展示出来，由于权限问题只能固定来自menuId的page) */
+        isFixed: boolean;
     }
 
     /** 日志 */

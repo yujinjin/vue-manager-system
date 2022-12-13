@@ -26,6 +26,9 @@ export default <App.Config>{
     /** 应该构建时间 */
     buildTime: new Date(process.env.VUE_APP_BUILD_TIME!),
 
+    /** 本地web服务地址 */
+    localDomain: process.env.VUE_APP_LOCAL_DOMAIN,
+
     /** web站点的接口地址 */
     webApiDomain: process.env.VUE_APP_API_DOMAIN,
 

@@ -1,78 +1,104 @@
 ## [vue-manager-system](https://github.com/yujinjin/vue-manager-system)(后台管理系统)
 
+#### 产生页面 tab 方式三种
+
+-   1.通过左边的菜单打开一个新页面
+-   2.通过已经打开的页面里新开一个页面
+    -   iframe 页面内打开 iframe 页面
+    -   iframe 页面内打开内部页面
+    -   内部页面直接跳转内部页面（不会新增 tab 页）
+    -   内部页面打开一个 iframe 页面
+-   3.页面初始化时打开上次固定展示的页面（菜单页面）
+
+#### 新打开页面传值
+
+-   title: 页面标题
+
+-   url: 页面 URL 地址
+
+-   id: 页面 ID(可不传，如果有传判断当前已经打开的 tab 页里是否存在该 ID，存在的情况展示该 tab 页,不存在就新增一个 tab 页)
+
+-   当前项目的 tab 页面 URL 上必须有 fromMenuId|fromPageId 这 2 个参数名
+
 ## 目录
 
-- [目录](#目录)
-- [介绍](#介绍)
-- [快速开始](#快速开始)
-- [组件的API文档](#组件的api文档)
-- [项目所用到的第三方组件列表](#项目所用到的第三方组件列表)
-- [项目UI及页面示例](#项目ui及页面示例)
-    - [1.登录界面](#1登录界面)
-    - [2.主界面布局](#2主界面布局)
-    - [3.简单查询页面示例](#3简单查询页面示例)
-    - [4.复杂查询页面示例](#4复杂查询页面示例)
-    - [5.普通页面表单示例](#5普通页面表单示例)
-    - [6.复杂表单](#6复杂表单)
-- [独立组件示例](#独立组件示例)
-    - [1. 图片上传（img-upload）](#1-图片上传img-upload)
-    - [2. 视频上传（video-upload）](#2-视频上传video-upload)
-    - [3. 视频播放（web-player）](#3-视频播放web-player)
-    - [4. 富文本框（web-editor）](#4-富文本框web-editor)
-    - [5. 数据列表栏显示隐藏状态的切换（toggle-table-column）](#5-数据列表栏显示隐藏状态的切换toggle-table-column)
-    - [6. 数据列表的操作列（table-column-action）](#6-数据列表的操作列table-column-action)
-    - [7. 数据列表的枚举列（table-column-enum）](#7-数据列表的枚举列table-column-enum)
-    - [8. 数据列表的图片列（table-column-img）](#8-数据列表的图片列table-column-img)
-    - [9. 数据列表的链接列（table-column-link）](#9-数据列表的链接列table-column-link)
-    - [10. 数据列表的标签列（table-column-tags）](#10-数据列表的标签列table-column-tags)
-    - [11. 数据列表的二维码预览（table-column-qrcode）](#11-数据列表的二维码预览table-column-qrcode)
-- [页面级组件示例](#页面级组件示例)
-    - [1. 查询表单（search-form）](#1-查询表单search-form)
-    - [2. 操作栏（action-bar）](#2-操作栏action-bar)
-    - [3. 数据列表（table-data)](#3-数据列表table-data)
-    - [4. form表单（form-input)](#4-form表单form-input)
-    - [5. 信息表单（view-info)](#5-信息表单view-info)
-    - [6. 弹窗表单（dialog-form)](#6-弹窗表单dialog-form)
-    - [7. 页面表单（page-form)](#7-页面表单page-form)
-    - [8.excel导入（excel-import-dialog）](#8excel导入excel-import-dialog)
-    - [9.excel导出（excel-export-dialog）](#9excel导出excel-export-dialog)
-- [项目框架的目录规范说明](#项目框架的目录规范说明)
-- [最后](#最后)
+-   [目录](#目录)
+-   [介绍](#介绍)
+-   [快速开始](#快速开始)
+-   [组件的 API 文档](#组件的api文档)
+-   [项目所用到的第三方组件列表](#项目所用到的第三方组件列表)
+-   [项目 UI 及页面示例](#项目ui及页面示例)
+    -   [1.登录界面](#1登录界面)
+    -   [2.主界面布局](#2主界面布局)
+    -   [3.简单查询页面示例](#3简单查询页面示例)
+    -   [4.复杂查询页面示例](#4复杂查询页面示例)
+    -   [5.普通页面表单示例](#5普通页面表单示例)
+    -   [6.复杂表单](#6复杂表单)
+-   [独立组件示例](#独立组件示例)
+    -   [1. 图片上传（img-upload）](#1-图片上传img-upload)
+    -   [2. 视频上传（video-upload）](#2-视频上传video-upload)
+    -   [3. 视频播放（web-player）](#3-视频播放web-player)
+    -   [4. 富文本框（web-editor）](#4-富文本框web-editor)
+    -   [5. 数据列表栏显示隐藏状态的切换（toggle-table-column）](#5-数据列表栏显示隐藏状态的切换toggle-table-column)
+    -   [6. 数据列表的操作列（table-column-action）](#6-数据列表的操作列table-column-action)
+    -   [7. 数据列表的枚举列（table-column-enum）](#7-数据列表的枚举列table-column-enum)
+    -   [8. 数据列表的图片列（table-column-img）](#8-数据列表的图片列table-column-img)
+    -   [9. 数据列表的链接列（table-column-link）](#9-数据列表的链接列table-column-link)
+    -   [10. 数据列表的标签列（table-column-tags）](#10-数据列表的标签列table-column-tags)
+    -   [11. 数据列表的二维码预览（table-column-qrcode）](#11-数据列表的二维码预览table-column-qrcode)
+-   [页面级组件示例](#页面级组件示例)
+    -   [1. 查询表单（search-form）](#1-查询表单search-form)
+    -   [2. 操作栏（action-bar）](#2-操作栏action-bar)
+    -   [3. 数据列表（table-data)](#3-数据列表table-data)
+    -   [4. form 表单（form-input)](#4-form表单form-input)
+    -   [5. 信息表单（view-info)](#5-信息表单view-info)
+    -   [6. 弹窗表单（dialog-form)](#6-弹窗表单dialog-form)
+    -   [7. 页面表单（page-form)](#7-页面表单page-form)
+    -   [8.excel 导入（excel-import-dialog）](#8excel导入excel-import-dialog)
+    -   [9.excel 导出（excel-export-dialog）](#9excel导出excel-export-dialog)
+-   [项目框架的目录规范说明](#项目框架的目录规范说明)
+-   [最后](#最后)
 
 ## 介绍
-> 这是一个使用vue-cli作为脚手架，基于vue、elementUI搭建的一套后台管理系统。
-> 
-> 与其他后台管理系统不一样的地方就在于这套系统的开发主要给后端开发人员来做（针对于小公司节省开发资源，尽量快的上手），曾经作为后端开发的我来做前端开发的角度来说，最痛苦的就是写CSS、UI。
-> 
-> 所以本项目框架把一些组件做了组合再次封装，其原则就是尽量少写些UI层面的代码，多用JS配置的方式来实现业务开发。
+
+> 这是一个使用 vue-cli 作为脚手架，基于 vue、elementUI 搭建的一套后台管理系统。
+>
+> 与其他后台管理系统不一样的地方就在于这套系统的开发主要给后端开发人员来做（针对于小公司节省开发资源，尽量快的上手），曾经作为后端开发的我来做前端开发的角度来说，最痛苦的就是写 CSS、UI。
+>
+> 所以本项目框架把一些组件做了组合再次封装，其原则就是尽量少写些 UI 层面的代码，多用 JS 配置的方式来实现业务开发。
 
 ## 快速开始
-- [在线demo](https://yujinjin.github.io/vue-manager-system/)
-- 克隆仓库： `git clone https://github.com/yujinjin/vue-manager-system`
-- 使用npm安装： `npm install`
-- 使用npm运行： `npm run R_UAT`
-- 使用npm打包： `npm run B_UAT`
 
-## 组件的API文档
+-   [在线 demo](https://yujinjin.github.io/vue-manager-system/)
+-   克隆仓库： `git clone https://github.com/yujinjin/vue-manager-system`
+-   使用 npm 安装： `npm install`
+-   使用 npm 运行： `npm run R_UAT`
+-   使用 npm 打包： `npm run B_UAT`
+
+## 组件的 API 文档
+
 正在编撰，敬请期待...
 
 ## 项目所用到的第三方组件列表
-- vue
-- vue-router
-- vuex
-- axios
-- element-ui
-- jquery(v1.12.4,部分插件需要依赖于jquery)
-- toastr(由于element-ui中的Message组件同时调用多次显示有问题，所以采用了它，[官方文档](https://github.com/CodeSeven/toastr))
-- cropperjs(图片裁剪，[官方文档](https://github.com/fengyuanchen/cropperjs))
-- echarts(百度echarts，[官方文档](https://echarts.apache.org/zh/index.html))
-- aliyun-oss-sdk(阿里云OSS SDK)
-- aliyun-upload-sdk(阿里云OSS 上传)
-- summernote(一个不依赖于boostrap的富文本框组件，发现部分功能有BUG，所以把源代码做了修复改动。因此如果使用该插件就不能再升级版本了)
-- qrcode(二维码)
 
-## 项目UI及页面示例
+-   vue
+-   vue-router
+-   vuex
+-   axios
+-   element-ui
+-   jquery(v1.12.4,部分插件需要依赖于 jquery)
+-   toastr(由于 element-ui 中的 Message 组件同时调用多次显示有问题，所以采用了它，[官方文档](https://github.com/CodeSeven/toastr))
+-   cropperjs(图片裁剪，[官方文档](https://github.com/fengyuanchen/cropperjs))
+-   echarts(百度 echarts，[官方文档](https://echarts.apache.org/zh/index.html))
+-   aliyun-oss-sdk(阿里云 OSS SDK)
+-   aliyun-upload-sdk(阿里云 OSS 上传)
+-   summernote(一个不依赖于 boostrap 的富文本框组件，发现部分功能有 BUG，所以把源代码做了修复改动。因此如果使用该插件就不能再升级版本了)
+-   qrcode(二维码)
+
+## 项目 UI 及页面示例
+
 #### 1.登录界面
+
 > 用户名密码登录
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/D7ABD0716EA347D7B1FEC79B15A28D84/21970)
@@ -86,6 +112,7 @@
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/29E976769C97493C9A8208B6DAC4AABD/21972)
 
 #### 2.主界面布局
+
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/2FD471648BE74372B3BC707B29C23EAF/21974)
 
 ```
@@ -96,9 +123,11 @@
 ```
 
 #### 3.简单查询页面示例
+
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/035F3B54AEE14273B6D0174AD29BBF68/21976)
 
 #### 4.复杂查询页面示例
+
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/22F39D16CEA142F08D6981A089ADDB01/21978)
 
 ```
@@ -108,6 +137,7 @@
 ```
 
 #### 5.普通页面表单示例
+
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/0B3AD713045147098A4F3B1BA58C7D67/21980)
 
 ```
@@ -115,6 +145,7 @@
 ```
 
 #### 6.复杂表单
+
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/FF9A248FE3924764821AFC665B180963/21982)
 
 ```
@@ -122,7 +153,9 @@
 ```
 
 ## 独立组件示例
+
 #### 1. 图片上传（img-upload）
+
 > 表单字段展示
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/8FC8645C62CF47D9917FF64050ABC3BE/21984)
@@ -138,6 +171,7 @@
 #### 2. 视频上传（video-upload）
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/2AA83C4577D641FF9266A9C1382A46CD/21988)
+
 ```
 说明：使用elemenet Upload的UI，通过阿里云SDK来上传视频。这里针对于视频上传做了公用的配置和封装，使其业务开发代码更少。
 ```
@@ -152,7 +186,7 @@
 
 #### 4. 富文本框（web-editor）
 
-> 常用tool
+> 常用 tool
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/C3360DA26013482A9683E5D3C72F9C7A/22263)
 
@@ -171,6 +205,7 @@
 #### 5. 数据列表栏显示隐藏状态的切换（toggle-table-column）
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/73C2D13FEB3E4F7C80D0A0E4B3A19D48/21995)
+
 ```
 说明：手动隐藏不需要展示的列，框架支持自动保存当前数据列的显示或隐藏状态，以便下次进入展示。
 ```
@@ -239,8 +274,7 @@
 
 #### 1. 查询表单（search-form）
 
-> 查询项较少时
-![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/F213AE81521D4D868F3591ED34693A6E/21999)
+> 查询项较少时 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/F213AE81521D4D868F3591ED34693A6E/21999)
 
 > 查询项较多时，超过一行。（默认隐藏状态）
 
@@ -280,7 +314,7 @@
 说明：当前数据列表封装分页组件、数据列组件等
 ```
 
-#### 4. form表单（form-input)
+#### 4. form 表单（form-input)
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/B2F953812BEA48F1BCD41B4DC7F10B58/22051)
 
@@ -318,14 +352,13 @@
 说明：以页面形式封装的表单，默认一行显示3个表单字段。本组件是在form表单组件的基础上做的封装。
 ```
 
-#### 8.excel导入（excel-import-dialog）
+#### 8.excel 导入（excel-import-dialog）
 
-> excel文件选择
+> excel 文件选择
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/C1D013B41FD64341821253CD650DAAE2/22057)
 
-> 数据导入解析成功
-![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/DAECB846228A43B39D402DBF584E5950/22060)
+> 数据导入解析成功 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/DAECB846228A43B39D402DBF584E5950/22060)
 
 > 数据导入解析失败
 
@@ -335,16 +368,15 @@
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/BFA2337D8D0C4404AC5B93B32F92B7A2/22064)
 
-> 数据导入解析成功提示
-![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/BD9ADD4ECB4C49F7A1A2265E85E085AF/22066)
+> 数据导入解析成功提示 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/BD9ADD4ECB4C49F7A1A2265E85E085AF/22066)
 
 ```
 说明：excel导入功能的封装
 ```
 
-#### 9.excel导出（excel-export-dialog）
+#### 9.excel 导出（excel-export-dialog）
 
-> 导出筛选条件及字段选择（2者可任选或都不选）
+> 导出筛选条件及字段选择（2 者可任选或都不选）
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/B39D406120E048B291701C9E54A85079/22303)
 
@@ -352,8 +384,7 @@
 
 ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/ACAF35C1FC4F42E39F66191BF2ED8DE5/22305)
 
-> 数据导出生成成功，提示下载Excel
-![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/419A30ADB62E452DB611C42CD333D748/22307)
+> 数据导出生成成功，提示下载 Excel ![image](http://note.youdao.com/yws/public/resource/98e1d331e4f783143e752a0e985a4aaa/xmlnote/419A30ADB62E452DB611C42CD333D748/22307)
 
 > 数据导出失败提示
 
@@ -364,6 +395,7 @@
 ```
 
 ## 项目框架的目录规范说明
+
 ```
 |-- dist                                // webapck打包压缩后的文件目录
 |-- tests                               // vue-cli测试环境目录
@@ -454,6 +486,7 @@
 ```
 
 ## 最后
-- 如果喜欢一定要 star哈!!!（谢谢!!）
 
-- 如果有意见和问题 请在 lssues提出，我会在线解答。
+-   如果喜欢一定要 star 哈!!!（谢谢!!）
+
+-   如果有意见和问题 请在 lssues 提出，我会在线解答。

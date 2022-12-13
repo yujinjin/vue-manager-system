@@ -26,7 +26,7 @@
         "removeComments": true,
         "importHelpers": true,
         "types": ["webpack-env", "node", "element-plus/global"],
-        "typeRoots": ["./typings"],
+        "typeRoots": ["./types"],
         "paths": {
             "@/*": ["src/*"],
             "@views/*": ["src/views/*"],
@@ -38,6 +38,6 @@
         }, // 模块名到基于 baseUrl的路径映射的列表。
         "lib": ["esnext", "dom", "dom.iterable", "scripthost"] // 编译过程中需要引入的库文件的列表。
     },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts", "types/**/*.ts", "mock/**/*.ts"],
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts", "types/**/*.ts", "mock/**/*.ts", "mock/index.js"],
     "exclude": ["node_modules", "dist", "**/*.js"]
 }

@@ -1,16 +1,21 @@
-/**
- * 作者：yujinjin9@126.com
- * 时间：2022-01-07
- * 描述：路由配置
+/*
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2022-08-09 13:49:25
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2022-12-07 10:50:11
+ * @项目的路径: \vue-manager-system\src\routers\index.ts
+ * @描述: 路由配置
  * meta: {
  * 	requiresAuth: boolean, // 是否需要登录
  * 	title: "首页" // 页面标题
  * }
  */
-import store from "@/store/";
+import { dataStore, eventsStore } from "@/stores";
 import { createRouter, createWebHistory, RouteRecordRaw, Router } from "vue-router";
 
 export default function (): Router {
+    const dataStoreInstace = dataStore();
+    const eventsStoreInstace = eventsStore();
     const router: Router = createRouter({
         history: createWebHistory("/"), // HTML5 history模式
         routes: <Array<RouteRecordRaw>>[
@@ -44,9 +49,9 @@ export default function (): Router {
     });
     // 注册一个全局前置守卫
     router.beforeEach(to => {
-        if (to.meta.requireAuth !== false && !store.state.data.loginUserInfo.isLogin) {
+        if (to.meta.requireAuth !== false && !dataStoreInstace.loginUserInfo.isLogin) {
             // 未登录的用户进入了需要登录的页面, 全局触发去登录事件
-            store.dispatch("trigger", { eventName: "gotoLogin", args: [router] });
+            eventsStoreInstace.trigger({ eventName: "gotoLogin", args: [router] });
             // 取消当前的导航
             return false;
         }
@@ -57,4 +62,13 @@ export default function (): Router {
         // TODO: 根据业务需要添加
     });
     return router;
+}
+
+/**
+ * 外部链接路由
+ * @params id 参数
+ * @params params 参数
+ */
+export function externalRoute(id: string, fromMenuId: string) {
+    return { name: "external", params: { id }, query: { fromMenuId } };
 }

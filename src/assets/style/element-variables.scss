@@ -1,0 +1,32 @@
+/* 改变主题色变量 */
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+    $colors: (
+        "primary": (
+            "base": #00b85c
+        ),
+        "success": (
+            "base": #00b85c
+        ),
+        "warning": (
+            "base": #e6a23c
+        ),
+        "danger": (
+            "base": #e63948
+        )
+    ),
+    $text-color: (
+        "disabled": #00b85c
+    ),
+    $border-color: (
+        "": #ebebeb
+    ),
+    $border-radius: (
+        "base": 2px
+    ),
+    $font-size: (
+        "base": 12px
+    )
+);
+
+// 如果你想导入所有样式:
+@use "element-plus/theme-chalk/src/index.scss" as *;

@@ -21,9 +21,8 @@ declare namespace Http {
 
     // 请求接口返回的错误
     interface ResponseError {
-        message?: string;
-        validationErrors?: Array<{ message: string }>;
-        details?: string;
+        message?: string; // 返回的错误消息
+        details?: any; // 返回详细错误消息对象
     }
 
     // 请求接口返回的结果数据
@@ -51,7 +50,7 @@ declare namespace Http {
         url: string; // 下载地址URL
         method: "get" | "post"; // 请求的地址方法（post只能使用form提交）
         inputData?: Record<string, number | string | boolean>; // 请求的参数
-        type: "iframe" | "form" | "a" | "open"; // 下载使用的技术方案
+        type: "iframe" | "form" | "a" | "open" | "blob"; // 下载使用的技术方案
         fileName?: string; // 下载下来的自定义文件名（只有a标签才有用）
     }
 }

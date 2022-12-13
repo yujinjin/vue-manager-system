@@ -1,10 +1,20 @@
+<!--
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2022-08-09 13:49:25
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2022-12-13 09:35:05
+ * @项目的路径: \vue-manager-system\src\views\components\HelloWorld.vue
+ * @描述: hello world 示例
+-->
 <template>
     <div class="hello">
         <h1>{{ msg }}</h1>
         <p>
-            For a guide and recipes on how to configure / customize this project,<br />
+            For a guide and recipes on how to configure / customize this project,
+            <br />
             check out the
-            <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
+            <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>
+            .
         </p>
         <h3>Installed CLI Plugins</h3>
         <ul>

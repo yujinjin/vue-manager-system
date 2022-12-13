@@ -1,17 +1,19 @@
 import { createApp, App as VueApplication } from "vue";
 import ElementPlus from "element-plus";
+import zhCn from "element-plus/lib/locale/lang/zh-cn";
 import Appvue from "@/views/app.vue";
 import { App } from "/#/app";
-import type { Store } from "vuex";
+import type { Pinia } from "pinia";
 import routers from "@/routers/";
 import type { Router } from "vue-router";
-import store from "@/store/";
+import store from "@/stores";
 import components from "@/components/index";
+import directives from "@/services/directives";
 import plugins from "@/plugins/index";
 import registerEvents from "@/services/register-events";
-import "@style/scss/element-variables.scss";
-import "@style/less/site.less";
-import "@style/css/icomoon.css";
+import "@style/element-variables.scss";
+import "@style/index.less";
+import "@style/icomoon.css";
 
 /** App Main类 */
 class AppMain {
@@ -25,7 +27,7 @@ class AppMain {
     vueAppInstance: VueApplication | null;
 
     // VUE存储状态
-    store: Store<App.StoreStateType>;
+    store: Pinia;
 
     // VUE 路由
     router: Router;
@@ -72,8 +74,12 @@ class AppMain {
             };
         }
         vueAppInstance.use(this.store);
-        vueAppInstance.use(ElementPlus, { size: "small" });
+        vueAppInstance.use(ElementPlus, { locale: zhCn });
         vueAppInstance.use(this.router);
+        // 注册全局指令
+        Object.keys(directives).forEach(key => {
+            vueAppInstance.directive(key, directives[key]);
+        });
         // 注册全局插件
         plugins(vueAppInstance);
         // 注册全局组件

@@ -5,7 +5,8 @@ module.exports = defineConfig({
     env: {
         browser: true,
         node: true,
-        es6: true
+        es6: true,
+        "vue/setup-compiler-macros": true
     },
     // extends: ["plugin:vue/vue3-essential", "eslint:recommended", "@vue/typescript/recommended", "@vue/prettier", "@vue/prettier/@typescript-eslint"],
     // parserOptions: {

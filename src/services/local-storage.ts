@@ -1,45 +1,60 @@
-/**
- * 作者：yujinjin9@126.com
- * 时间：2021-12-29
- * 描述：站点本地存储信息
+/*
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2022-08-09 13:49:25
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2022-12-05 16:29:06
+ * @项目的路径: \vue-manager-system\src\services\local-storage.ts
+ * @描述: 站点本地存储信息
  */
-import { App } from "/#/app";
-
-class AppStorage implements App.Storage {
+class AppStorage {
     /** 本地存储的应用名称 */
     private localStorageName: string;
 
     constructor() {
-        this.localStorageName = config.appName + "LocalStorage";
+        this.localStorageName = config.appName + "Storage";
     }
 
     /**
-     * 本地存储
-     * @param value 本地存储的内容，不传值会直接删除
+     * 本地存储操作
+     * @param type 存储类型 0: localStorage, 1: sessionStorage
+     * @param value 存储的值，如果值为undefined表示获取${localStorageName}值，为null或者''时表示删除
      */
-    localStorage(value?: string) {
-        if (!window || !window.localStorage) {
+    storage(type: 0 | 1 = 0, value?: string) {
+        if (!window) {
+            alert("您开启了秘密浏览或无痕浏览模式，请关闭!");
+            return;
+        }
+        const storage = type === 0 ? window.localStorage : window.sessionStorage;
+        if (!storage) {
             alert("您开启了秘密浏览或无痕浏览模式，请关闭!");
             return;
         }
         if (value === undefined) {
-            return window.localStorage.getItem(this.localStorageName);
+            return storage.getItem(this.localStorageName);
         } else if (value === null || value === "") {
-            window.localStorage.removeItem(this.localStorageName);
+            storage.removeItem(this.localStorageName);
         } else {
-            window.localStorage.setItem(this.localStorageName, value);
+            storage.setItem(this.localStorageName, value);
         }
     }
+}
 
+// 实例化本地存储对象
+let appStorageInstance: null | AppStorage = null;
+
+export default {
     /**
-     * 获取站点本地存储信息
+     * 根据key值获取本地存储信息
      * @param key 存储业务对象key值，如果不传返回整个站点存储对象
      */
-    getSiteLocalStorage(key?: string) {
+    getValue(type: 0 | 1 = 0, key: string): any {
+        if (!appStorageInstance) {
+            appStorageInstance = new AppStorage();
+        }
         // 获取本地存储内容
-        const localStorageContents = this.localStorage();
+        const localStorageContents = appStorageInstance.storage(type);
         // 返回站点存储的对象
-        let localStorageObject: Record<string, any> = {};
+        let localStorageObject = {};
         if (localStorageContents) {
             try {
                 localStorageObject = JSON.parse(localStorageContents);
@@ -52,15 +67,27 @@ class AppStorage implements App.Storage {
         } else {
             return localStorageObject;
         }
-    }
+    },
 
     /**
-     * 设置站点本地存储信息
+     * 根据key值设置本地存储信息
      * @param key 存储业务对象key值
-     * @param value 存储的业务对象value值
+     * @param value 存储的业务对象value值, undefined|''|null时表示删除
      */
-    setSiteLocalStorage(key: string, value?: any) {
-        const localStorageObject = this.getSiteLocalStorage();
+    setValue(type: 0 | 1 = 0, key: string, value?: any): void {
+        if (!appStorageInstance) {
+            appStorageInstance = new AppStorage();
+        }
+        const localStorageContents = appStorageInstance.storage(type);
+        // 返回站点存储的对象
+        let localStorageObject = {};
+        if (localStorageContents) {
+            try {
+                localStorageObject = JSON.parse(localStorageContents);
+            } catch (error) {
+                logs.warn(error, localStorageContents);
+            }
+        }
         if (value === undefined || value === null || value === "") {
             if (Object.keys(localStorageObject).includes(key)) {
                 delete localStorageObject[key];
@@ -68,15 +95,6 @@ class AppStorage implements App.Storage {
         } else {
             localStorageObject[key] = value;
         }
-        this.localStorage(JSON.stringify(localStorageObject));
-    }
-}
-
-// 实例化本地存储对象
-const appStorageInstance = new AppStorage();
-
-export default {
-    setUserInfo(): void {
-        appStorageInstance.setSiteLocalStorage("test", 1);
+        appStorageInstance.storage(type, JSON.stringify(localStorageObject));
     }
 };

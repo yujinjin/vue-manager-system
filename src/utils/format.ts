@@ -6,7 +6,7 @@
 
 //日期格式化
 export function dateFormat(date: Date | number | string, format = "YYYY-MM-DD"): string {
-    if (date instanceof String || date instanceof Number) {
+    if (!(date instanceof Date)) {
         date = new Date(date);
     }
     const dateConfig = {
@@ -22,7 +22,7 @@ export function dateFormat(date: Date | number | string, format = "YYYY-MM-DD"):
     };
     Object.keys(dateConfig).forEach(key => {
         if (new RegExp(key).test(format)) {
-            format.replace(new RegExp("(" + key + ")"), function (match) {
+            format = format.replace(new RegExp("(" + key + ")"), function (match) {
                 if (match.length > String(dateConfig[key]).length) {
                     return new Array(match.length - String(dateConfig[key]).length).fill("0").join("") + String(dateConfig[key]);
                 }

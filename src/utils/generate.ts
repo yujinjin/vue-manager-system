@@ -1,7 +1,10 @@
-/**
- * 作者：yujinjin9@126.com
- * 时间：2022-01-10
- * 描述：动态生成数据
+/*
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2022-08-09 13:49:25
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2022-12-12 09:53:50
+ * @项目的路径: \vue-manager-system\src\utils\generate.ts
+ * @描述: 动态生成数据
  */
 
 /**
@@ -27,6 +30,12 @@ export function randomId() {
             v = c == "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
     });
-    randomId = currentDate.getFullYear() + "" + (currentDate.getMonth() > 8 ? currentDate.getMonth() + 1 : "0" + (1 + currentDate.getMonth())) + "" + (currentDate.getDate() > 9 ? currentDate.getDate() : "0" + currentDate.getDate()) + randomId;
+    randomId =
+        currentDate.getFullYear() +
+        "" +
+        (currentDate.getMonth() > 8 ? currentDate.getMonth() + 1 : "0" + (1 + currentDate.getMonth())) +
+        "" +
+        (currentDate.getDate() > 9 ? currentDate.getDate() : "0" + currentDate.getDate()) +
+        randomId;
     return randomId;
 }
