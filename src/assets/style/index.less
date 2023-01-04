@@ -68,6 +68,26 @@ ul {
     clear: both;
 }
 
+/* 普通单行样式（必须指定宽度） */
+.text-ellipsis-block {
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 多行样式(不要有padding) */
+.text-ellipsis-box {
+    display: -webkit-box;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
 a {
     color: #337ab7;
     text-decoration: none;

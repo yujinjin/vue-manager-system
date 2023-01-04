@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:27:44
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-13 09:41:18
+ * @最后修改时间: 2023-01-03 18:19:18
  * @项目的路径: \vue-manager-system\src\components\action-bar.vue
  * @描述: 列表操作栏
 -->
@@ -25,7 +25,7 @@ import { TextAlignProperty } from "csstype";
 
 const props = defineProps({
     buttons: {
-        type: Array as PropType<Components.Button[]>,
+        type: Array as PropType<Components.TableButton[]>,
         default: function () {
             return [];
         }
@@ -55,7 +55,7 @@ const emits = defineEmits(["selectRowsChange"]);
 // handleCode: 用户操作CODE
 // text: 按钮操作文案
 // click: 按钮点击事件
-const actionButtons: Ref<Components.Button[]> = ref([]);
+const actionButtons: Ref<Components.TableButton[]> = ref([]);
 
 const store = dataStore();
 

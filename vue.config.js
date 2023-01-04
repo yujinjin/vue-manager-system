@@ -6,6 +6,9 @@ console.log(chalk.bgBlueBright("------------------------------------------------
 console.log(chalk.blue(Alphabet("JACK YU", "planar")));
 console.log(chalk.bgBlueBright("--------------------------------------------------"));
 const pkg = require("./package.json");
+const mock = require("./mock/index");
+const bodyParser = require("body-parser");
+
 function pathResolve(dir) {
     return path.resolve(process.cwd(), ".", dir);
 }
@@ -28,6 +31,7 @@ module.exports = {
             alias: {
                 "@": pathResolve("src"),
                 "@api": pathResolve("src/api"),
+                "@assets": pathResolve("src/assets"),
                 "@imgs": pathResolve("src/assets/images"),
                 "@style": pathResolve("src/assets/style"), // 视图
                 "@views": pathResolve("src/views"), // 视图
@@ -72,17 +76,24 @@ module.exports = {
 
         config.module
             .rule("static-images")
+            .test(/\.(png|jpe?g|gif|ico)(\?.*)?$/)
+            .set("type", "asset")
+            .set("generator", {
+                filename: "build/img/[name].[hash:8][ext]"
+            })
             .set("parser", {
                 dataUrlCondition: {
                     maxSize: 0
                 }
             })
+            .include.add(pathResolve("src/assets/static"))
             .end();
 
         config.plugin("define").tap(options => {
             // DefinePlugin注入全局变量
             options[0]["process.env"]["VUE_APP_BUILD_TIME"] = new Date().getTime();
             options[0]["process.env"]["VUE_APP_VERSION"] = JSON.stringify(pkg.version);
+            options[0]["process.env"]["VUE_APP_NAME"] = JSON.stringify(pkg.name);
             return options;
         });
 
@@ -100,7 +111,10 @@ module.exports = {
             if (!devServer) {
                 throw new Error("webpack-dev-server is not defined");
             }
-            // mock.init(devServer.app);
+            if (process.env.MOCK_DATA === "1") {
+                devServer.app.use(bodyParser.json());
+                mock(devServer.app);
+            }
             // devServer.app.get('/some/path', function (req, res) {
             //   res.json({ custom: 'response' });
             // });

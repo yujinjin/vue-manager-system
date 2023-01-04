@@ -36,7 +36,7 @@ import { Loading } from "@element-plus/icons-vue";
 
 const props = defineProps({
     buttons: {
-        type: Array as PropType<Array<Components.Button>>,
+        type: Array as PropType<Array<Components.TableButton>>,
         default: function () {
             return [];
         }
@@ -55,7 +55,7 @@ const props = defineProps({
 });
 
 // 实际数据列中的操作按钮列表
-const actionButtons: Ref<Components.Button[]> = ref([]);
+const actionButtons: Ref<Components.TableButton[]> = ref([]);
 
 const showStatusButtons = computed(() => {
     return actionButtons.value.filter(button => button.isShow);

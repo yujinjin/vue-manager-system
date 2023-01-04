@@ -5,8 +5,7 @@
  */
 
 import { Http } from "/#/http";
-import ajax from "./ajax";
-import { AxiosPromise } from "axios";
+import request from "./request";
 
 export default {
     /**
@@ -38,14 +37,14 @@ export default {
      * @param url 请求的地址URL
      * @param requestConfig 请求配置参数
      */
-    upload<T>(inputData: Record<string, any>, url: string, requestConfig?: Http.RequestConfig): AxiosPromise<Http.ResponseData<T> | T> {
+    upload(inputData: Record<string, any>, url: string, requestConfig?: Http.RequestConfig) {
         const formData = new FormData();
         if (inputData && typeof inputData === "object") {
             for (const key in inputData) {
                 formData.append(key, inputData[key]);
             }
         }
-        return ajax(
+        return request(
             Object.assign(
                 {
                     url,
@@ -126,12 +125,12 @@ export default {
                 const {
                     data,
                     headers: { "content-disposition": fileName }
-                } = await ajax({
+                } = (await request({
                     url: downloadConfig.url,
                     method: downloadConfig.method,
                     data: downloadConfig.inputData,
                     responseType: "blob"
-                });
+                })) as Http.Response;
                 const aElement = document.createElement("a");
                 aElement.setAttribute("download", downloadConfig.fileName || fileName || String(new Date().getTime()));
                 aElement.setAttribute("href", window.URL.createObjectURL(data));
@@ -142,5 +141,10 @@ export default {
         iframeElement.onload = function () {
             document.body.removeChild(iframeElement);
         };
+    },
+
+    // 上传图片
+    uploadImage(inputData: Record<string, any>, requestConfig?: Http.RequestConfig) {
+        return this.upload(inputData, "/uploadImage", requestConfig);
     }
 };

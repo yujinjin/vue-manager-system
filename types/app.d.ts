@@ -62,11 +62,23 @@ declare namespace App {
 
     /** 当前登录用户信息 */
     interface LoginUserInfo {
-        /** 是否登录 */
-        isLogin: boolean;
+        /** 登录用户号 */
+        userName: string;
 
-        /** 用户编号 */
-        userNo: string;
+        /** 手机号 */
+        phoneNumber: string;
+
+        /** 邮箱 */
+        email: string;
+
+        /** 头像 */
+        avatar: string;
+
+        /** 性别 */
+        gender: string;
+
+        /** 过期时间 */
+        expiredTime: number;
 
         /** 用户授权码 */
         authAccessCode: string;

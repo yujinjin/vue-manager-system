@@ -1,3 +1,11 @@
+/*
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2022-08-09 13:49:25
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2022-12-19 16:21:17
+ * @项目的路径: \vue-manager-system\types\http.d.ts
+ * @描述: 头部注释配置模板
+ */
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 
 /**
@@ -36,7 +44,7 @@ declare namespace Http {
     // 请求接口响应返回数据
     interface Response<T = any> extends AxiosResponse {
         config: RequestConfig;
-        data: ResponseData<T>;
+        data: ResponseData<T> | T;
     }
 
     // 异常失败

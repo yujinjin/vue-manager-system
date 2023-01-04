@@ -1,20 +1,16 @@
-import { HandleCodes } from "@/services/enums";
-import type { ButtonProps, TableProps, TableColumnCtx, PaginationProps } from "element-plus";
-
 /*
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:34:02
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-08 16:50:21
+ * @最后修改时间: 2023-01-04 10:57:44
  * @项目的路径: \vue-manager-system\types\components.d.ts
  * @描述: 自定义组件声明
  */
+import { HandleCodes } from "@/services/enums";
+import type { ButtonProps, TableProps, TableColumnCtx, PaginationProps, FormProps, FormItemProps } from "element-plus";
 declare namespace Components {
     /** 自定义按钮组件 */
     interface Button {
-        /** 当前按钮操作CODE */
-        handleCode: HandleCodes;
-
         /** 按钮文案内容 */
         text: string;
 
@@ -24,18 +20,33 @@ declare namespace Components {
         /** 是否显示(通过当前固定展示数目来判断是否展示) */
         isShow?: boolean;
 
-        /** 是否显示(根据当前列的数据情况来判断是否展示) */
-        display?: (row: any) => boolean;
-
         /** 按钮点击函数事件 */
-        click?: (selectRows: any[], button: Components.Button) => Promise<void>;
+        click?: (button: Components.Button) => Promise<void>;
 
         /** element-plus里的button属性，具体见element-plus button文档 */
         props?: Partial<ButtonProps>;
     }
 
-    /** 查询表单字段 */
-    interface SearchFormField {
+    /** 数据表格按钮 */
+    interface TableButton extends Button {
+        /** 当前按钮操作CODE */
+        handleCode?: HandleCodes;
+
+        /** 是否显示(根据当前列的数据情况来判断是否展示) */
+        display?: (row: any) => boolean;
+
+        /** 按钮点击函数事件 */
+        click?: (selectRows: any[], button: Components.TableButton) => Promise<void>;
+    }
+
+    /** form表单按钮 */
+    interface FormButton extends Button {
+        /** 按钮点击函数事件 */
+        click?: (inputFormValue: Record<string, any>, button: Components.Button) => Promise<void>;
+    }
+
+    /** 表单字段 */
+    interface FormField {
         /** 查询项的名称，同时也是组件的双向绑定值属性 */
         name: string;
 
@@ -46,7 +57,7 @@ declare namespace Components {
         value?: any;
 
         /** 组件的类型 */
-        type?: "input" | "select" | "datePicker";
+        type?: string;
 
         /** label宽度 */
         labelWidth?: number;
@@ -73,13 +84,50 @@ declare namespace Components {
         slot?: string;
     }
 
+    /** 查询表单字段 */
+    interface SearchFormField extends FormField {
+        /** 组件的类型 */
+        type?: "input" | "select" | "datePicker";
+    }
+
+    /** 数据输入表单字段 */
+    interface InputFormField extends FormField {
+        /** 组件的类型 */
+        type?:
+            | "input"
+            | "select"
+            | "datePicker"
+            | "timePicker"
+            | "timeSelect"
+            | "label"
+            | "inputNumber"
+            | "radio"
+            | "slider"
+            | "switch"
+            | "imgUpload"
+            | "webEditor"
+            | "autocomplete"
+            | "cascader"
+            | "checkbox"
+            | "colorPicker";
+
+        /** 组件所占的列数,默认是24 */
+        span?: number;
+
+        /** 表单验证规则 */
+        // rules: FormItemRule | FormItemRule[];
+
+        /** Form Item 属性 */
+        formItemProps?: Partial<NotReadonly<FormItemProps>>;
+    }
+
     /** 数据表格列组件属性 */
     interface TableColumn<T> extends Partial<TableColumnCtx<T>> {
         /** 数据列的自定义类型 */
         type?: "selection" | "index" | "expand" | "number" | "action" | "date" | "enum" | "image";
 
         /** 操作按钮列表(type是action有用) */
-        buttons?: Components.Button[];
+        buttons?: Components.TableButton[];
 
         /** 数字格式化小数点位数(默认是0, type是number有用) */
         digit?: number;
@@ -100,7 +148,7 @@ declare namespace Components {
     /** 列表操作栏组件属性 */
     interface ActionBar {
         /** 自定按钮列表 */
-        buttons?: Components.Button[];
+        buttons?: Components.TableButton[];
 
         /** 选择的数据列 */
         selectRows?: Array<any>;
@@ -130,10 +178,31 @@ declare namespace Components {
         inputWidth?: number;
 
         /** 自定按钮列表 */
-        buttons?: Components.Button[];
+        buttons?: Components.TableButton[];
 
         /** 所属的页面名称（用于判断按钮的操作权限、存储的数据情况等） */
         pageName?: string;
+    }
+
+    /** 数据输入表单组件属性 */
+    interface InputForm {
+        /** 自定按钮列表 */
+        fields: InputFormField[];
+
+        /** 当前表单数据是否正在加载中 */
+        isLoading?: boolean;
+
+        /** 一行表单数 */
+        columns?: number;
+
+        /** form表单属性 */
+        props?: Partial<FormProps>;
+
+        /** form表单事件 */
+        events?: Record<string, Function>;
+
+        /** 表单默认值 */
+        value?: Record<string, any>;
     }
 
     /** 搜索表单实例 */

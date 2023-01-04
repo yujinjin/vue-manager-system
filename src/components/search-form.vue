@@ -84,7 +84,7 @@ const props = defineProps({
     },
     // 操作按钮
     buttons: {
-        type: Array as PropType<Components.Button[]>,
+        type: Array as PropType<Components.TableButton[]>,
         default() {
             return [];
         }
@@ -99,7 +99,7 @@ const emits = defineEmits(["generateFormFields", "search", "update:isShowCollaps
 const formFields: Ref<Components.SearchFormField[]> = ref([]);
 
 // 扩展按钮列表
-const extendButtons: Ref<Components.Button[]> = ref([]);
+const extendButtons: Ref<Components.TableButton[]> = ref([]);
 
 // 展开状态
 const collapseStatus: Ref<boolean> = ref(true);

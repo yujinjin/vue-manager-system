@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-07 10:50:11
+ * @最后修改时间: 2023-01-04 15:22:50
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
@@ -10,12 +10,12 @@
  * 	title: "首页" // 页面标题
  * }
  */
-import { dataStore, eventsStore } from "@/stores";
+import { storageStore, eventsStore } from "@/stores";
 import { createRouter, createWebHistory, RouteRecordRaw, Router } from "vue-router";
 
 export default function (): Router {
-    const dataStoreInstace = dataStore();
-    const eventsStoreInstace = eventsStore();
+    const dataStorages = storageStore();
+    const dataEvents = eventsStore();
     const router: Router = createRouter({
         history: createWebHistory("/"), // HTML5 history模式
         routes: <Array<RouteRecordRaw>>[
@@ -23,9 +23,9 @@ export default function (): Router {
                 path: "/",
                 name: "home", // 首页
                 meta: {
-                    requireAuth: false
+                    requireAuth: true
                 },
-                component: () => import("@views/home.vue")
+                component: () => import("@views/home/index.vue")
             },
             {
                 path: "/login",
@@ -49,9 +49,9 @@ export default function (): Router {
     });
     // 注册一个全局前置守卫
     router.beforeEach(to => {
-        if (to.meta.requireAuth !== false && !dataStoreInstace.loginUserInfo.isLogin) {
+        if (to.meta.requireAuth !== false && !dataStorages.isLogin()) {
             // 未登录的用户进入了需要登录的页面, 全局触发去登录事件
-            eventsStoreInstace.trigger({ eventName: "gotoLogin", args: [router] });
+            dataEvents.trigger({ eventName: "gotoLogin", args: [router] });
             // 取消当前的导航
             return false;
         }

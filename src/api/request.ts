@@ -8,7 +8,7 @@ import loading from "@/plugins/loading";
 import type { Http } from "/#/http";
 import { ElMessage } from "element-plus";
 
-export default function (requestConfig: Http.RequestConfig) {
+export default function request<T>(requestConfig: Http.RequestConfig): Promise<Http.Response<T> | Http.ResponseData<T> | T> {
     // 自定义非axios的配置
     const customerOptions = {
         // 是否让框架自动显示错误提示信息

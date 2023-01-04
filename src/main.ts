@@ -6,7 +6,7 @@ import { App } from "/#/app";
 import type { Pinia } from "pinia";
 import routers from "@/routers/";
 import type { Router } from "vue-router";
-import store from "@/stores";
+import store from "@/stores/index";
 import components from "@/components/index";
 import directives from "@/services/directives";
 import plugins from "@/plugins/index";
@@ -30,14 +30,14 @@ class AppMain {
     store: Pinia;
 
     // VUE 路由
-    router: Router;
+    router: Router | null;
 
     constructor() {
         this.initConfig();
         this.config = config;
         this.logs = logs;
         this.store = store;
-        this.router = routers();
+        this.router = null;
         this.vueAppInstance = null;
     }
 
@@ -75,6 +75,7 @@ class AppMain {
         }
         vueAppInstance.use(this.store);
         vueAppInstance.use(ElementPlus, { locale: zhCn });
+        this.router = routers();
         vueAppInstance.use(this.router);
         // 注册全局指令
         Object.keys(directives).forEach(key => {
