@@ -2,13 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-04 09:53:25
+ * @最后修改时间: 2023-01-18 15:21:02
  * @项目的路径: \vue-manager-system\src\components\img-upload.vue
  * @描述: 图片上传组件
 -->
 <template>
     <div class="img-upload">
-        <el-upload v-bind="uploadInnerProps" :file-list="fileList" ref="updloadRef">
+        <el-upload v-bind="uploadInnerProps" v-model:file-list="fileList" ref="updloadRef">
             <template #default>
                 <slot><el-button type="primary">点击上传</el-button></slot>
             </template>
@@ -16,7 +16,7 @@
                 <div class="el-upload__tip">只能上传图片文件，且不超过{{ maxSize > 1024 ? numberFormat(maxSize / 1024, 1) + "M" : maxSize + "KB" }}</div>
             </template>
         </el-upload>
-        <el-dialog v-model="isShowCropperDialog" title="图片裁剪" :append-to-body="true" :close-on-click-modal="false" width="1000px">
+        <el-dialog v-model="isShowCropperDialog" class="cropper-dialog" title="图片裁剪" :append-to-body="true" :close-on-click-modal="false" width="1000px">
             <div class="cropper-panel">
                 <div class="cropper-box">
                     <img :src="cropperImg" ref="cropperImgRef" />
@@ -39,16 +39,17 @@
 </template>
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
-import { ElMessage, UploadInstance } from "element-plus";
-import type { UploadProps, UploadRequestOptions, UploadFile, UploadFiles, UploadUserFile } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
+import type { UploadProps, UploadInstance, UploadRequestOptions, UploadFile, UploadFiles, UploadUserFile } from "element-plus";
 import type { Ref, PropType } from "vue";
 import { numberFormat } from "@/utils/format";
 import Cropper from "cropperjs";
-import CommonAPI from "@api/common";
+import "cropperjs/dist/cropper.css";
+import commonAPI from "@api/common";
 
 const props = defineProps({
     // 上传的组件的值
-    moduleValue: {
+    modelValue: {
         type: [String, Array] as PropType<string | string[]>
     },
     // 上传属性配置选项，具体见（element-plus upload文档）
@@ -65,14 +66,14 @@ const props = defineProps({
         type: Number,
         default: 2048
     },
-    // 分隔符，moduleValue可能是多个图片的路径用"|"隔开的字符串
+    // 分隔符，modelValue可能是多个图片的路径用"|"隔开的字符串
     separator: {
         type: String,
         default: "|"
     }
 });
 
-const emits = defineEmits(["update:moduleValue"]);
+const emits = defineEmits(["update:modelValue"]);
 
 // 上传组件内部属性
 const uploadInnerProps: Ref<Partial<UploadProps>> = ref({});
@@ -97,22 +98,22 @@ const cropperImg: Ref<string> = ref("");
 // 图片裁剪实例化对象
 let cropperInstance: Cropper;
 
-// ModuleValue的string格式，解决双向绑定时与fileList的值并不是同样的数据而产生的多次修改ModuleValue值
-let newModuleValue = "";
+// ModelValue的string格式，解决双向绑定时与fileList的值并不是同样的数据而产生的多次修改ModelValue值
+let newModelValue = "";
 
 // 剪切图片的方向
 let directionCropper = false;
 
 // 把当前modelValue转换成upload组件所用的文件格式列表
 const generateFileList = function () {
-    if (!props.moduleValue) {
+    if (!props.modelValue) {
         fileList.value = [];
-    } else if (Array.isArray(props.moduleValue)) {
-        fileList.value = JSON.parse(JSON.stringify(props.moduleValue));
+    } else if (Array.isArray(props.modelValue)) {
+        fileList.value = JSON.parse(JSON.stringify(props.modelValue));
     } else if (uploadInnerProps.value.limit === 1) {
-        fileList.value = [{ name: props.moduleValue.substring(props.moduleValue.lastIndexOf("/")), url: props.moduleValue }];
+        fileList.value = [{ name: props.modelValue.substring(props.modelValue.lastIndexOf("/")), url: props.modelValue }];
     } else {
-        fileList.value = props.moduleValue.split(props.separator).map(url => ({ name: url.substring(url.lastIndexOf("/")), url }));
+        fileList.value = props.modelValue.split(props.separator).map(url => ({ name: url.substring(url.lastIndexOf("/")), url }));
     }
 };
 
@@ -157,7 +158,7 @@ const closeCroppDialog = function () {
 
 // 图片上传API
 const imageUploadApi = async function (file: File) {
-    const img = (await CommonAPI.uploadImage({ file })) as string;
+    const img = (await commonAPI.uploadImage({ file })) as string;
     if (uploadInnerProps.value.limit === 1) {
         fileList.value = [{ name: img.substring(img.lastIndexOf("/")), url: img }];
     } else {
@@ -167,12 +168,12 @@ const imageUploadApi = async function (file: File) {
 
 // 文件列表变化
 const fileListChange = function () {
-    if (Array.isArray(props.moduleValue)) {
-        newModuleValue = JSON.stringify(fileList.value);
-        emits("update:moduleValue", JSON.parse(newModuleValue));
+    if (Array.isArray(props.modelValue)) {
+        newModelValue = JSON.stringify(fileList.value);
+        emits("update:modelValue", JSON.parse(newModelValue));
     } else {
-        newModuleValue = fileList.value.map(item => item.url).join(props.separator);
-        emits("update:moduleValue", newModuleValue);
+        newModelValue = fileList.value.map(item => item.url).join(props.separator);
+        emits("update:modelValue", newModelValue);
     }
 };
 
@@ -193,8 +194,19 @@ const changeDirectionCropper = function () {
 
 // 保存剪切的图
 const saveCropper = function () {
-    // 提交
-    updloadRef.value?.submit();
+    try {
+        cropperInstance.getCroppedCanvas().toBlob(async blob => {
+            if (blob!.size / 1024 > props.maxSize) {
+                ElMessage.error("文件大小超出限制！");
+                return;
+            }
+            await imageUploadApi(new File([blob!], Date.now() + ".jpg", { type: "image/jpeg", lastModified: Date.now() }));
+            fileListChange();
+            closeCroppDialog();
+        }, "image/jpeg");
+    } catch (error) {
+        logs.error(error);
+    }
 };
 
 // 默认上传属性
@@ -202,28 +214,16 @@ const defaultUploadProps = {
     action: "", // 图片上传地址
     // 覆盖默认的 Xhr 行为，允许自行实现上传文件的请求
     httpRequest: function (options: UploadRequestOptions): Promise<void> {
-        if (cropperInstance) {
-            return new Promise((resolve, reject) => {
-                try {
-                    cropperInstance.getCroppedCanvas().toBlob(async blob => {
-                        await imageUploadApi(new File([blob!], Date.now() + ".jpg", { type: "image/jpeg", lastModified: Date.now() }));
-                        fileListChange();
-                        closeCroppDialog();
-                        resolve();
-                    }, "image/jpeg");
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        } else {
-            return imageUploadApi(options.file).then(() => {
-                fileListChange();
-                return;
-            });
-        }
+        return imageUploadApi(options.file).then(() => {
+            fileListChange();
+            return;
+        });
     },
     // 图片上传变化
-    onChange: function (file) {
+    onChange: function (file: UploadFile, files: UploadFiles) {
+        // 由于element plus upload组件上传之后会自动添加一个预览文件。
+        // 这里是自定义实现的文件上传请求，所以必须是上传完文件之后才展示处理， 这里删除掉
+        files.pop();
         if (!props.cropperProps) {
             // 当前图片无需剪切
             return;
@@ -233,23 +233,21 @@ const defaultUploadProps = {
             cropperImg.value = e.target!.result as string;
             showCroppDialogHandle();
         };
-        imgFileReader.readAsDataURL(file.raw);
+        imgFileReader.readAsDataURL(file.raw!);
     },
     // 图片上传前操作
     beforeUpload: async function (file) {
-        if (cropperInstance) {
-            return new Promise((resolve, reject) => {
-                cropperInstance.getCroppedCanvas().toBlob(blob => {
-                    if (blob!.size / 1024 > props.maxSize) {
-                        ElMessage.error("文件大小超出限制！");
-                        reject();
-                    }
-                    resolve(true);
-                }, "image/jpeg");
-            });
-        } else if (file.size / 1024 > props.maxSize) {
+        if (file.size / 1024 > props.maxSize) {
             ElMessage.error("文件大小超出限制！");
             return false;
+        }
+    },
+    onExceed() {
+        if (uploadInnerProps.value.limit && uploadInnerProps.value.limit > 1) {
+            ElMessageBox.alert("您最多只能上传" + uploadInnerProps.value.limit + "个图片!", "上传图片", {
+                confirmButtonText: "确定",
+                type: "warning"
+            });
         }
     },
     listType: "picture",
@@ -272,9 +270,9 @@ watch(
 );
 
 watch(
-    () => props.moduleValue,
+    () => props.modelValue,
     value => {
-        if ((!value && !newModuleValue) || value === newModuleValue || JSON.stringify(value) === newModuleValue) {
+        if ((!value && !newModelValue) || value === newModelValue || JSON.stringify(value) === newModelValue) {
             return;
         }
         generateFileList();
@@ -313,6 +311,23 @@ watch(
             width: 160px;
             height: 160px;
             overflow: hidden;
+        }
+    }
+}
+</style>
+<style lang="less">
+.el-dialog.cropper-dialog {
+    .el-dialog__body {
+        padding: 12px 20px 0px;
+        overflow-y: auto;
+    }
+
+    .el-dialog__footer {
+        padding: 8px 20px;
+        box-shadow: 0px -1px 0px 0px #f5f5f5, 0px 1px 30px 0px rgba(0, 21, 41, 0.12);
+
+        .el-button {
+            min-width: 80px;
         }
     }
 }

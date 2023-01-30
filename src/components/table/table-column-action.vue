@@ -10,7 +10,7 @@
         >
             {{ button.text }}
         </el-button>
-        <el-dropdown v-if="hideStatusButtons.length > 0" @command="dropdownCommandHandle">
+        <el-dropdown v-if="hideStatusButtons.length > 0" popper-class="custom-action-dropdown" @command="dropdownCommandHandle">
             <span>
                 <i class="icomoon-more"></i>
             </span>
@@ -76,7 +76,7 @@ const initActionButtons = function () {
         }
     });
     if (props.maxNumShow && actionButtons.value.length > props.maxNumShow) {
-        actionButtons.value.slice(props.maxNumShow - 1).forEach(button => {
+        actionButtons.value.slice(props.maxNumShow).forEach(button => {
             button.isShow = false;
         });
     }

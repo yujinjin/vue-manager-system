@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-03 17:31:38
+ * @最后修改时间: 2023-01-09 15:01:06
  * @项目的路径: \vue-manager-system\src\components\web-editor.vue
  * @描述: web 富文本框编辑器
 -->
@@ -16,38 +16,44 @@ import type { Ref } from "vue";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { debounce } from "@/utils/others";
-import CommonAPI from "@api/common";
+import commonAPI from "@api/common";
 import { formItemContextKey, formContextKey } from "element-plus";
 import type { FormContext, FormItemContext } from "element-plus";
 
 const props = defineProps({
-    moduleValue: String,
+    modelValue: String,
     disabled: {
         type: Boolean,
         default: false
     }
 });
 
-const emits = defineEmits(["update:moduleValue"]);
+const emits = defineEmits(["update:modelValue"]);
 
-//
+// web 编辑器ref
 const webEditorRef = ref(null);
 
+// inputFile ref
 const inputFileRef: Ref<HTMLInputElement | null> = ref(null);
 
+// 当前elForm实例
 const elForm = inject(formContextKey, {} as FormContext);
 
+// 当前elFormItem实例
 const elFormItem = inject(formItemContextKey, {} as FormItemContext);
 
+// quill富文本框编辑器实例
 let quillInstance;
 
+// 输入内容变化操作
 const textChangeHandle = debounce(() => {
-    emits("update:moduleValue", quillInstance.getText());
+    emits("update:modelValue", quillInstance.getText());
     elFormItem?.validate("change");
 }, 300);
 
+// 图片文件选择变化
 const imgFileChangeHandle = async function (e) {
-    const img = (await CommonAPI.uploadImage({ file: e.target.files[0] })) as string;
+    const img = (await commonAPI.uploadImage({ file: e.target.files[0] })) as string;
     //图片上传成功之后的回调
     let range = quillInstance.getSelection();
     if (!range) {
@@ -74,8 +80,8 @@ const initQuill = function () {
         readOnly: props.disabled === true,
         placeholder: "输入内容..."
     });
-    if (props.moduleValue) {
-        quillInstance.setText(props.moduleValue);
+    if (props.modelValue) {
+        quillInstance.setText(props.modelValue);
     }
     quillInstance.on("text-change", function () {
         textChangeHandle();
@@ -83,10 +89,10 @@ const initQuill = function () {
 };
 
 watch(
-    () => props.moduleValue,
+    () => props.modelValue,
     value => {
         if (!quillInstance || value === quillInstance.getText()) return;
-        quillInstance.setText(props.moduleValue);
+        quillInstance.setText(props.modelValue);
     }
 );
 
@@ -109,8 +115,19 @@ onUnmounted(() => {
 });
 </script>
 <style lang="less" scoped>
-.web-editor {
+.web-editor-container {
     width: 100%;
-    min-height: 100px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+
+    .web-editor {
+        width: 100%;
+        flex: 1;
+    }
+
+    .ql-toolbar.ql-snow {
+        width: 100%;
+    }
 }
 </style>

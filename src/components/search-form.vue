@@ -9,6 +9,9 @@
                 <!-- input -->
                 <el-input v-else-if="field.type === 'input'" v-model.trim="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
 
+                <!-- input-number -->
+                <el-input-number v-else-if="field.type === 'inputNumber'" v-model.trim="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
+
                 <!-- select -->
                 <el-select v-else-if="field.type === 'select'" v-model="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}">
                     <el-option
@@ -93,7 +96,9 @@ const props = defineProps({
     pageName: String
 });
 
-const emits = defineEmits(["generateFormFields", "search", "update:isShowCollapse", "change", "collapseStatusChange"]);
+// fieldsChange: 当前表单字段变化事件; search: 搜索操作; change: 表单字段值变化事件;
+// update:isShowCollapse: 修改折叠状态; collapseStatusChange: 折叠状态变化事件
+const emits = defineEmits(["fieldsChange", "search", "change", "update:isShowCollapse", "collapseStatusChange"]);
 
 // search 表单字段列表
 const formFields: Ref<Components.SearchFormField[]> = ref([]);
@@ -117,6 +122,10 @@ const generateFormFields = function () {
         return;
     }
     props.fields.forEach(field => {
+        if (!field.name) {
+            logs.warn("字段没有属性name值", field);
+            return;
+        }
         const newField = extend(true, {}, field);
         if (!Object.prototype.hasOwnProperty.call(newField, "value")) {
             newField.value = null;
@@ -139,7 +148,7 @@ const generateFormFields = function () {
         }
         formFields.value.push(newField);
     });
-    emits("generateFormFields", getSearchFormValue(), formFields.value);
+    emits("fieldsChange", formFields.value);
 };
 
 // 生成扩展按钮列表
@@ -242,7 +251,18 @@ onMounted(async () => {
     triggerResizeEvent();
 });
 
-defineExpose({ formFields, getSearchFormValue });
+defineExpose({
+    // 修改当前form字段的属性
+    changeFormFields: function (callback: (formFields: Components.SearchFormField[]) => void) {
+        if (callback && typeof callback === "function") {
+            callback(formFields.value);
+        } else {
+            logs.warn("callback 必须是一个函数");
+        }
+    },
+    // 获取当前搜索表单的数据对象
+    getValue: getSearchFormValue
+});
 </script>
 
 <style lang="less" scoped>
@@ -280,6 +300,12 @@ defineExpose({ formFields, getSearchFormValue });
 
             :deep(.el-radio) {
                 height: 28px;
+            }
+
+            :deep(.el-input-number) {
+                .el-input__inner {
+                    text-align: left;
+                }
             }
         }
     }

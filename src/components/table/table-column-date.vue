@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 18:46:03
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-13 09:43:35
+ * @最后修改时间: 2023-01-18 15:49:28
  * @项目的路径: \vue-manager-system\src\components\table\table-column-date.vue
  * @描述: 日期格式化数据列
 -->
@@ -16,7 +16,7 @@ import { dateFormat } from "@/utils/format";
 const props = defineProps({
     // 日期值
     value: {
-        type: [String, Object, Number, Array]
+        type: [String, Number, Array]
     },
     // 日期格式化字符串
     formate: {
@@ -35,9 +35,9 @@ const dateText = computed(() => {
         return "-";
     }
     if (Object.prototype.toString.call(props.value) === "[object Array]") {
-        return props.value.map(item => (item ? dateFormat(item, props.formate) : "")).join(props.separator);
+        return (props.value as Array<string>).map(item => (item ? dateFormat(item, props.formate) : "")).join(props.separator);
     } else {
-        return props.value ? dateFormat(props.value, props.formate) : "-";
+        return props.value ? dateFormat(props.value as number | string, props.formate) : "-";
     }
 });
 </script>

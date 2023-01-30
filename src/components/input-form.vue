@@ -2,13 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-03 17:21:00
+ * @最后修改时间: 2023-01-18 15:30:30
  * @项目的路径: \vue-manager-system\src\components\input-form.vue
  * @描述: 数据输入表单
 -->
 <template>
     <div class="input-form" v-loading="isLoading">
-        <el-form v-bind="formProps" v-model="inputFormValue">
+        <el-form v-bind="formProps" :model="inputFormValue" ref="inputFormRef">
             <el-row>
                 <el-col v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index" :span="field.span">
                     <el-form-item v-bind="field.formItemProps">
@@ -105,7 +105,7 @@
 <script setup lang="ts">
 import type { Components } from "/#/components";
 import type { Ref, PropType } from "vue";
-import type { FormProps } from "element-plus";
+import type { FormInstance, FormProps } from "element-plus";
 import { ref, watch } from "vue";
 import { INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@/services/constants";
 import { setObjectProperty, getObjectProperty } from "@/utils/others";
@@ -151,6 +151,9 @@ const emits = defineEmits(["fieldValueChange"]);
 // 表单属性
 const formProps = ref({});
 
+// form ref
+const inputFormRef: Ref<null | FormInstance> = ref(null);
+
 // 表单数据
 const inputFormValue: Ref<Record<string, any>> = ref({});
 
@@ -163,7 +166,15 @@ const generateFormFields = function () {
     if (!props.fields || props.fields.length === 0) {
         return;
     }
+    const style = { width: "400px" };
+    if (props.columns === 2) {
+        style.width = "220px";
+    }
     props.fields.forEach(field => {
+        if (!field.name) {
+            logs.warn("字段没有属性name值", field);
+            return;
+        }
         const newField: Components.InputFormField = extend(true, {}, field);
         if (!newField.span) {
             newField.span = 24 / props.columns;
@@ -187,15 +198,20 @@ const generateFormFields = function () {
         if (newField.inputWidth) {
             newField.props!.style = newField.props!.style || {};
             newField.props!.style.width = newField.inputWidth + "px";
+        } else {
+            newField.props!.style = Object.assign({}, style, newField.props!.style);
         }
         if (newField.label) {
-            newField.formItemProps.label = newField.label + newField.label.endsWith("：") ? "" : "：";
+            newField.formItemProps.label = newField.label + (newField.label.endsWith("：") ? "" : "：");
         }
         if (newField.labelWidth) {
             newField.formItemProps.labelWidth = newField.labelWidth;
         }
         if (!newField.formItemProps.prop) {
             newField.formItemProps.prop = newField.name;
+        }
+        if (newField.rules) {
+            newField.formItemProps.rules = newField.rules;
         }
         formFields.value.push(newField);
     });
@@ -206,8 +222,12 @@ const generateFormFields = function () {
 const initInputFormValue = function () {
     inputFormValue.value = extend(true, {}, props.value);
     formFields.value.forEach(field => {
+        if (!field.name) {
+            logs.warn("字段没有属性name值", field);
+            return;
+        }
         // 设置field 的value值
-        let fieldValue = getObjectProperty(props.value, field.name);
+        let fieldValue = getObjectProperty(inputFormValue.value, field.name);
         if (fieldValue === undefined) {
             fieldValue = Object.prototype.hasOwnProperty.call(field, "value") ? field.value : null;
             setObjectProperty(inputFormValue.value, field.name, fieldValue);
@@ -218,7 +238,7 @@ const initInputFormValue = function () {
 
 // 获取elment 组件名称
 const getElComponentName = function (field: Components.InputFormField) {
-    return "el-" + field.name.replace(/([A-Z])/g, "-$1").toLowerCase();
+    return "el-" + field.type!.replace(/([A-Z])/g, "-$1").toLowerCase();
 };
 
 // 设置字段的值
@@ -251,7 +271,40 @@ watch(
     }
 );
 
-defineExpose({ inputFormValue: inputFormValue.value });
+watch(
+    () => props.props,
+    value => {
+        formProps.value = Object.assign(
+            {
+                labelWidth: 120
+            },
+            value
+        );
+    },
+    {
+        immediate: true,
+        deep: true
+    }
+);
+
+defineExpose({
+    // 获取表单的value
+    getInputValue: function () {
+        return JSON.parse(JSON.stringify(inputFormValue.value));
+    },
+    // 修改当前form字段的属性
+    changeFormFields: function (callback: (formFields: Components.InputFormField[]) => void) {
+        if (callback && typeof callback === "function") {
+            callback(formFields.value);
+        } else {
+            logs.warn("callback 必须是一个函数");
+        }
+    },
+    // 获取form Ref
+    getFormRef: function () {
+        return inputFormRef.value;
+    }
+});
 </script>
 <style lang="less" scoped>
 .input-form {

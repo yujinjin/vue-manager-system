@@ -7,17 +7,16 @@
             :isSearchLoading="isSearchLoading"
             @search="searchHandle"
             @change="searchValueChangeHandle"
-            @generateFormFields="initSearchFormValue"
+            @fieldsChange="searchFieldsChangeHandle"
             ref="searchFormRef"
         >
             <template v-for="name in distributeSlots.searchForm" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
         </search-form>
-        <action-bar v-if="actionBarProps" v-bind="actionBarProps" :pageName="pageName" :selectRows="selectRows" @selectRowsChange="selectRowsChangeInActionBar">
-            <!-- action bar组件只有一个slot -->
-            <template v-if="distributeSlots.actionBar.length > 0" #default="scope">
-                <slot :name="distributeSlots.actionBar[0]" v-bind="scope"></slot>
+        <action-bar v-if="actionBarProps" v-bind="actionBarProps" :pageName="pageName" :selectRows="selectRows" ref="actionBarRef">
+            <template v-for="name in distributeSlots.actionBar" #[name]="scope">
+                <slot :name="name" v-bind="scope"></slot>
             </template>
         </action-bar>
         <data-table
@@ -40,7 +39,7 @@
 <script setup lang="ts">
 import type { Components } from "/#/components";
 import type { Ref, PropType } from "vue";
-import { ref, useSlots, computed, watch, nextTick } from "vue";
+import { onMounted, ref, useSlots, computed, watch, nextTick } from "vue";
 import extend from "@/utils/extend";
 
 const props = defineProps({
@@ -62,7 +61,7 @@ const props = defineProps({
     pageName: String
 });
 
-const emits = defineEmits(["searchValueChange", "selectRowsChangeInActionBar", "searchFormFieldsChange"]);
+const emits = defineEmits(["searchValueChange", "searchFieldsChange", "selectRowsChange"]);
 
 const slots = useSlots();
 
@@ -74,6 +73,9 @@ const dataTableRef: Ref<Components.DataTableRef | null> = ref(null);
 
 // searchForm组件ref
 const searchFormRef: Ref<Components.SearchFormRef | null> = ref(null);
+
+// actionBar组件Ref
+const actionBarRef: Ref<Components.ActionBarRef | null> = ref(null);
 
 // 当前搜索是否正在加载中
 const isSearchLoading = ref(false);
@@ -100,36 +102,20 @@ const distributeSlots = computed(() => {
     return typeSlotList;
 });
 
-// 初始化搜索表单的值
-const initSearchFormValue = function (searchFormValue, formFields) {
-    extend(true, searchFormInput.value, searchFormValue);
-    emits("searchFormFieldsChange", searchFormValue, formFields);
-};
-
-// 在action bar 组件中监控selectRows的数据变化，目前应用场景是如果没有数据列表，部分按钮置为disable
-const selectRowsChangeInActionBar = function (selectRows, actionButtons) {
-    emits("selectRowsChangeInActionBar", selectRows, actionButtons);
-};
-
 // 搜索表单的值变化事件
 const searchValueChangeHandle = function (field, formFields) {
-    // setObjectProperty(searchFormInput.value, field.name, field.value);
     emits("searchValueChange", field, formFields);
 };
 
-// 查询方法
-const queryDataList = function () {
-    if (dataTableRef.value) {
-        dataTableRef.value.queryDataList();
-    }
+// 搜索表单的字段变化事件
+const searchFieldsChangeHandle = function (formFields) {
+    emits("searchFieldsChange", formFields);
 };
 
-// 展开/收起状态更改操作
-// const collapseStatusChangeHandle = function () {
-//     if (dataTableRef.value) {
-//         dataTableRef.value.initTableMaxHeight();
-//     }
-// };
+// 查询方法
+const queryDataList = function (isInit = true) {
+    dataTableRef.value?.queryDataList(isInit);
+};
 
 // 搜索操作
 const searchHandle = function (searchFormValue) {
@@ -137,25 +123,59 @@ const searchHandle = function (searchFormValue) {
     queryDataList();
 };
 
-// 获取当前搜索表单的实时值
-const getSearchFormValue = function () {
-    if (searchFormRef.value) {
-        return extend(true, {}, props.dataTableProps && props.dataTableProps.filters, searchFormRef.value.getSearchFormValue());
+watch(
+    () => selectRows.value,
+    () => {
+        emits("selectRowsChange", selectRows.value);
+    },
+    {
+        deep: true
     }
-    return extend(true, {}, searchFormInput.value);
-};
+);
 
 const unwatch = watch(
     () => props.isLoadingForInit,
     async value => {
         unwatch();
         if (value) return;
+        if (searchFormRef.value) {
+            extend(true, searchFormInput.value, searchFormRef.value.getValue());
+        }
         await nextTick();
         queryDataList();
     }
 );
 
-defineExpose({ searchFormInput, getSearchFormValue });
+onMounted(() => {
+    if (searchFormRef.value) {
+        extend(true, searchFormInput.value, searchFormRef.value.getValue());
+    }
+    emits("selectRowsChange", selectRows.value);
+});
+
+defineExpose({
+    // 分页查询
+    query: queryDataList,
+    // 获取当前搜索表单实时值
+    getSearchingValue: function () {
+        if (searchFormRef.value) {
+            return extend(true, {}, props.dataTableProps && props.dataTableProps.filters, searchFormRef.value.getValue());
+        }
+        return extend(true, {}, searchFormInput.value);
+    },
+    // 获取当前已经搜索出来的结果值，与getSearchFormValue区别是当前已经用它查询出来结果的搜索表单值
+    getSearchedValue: function () {
+        return extend(true, {}, searchFormInput.value);
+    },
+    // 修改当前form字段的属性
+    changeFormFields: function (callback) {
+        searchFormRef.value?.changeFormFields(callback);
+    },
+    // 修改当前生成的button按钮值
+    changeButtons: function (callback) {
+        actionBarRef.value?.changeButtons(callback);
+    }
+});
 </script>
 <style lang="less" scoped>
 .search-page {

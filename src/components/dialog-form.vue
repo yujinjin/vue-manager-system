@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-04 10:58:05
+ * @最后修改时间: 2023-01-18 15:19:24
  * @项目的路径: \vue-manager-system\src\components\dialog-form.vue
- * @描述: 头部注释配置模板
+ * @描述: form 弹窗组件
 -->
 <template>
-    <el-dialog v-if="isShow" v-model="dialogVisible" v-bind="dialogInnerProps" @closed="dialogClosed">
+    <el-dialog v-if="isShow" v-model="dialogVisible" v-bind="dialogInnerProps" class="dialog-form" @closed="dialogClosed">
         <input-form v-bind="inputFormProps" @fieldValueChange="inputFormFieldValueChange" ref="inputFormRef">
             <template v-for="name in Object.keys(slots)" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
@@ -15,9 +15,16 @@
         </input-form>
         <template #footer>
             <div class="dialog-footer">
-                <el-button v-for="(button, index) in actionButtons" :key="index" v-bind="button.props" @click="clickHandle(button)" :loading="button.isLoading">
-                    {{ button.text }}
-                </el-button>
+                <template v-for="(button, index) in actionButtons">
+                    <slot v-if="button.slot" :name="button.slot" :button="button"></slot>
+                    <el-button v-else :key="index" v-bind="button.props" @click="clickHandle(button)" :loading="button.isLoading">
+                        <template v-if="button.icon">
+                            <i v-if="typeof button.icon === 'string'" :class="[button.icon]"></i>
+                            <el-icon v-else><component :is="button.icon" /></el-icon>
+                        </template>
+                        {{ button.text }}
+                    </el-button>
+                </template>
             </div>
         </template>
     </el-dialog>
@@ -28,12 +35,6 @@ import type { Ref, PropType } from "vue";
 import type { DialogProps } from "element-plus";
 import type { NotReadonly } from "/#/global";
 import type { Components } from "/#/components";
-// import { Router, useRouter } from "vue-router";
-// import { storageStore, eventsStore } from "@/stores";
-// 全局路由对象
-// const router: Router = useRouter();
-// vuex
-// const storageData = storageStore();
 
 const props = defineProps({
     isShow: {
@@ -58,7 +59,7 @@ const dialogVisible: Ref<boolean> = ref(false);
 
 const slots = useSlots();
 
-const inputFormRef: Ref<null | { inputFormValue: Record<string, any> }> = ref(null);
+const inputFormRef: Ref<null | Components.InputFormRef> = ref(null);
 
 // 弹窗内部属性
 const dialogInnerProps: Ref<Partial<NotReadonly<DialogProps>>> = ref({});
@@ -103,9 +104,10 @@ const clickHandle = async function (button) {
     let canColse = true;
     try {
         if (button.click) {
-            canColse = await button.click(inputFormRef.value!.inputFormValue, button);
+            canColse = await button.click(inputFormRef.value!.getInputValue(), inputFormRef.value!.getFormRef(), button);
         }
     } catch (error) {
+        canColse = false;
         logs.error(error);
     }
     button.isLoading = false;
@@ -119,22 +121,20 @@ watch(
     value => {
         if (value) {
             dialogVisible.value = true;
+            dialogInnerProps.value = Object.assign(
+                {
+                    closeOnClickModal: false,
+                    appendToBody: true,
+                    destroyOnClose: true,
+                    width: "750px"
+                },
+                props.dialogProps
+            );
         }
-    }
-);
-
-watch(
-    () => props.dialogProps,
-    () => {
-        dialogInnerProps.value = Object.assign(
-            {
-                class: "dialog-form",
-                closeOnClickModal: false
-            },
-            props.dialogProps
-        );
     },
-    { immediate: true, deep: true }
+    {
+        immediate: true
+    }
 );
 
 watch(
@@ -144,8 +144,46 @@ watch(
     },
     { deep: true, immediate: true }
 );
+
+defineExpose({
+    // 获取表单的value
+    getInputValue: function () {
+        return inputFormRef.value?.getInputValue();
+    },
+    // 修改当前form字段的属性
+    changeFormFields: function (callback: (formFields: Components.InputFormField[]) => void) {
+        return inputFormRef.value?.changeFormFields(callback);
+    },
+    // 修改当前生成的button按钮值
+    changeButtons: function (callback: (actionButtons: Components.FormButton[]) => void) {
+        if (callback && typeof callback === "function") {
+            callback(actionButtons.value);
+        } else {
+            logs.warn("callback 必须是一个函数");
+        }
+    },
+    // 获取form Ref
+    getFormRef: function () {
+        return inputFormRef.value?.getFormRef();
+    }
+});
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .dialog-form {
+    width: 100%;
+    .el-dialog__body {
+        padding: 12px 20px 0px;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .el-dialog__footer {
+        padding: 8px 20px;
+        box-shadow: 0px -1px 0px 0px #f5f5f5, 0px 1px 30px 0px rgba(0, 21, 41, 0.12);
+
+        .el-button {
+            min-width: 80px;
+        }
+    }
 }
 </style>

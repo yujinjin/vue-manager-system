@@ -12,7 +12,7 @@
                     <!-- 数字 -->
                     <table-column-number v-else-if="columnItem.type === 'number'" :value="getCellValue(scope.row, columnItem)" :digit="columnItem.digit || 0" />
                     <!-- 图片 -->
-                    <table-column-img v-else-if="columnItem.type === 'image'" :imgs="getCellValue(scope.row, columnItem)" />
+                    <table-column-image v-else-if="columnItem.type === 'image'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
                     <!-- 枚举 -->
                     <table-column-enum v-else-if="columnItem.type === 'enum'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
                     <!-- 操作按钮 -->
@@ -33,7 +33,7 @@ import { onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import { PAGE_ITEMS } from "@/services/constants";
 import tableColumnDate from "./table/table-column-date.vue";
 import tableColumnNumber from "./table/table-column-number.vue";
-import tableColumnImg from "./table/table-column-img.vue";
+import tableColumnImage from "./table/table-column-image.vue";
 import tableColumnEnum from "./table/table-column-enum.vue";
 import tableColumnAction from "./table/table-column-action.vue";
 import { dataStore } from "@/stores/";
@@ -225,7 +225,11 @@ const initColumns = function () {
             }
         } else if (newColumnItem.type === "index" && !newColumnItem.index) {
             newColumnItem.index = function (index) {
-                return (paginationData.value.currentPage! - 1) * paginationData.value.pageSize! + index + 1;
+                if (props.isShowPagination) {
+                    return (paginationData.value.currentPage! - 1) * paginationData.value.pageSize! + index + 1;
+                } else {
+                    return index + 1;
+                }
             };
         } else if (!newColumnItem.type && !newColumnItem.formatter) {
             newColumnItem.formatter = function (row, column, cellValue) {
@@ -256,7 +260,9 @@ const queryDataList = async function (isInit = true) {
             queryResult = props.queryResponseProcess(queryResult);
         }
         dataList.value = queryResult.items || [];
-        paginationData.value.total = queryResult.totalCount;
+        if (props.isShowPagination) {
+            paginationData.value.total = queryResult.totalCount || 0;
+        }
     } catch (error) {
         logs.error(error);
     }
@@ -326,8 +332,8 @@ if (!props.props || (!props.props.height && !props.props.maxHeight)) {
     window.addEventListener("resize", resizeHandle);
 }
 
-onMounted(() => {
-    initTableMaxHeight();
+onMounted(async () => {
+    await initTableMaxHeight();
     if (props.autoInitQuery) {
         queryDataList();
     }

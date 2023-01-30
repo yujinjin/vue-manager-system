@@ -2,17 +2,24 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:34:02
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-04 10:57:44
+ * @最后修改时间: 2023-01-18 15:06:22
  * @项目的路径: \vue-manager-system\types\components.d.ts
  * @描述: 自定义组件声明
  */
 import { HandleCodes } from "@/services/enums";
-import type { ButtonProps, TableProps, TableColumnCtx, PaginationProps, FormProps, FormItemProps } from "element-plus";
+import type { ButtonProps, TableProps, TableColumnCtx, PaginationProps, FormProps, FormItemProps, FormItemRule, FormInstance } from "element-plus";
+import { Component } from "vue";
 declare namespace Components {
     /** 自定义按钮组件 */
     interface Button {
         /** 按钮文案内容 */
         text: string;
+
+        /** 自定义插槽名称（如有值其他选项无效） */
+        slot?: string;
+
+        /** 按钮自定义的图标 */
+        icon?: string | Component;
 
         /** 按钮是否正在加载 */
         isLoading?: boolean;
@@ -42,7 +49,7 @@ declare namespace Components {
     /** form表单按钮 */
     interface FormButton extends Button {
         /** 按钮点击函数事件 */
-        click?: (inputFormValue: Record<string, any>, button: Components.Button) => Promise<void>;
+        click?: (inputFormValue: Record<string, any>, formRef: FormInstance | null, button: Components.Button) => Promise<void>;
     }
 
     /** 表单字段 */
@@ -87,7 +94,7 @@ declare namespace Components {
     /** 查询表单字段 */
     interface SearchFormField extends FormField {
         /** 组件的类型 */
-        type?: "input" | "select" | "datePicker";
+        type?: "input" | "inputNumber" | "select" | "datePicker";
     }
 
     /** 数据输入表单字段 */
@@ -115,7 +122,7 @@ declare namespace Components {
         span?: number;
 
         /** 表单验证规则 */
-        // rules: FormItemRule | FormItemRule[];
+        rules: FormItemRule | FormItemRule[];
 
         /** Form Item 属性 */
         formItemProps?: Partial<NotReadonly<FormItemProps>>;
@@ -205,13 +212,6 @@ declare namespace Components {
         value?: Record<string, any>;
     }
 
-    /** 搜索表单实例 */
-    interface SearchFormRef {
-        formFields: Components.SearchFormField[];
-
-        getSearchFormValue: () => Record<string, any>;
-    }
-
     /**  搜索表单组件属性 */
     interface DataTable {
         /** 当前列表查询函数 */
@@ -251,15 +251,6 @@ declare namespace Components {
         pageName?: string;
     }
 
-    /** 数据表格实例 */
-    interface DataTableRef {
-        /** 查询数据函数 */
-        queryDataList: (isInit?: boolean) => Promise<any>;
-
-        /** 初始化表格最大高度 */
-        initTableMaxHeight: () => Promise<void>;
-    }
-
     interface SearchPage {
         /** 初始化时正在加载(用于dataTable组件初始化是否默认查询，适用场景：筛选项中需要先查询数据后来初始化筛选项值) */
         isLoadingForInit?: boolean;
@@ -275,5 +266,39 @@ declare namespace Components {
 
         /** 所属的页面名称（用于判断按钮的操作权限、存储的数据情况等） */
         pageName?: string;
+    }
+
+    /** 搜索表单实例 */
+    interface SearchFormRef {
+        getValue: () => Record<string, any>;
+
+        /** 获取表单的value */
+        changeFormFields: (callback: (formFields: Components.SearchFormField[]) => void) => void;
+    }
+
+    /** 数据表格实例 */
+    interface DataTableRef {
+        /** 查询数据函数 */
+        queryDataList: (isInit?: boolean) => Promise<any>;
+
+        /** 初始化表格最大高度 */
+        initTableMaxHeight: () => Promise<void>;
+    }
+
+    /** 列表操作栏实例 */
+    interface ActionBarRef {
+        changeButtons: (buttons: Components.TableButton[]) => void;
+    }
+
+    /** 数据输入表单实例 */
+    interface InputFormRef {
+        /** 获取表单的value */
+        getInputValue: () => Record<string, any> | null;
+
+        /** 获取表单的value */
+        changeFormFields: (callback: (formFields: Components.InputFormField[]) => void) => void;
+
+        // 获取form Ref
+        getFormRef: () => FormInstance | null;
     }
 }

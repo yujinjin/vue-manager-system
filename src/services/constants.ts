@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 16:36:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-20 15:12:07
+ * @最后修改时间: 2023-01-09 10:57:50
  * @项目的路径: \vue-manager-system\src\services\constants.ts
  * @描述: 常量集合
  */
@@ -16,6 +16,12 @@ export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES = {
     input: {
         placeholder: "请输入",
         clearable: true
+    },
+    // Input Number 数字输入框默认配置选项(具体见element plus Input Number 输入框文档)
+    inputNumber: {
+        placeholder: "请输入",
+        controls: false,
+        valueOnClear: null
     },
     // select 选择器默认配置选项（具体见element Select 选择器文档）
     select: {
@@ -190,5 +196,11 @@ export const INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES = {
     // Switch 开关默认配置选项（具体见element plus Switch文档）
     switch: {},
     // 图片上传配置选项
-    imgUpload: {}
+    imgUpload: {},
+    // web 富文本框编辑器
+    webEditor: {
+        style: {
+            width: "100%"
+        }
+    }
 };

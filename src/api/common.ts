@@ -131,8 +131,15 @@ export default {
                     data: downloadConfig.inputData,
                     responseType: "blob"
                 })) as Http.Response;
+                if (!downloadConfig.fileName) {
+                    if (fileName) {
+                        downloadConfig.fileName = decodeURIComponent(fileName.split("filename=")[1]);
+                    } else {
+                        downloadConfig.fileName = new Date().getTime() + "";
+                    }
+                }
                 const aElement = document.createElement("a");
-                aElement.setAttribute("download", downloadConfig.fileName || fileName || String(new Date().getTime()));
+                aElement.setAttribute("download", downloadConfig.fileName);
                 aElement.setAttribute("href", window.URL.createObjectURL(data));
                 aElement.setAttribute("target", iframeElement.name);
                 aElement.click();
@@ -145,6 +152,6 @@ export default {
 
     // 上传图片
     uploadImage(inputData: Record<string, any>, requestConfig?: Http.RequestConfig) {
-        return this.upload(inputData, "/uploadImage", requestConfig);
+        return this.upload(inputData, "/common/uploadImage", requestConfig);
     }
 };
