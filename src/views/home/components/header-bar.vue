@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-16 13:53:57
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-04 15:40:33
+ * @最后修改时间: 2023-11-15 16:14:56
  * @项目的路径: \vue-manager-system\src\views\home\components\header-bar.vue
  * @描述: home 头部
 -->
@@ -10,14 +10,20 @@
     <div class="header-bar">
         <div class="left-inner">
             <div class="logo-box">
-                <img src="@assets/static/logo.png" height="45" width="45" />
+                <svg-icon class="logo" value="vue-logo" />
             </div>
             <div class="title-text">中台管理系统</div>
             <div class="icon-box" @click="toggleMenuCollapseState">
-                <i :class="menuCollapseState ? 'icomoon-point-right' : 'icomoon-point-left'"></i>
+                <svg-icon :class="{ actived: menuCollapseState }" value="fold" />
             </div>
         </div>
-        <div class="center-inner"></div>
+        <div class="center-inner">
+            <el-breadcrumb :separator-icon="ArrowRight">
+                <el-breadcrumb-item>商城管理</el-breadcrumb-item>
+                <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+                <el-breadcrumb-item>品牌管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
         <div class="right-inner">
             <div class="message-box"><messages /></div>
             <div class="icon-box">
@@ -38,7 +44,7 @@
                                 <i class="icomoon-user"></i>
                                 <span class="dropdown-text">我的账户</span>
                             </el-dropdown-item>
-                            <el-dropdown-item command="showUpdateInfoDialog">
+                            <el-dropdown-item command="showUpdatePasswordDialog">
                                 <i class="icomoon-cog"></i>
                                 <span class="dropdown-text">修改密码</span>
                             </el-dropdown-item>
@@ -51,16 +57,18 @@
                 </el-dropdown>
             </div>
         </div>
-        <login-info-dialog :isShow="isShowUserInfoDialog" />
+        <login-info-dialog v-model:isShow="isShowUserInfoDialog" />
+        <update-password-dialog v-model:isShow="isShowUpdatePasswordDialog" />
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
 import type { Ref } from "vue";
+import { ref } from "vue";
+import { Refresh, CaretBottom, ArrowRight } from "@element-plus/icons-vue";
+import { storageStore } from "@/stores";
 import messages from "./messages.vue";
 import loginInfoDialog from "./login-info-dialog.vue";
-import { Refresh, CaretBottom } from "@element-plus/icons-vue";
-import { storageStore } from "@/stores";
+import updatePasswordDialog from "./update-password-dialog.vue";
 
 defineProps({
     menuCollapseState: {
@@ -73,7 +81,11 @@ const emits = defineEmits(["toggleMenuCollapseState"]);
 // 存储data
 const storageData = storageStore();
 
+// 是否显示修改用户信息弹窗
 const isShowUserInfoDialog: Ref<boolean> = ref(false);
+
+// 是否显示修改用户密码弹窗
+const isShowUpdatePasswordDialog = ref<boolean>(false);
 
 // 切换菜单折叠状态
 const toggleMenuCollapseState = function () {
@@ -83,6 +95,8 @@ const toggleMenuCollapseState = function () {
 const loginUserCommandHandle = function (command) {
     if (command === "showUserInfoDialog") {
         isShowUserInfoDialog.value = true;
+    } else if (command === "showUpdatePasswordDialog") {
+        isShowUpdatePasswordDialog.value = true;
     }
 };
 </script>
@@ -93,7 +107,6 @@ const loginUserCommandHandle = function (command) {
     margin: 0;
     border: none;
     height: 45px;
-    background-color: #2dc3e8;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
@@ -106,8 +119,12 @@ const loginUserCommandHandle = function (command) {
         display: flex;
         width: 224px;
         .logo-box {
-            width: 51px;
+            width: 60px;
             text-align: center;
+            :deep(.svg-icon) {
+                height: 44px;
+                width: 44px;
+            }
         }
 
         .title-text {
@@ -116,7 +133,7 @@ const loginUserCommandHandle = function (command) {
             padding-left: 5px;
             text-align: left;
             line-height: 45px;
-            color: #fff;
+            font-weight: bold;
             display: -webkit-box;
             word-break: break-all;
             text-overflow: ellipsis;
@@ -127,13 +144,17 @@ const loginUserCommandHandle = function (command) {
 
         .icon-box {
             width: 30px;
-            color: #fff;
             cursor: pointer;
             font-size: 20px;
             transition: color 0.318s ease 0s;
             display: flex;
             justify-content: center;
             align-items: center;
+            color: #606266;
+
+            .actived {
+                transform: rotate(180deg);
+            }
 
             &:hover {
                 box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -146,13 +167,20 @@ const loginUserCommandHandle = function (command) {
         display: flex;
         align-items: flex-end;
         position: relative;
+        align-items: center;
+
+        :deep(.el-breadcrumb) {
+            margin-left: 12px;
+            .el-breadcrumb__item[aria-current="page"] .el-breadcrumb__inner {
+                color: #ccc;
+            }
+        }
     }
 
     .right-inner {
         width: 200px;
         display: flex;
         padding: 0px 10px;
-        color: #fff;
         font-size: 12px;
         align-items: center;
         line-height: 24px;
@@ -161,7 +189,7 @@ const loginUserCommandHandle = function (command) {
         .icon-box {
             cursor: pointer;
             padding-right: 16px;
-            color: #fff;
+            color: #606266;
             font-size: 18px;
             display: flex;
             align-items: center;
@@ -173,7 +201,6 @@ const loginUserCommandHandle = function (command) {
             .name-info {
                 display: flex;
                 position: relative;
-                color: #fff;
                 align-items: center;
 
                 .avatar-box {

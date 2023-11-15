@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-04 15:20:41
+ * @最后修改时间: 2023-11-15 18:22:22
  * @项目的路径: \vue-manager-system\src\views\home\components\messages.vue
  * @描述: 消息列表
 -->
 <template>
-    <el-dropdown @command="handleCommand">
+    <el-dropdown @command="messageCommandHandle">
         <span class="el-dropdown-link">
             <el-badge :value="unreadMessages.length" :max="99" :hidden="unreadMessages.length <= 0">
                 <el-icon><ChatLineRound /></el-icon>
@@ -53,7 +53,7 @@ import { ref } from "vue";
 import type { Ref } from "vue";
 import { ChatLineRound } from "@element-plus/icons-vue";
 import systemAPI from "@api/system";
-import { timeDifferenceFormat } from "@/utils/format";
+import { timeDifferenceFormat } from "@yujinjin/utils";
 
 const unreadMessages: Ref<Record<string, any>[]> = ref([]);
 
@@ -62,15 +62,16 @@ const queryUnreadMessages = async function () {
     unreadMessages.value = (await systemAPI.queryUnreadMessages()) as Record<string, any>[];
 };
 
-const handleCommand = function (index) {
-    console.info("handleCommand........." + index);
+// 消息查看
+const messageCommandHandle = function (index) {
+    logs.info("messageCommandHandle........." + unreadMessages.value[index]);
 };
 
 queryUnreadMessages();
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-icon {
-    color: #fff;
+    color: #606266;
     font-size: 18px;
 }
 
@@ -119,7 +120,7 @@ queryUnreadMessages();
         .time-text {
             text-align: right;
             font-size: 11px;
-            color: #2dc3e8;
+            color: var(--el-color-primary);
             line-height: 12px;
         }
     }
@@ -129,8 +130,9 @@ queryUnreadMessages();
     display: flex;
     text-align: center;
     width: 100%;
-    font-size: 13px;
-    line-height: 40px;
+    font-size: 12px;
+    line-height: 32px;
+    color: #666;
 
     &:hover {
         background-color: #fff;
@@ -138,6 +140,10 @@ queryUnreadMessages();
 
     .text-box {
         flex: 1;
+
+        &:hover {
+            color: var(--el-color-primary);
+        }
     }
 }
 </style>

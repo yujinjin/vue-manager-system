@@ -4,7 +4,8 @@
  * 描述：封装第三方加载插件，由于Loading的加载是单例的，所以这里要做到如果被多次调用显示，以最后一次的close才真正关闭
  */
 
-import { ElLoading, LoadingOptions } from "element-plus";
+import type { LoadingOptions } from "element-plus";
+import { ElLoading } from "element-plus";
 import type { LoadingInstance } from "element-plus/lib/components/loading/src/loading";
 
 let loadingInstance: LoadingInstance | null = null;

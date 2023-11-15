@@ -2,14 +2,14 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-05 16:24:22
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 16:02:05
+ * @最后修改时间: 2023-10-27 11:51:32
  * @项目的路径: \vue-manager-system\src\stores\storage.ts
  * @描述: 本地存储数据管理
  */
-import { App } from "/#/app";
+import type { App } from "/#/app";
 import { defineStore } from "pinia";
 import { getValue, setValue } from "@/services/local-storage";
-import { randomId } from "@/utils/generate";
+import { randomId } from "@yujinjin/utils";
 
 export default defineStore("storage", {
     // 把本地存储放在缓存里的数据
@@ -114,7 +114,7 @@ export default defineStore("storage", {
         },
         // 示例数据1(简单获取)-勿需缓存直接获取
         getExampleData2: function () {
-            console.info("...........exampleData2");
+            logs.info("...........exampleData2");
             return getValue(0, "exampleData2");
         },
         // 存储示例数据2-简单存储, 如果value 为 undefined|''|null时会删除本地存储
@@ -126,7 +126,7 @@ export default defineStore("storage", {
         },
         // 获取示例数据3，判断本地存储的数据是否过期
         getExampleData3() {
-            console.info("...........exampleData3");
+            logs.info("...........exampleData3");
             if (this.exampleData3 && this.exampleData3.expiredTime > new Date().getTime()) {
                 return this.exampleData3.value;
             }
@@ -145,7 +145,7 @@ export default defineStore("storage", {
         },
         // 获取示例数据4，判断本地存储的数据是否过期(这里不做缓存)
         getExampleData4: function () {
-            console.info("...........exampleData4");
+            logs.info("...........exampleData4");
             const exampleData4 = getValue(0, "exampleData4");
             if (exampleData4 && exampleData4.expiredTime > new Date().getTime()) {
                 return exampleData4.value;

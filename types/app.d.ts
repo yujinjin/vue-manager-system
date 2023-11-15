@@ -3,7 +3,7 @@
  * 时间：2020-12-28
  * 描述：APP命名空间
  */
-import { BuildEnv } from "/@/services/enums";
+import type { BuildEnv } from "/@/services/enums";
 
 declare namespace App {
     /** APP当前环境配置 */
@@ -37,21 +37,6 @@ declare namespace App {
 
         /** 上传服务站点的地址 */
         readonly uploadDomain: string;
-    }
-
-    interface StoreStateType {
-        data: {
-            locationInfo: LocationInfo;
-            loginUserInfo: LoginUserInfo;
-        };
-        event: {
-            events: Record<string, Array<Function>>;
-            onceEvents: Record<string, Array<Function>>;
-        };
-        pageViews: {
-            cachedViews: string[];
-            visitedViews: PageView[];
-        };
     }
 
     /** 站点数据 */
@@ -112,6 +97,21 @@ declare namespace App {
 
         /** 是否固定展示(每次登录都自动展示出来，由于权限问题只能固定来自menuId的page) */
         isFixed: boolean;
+    }
+
+    interface StoreStateType {
+        data: {
+            locationInfo: LocationInfo;
+            loginUserInfo: LoginUserInfo;
+        };
+        event: {
+            events: Record<string, Array<(...args: any[]) => any>>;
+            onceEvents: Record<string, Array<(...args: any[]) => any>>;
+        };
+        pageViews: {
+            cachedViews: string[];
+            visitedViews: PageView[];
+        };
     }
 
     /** 日志 */

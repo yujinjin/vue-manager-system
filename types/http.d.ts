@@ -2,11 +2,11 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-19 16:21:17
+ * @最后修改时间: 2023-10-31 15:51:19
  * @项目的路径: \vue-manager-system\types\http.d.ts
  * @描述: 头部注释配置模板
  */
-import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import type { AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 
 /**
  * ajax 请求
@@ -14,6 +14,21 @@ import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 declare namespace Http {
     // 请求配置项
     interface RequestConfig extends AxiosRequestConfig {
+        // 是否让框架自动显示错误提示信息
+        isShowError?: boolean;
+
+        // 是否处理返回的response数据，默认系统框架会处理数据
+        isResultData?: boolean;
+
+        // 是否显示loading加载
+        isShowLoading?: boolean;
+
+        // 延迟加载定时器ID
+        showLoadingTimerId?: number;
+    }
+
+    // 拦截请求配置
+    interface InternalRequestConfig extends InternalAxiosRequestConfig {
         // 是否让框架自动显示错误提示信息
         isShowError?: boolean;
 

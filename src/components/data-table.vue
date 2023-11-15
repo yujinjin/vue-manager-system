@@ -37,9 +37,9 @@ import tableColumnImage from "./table/table-column-image.vue";
 import tableColumnEnum from "./table/table-column-enum.vue";
 import tableColumnAction from "./table/table-column-action.vue";
 import { dataStore } from "@/stores/";
-import extend from "@/utils/extend";
-import { debounce } from "@/utils/others";
-import { NotReadonly } from "/#/global";
+import { extend } from "@yujinjin/utils";
+import { debounce } from "@yujinjin/utils";
+import type { NotReadonly } from "/#/global";
 
 const props = defineProps({
     // 当前列表查询函数, 可返回Promise
@@ -88,7 +88,7 @@ const props = defineProps({
     },
     // table 其他事件具体参照element plus table文档
     events: {
-        type: Object as PropType<Record<string, Function>>,
+        type: Object as PropType<Record<string, (...args: any[]) => any>>,
         default() {
             return {};
         }
@@ -227,9 +227,8 @@ const initColumns = function () {
             newColumnItem.index = function (index) {
                 if (props.isShowPagination) {
                     return (paginationData.value.currentPage! - 1) * paginationData.value.pageSize! + index + 1;
-                } else {
-                    return index + 1;
                 }
+                return index + 1;
             };
         } else if (!newColumnItem.type && !newColumnItem.formatter) {
             newColumnItem.formatter = function (row, column, cellValue) {
@@ -282,9 +281,8 @@ const getCellValue = function (row, columnItem) {
     }
     if (columnItem.prop.split(",").length > 1) {
         return columnItem.prop.split(",").map(key => row[key]);
-    } else {
-        return row[columnItem.prop];
     }
+    return row[columnItem.prop];
 };
 
 // 分页中每页条目数据变换

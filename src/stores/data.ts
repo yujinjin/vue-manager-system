@@ -6,7 +6,7 @@
  * @项目的路径: \vue-manager-system\src\stores\data.ts
  * @描述: app数据管理入口文件
  */
-import { App } from "/#/app";
+import type { App } from "/#/app";
 import { defineStore } from "pinia";
 
 export default defineStore("data", {

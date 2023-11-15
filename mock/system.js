@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 13:55:10
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 14:27:13
+ * @最后修改时间: 2023-11-15 16:56:56
  * @项目的路径: \vue-manager-system\mock\system.js
  * @描述: 系统模块mock数据
  */
@@ -26,19 +26,19 @@ module.exports = function (app) {
     app.get("/system/login", function (request, response) {
         response.json(
             wrapResponse({
-                token: "@word(120)",
-                expiredIn: "@integer(300000, 6000000)",
-                userName: "@name()",
-                email: "@email",
+                "token": "@word(120)",
+                "expiredIn": "@integer(3600000, 864000000)",
+                "userName": "@name()",
+                "email": "@email",
                 "avatar|1": new Array(20).fill(0).map(() => Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5))),
                 "gender|1": ["1", "2"],
-                phoneNumber: Mock.mock(/1[3456789]\d{9}/) // 手机号码
+                "phoneNumber": Mock.mock(/1[3456789]\d{9}/) // 手机号码
             })
         );
     });
 
     // 发送验证码
-    app.get("/system/sendValidateCode", function (request, response) {
+    app.post("/system/sendValidateCode", function (request, response) {
         response.json(wrapResponse(null, true));
     });
 
@@ -49,11 +49,11 @@ module.exports = function (app) {
             wrapResponse(
                 [
                     {
-                        id: "@id()",
-                        title: "@cword(4, 10)",
+                        "id": "@id()",
+                        "title": "@cword(4, 10)",
                         "senderAvatar|1": new Array(20).fill(0).map(() => Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5))),
-                        content: "@csentence(5, 200)",
-                        sendTime: "@integer(" + (time - 2 * 24 * 60 * 60 * 1000) + ", " + time + ")"
+                        "content": "@csentence(5, 200)",
+                        "sendTime": "@integer(" + (time - 2 * 24 * 60 * 60 * 1000) + ", " + time + ")"
                     }
                 ],
                 false,
@@ -68,12 +68,12 @@ module.exports = function (app) {
     });
 
     // 修改当前用户登录的密码
-    app.get("/system/updateLoginPassword", function (request, response) {
+    app.post("/system/updateLoginPassword", function (request, response) {
         response.json(wrapResponse(null, true));
     });
 
     // 修改当前登录用户信息
-    app.get("/system/updateLoginUserInfo", function (request, response) {
+    app.post("/system/updateLoginUserInfo", function (request, response) {
         response.json(wrapResponse(null, true));
     });
 

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 15:30:30
+ * @最后修改时间: 2023-11-15 16:30:56
  * @项目的路径: \vue-manager-system\src\components\input-form.vue
  * @描述: 数据输入表单
 -->
@@ -12,90 +12,10 @@
             <el-row>
                 <el-col v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index" :span="field.span">
                     <el-form-item v-bind="field.formItemProps">
-                        <!-- 自定义插件，插槽 -->
-                        <slot v-if="field.slot" :name="field.slot" :field="field" :formFields="formFields"></slot>
-
-                        <!-- 标签内容 -->
-                        <div class="label-contents" v-if="field.type === 'label'">{{ getObjectProperty(inputFormValue, field.name) }}</div>
-
-                        <!-- 图片上传 -->
-                        <img-upload
-                            v-if="field.type === 'imgUpload'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value.trim(), field)"
-                            v-bind="field.props || {}"
-                        />
-
-                        <!-- 富文本框 -->
-                        <web-editor
-                            v-if="field.type === 'webEditor'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value.trim(), field)"
-                            v-bind="field.props || {}"
-                        />
-
-                        <!-- select -->
-                        <el-select
-                            v-else-if="field.type === 'select'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value, field)"
-                            v-bind="field.props || {}"
-                            v-on="field.events || {}"
-                        >
-                            <el-option
-                                v-for="(item, index) in field.data"
-                                :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
-                                :label="item[field.optionLabelKey || 'label']"
-                                :value="item[field.optionValueKey || 'value']"
-                                :disabled="item.disabled === true"
-                            />
-                        </el-select>
-
-                        <!-- checkbox -->
-                        <el-checkbox-group
-                            v-else-if="field.type === 'checkbox'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value, field)"
-                            v-bind="field.props || {}"
-                            v-on="field.events || {}"
-                        >
-                            <el-checkbox
-                                v-for="(item, index) in field.data"
-                                :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
-                                :label="item[field.optionValueKey || 'value']"
-                                :disabled="item.disabled === true"
-                            >
-                                {{ item[field.optionLabelKey || "label"] }}
-                            </el-checkbox>
-                        </el-checkbox-group>
-
-                        <!-- radio -->
-                        <el-radio-group
-                            v-else-if="field.type === 'radio'"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value, field)"
-                            v-bind="field.props || {}"
-                            v-on="field.events || {}"
-                        >
-                            <el-radio-button
-                                v-for="(item, index) in field.data"
-                                :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
-                                :label="item[field.optionValueKey || 'value']"
-                                :disabled="item.disabled === true"
-                            >
-                                {{ item[field.optionLabelKey || "label"] }}
-                            </el-radio-button>
-                        </el-radio-group>
-
-                        <!-- element 组件 -->
-                        <component
-                            v-else
-                            :is="getElComponentName(field)"
-                            :modelValue="getObjectProperty(inputFormValue, field.name)"
-                            @update:modelValue="value => setFieldValue(value, field)"
-                            v-bind="field.props || {}"
-                            v-on="field.events || {}"
-                        />
+                        <input-field :field="field" :modelValue="getObjectProperty(inputFormValue, field.name)" @update:modelValue="value => setFieldValue(value, field)">
+                            <!-- 自定义插件，插槽 -->
+                            <slot v-if="field.slot" :name="field.slot" :field="field" :value="getObjectProperty(inputFormValue, field.name)" :formFields="formFields"></slot>
+                        </input-field>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -105,12 +25,12 @@
 <script setup lang="ts">
 import type { Components } from "/#/components";
 import type { Ref, PropType } from "vue";
-import type { FormInstance, FormProps } from "element-plus";
+import type { FormInstance, FormProps, FormValidateCallback } from "element-plus";
 import { ref, watch } from "vue";
 import { INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@/services/constants";
-import { setObjectProperty, getObjectProperty } from "@/utils/others";
-import extend from "@/utils/extend";
-import { NotReadonly } from "/#/global";
+import { setObjectProperty, getObjectProperty } from "@yujinjin/utils";
+import { extend } from "@yujinjin/utils";
+import type { NotReadonly } from "/#/global";
 
 const props = defineProps({
     fields: {
@@ -135,7 +55,7 @@ const props = defineProps({
     },
     // form表单事件
     events: {
-        type: Object as PropType<Record<string, Function>>
+        type: Object as PropType<Record<string, (...args: any[]) => any>>
     },
     // 表单数据默认值
     value: {
@@ -159,6 +79,24 @@ const inputFormValue: Ref<Record<string, any>> = ref({});
 
 // 表单字段列表
 const formFields: Ref<Components.InputFormField[]> = ref([]);
+
+// 初始化表单数据
+const initInputFormValue = function () {
+    inputFormValue.value = extend(true, {}, props.value);
+    formFields.value.forEach(field => {
+        if (!field.name) {
+            logs.warn("字段没有属性name值", field);
+            return;
+        }
+        // 设置field 的value值
+        let fieldValue = getObjectProperty(inputFormValue.value, field.name);
+        if (fieldValue === undefined) {
+            fieldValue = Object.prototype.hasOwnProperty.call(field, "value") ? field.value : null;
+            setObjectProperty(inputFormValue.value, field.name, fieldValue);
+            emits("fieldValueChange", field, fieldValue, formFields.value);
+        }
+    });
+};
 
 // 生成表单字段列表
 const generateFormFields = function () {
@@ -216,29 +154,6 @@ const generateFormFields = function () {
         formFields.value.push(newField);
     });
     initInputFormValue();
-};
-
-// 初始化表单数据
-const initInputFormValue = function () {
-    inputFormValue.value = extend(true, {}, props.value);
-    formFields.value.forEach(field => {
-        if (!field.name) {
-            logs.warn("字段没有属性name值", field);
-            return;
-        }
-        // 设置field 的value值
-        let fieldValue = getObjectProperty(inputFormValue.value, field.name);
-        if (fieldValue === undefined) {
-            fieldValue = Object.prototype.hasOwnProperty.call(field, "value") ? field.value : null;
-            setObjectProperty(inputFormValue.value, field.name, fieldValue);
-            emits("fieldValueChange", field, fieldValue, formFields.value);
-        }
-    });
-};
-
-// 获取elment 组件名称
-const getElComponentName = function (field: Components.InputFormField) {
-    return "el-" + field.type!.replace(/([A-Z])/g, "-$1").toLowerCase();
 };
 
 // 设置字段的值
@@ -303,6 +218,10 @@ defineExpose({
     // 获取form Ref
     getFormRef: function () {
         return inputFormRef.value;
+    },
+    // 表单验证
+    validate(callback?: FormValidateCallback) {
+        return inputFormRef.value?.validate(callback);
     }
 });
 </script>

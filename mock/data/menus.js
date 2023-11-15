@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 14:33:59
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-04 13:59:17
+ * @最后修改时间: 2023-11-07 09:54:30
  * @项目的路径: \vue-manager-system\mock\data\menus.js
  * @描述: 用户菜单列表
  * { id: 菜单ID, parentId: 父级菜单ID(null表示顶级菜单), name: 菜单名称, icons: 菜单图标, url: 菜单地址(可为null), moduleCode: 菜单所属模块code }
@@ -59,7 +59,7 @@ const icons = [
 module.exports = [
     {
         id: "10",
-        parentId: "0",
+        parentId: null,
         name: "示例",
         icons: "icomoon-accessibility",
         code: "10",
@@ -72,14 +72,14 @@ module.exports = [
         parentId: "10",
         name: "页面查询",
         icons: "icomoon-stats-dots",
-        code: "10010000",
+        code: "1001",
         url: "/example/query-search",
         moduleCode: "BASE",
         status: 1
     },
     {
         id: "11",
-        parentId: "0",
+        parentId: null,
         name: "数据分析",
         icons: "icomoon-database",
         code: "11",
@@ -119,7 +119,7 @@ module.exports = [
     },
     {
         id: "12",
-        parentId: "0",
+        parentId: null,
         name: "商城管理",
         icons: "icomoon-cart",
         code: "12",
@@ -309,7 +309,7 @@ module.exports = [
     },
     {
         id: "13",
-        parentId: "0",
+        parentId: null,
         name: "核算中心",
         icons: "icomoon-calculator",
         code: "400000",
@@ -329,7 +329,7 @@ module.exports = [
     },
     {
         id: "14",
-        parentId: "0",
+        parentId: null,
         name: "支付中心",
         icons: "icomoon-paypal",
         code: "14",
@@ -349,7 +349,7 @@ module.exports = [
     },
     {
         id: "15",
-        parentId: "0",
+        parentId: null,
         name: "系统管理",
         icons: "icomoon-cog",
         code: "100000",

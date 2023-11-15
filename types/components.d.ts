@@ -2,13 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:34:02
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 15:06:22
+ * @最后修改时间: 2023-11-15 16:36:43
  * @项目的路径: \vue-manager-system\types\components.d.ts
  * @描述: 自定义组件声明
  */
-import { HandleCodes } from "@/services/enums";
-import type { ButtonProps, TableProps, TableColumnCtx, PaginationProps, FormProps, FormItemProps, FormItemRule, FormInstance } from "element-plus";
-import { Component } from "vue";
+import type { HandleCodes } from "@/services/enums";
+import type { ButtonProps, TableProps, TableColumnCtx, PaginationProps, FormProps, FormItemProps, FormItemRule, FormInstance, FormValidateCallback } from "element-plus";
+import type { Component } from "vue";
 declare namespace Components {
     /** 自定义按钮组件 */
     interface Button {
@@ -85,7 +85,7 @@ declare namespace Components {
         props?: Record<string, any>;
 
         /** 组件自定义事件 */
-        events?: Record<string, Function>;
+        events?: Record<string, (...args: any[]) => any>;
 
         /** 自定义插槽名称（如有值其他选项无效） */
         slot?: string;
@@ -94,7 +94,7 @@ declare namespace Components {
     /** 查询表单字段 */
     interface SearchFormField extends FormField {
         /** 组件的类型 */
-        type?: "input" | "inputNumber" | "select" | "datePicker";
+        type?: "input" | "inputNumber" | "select" | "checkboxSelect" | "datePicker";
     }
 
     /** 数据输入表单字段 */
@@ -102,7 +102,11 @@ declare namespace Components {
         /** 组件的类型 */
         type?:
             | "input"
+            | "textarea"
+            | "password"
             | "select"
+            | "selectV2"
+            | "checkboxSelect"
             | "datePicker"
             | "timePicker"
             | "timeSelect"
@@ -116,13 +120,14 @@ declare namespace Components {
             | "autocomplete"
             | "cascader"
             | "checkbox"
-            | "colorPicker";
+            | "colorPicker"
+            | "upload";
 
         /** 组件所占的列数,默认是24 */
         span?: number;
 
         /** 表单验证规则 */
-        rules: FormItemRule | FormItemRule[];
+        rules?: FormItemRule | FormItemRule[];
 
         /** Form Item 属性 */
         formItemProps?: Partial<NotReadonly<FormItemProps>>;
@@ -206,7 +211,7 @@ declare namespace Components {
         props?: Partial<FormProps>;
 
         /** form表单事件 */
-        events?: Record<string, Function>;
+        events?: Record<string, (...args: any[]) => any>;
 
         /** 表单默认值 */
         value?: Record<string, any>;
@@ -233,7 +238,7 @@ declare namespace Components {
         props?: TableProps;
 
         /** table 其他事件具体参照element plus table文档 */
-        events?: Record<string, Function>;
+        events?: Record<string, (...args: any[]) => any>;
 
         /** 查询参数数据加工（查询前参数处理函数） */
         queryParametersProcess?: (parameters?: any) => any;
@@ -300,5 +305,26 @@ declare namespace Components {
 
         // 获取form Ref
         getFormRef: () => FormInstance | null;
+
+        // 表单验证
+        validate: (callback?: FormValidateCallback) => Promise<void>
+    }
+
+    /** form 弹窗组件实例 */
+    interface DialogFormRef {
+        // 获取表单的value
+        getInputValue: () => Record<string, any>;
+
+        // 修改当前form字段的属性
+        changeFormFields: (callback: (formFields: Components.InputFormField[]) => void) => void;
+
+        // 修改当前生成的button按钮值
+        changeButtons: (callback: (actionButtons: Components.FormButton[]) => void) => void;
+
+        // 获取form Ref
+        getFormRef: () => Components.InputFormRef | null;
+
+        // 表单验证
+        validate: (callback?: FormValidateCallback) => Promise<void>
     }
 }

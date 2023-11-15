@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 15:21:02
+ * @最后修改时间: 2023-10-27 16:05:19
  * @项目的路径: \vue-manager-system\src\components\img-upload.vue
  * @描述: 图片上传组件
 -->
@@ -39,10 +39,10 @@
 </template>
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
-import type { UploadProps, UploadInstance, UploadRequestOptions, UploadFile, UploadFiles, UploadUserFile } from "element-plus";
+import { ElMessage, ElMessageBox , ElUpload} from "element-plus";
+import type { UploadProps, UploadRequestOptions, UploadFile, UploadFiles, UploadUserFile } from "element-plus";
 import type { Ref, PropType } from "vue";
-import { numberFormat } from "@/utils/format";
+import { numberFormat } from "@yujinjin/utils";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import commonAPI from "@api/common";
@@ -84,7 +84,7 @@ const fileList: Ref<UploadUserFile[]> = ref([]);
 // 是否显示裁剪弹窗
 const isShowCropperDialog: Ref<boolean> = ref(false);
 
-const updloadRef: Ref<UploadInstance | null> = ref(null);
+const updloadRef = ref<InstanceType<typeof ElUpload>>();
 
 // 剪切图片ref
 const cropperImgRef: Ref<HTMLImageElement | null> = ref(null);

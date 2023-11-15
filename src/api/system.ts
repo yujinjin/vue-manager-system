@@ -4,7 +4,7 @@
  * 描述：系统管理API接口
  */
 import request from "./request";
-import { Http } from "/#/http";
+import type { Http } from "../../types/http";
 
 export default {
     /**
@@ -57,8 +57,8 @@ export default {
     /**
      * 查询登录用户的菜单列表
      */
-    queryLoginUserMenus(ajaxOptions?: Http.RequestConfig) {
-        return request(
+    queryLoginUserMenus<T>(ajaxOptions?: Http.RequestConfig) {
+        return request<T>(
             Object.assign(
                 {
                     url: "/system/queryLoginUserMenus",

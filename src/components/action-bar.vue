@@ -28,7 +28,7 @@ import type { Components } from "/#/components";
 import type { PropType, Ref } from "vue";
 import { ref, watch } from "vue";
 import { dataStore } from "@/stores/";
-import { TextAlignProperty } from "csstype";
+import type { TextAlignProperty } from "csstype";
 
 const props = defineProps({
     buttons: {

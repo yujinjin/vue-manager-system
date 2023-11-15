@@ -1,9 +1,14 @@
-/**
- * 作者：yujinjin9@126.com
- * 时间：2021-12-29
- * 描述：APP应用配置
+/*
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2022-08-09 13:49:25
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2023-10-31 11:51:21
+ * @项目的路径: \vue-manager-system\src\config.ts
+ * @描述：APP应用配置
  */
-import { App } from "/#/app";
+/// <reference types="node" />
+
+import type { App } from "/#/app";
 import { BuildEnv } from "@/services/enums";
 
 // 全局应用配置信息

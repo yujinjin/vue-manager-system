@@ -3,9 +3,11 @@
  * 时间：2022-01-10
  * 描述：交互式数据请求
  */
-import axios, { AxiosRequestHeaders } from "axios";
-import loading from "@/plugins/loading";
 import type { Http } from "/#/http";
+import type { AxiosRequestHeaders } from "axios";
+import axios from "axios";
+import loading from "@/plugins/loading";
+
 import { ElMessage } from "element-plus";
 
 export default function request<T>(requestConfig: Http.RequestConfig): Promise<Http.Response<T> | Http.ResponseData<T> | T> {
@@ -26,7 +28,7 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
         }, // 开始请求数据时的函数，返回Promise,如果是false就不再去请求数据
         request: {
             // 在发送请求之前的函数
-            before: function (axiosConfig: Http.RequestConfig) {
+            before: function (axiosConfig: Http.InternalRequestConfig) {
                 //如果配置传入显示加载选项就显示加载项
                 if (axiosConfig.isShowLoading === true) {
                     axiosConfig.showLoadingTimerId = window.setTimeout(() => {
@@ -62,16 +64,15 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
                     return response;
                 } else if (response.data.success === true) {
                     return response.config.isResultData ? response.data.data : response.data;
-                } else {
-                    if (response.config.isShowError) {
-                        ElMessage({
-                            message: (response.data.error && response.data.error.message) || "很抱歉，服务出错，请稍后再试~",
-                            type: "error"
-                        });
-                        logs.warn("接口出错:" + JSON.stringify(response.data));
-                    }
-                    return Promise.reject(response.config.isResultData ? response.data.data : response.data);
+                } 
+                if (response.config.isShowError) {
+                    ElMessage({
+                        message: (response.data.error && response.data.error.message) || "很抱歉，服务出错，请稍后再试~",
+                        type: "error"
+                    });
+                    logs.warn("接口出错:" + JSON.stringify(response.data));
                 }
+                return Promise.reject(response.config.isResultData ? response.data.data : response.data);
             },
             // 在发送请求数据的error函数
             error: function (error: Http.Error) {
@@ -143,14 +144,14 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
                 if (!data) {
                     return data;
                 }
-                if (headers["Content-Type"] == "application/x-www-form-urlencoded") {
+                if (headers["Content-Type"] === "application/x-www-form-urlencoded") {
                     // 将数据转换为表单数据
                     const formData: Array<string> = [];
                     Object.keys(data).forEach(key => {
                         formData.push(encodeURIComponent(String(key)) + "=" + encodeURIComponent(String(data[key])));
                     });
                     return formData.join("&");
-                } else if ((headers["Content-Type"] as String)?.indexOf("multipart/form-data") != -1) {
+                } else if ((headers["Content-Type"] as string)?.indexOf("multipart/form-data") !== -1) {
                     return data;
                 }
                 return JSON.stringify(data);
@@ -177,7 +178,7 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
     const instance = axios.create(customerAxiosOptions);
     //添加请求拦截器
     instance.interceptors.request.use(
-        function (axiosConfig: Http.RequestConfig) {
+        function (axiosConfig: Http.InternalRequestConfig) {
             if (customerInterceptor.request && customerInterceptor.request.before) {
                 return customerInterceptor.request.before(axiosConfig);
             }

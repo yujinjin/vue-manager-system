@@ -1,11 +1,12 @@
-import { createApp, App as VueApplication } from "vue";
-import ElementPlus from "element-plus";
-import zhCn from "element-plus/lib/locale/lang/zh-cn";
-import Appvue from "@/views/app.vue";
-import { App } from "/#/app";
+import type { App as VueApplication } from "vue";
+import type { App } from "/#/app";
 import type { Pinia } from "pinia";
-import routers from "@/routers/";
 import type { Router } from "vue-router";
+import { createApp } from "vue";
+import ElementPlus from "element-plus";
+import zhCn from "element-plus/dist/locale/zh-cn.mjs";
+import Appvue from "@/views/app.vue";
+import routers from "@/routers/";
 import store from "@/stores/index";
 import components from "@/components/index";
 import directives from "@/services/directives";

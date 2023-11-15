@@ -40,7 +40,7 @@
 import type { Components } from "/#/components";
 import type { Ref, PropType } from "vue";
 import { onMounted, ref, useSlots, computed, watch, nextTick } from "vue";
-import extend from "@/utils/extend";
+import { extend } from "@yujinjin/utils";
 
 const props = defineProps({
     // 初始化时正在加载

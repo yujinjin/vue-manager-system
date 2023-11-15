@@ -10,7 +10,8 @@
     <div class="table-column-enum">{{ enumText }}</div>
 </template>
 <script setup lang="ts">
-import { computed, PropType } from "vue";
+import type { PropType } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
     value: {
@@ -55,9 +56,9 @@ const enumText = computed(() => {
             const findItem = props.data.find(dateItem => dateItem[props.valueKey] === item);
             if (findItem) {
                 return findItem[props.textKey];
-            } else {
+            } 
                 return item;
-            }
+            
         })
         .join(props.separator);
 });

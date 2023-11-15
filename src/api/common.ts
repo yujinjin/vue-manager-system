@@ -4,7 +4,7 @@
  * 描述：公用api 应用程序接口
  */
 
-import { Http } from "/#/http";
+import type { Http } from "../../types/http";
 import request from "./request";
 
 export default {

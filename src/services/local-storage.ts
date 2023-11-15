@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 15:56:49
+ * @最后修改时间: 2023-11-15 13:51:57
  * @项目的路径: \vue-manager-system\src\services\local-storage.ts
  * @描述: 站点本地存储信息
  */
@@ -21,11 +21,13 @@ class AppStorage {
      */
     storage(type: 0 | 1 = 0, value?: string) {
         if (!window) {
+            // eslint-disable-next-line no-alert
             alert("您开启了秘密浏览或无痕浏览模式，请关闭!");
             return;
         }
         const storage = type === 0 ? window.localStorage : window.sessionStorage;
         if (!storage) {
+            // eslint-disable-next-line no-alert
             alert("您开启了秘密浏览或无痕浏览模式，请关闭!");
             return;
         }
@@ -46,7 +48,7 @@ let appStorageInstance: null | AppStorage = null;
  * 根据key值获取本地存储信息
  * @param key 存储业务对象key值，如果不传返回整个站点存储对象
  */
-export const getValue = function (type: 0 | 1 = 0, key: string): any {
+export const getValue = function (type: 0 | 1 = 0, key?: string): any {
     if (!appStorageInstance) {
         appStorageInstance = new AppStorage();
     }
@@ -63,9 +65,8 @@ export const getValue = function (type: 0 | 1 = 0, key: string): any {
     }
     if (key) {
         return localStorageObject[key];
-    } else {
-        return localStorageObject;
-    }
+    } 
+    return localStorageObject;
 };
 
 /**
@@ -74,7 +75,7 @@ export const getValue = function (type: 0 | 1 = 0, key: string): any {
  * @param value 存储的业务对象value值, undefined|''|null时表示删除
  */
 export const setValue = function (type: 0 | 1 = 0, key: string, value?: any): void {
-    const localStorageObject = getValue(type, key) || {};
+    const localStorageObject = getValue(type) || {};
     if (value === undefined || value === null || value === "") {
         if (Object.keys(localStorageObject).includes(key)) {
             delete localStorageObject[key];

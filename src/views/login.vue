@@ -111,11 +111,12 @@
 <script setup lang="ts">
 import type { Ref } from "vue";
 import { onUnmounted, ref, reactive, watch } from "vue";
-import { RouteLocationNormalizedLoaded, Router, useRoute, useRouter } from "vue-router";
+import type { RouteLocationNormalizedLoaded, Router} from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { storageStore } from "@/stores/";
 import QRCode from "qrcode";
 import { ElMessage } from "element-plus";
-import { chinaPhoneNumberValidate } from "@/utils/validation";
+import { chinaPhoneNumberValidate } from "@yujinjin/utils";
 import systemAPI from "@api/system";
 
 // 当前路由

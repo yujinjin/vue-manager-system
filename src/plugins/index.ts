@@ -3,7 +3,7 @@
  * 时间：2022-03-08
  * 描述：系统自定义插件入口
  */
-import { App } from "vue";
+import type { App } from "vue";
 import loading from "./loading";
 
 export default function (vueAppInstance: App) {

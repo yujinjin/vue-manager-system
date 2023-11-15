@@ -2,30 +2,11 @@
     <div class="search-panel" :class="{ collapse: !collapseStatus }" :style="{ paddingRight: collapseStatus ? '' : buttonBoxWidth + 'px' }">
         <div class="field-box" v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index">
             <div class="label-text" :style="{ width: (field.labelWidth || labelWidth) + 'px' }" v-if="field.label">{{ field.label }}</div>
-            <div class="input-box" :style="{ width: (field.inputWidth || inputWidth) + 'px' }">
-                <!-- 自定义插件，插槽 -->
-                <slot v-if="field.slot" :name="field.slot" :field="field" :formFields="formFields"></slot>
-
-                <!-- input -->
-                <el-input v-else-if="field.type === 'input'" v-model.trim="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
-
-                <!-- input-number -->
-                <el-input-number v-else-if="field.type === 'inputNumber'" v-model.trim="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
-
-                <!-- select -->
-                <el-select v-else-if="field.type === 'select'" v-model="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}">
-                    <el-option
-                        v-for="(item, index) in field.data"
-                        :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
-                        :label="item[field.optionLabelKey || 'label']"
-                        :value="item[field.optionValueKey || 'value']"
-                        :disabled="item.disabled === true"
-                    />
-                </el-select>
-
-                <!-- date-picker -->
-                <el-date-picker v-else-if="field.type === 'datePicker'" v-model="field.value" @change="changeHandle(field)" v-bind="field.props || {}" v-on="field.events || {}" />
-            </div>
+            <search-field :field="field" v-model="field.value" @change="changeHandle" :style="{ width: (field.inputWidth || inputWidth) + 'px' }">
+                <template v-if="field.slot">
+                    <slot :name="field.slot" :field="field" :formFields="formFields"></slot>
+                </template>
+            </search-field>
         </div>
         <!-- 占位 -->
         <div class="placeholder-button-box" :style="{ width: buttonBoxWidth + 'px' }" v-show="isShowCollapse && collapseStatus"></div>
@@ -53,8 +34,8 @@ import type { Components } from "/#/components";
 import type { Ref, PropType } from "vue";
 import { onMounted, ref, watch, nextTick } from "vue";
 import { SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@/services/constants";
-import { setObjectProperty } from "@/utils/others";
-import extend from "@/utils/extend";
+import { setObjectProperty } from "@yujinjin/utils";
+import { extend } from "@yujinjin/utils";
 
 const props = defineProps({
     // 查询表单字段列表 [{name: 查询项的名称，同时也是父级组件的字段属性, label: 选项的标签名称, value: 选项的值, type: 组件的类型, labelWidth: label宽度,  inputWidth: 表单宽度, data: 数据（比如：select的选项值列表）, props: 组件的自定义选项(可无), events: 组件自定义事件 slot: 自定义插槽名称（可无，如有值其他选项无效）}]

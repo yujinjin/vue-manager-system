@@ -7,7 +7,7 @@
  * @描述: demo 查询API
  */
 import request from "./request";
-import { Http } from "/#/http";
+import type { Http } from "../../types/http";
 
 export default {
     /**

@@ -2,16 +2,17 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-04 15:22:50
+ * @最后修改时间: 2023-10-31 16:06:49
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
- * 	requiresAuth: boolean, // 是否需要登录
- * 	title: "首页" // 页面标题
+ *  requiresAuth: boolean, // 是否需要登录
+ *  title: "首页" // 页面标题
  * }
  */
 import { storageStore, eventsStore } from "@/stores";
-import { createRouter, createWebHistory, RouteRecordRaw, Router } from "vue-router";
+import type { RouteRecordRaw, Router } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 export default function (): Router {
     const dataStorages = storageStore();

@@ -2,22 +2,27 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-19 14:21:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-04 13:48:50
+ * @最后修改时间: 2023-11-15 10:35:10
  * @项目的路径: \vue-manager-system\src\views\home\index.vue
- * @描述: 头部注释配置模板
+ * @描述: 中台主页
 -->
 <template>
     <div class="main">
         <header-bar :menuCollapseState="menuCollapseState" @toggleMenuCollapseState="menuCollapseState = !menuCollapseState" />
         <div class="page-content">
+            <!-- 侧边栏 -->
+            <div></div>
+            <!-- 页面tab列表 -->
+            <div></div>
             <!-- <keep-alive :include="$store.state.pageTabs.cachedViews">
-				<router-view :key="routeKey" class="page-body"></router-view>
-			</keep-alive> -->
+                <router-view :key="routeKey" class="page-body"></router-view>
+            </keep-alive> -->
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ElMessage } from "element-plus";
 import { ref } from "vue";
 import headerBar from "./components/header-bar.vue";
 
@@ -37,6 +42,9 @@ const initLocalStoragePageViews = function () {
 const init = function () {
     initUserMenuList();
     initLocalStoragePageViews();
+    if (window.screen.height < 768 || window.screen.width < 1366) {
+        ElMessage.warning("当前管理系统屏幕分辨率最佳体验不低于1366*768!");
+    }
 };
 
 init();
@@ -45,18 +53,12 @@ init();
 <style scoped lang="less">
 .main {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     position: relative;
     display: flex;
-    min-width: 1366px;
+    min-width: 1360px;
     min-height: 650px;
     padding-top: 45px;
-
-    .side-bar {
-        width: 224px;
-        height: 100%;
-        flex-shrink: 0;
-    }
 
     .page-content {
         flex: 1;

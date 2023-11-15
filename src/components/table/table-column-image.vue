@@ -37,9 +37,9 @@ const previewImgList = computed(() => {
     if (!props.value) return null;
     if (Array.isArray(props.value)) {
         return props.value;
-    } else {
+    } 
         return props.separator ? props.value.split(props.separator) : [props.value];
-    }
+    
 });
 </script>
 <style lang="less" scoped>

@@ -3,11 +3,12 @@
  * 时间：2022-02-28
  * 页面视图管理
  */
-import { App } from "/#/app";
+import type { App } from "/#/app";
 import { defineStore } from "pinia";
-import { randomId } from "@/utils/generate";
-import { changeUrlParameter } from "@/utils/url";
-import { Router, useRouter } from "vue-router";
+import { randomId } from "@yujinjin/utils";
+import { changeUrlParameter } from "@yujinjin/utils";
+import type { Router} from "vue-router";
+import { useRouter } from "vue-router";
 
 export default defineStore("pageViews", {
     state: () => ({

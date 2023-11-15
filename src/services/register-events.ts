@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-07 10:58:10
+ * @最后修改时间: 2023-10-30 10:04:43
  * @项目的路径: \vue-manager-system\src\services\register-events.ts
  * @描述: 注册全局事件
  */
 import { eventsStore } from "@/stores";
-import { Router } from "vue-router";
+import type { Router } from "vue-router";
 
 export default function () {
     const store = eventsStore();
@@ -25,12 +25,13 @@ export default function () {
         router.push({ name: "login" });
     };
 
-    // 注册全局事件
+    // 注册跳转登录全局事件
     store.on({
         eventName: "gotoLogin",
         callback: gotoLogin
     });
 
+    // 注册跳转登出全局事件
     store.on({
         eventName: "gotoLogout",
         callback: gotoLogout

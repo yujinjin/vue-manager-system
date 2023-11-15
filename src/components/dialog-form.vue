@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 15:19:24
+ * @最后修改时间: 2023-11-15 16:34:01
  * @项目的路径: \vue-manager-system\src\components\dialog-form.vue
  * @描述: form 弹窗组件
 -->
@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { useSlots, ref, watch } from "vue";
 import type { Ref, PropType } from "vue";
-import type { DialogProps } from "element-plus";
+import type { DialogProps, FormValidateCallback } from "element-plus";
 import type { NotReadonly } from "/#/global";
 import type { Components } from "/#/components";
 
@@ -165,6 +165,10 @@ defineExpose({
     // 获取form Ref
     getFormRef: function () {
         return inputFormRef.value?.getFormRef();
+    },
+    // 表单验证
+    validate(callback?: FormValidateCallback) {
+        return inputFormRef.value?.validate(callback);
     }
 });
 </script>
@@ -179,7 +183,9 @@ defineExpose({
 
     .el-dialog__footer {
         padding: 8px 20px;
-        box-shadow: 0px -1px 0px 0px #f5f5f5, 0px 1px 30px 0px rgba(0, 21, 41, 0.12);
+        box-shadow:
+            0px -1px 0px 0px #f5f5f5,
+            0px 1px 30px 0px rgba(0, 21, 41, 0.12);
 
         .el-button {
             min-width: 80px;
