@@ -6,53 +6,50 @@
 import type { App } from "/#/app";
 import { defineStore } from "pinia";
 import { randomId } from "@yujinjin/utils";
-import { changeUrlParameter } from "@yujinjin/utils";
-import type { Router} from "vue-router";
-import { useRouter } from "vue-router";
+import { isExternalLink } from "@/utils/index";
+import { externalRoutePath, innerRoutePath } from "@/routers";
+
 
 export default defineStore("pageViews", {
     state: () => ({
-        currentVisiteIndex: -1, // 当前正在访问的页面视图索引
+        currentVisiteIndex: 0, // 当前正在访问的页面视图索引
         visitedViews: [] as App.PageView[] // 当前已经访问的页面视图列表
     }),
     actions: {
         /**
          * 通过点击菜单打开页面路由
-         * @param menuId 菜单ID
-         * @param menuName 菜单名称
-         * @param menuUrl 菜单URL
+         * @param object { id: 菜单ID, name: 菜单名称, url: 菜单URL, routePath: 路由路径, externalLink: 是否外链 }
          */
-        openPageByMenu({ menuId, menuName, menuUrl }: { menuId: string; menuName: string; menuUrl: string }) {
-            const findVisiteIndex = this.visitedViews.findIndex(item => item.menuId === menuId);
+        openPageByMenu({ id, name, url, routePath = "", externalLink = false }: { id: string; name: string; url: string, routePath?: string, externalLink?: boolean }) {
+            const findVisiteIndex = this.visitedViews.findIndex(item => item.menuId === id);
             if (findVisiteIndex === -1) {
+                if(!routePath) {
+                    // 如果当前菜单没有传地址
+                    externalLink = isExternalLink(url);
+                    if(externalLink) {
+                        routePath = externalRoutePath({ menuId: id });
+                    } else {
+                        routePath = innerRoutePath(url, { menuId: id })
+                    }
+                }
                 const pageView: App.PageView = {
                     id: randomId(),
-                    menuId,
-                    routeName: "",
-                    routePath: "",
-                    title: menuName,
-                    fullPath: menuUrl,
-                    isIframe: !/^\/\w{2}/.test(menuUrl) && menuUrl.indexOf(config.localDomain + "/") === -1,
+                    menuId: id,
+                    routePath,
+                    title: name,
+                    fullPath: url,
+                    isIframe: externalLink,
                     isFixed: false
                 };
-                const router: Router = useRouter();
-                if (pageView.isIframe) {
-                    pageView.routeName = "external";
-                    pageView.routePath = router.resolve({ name: "external", params: { id: pageView.id }, query: { fromMenuId: menuId } }).fullPath;
-                } else {
-                    menuUrl = changeUrlParameter(/^\/\w{2}/.test(menuUrl) ? menuUrl : menuUrl.substring(config.localDomain.length), "menuId", menuId);
-                    pageView.routeName = router.resolve(menuUrl).name?.toString() || "";
-                    pageView.routePath = menuUrl;
-                }
                 this.visitedViews.push(pageView);
-                this.currentVisiteIndex = this.visitedViews.length;
+                this.currentVisiteIndex = this.visitedViews.length - 1;
             } else {
                 this.currentVisiteIndex = findVisiteIndex;
             }
         },
 
         /**
-         * 通过iframe外部页面打开页面
+         * 通过iframe外部页面打开（展示）页面
          * @param pageId 新开一个页面ID, 可不传。如果有传值判断当前已经打开的 tab 页里是否存在该 ID，存在的情况展示该 tab 页,不存在就新增一个 tab 页
          * @param fromPageId 来自当前页面的ID
          * @param title 页面标题
@@ -72,40 +69,35 @@ export default defineStore("pageViews", {
             const pageView: App.PageView = {
                 id: pageId || randomId(),
                 fromPageId,
-                routeName: "",
                 routePath: "",
                 title,
                 fullPath: url,
-                isIframe: !/^\/\w{2}/.test(url) && url.indexOf(config.localDomain + "/") === -1,
+                isIframe: isExternalLink(url),
                 isFixed: false
             };
-            const router: Router = useRouter();
             if (pageView.isIframe) {
-                pageView.routeName = "external";
-                pageView.routePath = router.resolve({ name: "external", params: { id: pageView.id }, query: { fromPageId } }).fullPath;
+                pageView.routePath = externalRoutePath({ pageId: pageView.id });
             } else {
-                url = changeUrlParameter(/^\/\w{2}/.test(url) ? url : url.substring(config.localDomain.length), "pageId", pageView.id);
-                url = changeUrlParameter(url, "fromPageId", fromPageId);
-                pageView.routeName = router.resolve(url).name?.toString() || "";
-                pageView.routePath = url;
+                pageView.routePath = innerRoutePath(url, { pageId: pageView.id })
             }
             // 当前iframe所在是tab位置索引后面新增一个tab
-            this.visitedViews.splice(findPageIndex, 0, pageView);
+            this.visitedViews.splice(findPageIndex + 1, 0, pageView);
             this.currentVisiteIndex = findPageIndex + 1;
         },
         /**
-         * 关闭所有的page
+         * 关闭所有的page(除固定的page外)
          */
         closeAllPageViews() {
-            this.visitedViews = [];
+            this.visitedViews = this.visitedViews.filter(item => item.isFixed);
         },
         /**
-         * 关闭除此之外所有的page
-         * @param index 除此的page索引
+         * 关闭除此之外所有的page(除固定的page外)
+         * @param index 除此之外的page索引
          */
         closeOtherPageViews(index: number) {
-            this.visitedViews = [this.visitedViews[index]];
-            this.currentVisiteIndex = 0;
+            const currentPageId = this.visitedViews[index].id;
+            this.visitedViews = this.visitedViews.filter((item, i) => item.isFixed || index === i);
+            this.currentVisiteIndex = this.visitedViews.findIndex(item => item.id === currentPageId);
         },
         /**
          * 关闭当前的page
@@ -113,20 +105,22 @@ export default defineStore("pageViews", {
          */
         closePageViews(index: number) {
             this.visitedViews.splice(index, 1);
-            if (this.visitedViews.length === 0) {
-                this.currentVisiteIndex = -1;
-            } else if (index === 0) {
-                this.currentVisiteIndex = 0;
-            } else {
-                this.currentVisiteIndex = index - 1;
+            if(this.currentVisiteIndex === index) {
+                if (this.visitedViews.length === 0) {
+                    this.currentVisiteIndex = -1;
+                } else if (index === 0) {
+                    this.currentVisiteIndex = 0;
+                } else {
+                    this.currentVisiteIndex = index - 1;
+                }
             }
         },
         /**
          * 切换page的固定状态
          * @param index 当前的page索引
          */
-        toggleFixStatus(state, index: number) {
-            state.visitedViews[index].isFixed = !state.visitedViews[index].isFixed;
+        toggleFixStatus(index: number) {
+            this.visitedViews[index].isFixed = !this.visitedViews[index].isFixed;
         }
     }
 });

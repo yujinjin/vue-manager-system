@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-31 16:26:23
+ * @最后修改时间: 2023-12-25 17:00:44
  * @项目的路径: \vue-manager-system\.eslintrc.js
  * @描述: eslingt 配置
  */
@@ -33,7 +33,7 @@ module.exports = defineConfig({
     extends: ["eslint:recommended", "plugin:vue/vue3-essential", "@vue/eslint-config-typescript/recommended", "@vue/eslint-config-prettier", "@vue/eslint-config-prettier/skip-formatting", "plugin:promise/recommended"],
     rules: {
         // 允许调用 console 对象的方法
-        "no-console": "error",
+        "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
         // 是否使用 debugger
         "no-debugger": "error",
         // 禁止在循环中 出现 await
@@ -66,7 +66,7 @@ module.exports = defineConfig({
         // 强制在 parseInt() 使用基数参数
         "radix": "error",
         // 禁止在变量定义之前使用它们
-        "no-use-before-define": "error",
+        "no-use-before-define": "off",
         // 强制使用骆驼拼写法命名约定
         "camelcase": ["error", { properties: "always" }],
         // 强制块语句的最大可嵌套深度

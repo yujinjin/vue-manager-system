@@ -192,7 +192,11 @@ const extendButtonClickHandle = async function (button) {
         return;
     }
     button.loading = true;
-    await button.click();
+    try {
+        await button.click();
+    } catch (error) {
+        logs.error(error);
+    }
     button.loading = false;
 };
 

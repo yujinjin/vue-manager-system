@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-05 16:24:22
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-27 11:51:32
+ * @最后修改时间: 2023-12-14 11:20:02
  * @项目的路径: \vue-manager-system\src\stores\storage.ts
  * @描述: 本地存储数据管理
  */
@@ -163,6 +163,15 @@ export default defineStore("storage", {
                     expiredTime: new Date().getTime() + 24 * 60 * 60 * 1000
                 });
             }
+        },
+        // 获取固定菜单数据列表(这里不做缓存)
+        getFixedMenuData(): string[] | undefined {
+            return getValue(0, "fixedMenuList");
+        },
+        // 设置固定菜单数据列表(这里不做缓存)
+        setFixedMenuData(menuIdList?: string[]) {
+            // 删除本地固定菜单数据
+            setValue(0, "fixedMenuList", menuIdList);
         }
     }
 });

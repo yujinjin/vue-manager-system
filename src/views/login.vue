@@ -111,7 +111,7 @@
 <script setup lang="ts">
 import type { Ref } from "vue";
 import { onUnmounted, ref, reactive, watch } from "vue";
-import type { RouteLocationNormalizedLoaded, Router} from "vue-router";
+import type { RouteLocationNormalizedLoaded, Router } from "vue-router";
 import { useRoute, useRouter } from "vue-router";
 import { storageStore } from "@/stores/";
 import QRCode from "qrcode";
@@ -236,7 +236,7 @@ const sendValidateCodeHandle = async function () {
 
 // 跳转主页
 const goPage = function () {
-    const routeName: string = (route.query.toName || "home") as string;
+    const routeName: string = (route.query.toName || "welcome") as string;
     let query = {};
     let params = {};
     if (route.query.toQuery) {

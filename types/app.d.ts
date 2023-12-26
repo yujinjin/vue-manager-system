@@ -80,10 +80,10 @@ declare namespace App {
         /** 来自页面视图ID(如果当前页面通过已经点开的页面内部触发的) */
         fromPageId?: string;
 
-        /** 路由的名称 */
-        routeName: string;
+        // 路由的名称(考虑到useRouter只能适用在组件setup里而且只是用来判断路由的keep alive，所以这里不在保存而是放在home里动态生成)
+        // routeName: string;
 
-        /** 当前页面路由地址 http://xxxx.com/#/XXX?fromMenuId(来自菜单ID参数)|fromPageId（来自页面ID参数） */
+        /** 当前页面路由地址 /#/XXX?menuId(来自菜单ID参数)|pageId（来自页面ID参数） */
         routePath: string;
 
         /** 页面的标题 */

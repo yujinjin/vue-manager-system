@@ -1,3 +1,11 @@
+<!--
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2023-10-27 18:13:47
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2023-11-17 17:49:16
+ * @项目的路径: \vue-manager-system\src\components\input-field.vue
+ * @描述: 表单输入字段组件
+-->
 <template>
     <!-- 自定义插件，插槽 -->
     <slot v-if="field.slot"></slot>
@@ -23,7 +31,7 @@
     </el-select>
 
     <!-- checkbox-select -->
-    <checkbox-select v-else-if="field.type === 'checkboxSelect'" :modelValue="field.value" @update:modelValue="changeValue" v-bind="field.props || {}" v-on="field.events || {}" />
+    <checkbox-select v-else-if="field.type === 'checkboxSelect'" :modelValue="modelValue" @update:modelValue="changeValue" v-bind="field.props || {}" v-on="field.events || {}" />
 
     <!-- checkbox -->
     <el-checkbox-group v-else-if="field.type === 'checkbox'" :modelValue="modelValue" @update:modelValue="value => changeValue(value)" v-bind="field.props || {}" v-on="field.events || {}">
@@ -57,7 +65,7 @@ import type { PropType } from "vue";
 
 defineProps({
     modelValue: {
-        type: [String, Number, Object, Boolean, Array]
+        type: [String, Number, Object, Boolean, Array] as PropType<any>
     },
     field: {
         type: Object as PropType<Components.InputFormField>,

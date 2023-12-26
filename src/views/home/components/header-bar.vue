@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-16 13:53:57
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-15 16:14:56
+ * @最后修改时间: 2023-11-16 11:24:20
  * @项目的路径: \vue-manager-system\src\views\home\components\header-bar.vue
  * @描述: home 头部
 -->
@@ -114,6 +114,7 @@ const loginUserCommandHandle = function (command) {
     left: 0px;
     right: 0px;
     top: 0px;
+    z-index: 99;
 
     .left-inner {
         display: flex;

@@ -2,13 +2,16 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 16:36:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-09 10:57:50
+ * @最后修改时间: 2023-11-23 15:58:39
  * @项目的路径: \vue-manager-system\src\services\constants.ts
  * @描述: 常量集合
  */
 
 // 分页每页记录数
 export const PAGE_ITEMS = 50;
+
+// page tab 最多固定个数
+export const PAGE_TAB_FIXED_MAX_NUMBER = 5;
 
 // 查询表单中的组件默认属性
 export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES = {

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-31 16:06:49
+ * @最后修改时间: 2023-12-26 16:05:27
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
@@ -13,6 +13,7 @@
 import { storageStore, eventsStore } from "@/stores";
 import type { RouteRecordRaw, Router } from "vue-router";
 import { createRouter, createWebHistory } from "vue-router";
+import { changeUrlParameter } from "@yujinjin/utils";
 
 export default function (): Router {
     const dataStorages = storageStore();
@@ -22,11 +23,34 @@ export default function (): Router {
         routes: <Array<RouteRecordRaw>>[
             {
                 path: "/",
-                name: "home", // 首页
-                meta: {
-                    requireAuth: true
-                },
-                component: () => import("@views/home/index.vue")
+                component: () => import("@views/home/index.vue"),
+                children: [
+                    {
+                        name: "welcome",
+                        path: "/",
+                        component: () => import("@views/others/welcome.vue")
+                    },
+                    {
+                        name: "play-input",
+                        path: "/play-input",
+                        component: () => import("@views/plays/input.vue")
+                    },
+                    {
+                        name: "play-details",
+                        path: "/play-details",
+                        component: () => import("@views/plays/details.vue")
+                    },
+                    {
+                        name: "external",
+                        path: "/external/:menuId(\\d+)?",
+                        component: () => import("@views/others/external.vue")
+                    },
+                    {
+                        name: "transit",
+                        path: "/transit",
+                        component: () => import("@views/others/transit.vue")
+                    }
+                ]
             },
             {
                 path: "/login",
@@ -66,10 +90,41 @@ export default function (): Router {
 }
 
 /**
- * 外部链接路由
- * @params id 参数
- * @params params 参数
+ * 外部链接路由路径
+ * @params menuId 菜单ID
+ * @params pageId 页面ID
  */
-export function externalRoute(id: string, fromMenuId: string) {
-    return { name: "external", params: { id }, query: { fromMenuId } };
+export function externalRoutePath({ menuId, pageId } : { menuId?: string, pageId?: string}) {
+    if(menuId) {
+        return "/external/" + menuId;
+    } 
+    return "/external?pageId=" + pageId;
+}
+
+/**
+ * 中转页链接路由路径
+ * @params menuId 菜单ID
+ * @params pageId 页面ID
+ */
+export function transitRoutePath({ pageIndex, fromRoutePath } : { pageIndex?: number, fromRoutePath?: string}) {
+    if(pageIndex || pageIndex === 0 ) {
+        return "/transit?fromPageIndex=" + pageIndex;
+    } 
+    return "/external?fromRoutePath=" + fromRoutePath;
+}
+
+/**
+ * 内部链接路由路径
+ * @params url 当前地址
+ * @params menuId 菜单ID
+ * @params pageId 页面ID
+ */
+export function innerRoutePath(url: string, { menuId, pageId } : { menuId?: string, pageId?: string}) {
+    url = url.replace(new RegExp("^http(s?)://" + window.location.host), "");
+    if(menuId) {
+        url = changeUrlParameter(url, "menuId", menuId);
+    } else {
+        url = changeUrlParameter(url, "pageId", pageId);
+    }
+    return url;
 }

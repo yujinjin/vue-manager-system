@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 14:33:59
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-07 09:54:30
+ * @最后修改时间: 2023-12-20 14:24:30
  * @项目的路径: \vue-manager-system\mock\data\menus.js
  * @描述: 用户菜单列表
  * { id: 菜单ID, parentId: 父级菜单ID(null表示顶级菜单), name: 菜单名称, icons: 菜单图标, url: 菜单地址(可为null), moduleCode: 菜单所属模块code }
@@ -352,7 +352,7 @@ module.exports = [
         parentId: null,
         name: "系统管理",
         icons: "icomoon-cog",
-        code: "100000",
+        code: "15",
         url: null,
         moduleCode: "BASE",
         status: 1
@@ -394,6 +394,66 @@ module.exports = [
         icons: "icomoon-menu",
         code: "1504",
         url: "/system/menus",
+        moduleCode: "BASE",
+        status: 1
+    },
+    {
+        id: "16",
+        parentId: null,
+        name: "路由测试",
+        icons: "icomoon-connection",
+        code: "16",
+        url: null,
+        moduleCode: "BASE",
+        status: 1
+    },
+    {
+        id: "1601",
+        parentId: "16",
+        name: "缓存路由",
+        icons: "icomoon-play",
+        code: "1601",
+        url: "/play-input",
+        moduleCode: "BASE",
+        status: 1
+    },
+    {
+        id: "1602",
+        parentId: "16",
+        name: "详情路由1",
+        icons: "icomoon-book",
+        code: "1602",
+        url: "/play-details?id=0001",
+        moduleCode: "BASE",
+        status: 1
+    },
+    {
+        id: "1603",
+        parentId: "16",
+        name: "详情路由2",
+        icons: "icomoon-book",
+        code: "1603",
+        url: "/play-details?id=0003",
+        moduleCode: "BASE",
+        status: 1
+    },
+    {
+        id: "1604",
+        parentId: "16",
+        name: "外链路由1",
+        icons: "icomoon-bell",
+        code: "1604",
+        url: "http://10.96.144.203:8080/",
+        moduleCode: "BASE",
+        status: 1
+    },
+    {
+        id: "1605",
+        parentId: "16",
+        name: "外链路由2",
+        icons: "icomoon-stopwatch",
+        code: "1605",
+        url: "http://10.96.144.203:8080/about",
         moduleCode: "BASE",
         status: 1
     }

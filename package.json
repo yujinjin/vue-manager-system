@@ -46,7 +46,9 @@
         "qrcode": "^1.5.3",
         "cropperjs": "^1.6.1",
         "quill": "^1.3.7",
-        "@yujinjin/utils": "^0.0.2"
+        "@yujinjin/utils": "^0.0.2",
+        "@better-scroll/core": "^2.5.1",
+        "@better-scroll/mouse-wheel": "^2.5.1"
     },
     "devDependencies": {
         "alphabetjs": "^0.1.4",

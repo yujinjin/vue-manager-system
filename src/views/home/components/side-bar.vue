@@ -1,12 +1,12 @@
 <template>
     <div class="side-bar" :class="{ collapse: menuCollapseState }" v-loading="isLoadingForMenus" element-loading-text="加载菜单中...">
         <div class="search-box" v-show="!menuCollapseState">
-            <el-select v-model="searchSelectValue" filterable remote default-first-option value-key="id" placeholder="搜索菜单" :remote-method="searchMenuHandle">
+            <el-select v-model="searchSelectValue" filterable remote default-first-option value-key="id" placeholder="搜索菜单" :remote-method="searchMenuHandle" @change="menuSelectChange">
                 <el-option v-for="item in searchMenuList" :key="item.value.id" :label="item.label" :value="item.value" />
             </el-select>
         </div>
         <el-scrollbar class="menus-wrapper" ref="scrollbarRef">
-            <el-menu :default-active="currentMenuId" :collapse="menuCollapseState" @select="gotoPage">
+            <el-menu :default-active="currentMenuId" :collapse="menuCollapseState" @select="selectedMenuHandle">
                 <menu-list :menuTreeData="menuTreeData" />
             </el-menu>
         </el-scrollbar>
@@ -14,27 +14,26 @@
 </template>
 <script setup lang="ts">
 import type { System } from "/#/modules/system";
-import { ref } from "vue";
-import { ElScrollbar } from "element-plus";
+import type { Router } from "vue-router";
+import { ref, watch } from "vue";
+import { ElMessageBox, ElScrollbar } from "element-plus";
 import systemAPI from "@api/system";
 import menuList from "./menu-list.vue";
-
-// import type { Ref, ComputedRef } from "vue";
-// import { Router, useRouter } from "vue-router";
-// import { storageStore, eventsStore } from "@/stores";
-
-// 全局路由对象
-// const router: Router = useRouter();
-
-// vuex
-// const storageData = storageStore();
+import { pageViewsStore } from "@/stores";
+import { useRouter } from "vue-router";
 
 defineProps({
-    menuCollapseState: Boolean,
-    currentMenuId: String
+    menuCollapseState: Boolean
 });
 
-// const emits = defineEmits([""])
+const emits = defineEmits(["loaded"]);
+
+const pageViews = pageViewsStore();
+
+const router: Router = useRouter();
+
+// 当前选中的菜单ID
+const currentMenuId = ref();
 
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>();
 
@@ -54,11 +53,23 @@ const searchMenuList = ref<
 // 菜单树数据
 const menuTreeData = ref<System.MenuTree[]>([]);
 
+// 监控当前页面tab page 的变化
+watch(
+    () => pageViews.visitedViews[pageViews.currentVisiteIndex]?.id,
+    () => {
+        if (pageViews.visitedViews[pageViews.currentVisiteIndex]?.menuId) {
+            currentMenuId.value = pageViews.visitedViews[pageViews.currentVisiteIndex].menuId;
+        }
+    }
+);
+
 // 初始化菜单树数据
 const initMenuTreeData = async function () {
     const menuTreeList: Array<Record<string, any>> = (await systemAPI.queryLoginUserMenus<Array<Record<string, any>>>()) as Array<Record<string, any>>;
     isLoadingForMenus.value = false;
     if (!menuTreeList || menuTreeList.length === 0) {
+        // 当前用户还没有配置任何菜单
+        ElMessageBox.alert("当前用户还没有配置任何菜单信息，请联系系统管理员", "提示", { type: "warning" });
         return;
     }
     const tempMenuTreeList: System.MenuTree[] = [];
@@ -70,8 +81,6 @@ const initMenuTreeData = async function () {
             icons: item.icons,
             url: item.url,
             moduleCode: item.moduleCode,
-            isActive: false,
-            isOpen: false,
             childList: []
         };
         if (!item.parentId) {
@@ -94,7 +103,7 @@ const initMenuTreeData = async function () {
         }
         newMenuList = tempNewMenuList;
     }
-
+    emits("loaded", menuTreeData.value);
     // // 查找父级菜单
     // const findParentMenu = function(menuList: MenuTree[], menuTree: MenuTree): MenuTree | null {
     //     if(menuList.length === 0) {
@@ -116,33 +125,163 @@ const searchMenuHandle = function (query: string) {
     if (menuTreeData.value.length === 0) {
         return;
     }
+    logs.debug("..........searchMenuHandle");
     // 匹配菜单名称
     const matchMenuTreeName = function (menuList: System.MenuTree[], menuNames: Array<string>, isAllInsert: boolean) {
         menuList.forEach(menu => {
-            if (menu.childList.length > 0) {
-                menuNames = menuNames.slice(0);
-                menuNames.push(menu.name);
-                matchMenuTreeName(menu.childList, menuNames, isAllInsert || menu.name.includes(query));
-            } else if (isAllInsert || menu.name.includes(query)) {
-                searchMenuList.value.push({ label: menuNames.join(" / "), value: menu });
+            if (menu.childList.length > 0 || isAllInsert || menu.name.includes(query)) {
+                const newMenuNames = menuNames.slice(0);
+                newMenuNames.push(menu.name);
+                if (menu.childList.length > 0) {
+                    matchMenuTreeName(menu.childList, newMenuNames, isAllInsert || menu.name.includes(query));
+                } else {
+                    searchMenuList.value.push({ label: newMenuNames.join(" / "), value: menu });
+                }
             }
         });
     };
     searchMenuList.value = [];
-    matchMenuTreeName(menuTreeData.value, [], false);
+    query = query?.trim();
+    if (query) {
+        matchMenuTreeName(menuTreeData.value, [], false);
+    }
 };
 
-// 获取菜单链接
-const gotoPage = function (key: string, keyPath: string[]) {
-    logs.info(key, keyPath);
+// 菜单链接跳转
+const gotoPage = function (menu: System.MenuTree) {
+    pageViews.openPageByMenu({ id: menu.id, url: menu.url, name: menu.name });
+    router.push(pageViews.visitedViews[pageViews.currentVisiteIndex].routePath);
+};
+
+// 菜单选择变化
+const menuSelectChange = function (menu: System.MenuTree) {
+    searchSelectValue.value = undefined;
+    gotoPage(menu);
+};
+
+// 菜单激活回调
+const selectedMenuHandle = function (key: string, keyPath: string[]) {
+    let findMenu = menuTreeData.value.find(menu => menu.id === keyPath[0]);
+    let i = 1;
+    while (findMenu && i < keyPath.length) {
+        findMenu = findMenu.childList.find(menu => menu.id === keyPath[i]);
+        i++;
+    }
+    if (findMenu) {
+        gotoPage(findMenu);
+    }
 };
 
 initMenuTreeData();
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .side-bar {
     width: 224px;
     height: 100%;
     flex-shrink: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.1);
+    transition: all 300ms ease-in-out;
+
+    &.collapse {
+        width: 58px;
+    }
+
+    // &::after {
+    //     content: "";
+    //     position: absolute;
+    //     right: 1px;
+    //     top: 0px;
+    //     bottom: 0px;
+    //     width: 1px;
+    //     background-color: #fff;
+    //     box-shadow: 1px 0 0 0 rgba(0,0,0,.01);
+    //     z-index: 1;
+    // }
+
+    .search-box {
+        width: 100%;
+        padding: 10px;
+
+        :deep(.el-select) {
+            width: 100%;
+
+            .el-input__wrapper {
+                border-radius: 4px;
+            }
+        }
+    }
+
+    .menus-wrapper {
+        flex: 1;
+        // padding-right: 4px;
+
+        :deep(.el-menu) {
+            border-right: 0px;
+            --el-menu-base-level-padding: 12px;
+            --el-menu-level-padding: 12px;
+            --el-menu-icon-width: 24px;
+            --el-menu-item-height: 44px;
+            --el-menu-item-font-size: 14px;
+            --el-menu-sub-item-height: 44px;
+
+            .el-sub-menu__title,
+            .el-menu-item {
+                .el-icon {
+                    color: #909399;
+                    font-size: 14px;
+                }
+                .menu-text {
+                    width: 100%;
+                    display: inline-block;
+                    white-space: nowrap;
+                    word-wrap: normal;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    text-align: left;
+                    color: #303133;
+                }
+
+                &:hover {
+                    .menu-text,
+                    .el-icon {
+                        color: var(--el-color-primary);
+                    }
+                }
+
+                &.is-active {
+                    background-color: var(--el-menu-hover-bg-color);
+
+                    &::after {
+                        position: absolute;
+                        content: "";
+                        z-index: 1;
+                        right: 0px;
+                        top: 0px;
+                        bottom: 0px;
+                        width: 1px;
+                        background-color: #15c359;
+                    }
+
+                    .menu-text,
+                    .el-icon {
+                        color: var(--el-color-primary);
+                    }
+                }
+            }
+        }
+    }
+}
+</style>
+<style lang="scss">
+.side-bar-menu-popper {
+    --el-menu-base-level-padding: 12px;
+    --el-menu-level-padding: 12px;
+    --el-menu-icon-width: 24px;
+    --el-menu-item-height: 44px;
+    --el-menu-item-font-size: 12px;
+    --el-menu-sub-item-height: 44px;
 }
 </style>
