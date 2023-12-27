@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-26 16:05:27
+ * @最后修改时间: 2023-12-27 15:04:43
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
@@ -29,6 +29,11 @@ export default function (): Router {
                         name: "welcome",
                         path: "/",
                         component: () => import("@views/others/welcome.vue")
+                    },
+                    {
+                        name: "system-modules",
+                        path: "/system/modules",
+                        component: () => import("@views/system/modules/index.vue")
                     },
                     {
                         name: "play-input",

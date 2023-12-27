@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 13:55:10
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-15 16:56:56
+ * @最后修改时间: 2023-12-27 15:27:03
  * @项目的路径: \vue-manager-system\mock\system.js
  * @描述: 系统模块mock数据
  */
@@ -78,8 +78,11 @@ module.exports = function (app) {
     });
 
     // 查询模块列表
-    app.get("/system/queryModulesList", function (request, response) {
-        response.json(wrapResponse(modules));
+    app.get("/system/queryModuleList", function (request, response) {
+        response.json(wrapResponse({
+            total: modules.length,
+            rows: modules
+        }));
     });
 
     // 新增或修改模块

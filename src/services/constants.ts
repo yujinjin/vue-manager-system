@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 16:36:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-23 15:58:39
+ * @最后修改时间: 2023-12-27 11:52:10
  * @项目的路径: \vue-manager-system\src\services\constants.ts
  * @描述: 常量集合
  */
@@ -10,8 +10,38 @@
 // 分页每页记录数
 export const PAGE_ITEMS = 50;
 
-// page tab 最多固定个数
-export const PAGE_TAB_FIXED_MAX_NUMBER = 5;
+// 常用操作CODE列表
+export const HANDLE_CODES = {
+    CREATE: "CREATE", // 创建
+    DELETE: "DELETE", // 删除
+    UPDATE: "UPDATE", // 更新
+    QUERY: "QUERY", // 查询
+    IMPORT: "IMPORT", // 导入
+    LOGS: "LOGS", // 日志
+    EXPORT: "EXPORT", // 导出
+    DOWNLOAD: "DOWNLOAD", // 下载
+    RESET: "RESET", // 重置
+    DECORATION: "DECORATION",
+    ONSHELF: "ONSHELF", // 上线
+    OFFSHELF: "OFFSHELF", // 下线
+    ENABLE: "ENABLE", // 启用
+    DISABLE: "DISABLE", // 禁用
+    SEARCH: "SEARCH", // 查看
+    CUSTOM: "CUSTOM", // 自定义列
+    AUTH: "AUTH", // 授权
+    SUBMIT: "SUBMIT", // 提交
+    COPY: "COPY", //复制
+    PASTE: "PASTE", //粘贴
+    PASS: "PASS", //通过
+    REFUSE: "REFUSE", //拒绝
+    MONITOR: "MONITOR", //监控
+    BATCHDELETE: "BATCHDELETE", // 批量删除
+    BATCHEXAMINE: "BATCHEXAMINE", //批量审核
+    BATCHUPDATE: "BATCHUPDATE", //批量修改
+    BATCHSUBMIT: "BATCHSUBMIT", //批量提交
+    BATCHRESET: "BATCHRESET", //批量撤回
+    BATCHAUTH: "BATCHAUTH" //批量授权
+};
 
 // 查询表单中的组件默认属性
 export const SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES = {

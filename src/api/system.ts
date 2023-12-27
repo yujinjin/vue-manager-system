@@ -102,12 +102,12 @@ export default {
     /**
      * 查询系统模块列表
      */
-    queryModulesList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryModuleList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
         return request(
             Object.assign(
                 {
-                    url: "/system/queryModulesList",
-                    data: inputData,
+                    url: "/system/queryModuleList",
+                    params: inputData,
                     method: "GET"
                 },
                 ajaxOptions || {}

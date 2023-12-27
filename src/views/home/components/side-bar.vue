@@ -182,24 +182,24 @@ initMenuTreeData();
     position: relative;
     display: flex;
     flex-direction: column;
-    box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.1);
+    position: relative;
     transition: all 300ms ease-in-out;
 
     &.collapse {
         width: 58px;
     }
 
-    // &::after {
-    //     content: "";
-    //     position: absolute;
-    //     right: 1px;
-    //     top: 0px;
-    //     bottom: 0px;
-    //     width: 1px;
-    //     background-color: #fff;
-    //     box-shadow: 1px 0 0 0 rgba(0,0,0,.01);
-    //     z-index: 1;
-    // }
+    &::after {
+        content: "";
+        position: absolute;
+        right: 1px;
+        top: 0px;
+        bottom: 0px;
+        width: 1px;
+        background-color: #fff;
+        box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.1);
+        z-index: 1;
+    }
 
     .search-box {
         width: 100%;

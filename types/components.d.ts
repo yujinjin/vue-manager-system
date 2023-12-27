@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:34:02
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-15 16:36:43
+ * @最后修改时间: 2023-12-27 14:21:11
  * @项目的路径: \vue-manager-system\types\components.d.ts
  * @描述: 自定义组件声明
  */
@@ -256,6 +256,7 @@ declare namespace Components {
         pageName?: string;
     }
 
+    /**  搜索页组件属性 */
     interface SearchPage {
         /** 初始化时正在加载(用于dataTable组件初始化是否默认查询，适用场景：筛选项中需要先查询数据后来初始化筛选项值) */
         isLoadingForInit?: boolean;
@@ -326,5 +327,23 @@ declare namespace Components {
 
         // 表单验证
         validate: (callback?: FormValidateCallback) => Promise<void>
+    }
+
+    /** 搜索页实例 */
+    interface SearchPageRef {
+        // 搜索查询函数
+        query: (isInit?: boolean) => Promise<any>;
+
+        // 获取当前搜索表单实时值
+        getSearchingValue: () => Record<string, any>;
+
+        // 获取当前已经搜索出来的结果值，与getSearchFormValue区别是当前已经用它查询出来结果的搜索表单值
+        getSearchedValue: () => Record<string, any>;
+
+        // 修改当前form字段的属性
+        changeFormFields: (callback: (formFields: Components.InputFormField[]) => void) => void;
+
+        // 修改当前生成的button按钮值
+        changeButtons: (callback: (actionButtons: Components.FormButton[]) => void) => void;
     }
 }
