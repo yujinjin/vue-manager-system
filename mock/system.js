@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 13:55:10
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-27 15:27:03
+ * @最后修改时间: 2024-01-09 09:39:16
  * @项目的路径: \vue-manager-system\mock\system.js
  * @描述: 系统模块mock数据
  */
@@ -23,7 +23,7 @@ const usersRoles = require("./data/users-roles");
 
 module.exports = function (app) {
     // 登录
-    app.get("/system/login", function (request, response) {
+    app.post("/system/login", function (request, response) {
         response.json(
             wrapResponse({
                 "token": "@word(120)",
@@ -77,12 +77,31 @@ module.exports = function (app) {
         response.json(wrapResponse(null, true));
     });
 
+    // 分页查询模块列表
+    app.get("/system/queryPageModuleList", function (request, response) {
+        const pageNo = parseInt(request.query.pageNo || "1", 10);
+        const pageSize = parseInt(request.query.pageSize || "50", 10);
+        const queryList = modules.filter(item => {
+            if(request.query.moduleName && !item.name.includes(request.query.moduleName) && !item.code.toLowerCase().includes(request.query.moduleName.toLowerCase())) {
+                return false;
+            }
+            return true;
+        });
+        response.json(wrapResponse({
+            total: queryList.length,
+            rows: queryList.slice((pageNo - 1) * pageSize, pageNo * pageSize)
+        }));
+    });
+
     // 查询模块列表
     app.get("/system/queryModuleList", function (request, response) {
-        response.json(wrapResponse({
-            total: modules.length,
-            rows: modules
-        }));
+        const queryList = modules.filter(item => {
+            if(request.query.moduleName && !item.name.includes(request.query.moduleName) && !item.code.toLowerCase().includes(request.query.moduleName.toLowerCase())) {
+                return false;
+            }
+            return true;
+        });
+        response.json(wrapResponse(queryList));
     });
 
     // 新增或修改模块
@@ -97,8 +116,8 @@ module.exports = function (app) {
 
     // 查询系统菜单列表
     app.get("/system/queryPageMenuList", function (request, response) {
-        const start = parseInt(request.query.start || "0", 10);
-        const length = parseInt(request.query.length || "50", 10);
+        const pageNo = parseInt(request.query.pageNo || "1", 10);
+        const pageSize = parseInt(request.query.pageSize || "50", 10);
         const status = request.query.status ? parseInt(request.query.status, 10) : null;
         const queryList = menus.filter(item => {
             if (request.query.code && !item.code.includes(request.query.code)) {
@@ -118,7 +137,7 @@ module.exports = function (app) {
         response.json(
             wrapResponse({
                 total: queryList.length,
-                rows: queryList.slice(start, length)
+                rows: queryList.slice((pageNo - 1) * pageSize, pageNo * pageSize)
             })
         );
     });
@@ -168,10 +187,10 @@ module.exports = function (app) {
         response.json(wrapResponse(null, true));
     });
 
-    // 查询角色列表
+    // 分页查询角色列表
     app.get("/system/queryPageRoleList", function (request, response) {
-        const start = parseInt(request.query.start || "0", 10);
-        const length = parseInt(request.query.length || "50", 10);
+        const pageNo = parseInt(request.query.pageNo || "1", 10);
+        const pageSize = parseInt(request.query.pageSize || "50", 10);
         const status = request.query.status ? parseInt(request.query.status, 10) : null;
         const queryList = roles.filter(item => {
             if (request.query.code && !item.code.includes(request.query.code)) {
@@ -191,8 +210,31 @@ module.exports = function (app) {
         response.json(
             wrapResponse({
                 total: queryList.length,
-                rows: queryList.slice(start, length)
+                rows: queryList.slice((pageNo - 1) * pageSize, pageNo * pageSize)
             })
+        );
+    });
+
+    // 查询角色列表
+    app.get("/system/queryRoleList", function (request, response) {
+        const status = request.query.status ? parseInt(request.query.status, 10) : null;
+        const queryList = roles.filter(item => {
+            if (request.query.code && !item.code.includes(request.query.code)) {
+                return false;
+            }
+            if (request.query.name && !item.name.includes(request.query.name)) {
+                return false;
+            }
+            if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
+                return false;
+            }
+            if ((status || status === 0) && item.status !== status) {
+                return false;
+            }
+            return true;
+        });
+        response.json(
+            wrapResponse(queryList)
         );
     });
 
@@ -243,20 +285,16 @@ module.exports = function (app) {
 
     // 分页查询系统用户列表
     app.get("/system/queryPageUserList", function (request, response) {
-        const start = parseInt(request.query.start || "0", 10);
-        const length = parseInt(request.query.length || "50", 10);
-        const status = request.query.status ? parseInt(request.query.status, 10) : null;
+        const pageNo = parseInt(request.query.pageNo || "1", 10);
+        const pageSize = parseInt(request.query.pageSize || "50", 10);
         const queryList = users.filter(item => {
-            if (request.query.loginName && !item.loginName.includes(request.query.loginName)) {
-                return false;
-            }
-            if (request.query.name && !item.name.includes(request.query.name)) {
+            if (request.query.name && !item.name.includes(request.query.name) && !item.loginName.includes(request.query.name)) {
                 return false;
             }
             if (request.query.email && !item.email.includes(request.query.email)) {
                 return false;
             }
-            if ((status || status === 0) && item.status !== status) {
+            if (request.query.status && item.status !== request.query.status) {
                 return false;
             }
             return true;
@@ -264,7 +302,7 @@ module.exports = function (app) {
         response.json(
             wrapResponse({
                 total: queryList.length,
-                rows: queryList.slice(start, length)
+                rows: queryList.slice((pageNo - 1) * pageSize, pageNo * pageSize)
             })
         );
     });
@@ -287,6 +325,28 @@ module.exports = function (app) {
 
     // 删除用户
     app.post("/system/deleteUser", function (request, response) {
+        response.json(wrapResponse(null, true));
+    });
+
+    // 修改用户锁定状态信息
+    app.post("/system/updateUserLockStatus", function (request, response) {
+        response.json(wrapResponse(null, true));
+    });
+
+    // 重置用户密码
+    app.post("/system/resetUerPassword", function (request, response) {
+        response.json(wrapResponse(null, true));
+    });
+
+    // 上传批量用户EXCEL(批量新增用户)
+    app.post("/system/uploadUsersExcel", function (request, response) {
+        setTimeout(() => {
+            response.json(wrapResponse(users, true));
+        }, parseInt((Math.random() * 10 * 1000).toFixed(0), 10));
+    });
+
+    // 批量新增用户信息
+    app.post("/system/batchInsertUers", function (request, response) {
         response.json(wrapResponse(null, true));
     });
 };

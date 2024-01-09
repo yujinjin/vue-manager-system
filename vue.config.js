@@ -56,6 +56,15 @@ module.exports = {
         config.module.rule("svg").exclude.add(pathResolve("src/components/icons")).end();
 
         config.module
+            .rule("static-file")
+            .test(/\.(xlsx|xls|docx|doc|pdf|zip)$/)
+            .set("type", "asset")
+            .set("generator", {
+                filename: "build/file/[name].[hash:8][ext]"
+            })
+            .end();
+
+        config.module
             .rule("icons")
             .test(/\.svg$/)
             .include.add(pathResolve("src/components/icons"))

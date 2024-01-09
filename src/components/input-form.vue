@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-15 16:30:56
+ * @最后修改时间: 2023-12-28 20:50:24
  * @项目的路径: \vue-manager-system\src\components\input-form.vue
  * @描述: 数据输入表单
 -->
@@ -14,7 +14,14 @@
                     <el-form-item v-bind="field.formItemProps">
                         <input-field :field="field" :modelValue="getObjectProperty(inputFormValue, field.name)" @update:modelValue="value => setFieldValue(value, field)">
                             <!-- 自定义插件，插槽 -->
-                            <slot v-if="field.slot" :name="field.slot" :field="field" :value="getObjectProperty(inputFormValue, field.name)" :formFields="formFields"></slot>
+                            <slot
+                                v-if="field.slot"
+                                :name="field.slot"
+                                :field="field"
+                                :value="getObjectProperty(inputFormValue, field.name)"
+                                :formValue="inputFormValue"
+                                :formFields="formFields"
+                            ></slot>
                         </input-field>
                     </el-form-item>
                 </el-col>

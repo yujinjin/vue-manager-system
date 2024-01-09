@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-27 16:05:19
+ * @最后修改时间: 2023-12-29 11:47:58
  * @项目的路径: \vue-manager-system\src\components\img-upload.vue
  * @描述: 图片上传组件
 -->
@@ -39,8 +39,8 @@
 </template>
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
-import { ElMessage, ElMessageBox , ElUpload} from "element-plus";
-import type { UploadProps, UploadRequestOptions, UploadFile, UploadFiles, UploadUserFile } from "element-plus";
+import { ElMessage, ElMessageBox, ElUpload, genFileId } from "element-plus";
+import type { UploadProps, UploadRequestOptions, UploadFile, UploadFiles, UploadUserFile, UploadRawFile } from "element-plus";
 import type { Ref, PropType } from "vue";
 import { numberFormat } from "@yujinjin/utils";
 import Cropper from "cropperjs";
@@ -148,6 +148,16 @@ const showCroppDialogHandle = async function () {
     }
 };
 
+// 开始剪切操作
+const startCroppHandle = async function (raw: UploadRawFile) {
+    const imgFileReader = new FileReader();
+    imgFileReader.onload = e => {
+        cropperImg.value = e.target!.result as string;
+        showCroppDialogHandle();
+    };
+    imgFileReader.readAsDataURL(raw!);
+};
+
 // 关闭裁剪弹窗
 const closeCroppDialog = function () {
     if (cropperInstance) {
@@ -221,19 +231,14 @@ const defaultUploadProps = {
     },
     // 图片上传变化
     onChange: function (file: UploadFile, files: UploadFiles) {
-        // 由于element plus upload组件上传之后会自动添加一个预览文件。
-        // 这里是自定义实现的文件上传请求，所以必须是上传完文件之后才展示处理， 这里删除掉
-        files.pop();
         if (!props.cropperProps) {
             // 当前图片无需剪切
             return;
         }
-        const imgFileReader = new FileReader();
-        imgFileReader.onload = e => {
-            cropperImg.value = e.target!.result as string;
-            showCroppDialogHandle();
-        };
-        imgFileReader.readAsDataURL(file.raw!);
+        // 由于element plus upload组件上传之后会自动添加一个预览文件。
+        // 这里是自定义实现的文件上传请求，所以必须是上传完文件之后才展示处理， 这里删除掉
+        files.pop();
+        startCroppHandle(file.raw!);
     },
     // 图片上传前操作
     beforeUpload: async function (file) {
@@ -242,12 +247,25 @@ const defaultUploadProps = {
             return false;
         }
     },
-    onExceed() {
+    onExceed(files: File[]) {
         if (uploadInnerProps.value.limit && uploadInnerProps.value.limit > 1) {
             ElMessageBox.alert("您最多只能上传" + uploadInnerProps.value.limit + "个图片!", "上传图片", {
                 confirmButtonText: "确定",
                 type: "warning"
             });
+        } else if (uploadInnerProps.value.limit === 1) {
+            if (props.cropperProps) {
+                // 当前图片需要剪切
+                startCroppHandle(files[0] as UploadRawFile);
+            } else {
+                updloadRef.value!.clearFiles();
+                const file = files[0] as UploadRawFile;
+                file.uid = genFileId();
+                updloadRef.value!.handleStart(file);
+                if (uploadInnerProps.value.autoUpload !== false) {
+                    updloadRef.value!.submit();
+                }
+            }
         }
     },
     listType: "picture",
@@ -324,7 +342,9 @@ watch(
 
     .el-dialog__footer {
         padding: 8px 20px;
-        box-shadow: 0px -1px 0px 0px #f5f5f5, 0px 1px 30px 0px rgba(0, 21, 41, 0.12);
+        box-shadow:
+            0px -1px 0px 0px #f5f5f5,
+            0px 1px 30px 0px rgba(0, 21, 41, 0.12);
 
         .el-button {
             min-width: 80px;

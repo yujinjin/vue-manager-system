@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:27:44
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-18 15:06:36
+ * @最后修改时间: 2023-12-28 10:24:12
  * @项目的路径: \vue-manager-system\src\components\action-bar.vue
  * @描述: 列表操作栏
 -->
@@ -28,7 +28,6 @@ import type { Components } from "/#/components";
 import type { PropType, Ref } from "vue";
 import { ref, watch } from "vue";
 import { dataStore } from "@/stores/";
-import type { TextAlignProperty } from "csstype";
 
 const props = defineProps({
     buttons: {
@@ -46,8 +45,8 @@ const props = defineProps({
     },
     // 按钮默认位置
     align: {
-        type: String as PropType<TextAlignProperty>,
-        default: "right"
+        type: String as PropType<"center" | "left" | "right">,
+        default: "left"
     },
     // 页面名称，用于获取有权限的按钮数据
     pageName: {

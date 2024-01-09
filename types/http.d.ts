@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-31 15:51:19
+ * @最后修改时间: 2024-01-04 21:11:52
  * @项目的路径: \vue-manager-system\types\http.d.ts
  * @描述: 头部注释配置模板
  */
@@ -71,7 +71,7 @@ declare namespace Http {
     // 下载配置项
     interface DownloadConfig {
         url: string; // 下载地址URL
-        method: "get" | "post"; // 请求的地址方法（post只能使用form提交）
+        method?: "get" | "post"; // 请求的地址方法（post只能使用form提交）
         inputData?: Record<string, number | string | boolean>; // 请求的参数
         type: "iframe" | "form" | "a" | "open" | "blob"; // 下载使用的技术方案
         fileName?: string; // 下载下来的自定义文件名（只有a标签才有用）

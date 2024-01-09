@@ -39,7 +39,7 @@
         "vue-router": "^4.2.5",
         "axios": "^1.6.0",
         "dayjs": "^1.11.10",
-        "element-plus": "^2.4.1",
+        "element-plus": "^2.4.4",
         "@element-plus/icons-vue": "^2.1.0",
         "vue-types": "^5.1.1",
         "echarts": "^5.4.3",

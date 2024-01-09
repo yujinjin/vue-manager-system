@@ -1,15 +1,14 @@
-<!--
- * @创建者: yujinjin9@126.com
- * @创建时间: 2022-08-09 13:49:25
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-28 21:15:08
- * @项目的路径: \vue-manager-system\src\views\home\components\login-info-dialog.vue
- * @描述: 登录用户信息弹窗
--->
 <template>
-    <dialog-form :isShow="isShow" ref="dialogFormRef" :buttons="buttons" :inputFormProps="inputForm" :dialogProps="dialogProps" @close="emits('update:isShow', false)">
+    <dialog-form
+        ref="dialogFormRef"
+        :isShow="isShow"
+        :buttons="buttons"
+        :inputFormProps="inputForm"
+        :dialogProps="{ title: row ? '编辑用户信息' : '新增用户信息', width: '600px' }"
+        @close="emits('update:isShow', false)"
+    >
         <template #avatar="{ formValue }">
-            <img-upload v-model="formValue.avatar" :uploadProps="{ showFileList: false, class: 'upload-avatar', limit: 1 }" :cropperProps="true">
+            <img-upload v-model="formValue.avatar" :uploadProps="{ showFileList: false, class: 'upload-avatar', limit: 1 }">
                 <div class="avatar-box" :class="{ empty: !formValue.avatar }">
                     <template v-if="formValue.avatar">
                         <img :src="formValue.avatar" class="avatar-pic" />
@@ -25,44 +24,49 @@
     </dialog-form>
 </template>
 <script setup lang="ts">
-import type { Ref } from "vue";
 import type { Components } from "/#/components";
-import type { DialogProps } from "element-plus";
-import type { NotReadonly } from "/#/global";
 import { ref, reactive } from "vue";
-import { storageStore } from "@/stores";
-import { Plus, Check, Close } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
 import systemAPI from "@api/system";
+import { ElMessage } from "element-plus";
+import { Plus, Check, Close } from "@element-plus/icons-vue";
 
-defineProps({
+const props = defineProps({
     // 是否显示弹窗
     isShow: {
         type: Boolean,
         default: false
+    },
+    row: {
+        type: Object
     }
 });
 
-const emits = defineEmits(["update:isShow"]);
+const emits = defineEmits(["update:isShow", "refresh"]);
 
 const dialogFormRef = ref<Components.DialogFormRef>();
 
-// 存储data
-const storageData = storageStore();
-
-// 弹窗属性
-const dialogProps = reactive<Partial<NotReadonly<DialogProps>>>({
-    title: "修改用户信息"
-});
-
 // 输入表单信息
 const inputForm = reactive<Components.InputForm>({
+    value: props.row && JSON.parse(JSON.stringify(props.row)),
     fields: [
         {
-            name: "userName",
+            name: "loginName",
             label: "用户名",
-            type: "label",
-            value: storageData.loginUserInfo.userName
+            type: "input",
+            props: {
+                disabled: !!props.row,
+                maxlength: 20
+            },
+            rules: [{ required: true, message: "请填写" }]
+        },
+        {
+            name: "name",
+            label: "姓名",
+            type: "input",
+            props: {
+                maxlength: 20
+            },
+            rules: [{ required: true, message: "请填写" }]
         },
         {
             name: "gender",
@@ -77,14 +81,12 @@ const inputForm = reactive<Components.InputForm>({
                     value: "2",
                     label: "女"
                 }
-            ],
-            value: storageData.loginUserInfo.gender
+            ]
         },
         {
             name: "avatar",
             label: "头像",
-            slot: "avatar",
-            value: storageData.loginUserInfo.avatar
+            slot: "avatar"
         },
         {
             name: "email",
@@ -95,8 +97,7 @@ const inputForm = reactive<Components.InputForm>({
                     { required: true, message: "请输入EMAIL" },
                     { type: "email", message: "请输入正确格式的邮箱" }
                 ]
-            },
-            value: storageData.loginUserInfo.email
+            }
         },
         {
             name: "phoneNumber",
@@ -104,17 +105,16 @@ const inputForm = reactive<Components.InputForm>({
             type: "input",
             formItemProps: {
                 rules: [
-                    { required: true, message: "请输入手机号" },
+                    // { required: true, message: "请输入手机号" },
                     { pattern: /^1[3456789]\d{9}$/, message: "请输入正确格式的手机号" }
                 ]
-            },
-            value: storageData.loginUserInfo.phoneNumber
+            }
         }
     ]
 });
 
 // 底部按钮列表
-const buttons: Ref<Components.FormButton[]> = ref([
+const buttons = ref<Components.FormButton[]>([
     {
         text: "取消"
     },
@@ -123,19 +123,14 @@ const buttons: Ref<Components.FormButton[]> = ref([
         props: { type: "primary" },
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
-            await systemAPI.updateLoginUserInfo(inputFormValue);
-            // 这里更新一下store中登录的用户信息（根据实际业务考虑也更新一下本地localstorage存储的用户信息，这里就不做更新了）
-            storageData.$patch(state => {
-                state.loginUserInfo.avatar = inputFormValue.avatar;
-                state.loginUserInfo.email = inputFormValue.email;
-                state.loginUserInfo.phoneNumber = inputFormValue.phoneNumber;
-                state.loginUserInfo.gender = inputFormValue.gender;
-            });
-            ElMessage.success("用户信息修改成功");
+            await systemAPI.addOrUpdateUser(inputFormValue);
+            ElMessage.success("操作成功");
+            emits("refresh");
         }
     }
 ]);
 </script>
+
 <style lang="scss" scoped>
 :deep(.upload-avatar) {
     .avatar-box {

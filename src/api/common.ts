@@ -91,7 +91,7 @@ export default {
                 break;
             case "form": {
                 const formElement: HTMLFormElement = document.createElement("form");
-                formElement.method = downloadConfig.method;
+                formElement.method = downloadConfig.method || "post";
                 if (downloadConfig.inputData && downloadConfig.method === "post") {
                     Object.keys(downloadConfig.inputData).forEach(key => {
                         const hiddenInputElement = document.createElement("input");

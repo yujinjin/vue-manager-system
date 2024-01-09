@@ -3,8 +3,10 @@
  * 时间：2019-11-28
  * 描述：系统管理API接口
  */
-import request from "./request";
+
 import type { Http } from "../../types/http";
+import request from "./request";
+import commonApi from "./common";
 
 export default {
     /**
@@ -15,8 +17,7 @@ export default {
             Object.assign(
                 {
                     url: "/system/login",
-                    data: inputData,
-                    method: "GET"
+                    data: inputData
                 },
                 ajaxOptions || {}
             )
@@ -100,6 +101,22 @@ export default {
     },
 
     /**
+     * 分页查询系统模块列表
+     */
+    queryPageModuleList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/queryPageModuleList",
+                    params: inputData,
+                    method: "GET"
+                },
+                ajaxOptions || {}
+            )
+        );
+    },
+
+    /**
      * 查询系统模块列表
      */
     queryModuleList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
@@ -133,7 +150,7 @@ export default {
     /**
      * 删除模块
      */
-    deleteModuleById(id: number, ajaxOptions?: Http.RequestConfig) {
+    deleteModuleById(id: string, ajaxOptions?: Http.RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -153,7 +170,8 @@ export default {
             Object.assign(
                 {
                     url: "/system/queryPageMenuList",
-                    data: inputData
+                    params: inputData,
+                    method: "GET"
                 },
                 ajaxOptions || {}
             )
@@ -168,7 +186,8 @@ export default {
             Object.assign(
                 {
                     url: "/system/queryMenuList",
-                    data: inputData
+                    params: inputData,
+                    method: "GET"
                 },
                 ajaxOptions || {}
             )
@@ -198,7 +217,8 @@ export default {
             Object.assign(
                 {
                     url: "/system/queryRoleListByMenuId",
-                    data: inputData
+                    params: inputData,
+                    method: "GET"
                 },
                 ajaxOptions || {}
             )
@@ -228,7 +248,8 @@ export default {
             Object.assign(
                 {
                     url: "/system/queryPageRoleList",
-                    data: inputData
+                    params: inputData,
+                    method: "GET"
                 },
                 ajaxOptions || {}
             )
@@ -243,7 +264,8 @@ export default {
             Object.assign(
                 {
                     url: "/system/queryRoleList",
-                    data: inputData
+                    params: inputData,
+                    method: "GET"
                 },
                 ajaxOptions || {}
             )
@@ -258,7 +280,8 @@ export default {
             Object.assign(
                 {
                     url: "/system/queryMenuListByRoleId",
-                    data: inputData
+                    params: inputData,
+                    method: "GET"
                 },
                 ajaxOptions || {}
             )
@@ -318,7 +341,8 @@ export default {
             Object.assign(
                 {
                     url: "/system/queryPageUserList",
-                    data: inputData
+                    method: "GET",
+                    params: inputData
                 },
                 ajaxOptions || {}
             )
@@ -333,7 +357,8 @@ export default {
             Object.assign(
                 {
                     url: "/system/queryRoleListByUserId",
-                    data: inputData
+                    params: inputData,
+                    method: "GET"
                 },
                 ajaxOptions || {}
             )
@@ -378,6 +403,58 @@ export default {
             Object.assign(
                 {
                     url: "/system/deleteUser",
+                    data: inputData
+                },
+                ajaxOptions || {}
+            )
+        );
+    },
+
+    /**
+     * 修改用户锁定状态信息
+     */
+    toggleUserLockStatus(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/updateUserLockStatus",
+                    data: inputData
+                },
+                ajaxOptions || {}
+            )
+        );
+    },
+
+    /**
+     * 重置用户密码
+     */
+    resetUerPassword(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/resetUerPassword",
+                    data: inputData
+                },
+                ajaxOptions || {}
+            )
+        );
+    },
+
+    /**
+     * 上传批量用户EXCEL(批量新增用户)
+     */
+    uploadUsersExcel(file: File, ajaxOptions?: Http.RequestConfig) {
+        return commonApi.upload({ file }, "/system/uploadUsersExcel", ajaxOptions);
+    },
+
+    /**
+     * 批量新增用户信息
+     */
+    batchInsertUers(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/batchInsertUers",
                     data: inputData
                 },
                 ajaxOptions || {}

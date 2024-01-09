@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 16:36:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-27 11:52:10
+ * @最后修改时间: 2024-01-02 14:24:55
  * @项目的路径: \vue-manager-system\src\services\constants.ts
  * @描述: 常量集合
  */
@@ -35,6 +35,7 @@ export const HANDLE_CODES = {
     PASS: "PASS", //通过
     REFUSE: "REFUSE", //拒绝
     MONITOR: "MONITOR", //监控
+    BATCHCREATE: "BATCHCREATE", // 批量新增
     BATCHDELETE: "BATCHDELETE", // 批量删除
     BATCHEXAMINE: "BATCHEXAMINE", //批量审核
     BATCHUPDATE: "BATCHUPDATE", //批量修改

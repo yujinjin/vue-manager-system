@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-12-20 17:47:33
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-26 09:51:31
+ * @最后修改时间: 2024-01-04 20:39:48
  * @项目的路径: \vue-manager-system\src\services\iframe-message.ts
  * @描述: 子应用和中台系统的通信框架
  */
@@ -21,6 +21,7 @@ const sendMessage = function (data: any) {
 };
 
 export default {
+    // 初始化
     init() {
         // 接收消息
         window.addEventListener("message", receiveMessage, false);
@@ -59,6 +60,22 @@ export default {
             value: id
         });
     },
+    /**
+     * 当前登录的用户token过期
+     */
+    loginTokenExpired() {
+        if(!iframeId) {
+            logs.error("未获取到当前页面唯一标识，请检查框架引用时机");
+            return;
+        }
+        sendMessage({
+            eventType: "loginTokenExpired",
+            value: iframeId
+        });
+    },
+    /**
+     * 销毁
+     */
     destroy() {
         window.removeEventListener("message", receiveMessage);
     }

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-10-27 18:13:47
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-17 17:49:16
+ * @最后修改时间: 2023-12-28 20:29:57
  * @项目的路径: \vue-manager-system\src\components\input-field.vue
  * @描述: 表单输入字段组件
 -->
@@ -47,14 +47,14 @@
 
     <!-- radio -->
     <el-radio-group v-else-if="field.type === 'radio'" :modelValue="modelValue" @update:modelValue="value => changeValue(value)" v-bind="field.props || {}" v-on="field.events || {}">
-        <el-radio-button
+        <el-radio
             v-for="(item, index) in field.data"
             :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
             :label="item[field.optionValueKey || 'value']"
             :disabled="item.disabled === true"
         >
             {{ item[field.optionLabelKey || "label"] }}
-        </el-radio-button>
+        </el-radio>
     </el-radio-group>
     <!-- element 组件 -->
     <component v-else :is="getElComponentName(field)" :modelValue="modelValue" @update:modelValue="value => changeValue(value)" v-bind="field.props || {}" v-on="field.events || {}" />
