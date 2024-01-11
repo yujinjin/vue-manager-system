@@ -119,7 +119,7 @@ const buttons = ref<Components.FormButton[]>([
         text: "取消"
     },
     {
-        text: "修改",
+        text: "保存",
         props: { type: "primary" },
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();

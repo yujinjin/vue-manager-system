@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-14 11:45:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-14 18:34:19
+ * @最后修改时间: 2024-01-10 14:26:52
  * @项目的路径: \vue-manager-system\mock\data\roles.js
  * @描述: 角色列表
  */
@@ -16,7 +16,7 @@ module.exports = [
         name: "基础平台超级管理员",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: Mock.mock("@id"),
@@ -25,7 +25,7 @@ module.exports = [
         name: "数据分析超级管理员",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: Mock.mock("@id"),
@@ -34,7 +34,7 @@ module.exports = [
         name: "数据分析产品经理",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: Mock.mock("@id"),
@@ -43,7 +43,7 @@ module.exports = [
         name: "商城超级管理员",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: Mock.mock("@id"),
@@ -52,7 +52,7 @@ module.exports = [
         name: "商城运营人员",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: Mock.mock("@id"),
@@ -61,7 +61,7 @@ module.exports = [
         name: "商城审核人员",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: Mock.mock("@id"),
@@ -70,7 +70,7 @@ module.exports = [
         name: "商城客服人员",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: Mock.mock("@id"),
@@ -79,7 +79,7 @@ module.exports = [
         name: "供应链超级管理员",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: Mock.mock("@id"),
@@ -88,7 +88,7 @@ module.exports = [
         name: "供应链出库管理员",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: Mock.mock("@id"),
@@ -97,6 +97,6 @@ module.exports = [
         name: "支付系统超级管理员",
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - parseInt(30 * 24 * 60 * 60 * 1000, 10),
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     }
 ];

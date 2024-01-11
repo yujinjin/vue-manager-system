@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 13:55:10
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-09 09:39:16
+ * @最后修改时间: 2024-01-11 11:51:52
  * @项目的路径: \vue-manager-system\mock\system.js
  * @描述: 系统模块mock数据
  */
@@ -118,18 +118,18 @@ module.exports = function (app) {
     app.get("/system/queryPageMenuList", function (request, response) {
         const pageNo = parseInt(request.query.pageNo || "1", 10);
         const pageSize = parseInt(request.query.pageSize || "50", 10);
-        const status = request.query.status ? parseInt(request.query.status, 10) : null;
+        // const status = request.query.status ? parseInt(request.query.status, 10) : null;
         const queryList = menus.filter(item => {
-            if (request.query.code && !item.code.includes(request.query.code)) {
-                return false;
-            }
-            if (request.query.name && !item.name.includes(request.query.name)) {
+            // if (request.query.code && !item.code.includes(request.query.code)) {
+            //     return false;
+            // }
+            if (request.query.name && !item.name.includes(request.query.name) && !item.code.includes(request.query.name)) {
                 return false;
             }
             if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
                 return false;
             }
-            if ((status || status === 0) && item.status !== status) {
+            if (request.query.status && item.status !== request.query.status) {
                 return false;
             }
             return true;
@@ -144,20 +144,20 @@ module.exports = function (app) {
 
     // 查询系统菜单列表
     app.get("/system/queryMenuList", function (request, response) {
-        const status = request.query.status ? parseInt(request.query.status, 10) : null;
+        // const status = request.query.status ? parseInt(request.query.status, 10) : null;
         response.json(
             wrapResponse(
                 menus.filter(item => {
-                    if (request.query.code && !item.code.includes(request.query.code)) {
-                        return false;
-                    }
-                    if (request.query.name && !item.name.includes(request.query.name)) {
+                    // if (request.query.code && !item.code.includes(request.query.code)) {
+                    //     return false;
+                    // }
+                    if (request.query.name && !item.name.includes(request.query.name) && !item.code.includes(request.query.name)) {
                         return false;
                     }
                     if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
                         return false;
                     }
-                    if ((status || status === 0) && item.status !== status) {
+                    if (request.query.status && item.status !== request.query.status) {
                         return false;
                     }
                     return true;
@@ -191,18 +191,18 @@ module.exports = function (app) {
     app.get("/system/queryPageRoleList", function (request, response) {
         const pageNo = parseInt(request.query.pageNo || "1", 10);
         const pageSize = parseInt(request.query.pageSize || "50", 10);
-        const status = request.query.status ? parseInt(request.query.status, 10) : null;
+        // const status = request.query.status ? parseInt(request.query.status, 10) : null;
         const queryList = roles.filter(item => {
-            if (request.query.code && !item.code.includes(request.query.code)) {
-                return false;
-            }
-            if (request.query.name && !item.name.includes(request.query.name)) {
+            // if (request.query.code && !item.code.includes(request.query.code)) {
+            //     return false;
+            // }
+            if (request.query.name && !item.name.includes(request.query.name) && !item.code.includes(request.query.name)) {
                 return false;
             }
             if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
                 return false;
             }
-            if ((status || status === 0) && item.status !== status) {
+            if (request.query.status && item.status !== request.query.status) {
                 return false;
             }
             return true;
@@ -217,48 +217,24 @@ module.exports = function (app) {
 
     // 查询角色列表
     app.get("/system/queryRoleList", function (request, response) {
-        const status = request.query.status ? parseInt(request.query.status, 10) : null;
+        // const status = request.query.status ? parseInt(request.query.status, 10) : null;
         const queryList = roles.filter(item => {
-            if (request.query.code && !item.code.includes(request.query.code)) {
-                return false;
-            }
-            if (request.query.name && !item.name.includes(request.query.name)) {
+            // if (request.query.code && !item.code.includes(request.query.code)) {
+            //     return false;
+            // }
+            if (request.query.name && !item.name.includes(request.query.name) && !item.code.includes(request.query.name)) {
                 return false;
             }
             if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
                 return false;
             }
-            if ((status || status === 0) && item.status !== status) {
+            if (request.query.status && item.status !== request.query.status) {
                 return false;
             }
             return true;
         });
         response.json(
             wrapResponse(queryList)
-        );
-    });
-
-    // 根据角色ID查询菜单列表
-    app.get("/system/queryMenuListByRoleId", function (request, response) {
-        const status = request.query.status ? parseInt(request.query.status, 10) : null;
-        response.json(
-            wrapResponse(
-                roles.filter(item => {
-                    if (request.query.code && !item.code.includes(request.query.code)) {
-                        return false;
-                    }
-                    if (request.query.name && !item.name.includes(request.query.name)) {
-                        return false;
-                    }
-                    if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
-                        return false;
-                    }
-                    if ((status || status === 0) && item.status !== status) {
-                        return false;
-                    }
-                    return true;
-                })
-            )
         );
     });
 
@@ -280,6 +256,18 @@ module.exports = function (app) {
 
     // 更新角色的菜单列表(角色页面绑定菜单)
     app.post("/system/updateMenusByRoleId", function (request, response) {
+        response.json(wrapResponse(null, true));
+    });
+
+    // 上传批量角色EXCEL(批量新增角色)
+    app.post("/system/uploadRolesExcel", function (request, response) {
+        setTimeout(() => {
+            response.json(wrapResponse(roles, true));
+        }, parseInt((Math.random() * 10 * 1000).toFixed(0), 10));
+    });
+
+    // 批量新增角色信息
+    app.post("/system/batchInsertRoles", function (request, response) {
         response.json(wrapResponse(null, true));
     });
 

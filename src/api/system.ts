@@ -304,6 +304,21 @@ export default {
     },
 
     /**
+     * 切换角色锁定状态信息
+     */
+    toggleRoleLockStatus(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/updateRoleLockStatus",
+                    data: inputData
+                },
+                ajaxOptions || {}
+            )
+        );
+    },
+
+    /**
      * 更新角色的菜单列表(角色页面绑定菜单)
      */
     updateMenusByRoleId(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
@@ -326,6 +341,28 @@ export default {
             Object.assign(
                 {
                     url: "/system/deleteRole",
+                    data: inputData
+                },
+                ajaxOptions || {}
+            )
+        );
+    },
+
+    /**
+     * 上传批量角色EXCEL(批量新增角色)
+     */
+    uploadRolesExcel(file: File, ajaxOptions?: Http.RequestConfig) {
+        return commonApi.upload({ file }, "/system/uploadRolesExcel", ajaxOptions);
+    },
+
+    /**
+     * 批量新增角色信息
+     */
+    batchInsertRoles(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/batchInsertRoles",
                     data: inputData
                 },
                 ajaxOptions || {}
@@ -411,7 +448,7 @@ export default {
     },
 
     /**
-     * 修改用户锁定状态信息
+     * 切换用户锁定状态信息
      */
     toggleUserLockStatus(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
         return request(

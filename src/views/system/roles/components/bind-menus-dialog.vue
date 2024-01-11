@@ -1,52 +1,51 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-12-28 11:10:17
+ * @创建时间: 2024-01-10 15:33:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-11 11:49:03
- * @项目的路径: \vue-manager-system\src\views\system\users\components\bind-roles-dialog.vue
- * @描述: 绑定用户的角色
+ * @最后修改时间: 2024-01-11 11:46:43
+ * @项目的路径: \vue-manager-system\src\views\system\roles\components\bind-menus-dialog.vue
+ * @描述: 角色绑定菜单弹窗
 -->
 <template>
-    <el-dialog v-model="dialogVisible" :title="'绑定用户【' + row.name + '】的角色'" class="dialog-form" width="800px" @closed="dialogClosed">
+    <el-dialog v-model="dialogVisible" :title="'绑定角色【' + row.name + '】的菜单'" class="dialog-form" width="800px" @closed="dialogClosed">
         <div class="search-panel">
-            <el-input v-model.trim="keyword" style="width: 250px; margin-right: 12px" clearable placeholder="搜索角色名称或编码" :prefix-icon="Search" />
-            <el-select v-model="modules" clearable multiple collapse-tags placeholder="搜索角色模块" style="width: 150px">
+            <el-input v-model.trim="keyword" placeholder="搜索菜单名称/编码/地址" style="width: 250px; margin-right: 12px" clearable :prefix-icon="Search" />
+            <el-select :model-value="row.moduleCode" disabled placeholder="搜索角色模块" style="width: 150px">
                 <el-option v-for="module in moduleList" :key="module.code" :value="module.code" :label="module.name" />
             </el-select>
+            <el-tooltip content="只能绑定相同系统模块的菜单">
+                <el-icon><InfoFilled /></el-icon>
+            </el-tooltip>
         </div>
-        <div class="role-list-panel">
+        <div class="data-list-panel">
             <div class="left-contents">
                 <el-table
-                    ref="roleTableRef"
+                    ref="dataTableRef"
                     :data="dataList"
                     height="250"
                     row-key="id"
                     stripe
                     border
-                    :empty-text="roleList && roleList.length > 0 ? '未搜索到角色相关数据' : '没有数据'"
+                    :empty-text="menuList && menuList.length > 0 ? '未搜索到菜单相关数据' : '没有数据'"
                     style="width: 100%"
                     @selection-change="selectionChangeHandle"
                     @row-click="rowClickHandle"
                 >
                     <el-table-column reserve-selection type="selection" label="选择" width="40" align="center" />
-                    <el-table-column label="角色名称(编码)" min-width="120" show-overflow-tooltip>
+                    <el-table-column label="菜单名称(编码)" min-width="120" show-overflow-tooltip>
                         <template #default="scope">{{ scope.row.name }}({{ scope.row.code }})</template>
                     </el-table-column>
-                    <el-table-column property="moduleCode" label="模块" width="120" show-overflow-tooltip>
-                        <template #default="scope">
-                            {{ getModuleText(scope.row.moduleCode) }}
-                        </template>
-                    </el-table-column>
+                    <el-table-column label="菜单地址" prop="url" min-width="150" show-overflow-tooltip />
                 </el-table>
             </div>
             <div class="right-contents">
                 <div class="header-row">
-                    <div class="label-text">已选角色({{ selectedRoleRows.length }})</div>
+                    <div class="label-text">已选菜单({{ selectedMenuRows.length }})</div>
                     <div class="label-text active" @click="clearSelectionHandle">清空</div>
                 </div>
                 <div class="inner-row">
-                    <div class="row-info" v-for="(role, index) in selectedRoleRows" :key="role.code">
-                        <div class="name-text" :title="role.name + '(' + role.code + ')'">{{ role.name }}({{ role.code }})</div>
+                    <div class="row-info" v-for="(menu, index) in selectedMenuRows" :key="menu.code">
+                        <div class="name-text" :title="menu.name + '(' + menu.code + ')'">{{ menu.name }}({{ menu.code }})</div>
                         <el-icon @click="deleteSelectedHandle(index)"><Delete /></el-icon>
                     </div>
                 </div>
@@ -62,9 +61,9 @@
 </template>
 <script setup lang="ts">
 import type { PropType } from "vue";
-import { ref, watch } from "vue";
-import { Search, Delete } from "@element-plus/icons-vue";
-import { ElTable, ElMessage } from "element-plus";
+import { ref, watch, nextTick } from "vue";
+import { Search, Delete, InfoFilled } from "@element-plus/icons-vue";
+import { ElLoading, ElTable, ElMessage } from "element-plus";
 import { debounce } from "@yujinjin/utils";
 import systemAPI from "@api/system";
 
@@ -76,13 +75,6 @@ const props = defineProps({
     row: {
         type: Object,
         required: true
-    },
-    // 所有的角色列表
-    roleList: {
-        type: Array as PropType<Record<string, any>[]>,
-        default: function () {
-            return [];
-        }
     },
     // 所有的模块列表
     moduleList: {
@@ -96,33 +88,25 @@ const props = defineProps({
 const emits = defineEmits(["update:isShow"]);
 
 // 弹窗显示状态
-const dialogVisible = ref(true);
+const dialogVisible = ref(false);
 
 // 搜索关键词
 const keyword = ref("");
 
-// 搜索的模块
-const modules = ref<string[]>([]);
+// 当前角色所属模块的最底部菜单列表（有菜单链接的）
+const menuList = ref<Record<string, any>[]>([]);
 
-// 角色数据表格ref
-const roleTableRef = ref<InstanceType<typeof ElTable>>();
+// 数据表格ref
+const dataTableRef = ref<InstanceType<typeof ElTable>>();
 
 // 数据列表
 const dataList = ref<Record<string, any>[]>([]);
 
 // 选中的角色行(用户关联的角色列表)
-const selectedRoleRows = ref<Record<string, any>[]>([]);
+const selectedMenuRows = ref<Record<string, any>[]>([]);
 
 // 是否正在提交
 const isSubmiting = ref(false);
-
-// 获取模块名称
-const getModuleText = function (moduleCode) {
-    if (!moduleCode) {
-        return "-";
-    }
-    return props.moduleList.find(item => item.code === moduleCode)?.name || "未知";
-};
 
 // 弹窗关闭事件
 const dialogClosed = function () {
@@ -131,50 +115,56 @@ const dialogClosed = function () {
 
 // 选择的角色数据变化
 const selectionChangeHandle = function (rows) {
-    selectedRoleRows.value = rows;
+    selectedMenuRows.value = rows;
 };
 
 // 清空角色选项数据
 const clearSelectionHandle = function () {
-    roleTableRef.value!.clearSelection();
-    selectedRoleRows.value = [];
+    dataTableRef.value!.clearSelection();
+    selectedMenuRows.value = [];
 };
 
 // 数据表格中的行点击事件
 const rowClickHandle = function (row) {
-    roleTableRef.value!.toggleRowSelection(row, selectedRoleRows.value.findIndex(item => item.id === row.id) === -1);
+    dataTableRef.value!.toggleRowSelection(row, selectedMenuRows.value.findIndex(item => item.id === row.id) === -1);
 };
 
 // 删除已选中的角色信息
 const deleteSelectedHandle = function (index: number) {
-    roleTableRef.value!.toggleRowSelection(selectedRoleRows.value[index], false);
-    selectedRoleRows.value.splice(index, 1);
+    dataTableRef.value!.toggleRowSelection(selectedMenuRows.value[index], false);
+    selectedMenuRows.value.splice(index, 1);
 };
 
 // 搜索（防抖）
 const searchDebounce = debounce(function () {
     const keywordReg = keyword.value && new RegExp(keyword.value.replace(/([,.+?:()*[\]^$|{}\\-])/g, "\\$1"), "i");
-    dataList.value = props.roleList.filter(role => {
-        if (keywordReg && !keywordReg.test(role.name) && !keywordReg.test(role.code)) {
-            return false;
-        }
-        if (modules.value.length > 0 && !modules.value.includes(role.moduleCode)) {
+    dataList.value = menuList.value.filter(menu => {
+        if (keywordReg && !keywordReg.test(menu.name) && !keywordReg.test(menu.code) && !keywordReg.test(menu.url)) {
             return false;
         }
         return true;
     });
 }, 200);
 
-// 查询当前选中的用户绑定的角色列表
-const queryUserRoleList = async function () {
-    const userRoleList = (await systemAPI.queryRoleListByUserId({ userId: props.row.id })) as Array<Record<string, string>>;
-    if (userRoleList && userRoleList.length > 0) {
-        userRoleList.forEach(item => {
-            const findRole = props.roleList.find(roleItem => roleItem.id === item.roleId);
-            if (findRole) {
-                selectedRoleRows.value.push(findRole);
-                roleTableRef.value?.toggleRowSelection(findRole, true);
+// 查询当前选中角色绑定菜单列表
+const queryRoleMenuList = async function () {
+    const roleMenuList = (await systemAPI.queryMenuListByRoleId({ roleId: props.row.id })) as Array<Record<string, string>>;
+    if (roleMenuList && roleMenuList.length > 0) {
+        roleMenuList.forEach(item => {
+            const findMenu = menuList.value.find(menuItem => menuItem.id === item.menuId);
+            if (findMenu) {
+                selectedMenuRows.value.push(findMenu);
             }
+        });
+    }
+};
+
+// 查询当前选中角色所属模块的最底部（有菜单链接）的菜单列表
+const queryMenuList = async function () {
+    const menus = (await systemAPI.queryMenuList({ moduleCode: props.row.moduleCode })) as Array<Record<string, string>>;
+    if (menus && menus.length > 0) {
+        menuList.value = menus.filter(menu => {
+            return menus.findIndex(item => item.parentId === menu.id) === -1;
         });
     }
 };
@@ -186,9 +176,9 @@ const saveHandle = async function () {
     }
     isSubmiting.value = true;
     try {
-        await systemAPI.updateRoleListByUserId({
-            userId: props.row.id,
-            roles: selectedRoleRows.value.map(item => item.id)
+        await systemAPI.updateMenusByRoleId({
+            roleId: props.row.id,
+            menus: selectedMenuRows.value.map(item => item.id)
         });
         ElMessage.success("操作成功");
         dialogVisible.value = false;
@@ -198,27 +188,43 @@ const saveHandle = async function () {
     isSubmiting.value = false;
 };
 
-watch(
-    () => props.row?.id,
-    value => {
-        if (value) {
-            queryUserRoleList();
-        }
-    },
-    {
-        immediate: true
-    }
-);
+watch(() => keyword.value, searchDebounce);
 
-watch(() => [keyword.value, modules.value], searchDebounce, { immediate: true });
+const init = async function () {
+    const loadingInstance = ElLoading.service();
+    try {
+        await queryMenuList();
+        await queryRoleMenuList();
+        dialogVisible.value = true;
+        dataList.value = menuList.value;
+        await nextTick();
+        selectedMenuRows.value.forEach(menuRow => {
+            dataTableRef.value?.toggleRowSelection(menuRow, true);
+        });
+    } catch (error) {
+        dialogClosed();
+        logs.error(error);
+    }
+    loadingInstance.close();
+};
+
+init();
 </script>
 <style lang="scss" scoped>
 .search-panel {
     padding-bottom: 8px;
     display: flex;
+    align-items: center;
+
+    .el-icon {
+        color: var(--el-color-warning);
+        font-size: 16px;
+        margin-left: 4px;
+        cursor: pointer;
+    }
 }
 
-.role-list-panel {
+.data-list-panel {
     display: flex;
     color: rgba(0, 0, 0, 0.65);
     padding-bottom: 12px;

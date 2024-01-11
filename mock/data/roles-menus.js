@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-14 18:26:21
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2022-12-15 11:35:23
+ * @最后修改时间: 2024-01-11 11:50:36
  * @项目的路径: \vue-manager-system\mock\data\roles-menus.js
  * @描述: 角色菜单信息列表（多对多管理）
  */
@@ -17,26 +17,21 @@ module.exports = (function () {
     const bottomMenus = {};
     menus
         .filter(menu => {
-            return menus.find(item => item.id === menu.parentId) === -1;
+            return menus.findIndex(item => item.parentId === menu.id) === -1;
         })
         .forEach(menu => {
             if (!bottomMenus[menu.moduleCode]) {
-                bottomMenus[menu.moduleCode] = {};
+                bottomMenus[menu.moduleCode] = [];
             }
-            bottomMenus[menu.moduleCode][menu.id + ""] = menu.id;
+            bottomMenus[menu.moduleCode].push(menu.id);
         });
 
     roles.forEach(role => {
         if (!bottomMenus[role.moduleCode]) {
             return;
         }
-        const randomMenus = Mock.mock({ ["menus|1-" + Object.keys(bottomMenus[role.moduleCode]).length]: bottomMenus[role.moduleCode] });
-        Object.values(randomMenus.menus).forEach(menuId => {
-            menusRoles.push({
-                menuId,
-                roleId: role.id
-            });
-        });
+        const randomMenus = Mock.Random.shuffle(bottomMenus[role.moduleCode], 1, bottomMenus[role.moduleCode].length);
+        menusRoles.push(...randomMenus.map(menuId => ({ menuId, roleId: role.id })));
     });
     return menusRoles;
 })();
