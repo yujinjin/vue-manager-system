@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-28 20:50:24
+ * @最后修改时间: 2024-01-15 16:14:57
  * @项目的路径: \vue-manager-system\src\components\input-form.vue
  * @描述: 数据输入表单
 -->
@@ -100,7 +100,7 @@ const initInputFormValue = function () {
         if (fieldValue === undefined) {
             fieldValue = Object.prototype.hasOwnProperty.call(field, "value") ? field.value : null;
             setObjectProperty(inputFormValue.value, field.name, fieldValue);
-            emits("fieldValueChange", field, fieldValue, formFields.value);
+            // emits("fieldValueChange", field, fieldValue, formFields.value, inputFormValue.value);
         }
     });
 };
@@ -169,7 +169,7 @@ const setFieldValue = function (fieldValue, field: Components.InputFormField) {
         fieldValue = fieldValue.trim();
     }
     setObjectProperty(inputFormValue.value, field.name, fieldValue);
-    emits("fieldValueChange", field, fieldValue, formFields.value);
+    emits("fieldValueChange", field, fieldValue, formFields.value, inputFormValue.value);
 };
 
 watch(
@@ -213,6 +213,19 @@ defineExpose({
     // 获取表单的value
     getInputValue: function () {
         return JSON.parse(JSON.stringify(inputFormValue.value));
+    },
+    /**
+     * 设置表单的属性值
+     * @param propertyName 属性名
+     * @param value 属性值
+     */
+    setInputPropertyValue: function (propertyName: string, value: any) {
+        const findField = formFields.value.find(field => field.name === propertyName);
+        if (findField) {
+            setFieldValue(value, findField);
+        } else {
+            setObjectProperty(inputFormValue.value, propertyName, value);
+        }
     },
     // 修改当前form字段的属性
     changeFormFields: function (callback: (formFields: Components.InputFormField[]) => void) {

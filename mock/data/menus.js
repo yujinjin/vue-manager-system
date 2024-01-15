@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 14:33:59
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-20 14:24:30
+ * @最后修改时间: 2024-01-15 09:45:52
  * @项目的路径: \vue-manager-system\mock\data\menus.js
  * @描述: 用户菜单列表
  * { id: 菜单ID, parentId: 父级菜单ID(null表示顶级菜单), name: 菜单名称, icons: 菜单图标, url: 菜单地址(可为null), moduleCode: 菜单所属模块code }
@@ -10,50 +10,54 @@
 const Mock = require("mockjs");
 
 const icons = [
-    "Fries",
     "icomoon-home",
-    "CreditCard",
+    "icomoon-home2",
+    "icomoon-home3",
+    "icomoon-office",
+    "icomoon-newspaper",
+    "icomoon-pencil",
+    "icomoon-pencil2",
+    "icomoon-quill",
+    "icomoon-pen",
+    "icomoon-blog",
+    "icomoon-eyedropper",
+    "icomoon-droplet",
+    "icomoon-paint-format",
     "icomoon-images",
-    "icomoon-file-vide",
-    "icomoon-folder",
-    "icomoon-folder-minus",
-    "icomoon-qrcode",
-    "icomoon-cart",
-    "icomoon-coin-dollar",
-    "icomoon-coin-euro",
-    "icomoon-credit-card",
-    "icomoon-phone",
-    "icomoon-phone-hang-up",
-    "icomoon-pushpin",
-    "icomoon-compass2",
-    "Sunrise",
-    "ElemeFilled",
-    "SuccessFilled",
-    "Comment",
-    "CirclePlusFilled",
-    "CaretTop",
-    "Tickets",
-    "FolderRemove",
-    "List",
-    "PictureRounded",
-    "Iphone",
-    "BellFilled",
-    "CameraFilled",
-    "DeleteLocation",
-    "MapLocation",
-    "Smoking",
-    "Goblet",
-    "icomoon-printer",
-    "icomoon-laptop",
-    "icomoon-mobile",
-    "icomoon-drawer2",
-    "icomoon-box-add",
-    "icomoon-box-remove",
-    "icomoon-download",
-    "icomoon-floppy-disk",
-    "icomoon-undo",
-    "icomoon-bubbles",
-    "icomoon-unlocked"
+    "icomoon-image",
+    "icomoon-camera",
+    "icomoon-headphones",
+    "icomoon-music",
+    "icomoon-play",
+    "icomoon-film",
+    "icomoon-video-camera",
+    "icomoon-dice",
+    "icomoon-pacman",
+    "icomoon-spades",
+    "icomoon-clubs",
+    "icomoon-diamonds",
+    "icomoon-bullhorn",
+    "icomoon-connection",
+    "icomoon-podcast",
+    "icomoon-feed",
+    "icomoon-mic",
+    "icomoon-book",
+    "icomoon-books",
+    "icomoon-library",
+    "icomoon-file-text",
+    "icomoon-profile",
+    "icomoon-file-empty",
+    "icomoon-files-empty",
+    "icomoon-file-text2",
+    "icomoon-file-picture",
+    "icomoon-file-music",
+    "icomoon-file-play",
+    "icomoon-file-video",
+    "icomoon-file-zip",
+    "icomoon-copy",
+    "icomoon-paste",
+    "icomoon-stack",
+    "icomoon-folder"
 ];
 
 module.exports = [
@@ -65,7 +69,9 @@ module.exports = [
         code: "10",
         url: null,
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1001",
@@ -75,7 +81,9 @@ module.exports = [
         code: "1001",
         url: "/example/query-search",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "11",
@@ -85,7 +93,9 @@ module.exports = [
         code: "11",
         url: null,
         moduleCode: "DATA",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1101",
@@ -95,7 +105,9 @@ module.exports = [
         code: "1101",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "DATA",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1102",
@@ -105,7 +117,9 @@ module.exports = [
         code: "1102",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "DATA",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1103",
@@ -115,7 +129,9 @@ module.exports = [
         code: "1103",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "DATA",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "12",
@@ -125,7 +141,9 @@ module.exports = [
         code: "12",
         url: null,
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1201",
@@ -135,7 +153,9 @@ module.exports = [
         code: "1201",
         url: null,
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "120101",
@@ -145,7 +165,9 @@ module.exports = [
         code: "120101",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "120102",
@@ -155,17 +177,21 @@ module.exports = [
         code: "120102",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "120103",
         parentId: "1201",
         name: "商品管理",
-        icons: "Goods",
+        icons: "icomoon-mail",
         code: "120103",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "120104",
@@ -175,7 +201,9 @@ module.exports = [
         code: "120104",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1202",
@@ -185,7 +213,7 @@ module.exports = [
         code: "1202",
         url: null,
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])") // 状态
     },
     {
         id: "120201",
@@ -195,7 +223,9 @@ module.exports = [
         code: "120201",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "12020101",
@@ -205,7 +235,9 @@ module.exports = [
         code: "12020101",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "12020102",
@@ -215,7 +247,9 @@ module.exports = [
         code: "12020102",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "12020103",
@@ -225,7 +259,9 @@ module.exports = [
         code: "12020103",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "12020104",
@@ -235,7 +271,9 @@ module.exports = [
         code: "12020104",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "12020105",
@@ -245,7 +283,9 @@ module.exports = [
         code: "12020105",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "12020106",
@@ -255,7 +295,9 @@ module.exports = [
         code: "12020106",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "120202",
@@ -265,7 +307,9 @@ module.exports = [
         code: "120202",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "120203",
@@ -275,7 +319,9 @@ module.exports = [
         code: "120203",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "120204",
@@ -285,7 +331,9 @@ module.exports = [
         code: "120204",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1203",
@@ -295,7 +343,9 @@ module.exports = [
         code: "1203",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "120301",
@@ -305,7 +355,9 @@ module.exports = [
         code: "120301",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "MALL",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "13",
@@ -315,7 +367,9 @@ module.exports = [
         code: "400000",
         url: null,
         moduleCode: "ACCOUNTING",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1301",
@@ -325,7 +379,9 @@ module.exports = [
         code: "1301",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "ACCOUNTING",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "14",
@@ -335,17 +391,21 @@ module.exports = [
         code: "14",
         url: null,
         moduleCode: "PAY",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1401",
         parentId: "14",
         name: "订单查询",
-        icons: "Money",
+        icons: "icomoon-paypal",
         code: "1401",
         url: "https://wwww." + Mock.mock("@word") + ".com",
         moduleCode: "PAY",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "15",
@@ -355,7 +415,9 @@ module.exports = [
         code: "15",
         url: null,
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1501",
@@ -365,7 +427,9 @@ module.exports = [
         code: "1501",
         url: "/system/modules",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1502",
@@ -375,7 +439,9 @@ module.exports = [
         code: "1502",
         url: "/system/users",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1503",
@@ -385,7 +451,9 @@ module.exports = [
         code: "1503",
         url: "/system/roles",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1504",
@@ -395,7 +463,9 @@ module.exports = [
         code: "1504",
         url: "/system/menus",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "16",
@@ -405,7 +475,9 @@ module.exports = [
         code: "16",
         url: null,
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1601",
@@ -415,7 +487,9 @@ module.exports = [
         code: "1601",
         url: "/play-input",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1602",
@@ -425,7 +499,9 @@ module.exports = [
         code: "1602",
         url: "/play-details?id=0001",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1603",
@@ -435,7 +511,9 @@ module.exports = [
         code: "1603",
         url: "/play-details?id=0003",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1604",
@@ -445,7 +523,9 @@ module.exports = [
         code: "1604",
         url: "http://10.96.144.203:8080/",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
     {
         id: "1605",
@@ -455,6 +535,8 @@ module.exports = [
         code: "1605",
         url: "http://10.96.144.203:8080/about",
         moduleCode: "BASE",
-        status: 1
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     }
 ];

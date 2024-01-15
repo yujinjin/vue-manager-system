@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 13:55:10
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-11 11:51:52
+ * @最后修改时间: 2024-01-15 14:20:01
  * @项目的路径: \vue-manager-system\mock\system.js
  * @描述: 系统模块mock数据
  */
@@ -96,7 +96,10 @@ module.exports = function (app) {
     // 查询模块列表
     app.get("/system/queryModuleList", function (request, response) {
         const queryList = modules.filter(item => {
-            if(request.query.moduleName && !item.name.includes(request.query.moduleName) && !item.code.toLowerCase().includes(request.query.moduleName.toLowerCase())) {
+            if(request.query.moduleName && item.moduleName !== request.query.moduleName) {
+                return false;
+            }
+            if(request.query.code && !item.code === request.query.code) {
                 return false;
             }
             return true;
@@ -118,12 +121,8 @@ module.exports = function (app) {
     app.get("/system/queryPageMenuList", function (request, response) {
         const pageNo = parseInt(request.query.pageNo || "1", 10);
         const pageSize = parseInt(request.query.pageSize || "50", 10);
-        // const status = request.query.status ? parseInt(request.query.status, 10) : null;
         const queryList = menus.filter(item => {
-            // if (request.query.code && !item.code.includes(request.query.code)) {
-            //     return false;
-            // }
-            if (request.query.name && !item.name.includes(request.query.name) && !item.code.includes(request.query.name)) {
+            if (request.query.keyword && !item.name.includes(request.query.keyword) && !item.code.toLowerCase().includes(request.query.keyword.toLowerCase()) && !item.url?.toLowerCase().includes(request.query.keyword.toLowerCase())) {
                 return false;
             }
             if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
@@ -144,14 +143,13 @@ module.exports = function (app) {
 
     // 查询系统菜单列表
     app.get("/system/queryMenuList", function (request, response) {
-        // const status = request.query.status ? parseInt(request.query.status, 10) : null;
         response.json(
             wrapResponse(
                 menus.filter(item => {
-                    // if (request.query.code && !item.code.includes(request.query.code)) {
-                    //     return false;
-                    // }
-                    if (request.query.name && !item.name.includes(request.query.name) && !item.code.includes(request.query.name)) {
+                    if (request.query.code && item.code !== request.query.code) {
+                        return false;
+                    }
+                    if (request.query.name && item.name !== request.query.name) {
                         return false;
                     }
                     if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
@@ -168,10 +166,11 @@ module.exports = function (app) {
 
     // 根据菜单ID查询角色列表（菜单页面查询绑定的角色列表）
     app.get("/system/queryRoleListByMenuId", function (request, response) {
-        const menudId = request.query.menudId;
+        const menuId = request.query.menuId;
+        const roleIdList = rolesMenus.filter(item => item.menuId.includes(menuId));
         response.json(
             wrapResponse(
-                rolesMenus.filter(item => item.menudId === menudId),
+                roles.filter(role => roleIdList.length > 0 && roleIdList.findIndex(({ roleId }) => roleId === role.id) !== -1),
                 false
             )
         );
@@ -182,8 +181,25 @@ module.exports = function (app) {
         response.json(wrapResponse(null, true));
     });
 
+    // 修改菜单锁定状态信息
+    app.post("/system/updateMenuLockStatus", function (request, response) {
+        response.json(wrapResponse(null, true));
+    });
+
     // 删除菜单
     app.post("/system/deleteMenu", function (request, response) {
+        response.json(wrapResponse(null, true));
+    });
+
+    // 上传批量菜单EXCEL(批量新增菜单)
+    app.post("/system/uploadMenusExcel", function (request, response) {
+        setTimeout(() => {
+            response.json(wrapResponse(menus, true));
+        }, parseInt((Math.random() * 10 * 1000).toFixed(0), 10));
+    });
+
+    // 批量新增菜单信息
+    app.post("/system/batchInsertMenus", function (request, response) {
         response.json(wrapResponse(null, true));
     });
 
@@ -217,12 +233,11 @@ module.exports = function (app) {
 
     // 查询角色列表
     app.get("/system/queryRoleList", function (request, response) {
-        // const status = request.query.status ? parseInt(request.query.status, 10) : null;
         const queryList = roles.filter(item => {
-            // if (request.query.code && !item.code.includes(request.query.code)) {
-            //     return false;
-            // }
-            if (request.query.name && !item.name.includes(request.query.name) && !item.code.includes(request.query.name)) {
+            if (request.query.code && item.code !== request.query.code) {
+                return false;
+            }
+            if (request.query.name && item.name !== request.query.name) {
                 return false;
             }
             if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
@@ -246,6 +261,11 @@ module.exports = function (app) {
 
     // 新增或修改角色信息
     app.post("/system/addOrUpdateRole", function (request, response) {
+        response.json(wrapResponse(null, true));
+    });
+
+    // 修改角色锁定状态信息
+    app.post("/system/updateRoleLockStatus", function (request, response) {
         response.json(wrapResponse(null, true));
     });
 

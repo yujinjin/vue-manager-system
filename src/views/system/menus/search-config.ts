@@ -1,22 +1,24 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-10 10:22:18
+ * @创建时间: 2024-01-11 21:29:42
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-11 21:29:58
- * @项目的路径: \vue-manager-system\src\views\system\roles\search-config.ts
- * @描述: 角色查询配置
+ * @最后修改时间: 2024-01-12 15:41:55
+ * @项目的路径: \vue-manager-system\src\views\system\menus\search-config.ts
+ * @描述: 菜单查询配置
  */
 import systemAPI from "@api/system";
 import { HANDLE_CODES } from "@/services/constants";
 
-export default function ({ showDialogHandle, toggleRoleLockStatusHandle, deleteHandle }) {
+export default function ({ showDialogHandle, toggleMenuLockStatusHandle, deleteHandle }) {
     return {
         searchFormProps: {
+            labelWidth: 124,
+            isShowCollapse: false,
             fields: [
                 {
-                    name: "name",
+                    name: "keyword",
                     type: "input",
-                    label: "角色编码/名称"
+                    label: "菜单名称/编码/URL"
                 },
                 {
                     name: "module",
@@ -39,8 +41,7 @@ export default function ({ showDialogHandle, toggleRoleLockStatusHandle, deleteH
                         }
                     ]
                 }
-            ],
-            isShowCollapse: false
+            ]
         },
         actionBarProps: {
             buttons: [
@@ -60,24 +61,37 @@ export default function ({ showDialogHandle, toggleRoleLockStatusHandle, deleteH
             ]
         },
         dataTableProps: {
-            query: systemAPI.queryPageRoleList,
+            query: systemAPI.queryPageMenuList,
             columns: [
                 {
-                    label: "角色编码",
+                    label: "菜单编码",
                     prop: "code",
                     minWidth: 120
                 },
                 {
-                    label: "角色名称",
+                    label: "菜单名称",
                     prop: "name",
                     minWidth: 120
                 },
                 {
                     label: "所属模块",
                     prop: "moduleCode",
-                    minWidth: 150,
+                    minWidth: 120,
                     type: "enum",
                     data: [] as Record<string, any>[]
+                },
+                {
+                    label: "地址",
+                    prop: "url",
+                    showOverflowTooltip: true,
+                    minWidth: 150
+                },
+                {
+                    label: "图标",
+                    prop: "icons",
+                    minWidth: 100,
+                    align: "center",
+                    slot: "dataTable_icons"
                 },
                 {
                     label: "状态",
@@ -86,30 +100,42 @@ export default function ({ showDialogHandle, toggleRoleLockStatusHandle, deleteH
                     slot: "dataTable_status"
                 },
                 {
+                    label: "更新人",
+                    prop: "updated",
+                    minWidth: 100
+                },
+                {
+                    label: "更新时间",
+                    prop: "updateTime",
+                    type: "date",
+                    formate: "YYYY-MM-DD HH:mm:ss",
+                    width: 150
+                },
+                {
                     type: "action",
                     width: 180,
                     buttons: [
                         {
-                            text: "编辑",
+                            text: "修改",
                             handleCode: HANDLE_CODES.UPDATE,
                             click: showDialogHandle
                         },
                         {
-                            text: "绑定菜单",
-                            handleCode: HANDLE_CODES.AUTH,
+                            text: "绑定的角色",
+                            handleCode: HANDLE_CODES.SEARCH,
                             click: showDialogHandle
                         },
                         {
                             text: "锁定",
                             handleCode: HANDLE_CODES.DISABLE,
                             display: row => row.status === "0",
-                            click: toggleRoleLockStatusHandle
+                            click: toggleMenuLockStatusHandle
                         },
                         {
                             text: "解锁",
                             handleCode: HANDLE_CODES.ENABLE,
                             display: row => row.status === "1",
-                            click: toggleRoleLockStatusHandle
+                            click: toggleMenuLockStatusHandle
                         },
                         {
                             text: "删除",

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:34:02
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-27 14:21:11
+ * @最后修改时间: 2024-01-15 10:37:35
  * @项目的路径: \vue-manager-system\types\components.d.ts
  * @描述: 自定义组件声明
  */
@@ -301,6 +301,9 @@ declare namespace Components {
         /** 获取表单的value */
         getInputValue: () => Record<string, any> | null;
 
+        /** 设置表单的属性值 */
+        setInputPropertyValue: (propertyName: string, value: any) => void;
+
         /** 获取表单的value */
         changeFormFields: (callback: (formFields: Components.InputFormField[]) => void) => void;
 
@@ -315,6 +318,9 @@ declare namespace Components {
     interface DialogFormRef {
         // 获取表单的value
         getInputValue: () => Record<string, any>;
+
+        /** 设置表单的属性值 */
+        setInputPropertyValue: (propertyName: string, value: any) => void;
 
         // 修改当前form字段的属性
         changeFormFields: (callback: (formFields: Components.InputFormField[]) => void) => void;

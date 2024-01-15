@@ -1,3 +1,11 @@
+<!--
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2023-12-28 10:10:08
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2024-01-15 09:42:55
+ * @项目的路径: \vue-manager-system\src\views\system\users\components\info-form-dialog.vue
+ * @描述: 新增或编辑用户信息弹窗
+-->
 <template>
     <dialog-form
         ref="dialogFormRef"

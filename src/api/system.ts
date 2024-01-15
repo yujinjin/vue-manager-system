@@ -210,6 +210,21 @@ export default {
     },
 
     /**
+     * 切换菜单锁定状态信息
+     */
+    toggleMenuLockStatus(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/updateMenuLockStatus",
+                    data: inputData
+                },
+                ajaxOptions || {}
+            )
+        );
+    },
+
+    /**
      * 根据菜单ID查询角色列表（菜单页面查询绑定的角色列表）
      */
     queryRoleListByMenuId(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
@@ -233,6 +248,28 @@ export default {
             Object.assign(
                 {
                     url: "/system/deleteMenu",
+                    data: inputData
+                },
+                ajaxOptions || {}
+            )
+        );
+    },
+
+    /**
+     * 上传批量菜单EXCEL(批量新增菜单)
+     */
+    uploadMenusExcel(file: File, ajaxOptions?: Http.RequestConfig) {
+        return commonApi.upload({ file }, "/system/uploadMenusExcel", ajaxOptions);
+    },
+
+    /**
+     * 批量新增菜单信息
+     */
+    batchInsertMenus(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/batchInsertMenus",
                     data: inputData
                 },
                 ajaxOptions || {}

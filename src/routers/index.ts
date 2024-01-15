@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-10 14:25:14
+ * @最后修改时间: 2024-01-11 20:24:13
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
@@ -14,6 +14,7 @@ import { storageStore, eventsStore } from "@/stores";
 import type { RouteRecordRaw, Router } from "vue-router";
 import { createRouter, createWebHistory } from "vue-router";
 import { changeUrlParameter } from "@yujinjin/utils";
+import system from "./system";
 
 export default function (): Router {
     const dataStorages = storageStore();
@@ -29,21 +30,6 @@ export default function (): Router {
                         name: "welcome",
                         path: "/",
                         component: () => import("@views/others/welcome.vue")
-                    },
-                    {
-                        name: "system-modules",
-                        path: "/system/modules",
-                        component: () => import("@views/system/modules/index.vue")
-                    },
-                    {
-                        name: "system-users",
-                        path: "/system/users",
-                        component: () => import("@views/system/users/index.vue")
-                    },
-                    {
-                        name: "system-roles",
-                        path: "/system/roles",
-                        component: () => import("@views/system/roles/index.vue")
                     },
                     {
                         name: "play-input",
@@ -64,7 +50,8 @@ export default function (): Router {
                         name: "transit",
                         path: "/transit",
                         component: () => import("@views/others/transit.vue")
-                    }
+                    },
+                    ...system
                 ]
             },
             {

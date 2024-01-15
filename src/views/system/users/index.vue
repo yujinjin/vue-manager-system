@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-12-28 09:43:38
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-10 11:16:32
+ * @最后修改时间: 2024-01-11 21:59:25
  * @项目的路径: \vue-manager-system\src\views\system\users\index.vue
  * @描述: 用户管理页面
 -->
@@ -13,7 +13,7 @@
         </template>
         <info-form-dialog v-if="isShowInfoDialog" v-model:isShow="isShowInfoDialog" @refresh="refreshHandle" :row="selectedRow" />
         <bind-roles-dialog v-if="isShowBindRolesDialog" v-model:isShow="isShowBindRolesDialog" :row="selectedRow" :roleList="roleList" :moduleList="moduleList" />
-        <batch-insert-dialog v-if="isShowBatchInsertDialog" v-model:isShow="isShowBindRolesDialog" />
+        <batch-insert-dialog v-if="isShowBatchInsertDialog" v-model:isShow="isShowBatchInsertDialog" />
     </search-page>
 </template>
 <script setup lang="ts">

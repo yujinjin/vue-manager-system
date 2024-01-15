@@ -258,9 +258,11 @@ const queryDataList = async function (isInit = true) {
         if (props.queryResponseProcess) {
             queryResult = props.queryResponseProcess(queryResult);
         }
-        dataList.value = queryResult.rows || [];
         if (props.isShowPagination) {
+            dataList.value = queryResult.rows || [];
             paginationData.value.total = queryResult.total || 0;
+        } else {
+            dataList.value = queryResult || [];
         }
     } catch (error) {
         logs.error(error);

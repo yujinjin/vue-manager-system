@@ -1,18 +1,23 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-10 11:05:15
+ * @创建时间: 2024-01-11 21:47:54
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-11 21:55:45
- * @项目的路径: \vue-manager-system\src\views\system\roles\index.vue
- * @描述: 系统角色管理页面
+ * @最后修改时间: 2024-01-15 16:41:41
+ * @项目的路径: \vue-manager-system\src\views\system\menus\index.vue
+ * @描述: 系统菜单管理页面
 -->
 <template>
     <search-page v-bind="searchConfigData" ref="searchPageRef">
+        <template #dataTable_icons="{ row }">
+            <i v-if="row.icons?.startsWith('icomoon')" class="icon" :class="row.icons"></i>
+            <el-image v-else-if="row.icons?.startsWith('http')" :src="row.icons" fit="contain" style="width: 30px; height: 30px" />
+            <template v-else>{{ row.icons }}</template>
+        </template>
         <template #dataTable_status="scope">
             <div class="state-text" :class="{ disable: scope.row.status === '1', enable: scope.row.status === '0' }">{{ getStatusText(scope.row.status) }}</div>
         </template>
         <info-form-dialog v-if="isShowInfoDialog" v-model:isShow="isShowInfoDialog" :moduleList="moduleList" @refresh="refreshHandle" :row="selectedRow" />
-        <bind-menus-dialog v-if="isShowBindMenusDialog" v-model:isShow="isShowBindMenusDialog" :row="selectedRow" :moduleList="moduleList" />
+        <bind-roles-dialog v-if="isShowBindRolesDialog" v-model:isShow="isShowBindRolesDialog" :row="selectedRow" :moduleList="moduleList" />
         <batch-insert-dialog v-if="isShowBatchInsertDialog" v-model:isShow="isShowBatchInsertDialog" :moduleList="moduleList" />
     </search-page>
 </template>
@@ -24,7 +29,7 @@ import systemAPI from "@api/system";
 import { HANDLE_CODES } from "@/services/constants";
 import searchConfig from "./search-config";
 import infoFormDialog from "./components/info-form-dialog.vue";
-import bindMenusDialog from "./components/bind-menus-dialog.vue";
+import bindRolesDialog from "./components/bind-roles-dialog.vue";
 import batchInsertDialog from "./components/batch-insert-dialog.vue";
 
 // search page 组件
@@ -33,17 +38,14 @@ const searchPageRef = ref<Components.SearchPageRef>();
 // 是否显示信息弹窗
 const isShowInfoDialog = ref(false);
 
-// 是否显示绑定菜单弹窗
-const isShowBindMenusDialog = ref(false);
+// 是否显示绑定菜单绑定的角色弹窗
+const isShowBindRolesDialog = ref(false);
 
 // 是否显示批量新增用户弹窗
 const isShowBatchInsertDialog = ref(false);
 
 // 当前选中数据列
 const selectedRow = ref();
-
-// 菜单列表
-const menuList = ref<Record<string, any>[]>([]);
 
 // 模块列表
 const moduleList = ref<Record<string, any>[]>([]);
@@ -64,7 +66,7 @@ const refreshHandle = async function () {
     await searchPageRef.value!.query();
 };
 
-// 显示角色相关操作信息弹
+// 显示菜单相关操作信息弹
 const showDialogHandle = function (rows, { handleCode }) {
     if (handleCode === HANDLE_CODES.CREATE) {
         selectedRow.value = null;
@@ -72,26 +74,26 @@ const showDialogHandle = function (rows, { handleCode }) {
         selectedRow.value = rows;
     }
     if ([HANDLE_CODES.CREATE, HANDLE_CODES.UPDATE].includes(handleCode)) {
-        // 新增/修改角色信息弹窗
+        // 新增/修改菜单信息弹窗
         isShowInfoDialog.value = true;
-    } else if (handleCode === HANDLE_CODES.AUTH) {
-        // 显示绑定菜单信息弹窗
-        isShowBindMenusDialog.value = true;
+    } else if (handleCode === HANDLE_CODES.SEARCH) {
+        // 显示绑定角色信息弹窗
+        isShowBindRolesDialog.value = true;
     } else if (handleCode === HANDLE_CODES.BATCHCREATE) {
-        // 显示批量新增角色信息弹窗
+        // 显示批量新增菜单信息弹窗
         isShowBatchInsertDialog.value = true;
     }
 };
 
-// 切换角色的锁定状态
-const toggleRoleLockStatusHandle = async function (row, { handleCode }) {
-    await ElMessageBox.confirm("确定" + (handleCode === HANDLE_CODES.DISABLE ? "锁定" : "解锁") + "当前角色信息吗?", "信息确认", {
+// 切换菜单的锁定状态
+const toggleMenuLockStatusHandle = async function (row, { handleCode }) {
+    await ElMessageBox.confirm("确定" + (handleCode === HANDLE_CODES.DISABLE ? "锁定" : "解锁") + "当前菜单信息吗?", "信息确认", {
         customClass: "custom-confirm",
         confirmButtonText: "确认",
         cancelButtonText: "取消",
         type: "warning"
     });
-    await systemAPI.toggleRoleLockStatus({ id: row.id, status: handleCode === HANDLE_CODES.DISABLE ? "1" : "0" });
+    await systemAPI.toggleMenuLockStatus({ id: row.id, status: handleCode === HANDLE_CODES.DISABLE ? "1" : "0" });
     ElMessage({
         customClass: "custom-message",
         message: "操作成功",
@@ -102,7 +104,7 @@ const toggleRoleLockStatusHandle = async function (row, { handleCode }) {
 
 // 删除操作
 const deleteHandle = async function (row) {
-    await ElMessageBox.confirm("确定删除当前角色信息吗?", "信息确认", {
+    await ElMessageBox.confirm("确定删除当前菜单信息吗?", "信息确认", {
         customClass: "custom-confirm",
         confirmButtonText: "确认",
         cancelButtonText: "取消",
@@ -118,13 +120,11 @@ const deleteHandle = async function (row) {
 };
 
 // 搜索页配置数据
-const searchConfigData = reactive(searchConfig({ showDialogHandle, toggleRoleLockStatusHandle, deleteHandle }));
+const searchConfigData = reactive(searchConfig({ showDialogHandle, toggleMenuLockStatusHandle, deleteHandle }));
 
 const init = async function () {
     // 查询模块列表
     moduleList.value = ((await systemAPI.queryModuleList({})) as Array<Record<string, any>>) || [];
-    // 查询菜单列表
-    menuList.value = ((await systemAPI.queryMenuList({})) as Array<Record<string, any>>) || [];
 
     if (moduleList.value.length > 0) {
         // 设置模块筛选项中的下拉框数据
@@ -173,5 +173,13 @@ init();
     &.enable::before {
         background: #00b85c;
     }
+}
+
+i.icon {
+    font-size: 20px;
+    border: 1px solid #ccc;
+    padding: 4px;
+    display: inline-block;
+    border-radius: 4px;
 }
 </style>

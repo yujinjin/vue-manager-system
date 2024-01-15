@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-17 16:54:04
+ * @最后修改时间: 2024-01-15 15:52:08
  * @项目的路径: \vue-manager-system\src\components\dialog-form.vue
  * @描述: form 弹窗组件
 -->
@@ -91,8 +91,8 @@ const dialogClosed = function () {
     emits("close");
 };
 
-const inputFormFieldValueChange = function (field: Components.InputFormField, fieldValue: any, formFields: Components.InputFormField[]) {
-    emits("fieldValueChange", field, fieldValue, formFields);
+const inputFormFieldValueChange = function (field: Components.InputFormField, fieldValue: any, formFields: Components.InputFormField[], inputValue: Record<string, any>) {
+    emits("fieldValueChange", field, fieldValue, formFields, inputValue);
 };
 
 // 按钮点击操作
@@ -150,6 +150,16 @@ defineExpose({
     getInputValue: function () {
         return inputFormRef.value?.getInputValue();
     },
+
+    /**
+     * 设置表单的属性值
+     * @param propertyName 属性名
+     * @param value 属性值
+     */
+    setInputPropertyValue: function (propertyName: string, value: any) {
+        inputFormRef.value?.setInputPropertyValue(propertyName, value);
+    },
+
     // 修改当前form字段的属性
     changeFormFields: function (callback: (formFields: Components.InputFormField[]) => void) {
         return inputFormRef.value?.changeFormFields(callback);
@@ -177,7 +187,7 @@ defineExpose({
     width: 100%;
     .el-dialog__body {
         padding: 12px 20px 0px;
-        max-height: 500px;
+        max-height: 600px;
         overflow-y: auto;
     }
 
