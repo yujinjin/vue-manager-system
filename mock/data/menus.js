@@ -434,10 +434,10 @@ module.exports = [
     {
         id: "1502",
         parentId: "15",
-        name: "用户管理",
-        icons: "icomoon-users",
+        name: "角色管理",
+        icons: "icomoon-user-tie",
         code: "1502",
-        url: "/system/users",
+        url: "/system/roles",
         moduleCode: "BASE",
         status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
         updated: Mock.mock("@first()"),
@@ -446,10 +446,10 @@ module.exports = [
     {
         id: "1503",
         parentId: "15",
-        name: "角色管理",
-        icons: "icomoon-user-tie",
+        name: "菜单管理",
+        icons: "icomoon-menu",
         code: "1503",
-        url: "/system/roles",
+        url: "/system/menus",
         moduleCode: "BASE",
         status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
         updated: Mock.mock("@first()"),
@@ -458,10 +458,22 @@ module.exports = [
     {
         id: "1504",
         parentId: "15",
-        name: "菜单管理",
-        icons: "icomoon-menu",
+        name: "用户管理",
+        icons: "icomoon-users",
         code: "1504",
-        url: "/system/menus",
+        url: "/system/users",
+        moduleCode: "BASE",
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
+    },
+    {
+        id: "1505",
+        parentId: "15",
+        name: "站内信管理",
+        icons: "icomoon-envelop",
+        code: "1505",
+        url: "/system/messages",
         moduleCode: "BASE",
         status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
         updated: Mock.mock("@first()"),

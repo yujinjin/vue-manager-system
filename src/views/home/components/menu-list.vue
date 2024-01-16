@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-11-14 16:14:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-19 15:30:01
+ * @最后修改时间: 2024-01-16 16:17:53
  * @项目的路径: \vue-manager-system\src\views\home\components\menu-list.vue
  * @描述: 菜单列表
 -->
@@ -11,7 +11,7 @@
         <el-menu-item v-if="menuItem.childList.length === 0" :index="menuItem.id">
             <el-icon>
                 <!-- <svg-icon class="menu-icon" :value="menuItem.icons" /> -->
-                <i class="icomoon-forward" :class="menuItem.icons"></i>
+                <i :class="menuItem.icons"></i>
             </el-icon>
             <template #title>
                 <menu-text :menuItem="menuItem" />
@@ -20,8 +20,8 @@
         <el-sub-menu v-else :index="menuItem.id" popper-class="side-bar-menu-popper">
             <template #title>
                 <el-icon>
-                    <!-- <svg-icon class="menu-icon" :value="menuItem.icons" /> -->
-                    <i class="icomoon-forward" :class="menuItem.icons"></i>
+                    <!--icomoon-forward <svg-icon class="menu-icon" :value="menuItem.icons" /> -->
+                    <i :class="menuItem.icons"></i>
                 </el-icon>
                 <menu-text :menuItem="menuItem" />
             </template>

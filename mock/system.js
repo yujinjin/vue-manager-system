@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 13:55:10
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-15 14:20:01
+ * @最后修改时间: 2024-01-16 16:13:44
  * @项目的路径: \vue-manager-system\mock\system.js
  * @描述: 系统模块mock数据
  */
@@ -20,6 +20,9 @@ const users = require("./data/users");
 const rolesMenus = require("./data/roles-menus");
 // 中台系统用户角色列表
 const usersRoles = require("./data/users-roles");
+// 中台系统站内信列表
+const messages = require("./data/messages");
+
 
 module.exports = function (app) {
     // 登录
@@ -355,6 +358,32 @@ module.exports = function (app) {
 
     // 批量新增用户信息
     app.post("/system/batchInsertUers", function (request, response) {
+        response.json(wrapResponse(null, true));
+    });
+
+    // 分页查询站内信列表（创建的数量）
+    app.get("/system/queryPageMessageList", function (request, response) {
+        const pageNo = parseInt(request.query.pageNo || "1", 10);
+        const pageSize = parseInt(request.query.pageSize || "50", 10);
+        const queryList = messages.filter(item => {
+            if (request.query.keyword && !item.title.includes(request.query.keyword) && !item.content.includes(request.query.keyword)) {
+                return false;
+            }
+            if (request.query.moduleCode && item.moduleCode !== request.query.moduleCode) {
+                return false;
+            }
+            return true;
+        });
+        response.json(
+            wrapResponse({
+                total: queryList.length,
+                rows: queryList.slice((pageNo - 1) * pageSize, pageNo * pageSize)
+            })
+        );
+    });
+
+    // 发送站内信
+    app.post("/system/sendMessage", function (request, response) {
         response.json(wrapResponse(null, true));
     });
 };

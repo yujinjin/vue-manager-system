@@ -534,5 +534,36 @@ export default {
                 ajaxOptions || {}
             )
         );
+    },
+
+    /**
+     * 分页查询站内信列表（创建的数量）
+     */
+    queryPageMessageList(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/queryPageMessageList",
+                    params: inputData,
+                    method: "GET"
+                },
+                ajaxOptions || {}
+            )
+        );
+    },
+
+    /**
+     * 发送站内信
+     */
+    insertMessage(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+        return request(
+            Object.assign(
+                {
+                    url: "/system/sendMessage",
+                    data: inputData
+                },
+                ajaxOptions || {}
+            )
+        );
     }
 };
