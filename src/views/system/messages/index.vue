@@ -2,12 +2,17 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-16 15:15:37
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-16 16:57:07
+ * @最后修改时间: 2024-01-16 17:24:44
  * @项目的路径: \vue-manager-system\src\views\system\messages\index.vue
  * @描述: 站内信页面
 -->
 <template>
     <search-page v-bind="searchConfigData" ref="searchPageRef">
+        <template #dataTable_status="scope">
+            <el-tag v-if="scope.row.status === '0'" type="info">发送中</el-tag>
+            <el-tag v-else-if="scope.row.status === '1'" type="success">发送完成</el-tag>
+            <el-tag v-else-if="scope.row.status === '2'" type="danger">发送失败</el-tag>
+        </template>
         <add-form-dialog v-if="isShowAddDialog" v-model:isShow="isShowAddDialog" :moduleList="moduleList" :roleList="roleList" @refresh="refreshHandle" />
     </search-page>
 </template>

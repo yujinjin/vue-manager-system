@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-16 14:52:33
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-16 16:11:25
+ * @最后修改时间: 2024-01-16 17:18:09
  * @项目的路径: \vue-manager-system\src\views\system\messages\search-config.ts
  * @描述: 站内信查询配置
  */
@@ -70,32 +70,19 @@ export default function ({ showDialogHandle }) {
                 {
                     label: "状态",
                     prop: "status",
-                    minWidth: 100,
-                    type: "enum",
-                    data: [
-                        {
-                            label: "发送中",
-                            value: "0"
-                        },
-                        {
-                            label: "已发送",
-                            value: "1"
-                        },
-                        {
-                            label: "发送失败",
-                            value: "2"
-                        }
-                    ]
+                    width: 100,
+                    slot: "dataTable_status"
                 },
                 {
                     label: "预计发送数量",
                     prop: "estimateSendNumber",
-                    minWidth: 100
+                    type: "number",
+                    width: 100
                 },
                 {
                     label: "实际发送数量",
                     prop: "realSendNumber",
-                    minWidth: 100
+                    width: 100
                 },
                 {
                     label: "更新人",

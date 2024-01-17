@@ -1,5 +1,5 @@
 <template>
-    <div class="external"></div>
+    <div class="transit"></div>
 </template>
 <script setup lang="ts">
 import { nextTick } from "vue";

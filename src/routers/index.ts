@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-11 20:24:13
+ * @最后修改时间: 2024-01-17 10:34:01
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
@@ -15,6 +15,8 @@ import type { RouteRecordRaw, Router } from "vue-router";
 import { createRouter, createWebHistory } from "vue-router";
 import { changeUrlParameter } from "@yujinjin/utils";
 import system from "./system";
+import others from "./others";
+import plays from "./plays";
 
 export default function (): Router {
     const dataStorages = storageStore();
@@ -26,32 +28,9 @@ export default function (): Router {
                 path: "/",
                 component: () => import("@views/home/index.vue"),
                 children: [
-                    {
-                        name: "welcome",
-                        path: "/",
-                        component: () => import("@views/others/welcome.vue")
-                    },
-                    {
-                        name: "play-input",
-                        path: "/play-input",
-                        component: () => import("@views/plays/input.vue")
-                    },
-                    {
-                        name: "play-details",
-                        path: "/play-details",
-                        component: () => import("@views/plays/details.vue")
-                    },
-                    {
-                        name: "external",
-                        path: "/external/:menuId(\\d+)?",
-                        component: () => import("@views/others/external.vue")
-                    },
-                    {
-                        name: "transit",
-                        path: "/transit",
-                        component: () => import("@views/others/transit.vue")
-                    },
-                    ...system
+                    ...system,
+                    ...others,
+                    ...plays
                 ]
             },
             {

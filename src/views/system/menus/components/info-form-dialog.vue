@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-15 09:41:32
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-15 16:24:14
+ * @最后修改时间: 2024-01-17 09:57:10
  * @项目的路径: \vue-manager-system\src\views\system\menus\components\info-form-dialog.vue
  * @描述: 菜单新增或修改弹窗
 -->
@@ -74,7 +74,7 @@ const inputForm = reactive<Components.InputForm>({
             name: "moduleCode",
             label: "所属模块",
             type: "select",
-            data: props.moduleList.map(item => ({ label: item.name + "( " + item.code + ")", value: item.code })),
+            data: props.moduleList.map(item => ({ label: item.name + "(" + item.code + ")", value: item.code })),
             rules: [{ required: true, message: "请填写" }]
         },
         {

@@ -539,7 +539,7 @@ export default {
     /**
      * 分页查询站内信列表（创建的数量）
      */
-    queryPageMessageList(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+    queryPageMessageList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -555,7 +555,7 @@ export default {
     /**
      * 发送站内信
      */
-    insertMessage(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+    insertMessage(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
         return request(
             Object.assign(
                 {

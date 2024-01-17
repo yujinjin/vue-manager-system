@@ -48,7 +48,7 @@ const inputForm = reactive<Components.InputForm>({
             name: "moduleCode",
             label: "所属模块",
             type: "select",
-            data: props.moduleList.map(item => ({ label: item.name + "( " + item.code + ")", value: item.code }))
+            data: props.moduleList.map(item => ({ label: item.name + "(" + item.code + ")", value: item.code }))
         },
         {
             name: "roles",

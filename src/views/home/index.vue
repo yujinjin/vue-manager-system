@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-19 14:21:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-26 16:24:37
+ * @最后修改时间: 2024-01-17 10:40:58
  * @项目的路径: \vue-manager-system\src\views\home\index.vue
  * @描述: 中台主页
 -->
@@ -206,7 +206,7 @@ init();
         .page-view {
             flex: 1;
             background-color: #fff;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
         }
     }
