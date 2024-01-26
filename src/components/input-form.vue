@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-15 16:14:57
+ * @最后修改时间: 2024-01-25 21:13:23
  * @项目的路径: \vue-manager-system\src\components\input-form.vue
  * @描述: 数据输入表单
 -->
@@ -10,7 +10,7 @@
     <div class="input-form" v-loading="isLoading">
         <el-form v-bind="formProps" :model="inputFormValue" ref="inputFormRef">
             <el-row>
-                <el-col v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index" :span="field.span">
+                <el-col v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index" :span="field.span" v-show="field.isShow !== false">
                     <el-form-item v-bind="field.formItemProps">
                         <input-field :field="field" :modelValue="getObjectProperty(inputFormValue, field.name)" @update:modelValue="value => setFieldValue(value, field)">
                             <!-- 自定义插件，插槽 -->
@@ -79,7 +79,7 @@ const emits = defineEmits(["fieldValueChange"]);
 const formProps = ref({});
 
 // form ref
-const inputFormRef: Ref<null | FormInstance> = ref(null);
+const inputFormRef = ref<FormInstance>();
 
 // 表单数据
 const inputFormValue: Ref<Record<string, any>> = ref({});
@@ -120,7 +120,7 @@ const generateFormFields = function () {
             logs.warn("字段没有属性name值", field);
             return;
         }
-        const newField: Components.InputFormField = extend(true, {}, field);
+        const newField: Components.InputFormField = extend(true, { isShow: true }, field);
         if (!newField.span) {
             newField.span = 24 / props.columns;
         }
@@ -209,7 +209,7 @@ watch(
     }
 );
 
-defineExpose({
+defineExpose<Components.InputFormRef>({
     // 获取表单的value
     getInputValue: function () {
         return JSON.parse(JSON.stringify(inputFormValue.value));
@@ -237,11 +237,11 @@ defineExpose({
     },
     // 获取form Ref
     getFormRef: function () {
-        return inputFormRef.value;
+        return inputFormRef.value!;
     },
     // 表单验证
     validate(callback?: FormValidateCallback) {
-        return inputFormRef.value?.validate(callback);
+        return inputFormRef.value!.validate(callback);
     }
 });
 </script>

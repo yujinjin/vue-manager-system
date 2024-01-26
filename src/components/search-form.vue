@@ -236,7 +236,7 @@ onMounted(async () => {
     triggerResizeEvent();
 });
 
-defineExpose({
+defineExpose<Components.SearchFormRef>({
     // 修改当前form字段的属性
     changeFormFields: function (callback: (formFields: Components.SearchFormField[]) => void) {
         if (callback && typeof callback === "function") {
@@ -250,7 +250,7 @@ defineExpose({
 });
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .search-panel {
     --el-component-size: 28px;
     --el-input-icon-color: #babac2;
@@ -262,6 +262,7 @@ defineExpose({
     font-size: 12px;
     color: #595959;
     position: relative;
+    
 
     &.collapse {
         height: 60px;
@@ -291,6 +292,10 @@ defineExpose({
                 .el-input__inner {
                     text-align: left;
                 }
+            }
+
+            :deep(.el-date-editor) {
+                --el-date-editor-daterange-width: 220px;
             }
         }
     }

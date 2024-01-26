@@ -159,37 +159,119 @@ module.exports = function (app) {
         );
     });
 
-    // 常用页面demo 分页查询
-    app.post("/demo/queryPageListForOrder", function (request, response) {
-        const time = new Date().getTime();
+    // demo订单分页查询
+    app.get("/demo/queryPageOrderList", function (request, response) {
+        const pageSize = parseInt(request.query.pageSize || "50", 10);
         response.json(
             wrapResponse({
                 "total|10-1000": 0,
-                "rows|50": [
+                "allCount|1-1000": 0, // 全部订单数
+                "pendingCount|1-1000": 0, // 待付款订单数
+                "paidCount|1-1000": 0, // 待发货订单数
+                "deliveredCount|1-1000": 0, // 已发货订单数
+                "completedCount|1-1000": 0, // 已签收订单数
+                "cancelledCount|1-1000": 0, // 已取消订单数
+                "refundedCount|1-1000": 0, // 已退款订单数
+                ["rows|" + pageSize]: [
                     {
-                        "orderNo": "ON@date('yyyyMMddHH')@string('number', 8)", // 订单编号
+                        "orderNo": "ON@date('yyyyMMddHH')@string('number', 8)",
                         "orderAmount|1-9999.1-2": 1, // 订单金额
-                        "orderStatus|1": [1, 2, 3, 10, 20, 30], // 订单状态
-                        "createTime": "@integer(" + (time - 30 * 24 * 60 * 60 * 1000) + ", " + (time + 30 * 24 * 60 * 60 * 1000) + ")", // 订单创建时间
-                        "goodsImgs": function () {
-                            const imgs = [
-                                "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-                                "https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg",
-                                "https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg",
-                                ...new Array(20).fill(0).map(() => Mock.Random.image(null, Mock.Random.color(), Mock.Random.color()))
-                            ];
-                            return new Array(Mock.mock("@integer(0, 5)"))
-                                .fill(0)
-                                .map(() => Mock.Random.pick(imgs))
-                                .join("|");
-                        }, // 商品图片
+                        "deviceSource|1": ["H5", "WXH5", "WXXCX", "iOSApp", "androidApp"], // 下单来源设备
+                        "payAmount|1-9999.1-2": 0, // 实际支付金额
+                        "orderStatus|1": [-1, -6, -7, -5, 10, 20, 30, 40, 50], // 订单状态
                         "goodsNumber|1-20": 1, // 商品数量
-                        "receiveMan": "@cname()", // 收货人
-                        "receiveMobileNumber": /1[3456789]\d{9}/, // 收货电话
-                        "remark": "@csentence(0, 100)" // 备注
+                        "goodsImgs": function () {
+                            return Mock.Random.shuffle(new Array(20).fill(0).map(() => Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5))), 1, this.goodsNumber).join(",");
+                        }, // 商品图片
+                        "buyerId": "UR@string('number', 12)", // 购买人ID（用户ID）
+                        "buyerName": "@cname()", // 购买人名称（真实姓名|昵称）
+                        "buyerMobileNumber": /1[3456789]\d{9}/, // 购买人手机号（用户手机号）
+                        "receiver": "@cname()", // 收货人
+                        "receiverMobileNumber": /1[3456789]\d{9}/, // 收货电话
+                        "remark": "@csentence(0, 100)", // 备注
+                        "payTime": function (){
+                            return Mock.mock("@boolean(1, 4, false)") ? new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000) : null;
+                        }, // 付款时间
+                        "createTime": function () {
+                            return new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000);
+                        } // 创建时间
                     }
                 ]
             })
         );
+    });
+
+    // demo 查询订单详情
+    app.get("/demo/queryOrderDetails", function (request, response) {
+        const orderNo = request.query.orderNo;
+        response.json(
+            wrapResponse({
+                "orderNo": orderNo,
+                "orderAmount|1-9999.1-2": 1, // 订单金额
+                "deviceSource|1": ["H5", "WXH5", "WXXCX", "iOSApp", "androidApp"], // 下单设备来源
+                "orderStatus|1": [-1, -6, -7, -5, 10, 20, 30, 40, 50], // 订单状态
+                "buyerId": "UR@string('number', 12)", // 购买人ID（用户ID）
+                "buyerName": "@cname()", // 购买人名称（真实姓名|昵称）
+                "buyerMobileNumber": /1[3456789]\d{9}/, // 购买人手机号（用户手机号）
+                "receiver": "@cname()", // 收货人
+                "receiverMobileNumber": /1[3456789]\d{9}/, // 收货电话
+                "receiverAddress": "@county(true) @cword(2, 5)路@integer(1,1000)号@integer(1,100)幢@integer(1,33)0@integer(1,4)室", // 收货人地址
+                "remark": "@csentence(0, 100)", // 备注
+                "createTime": new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000), // 下单时间
+                "payInfo": {
+                    "payNo": "PY@date('yyyyMMddHH')@string('number', 8)", // 支付流水号
+                    "payAmount|1-9999.1-2": 0, // 支付金额
+                    "payTime": Mock.mock("@boolean(1, 4, false)") ? new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000) : null, // 支付时间
+                    "payWay|1": ["cash", "zfb", "wx", "bankcard", "balance", "free"] // 支付方式
+                }, // 支付信息
+                "goodsList": new Array(Mock.Random.integer(1, 20)).fill(0).map(() => ({
+                    name: Mock.Random.ctitle(), // 商品名称
+                    img: Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5)), // 商品图片
+                    code: Mock.Random.string("upper", 4) + Mock.Random.string("number", 5), // 商品CODE
+                    specs: new Array(Mock.Random.integer(1, 4)).fill(0).map(() => Mock.mock("@cword(2, 6)")).join(";"), // 规格
+                    price: Mock.Random.float(1, 1000, 3), // 商品金额
+                    quantity: Mock.Random.integer(1, 4), // 商品数量
+                    discountPriceInYuan: Mock.Random.float(1, 10), // 优惠金额（元）
+                    activity: Mock.Random.pick(["限时抢购", "专题活动", "活动商品", ""]) // 活动名称
+                })), // 商品列表
+                "couponList": new Array(Mock.Random.integer(0, 3)).fill(0).map(() => ({
+                    type: Mock.Random.pick(["满减", "折扣", "抵扣"]),
+                    name: Mock.Random.pick(["专题活动满1000减100", "专题活动满200减15", "促销打9折", "限时5元抵扣", "特殊商品3元抵扣"]), // 优惠劵名称
+                    amount: Mock.Random.float(1, 1000, 3), // 优惠金额
+                    quantity: Mock.Random.integer(1, 4) // 券数量
+                })), // 使用优惠券列表
+                "logisticsList": new Array(Mock.Random.integer(0, 3)).fill(0).map(() => ({
+                    companyName: Mock.Random.ctitle(), // 物流公司名称
+                    logisticsNumber: "WL" + Mock.Random.string("number", 10), // 物流单号
+                    goodsList: new Array(Mock.Random.integer(1, 3)).fill(0).map(() => ({
+                        name: Mock.Random.ctitle(), // 商品名称
+                        img: Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5)), // 商品图片
+                        specs: new Array(Mock.Random.integer(1, 4)).fill(0).map(() => Mock.mock("@cword(2, 6)")).join(";"), // 规格
+                        code: Mock.Random.string("upper", 4) + Mock.Random.string("number", 5), // 商品CODE
+                        quantity: Mock.Random.integer(1, 4) // 商品数量
+                    })) // 商品列表
+                })), // 物流信息列表
+                "afterSalesList": new Array(Mock.Random.integer(0, 2)).fill(0).map(() => ({
+                    type: Mock.Random.pick(["退款退货", "全部退款", "部分退款", "部分退款退货", "换货", "部分换货"]),
+                    createTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000), // 创建时间
+                    logisticsNumbers: new Array(Mock.Random.integer(1, 3)).fill(0).map(() => "WL" + Mock.Random.string("number", 10)).join(","), // 涉及物流单号
+                    refundAmount: Mock.Random.float(0, 1000, 3), // 退款金额
+                    reason: Mock.Random.pick(["商品质量有问题", "商品快递过程中损坏", "买错规格", "颜色有问题", "其他"]), // 原因
+                    remark: Mock.Random.ctitle(),// 用户备注
+                    goodsList: new Array(Mock.Random.integer(0, 3)).fill(0).map(() => ({
+                        name: Mock.Random.ctitle(), // 商品名称
+                        img: Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5)), // 商品图片
+                        specs: new Array(Mock.Random.integer(1, 4)).fill(0).map(() => Mock.mock("@cword(2, 6)")).join(";"), // 规格
+                        code: Mock.Random.string("upper", 4) + Mock.Random.string("number", 5), // 商品CODE
+                        quantity: Mock.Random.integer(1, 4) // 商品数量
+                    })) // 商品列表
+                })) // 售后信息列表
+            })
+        );
+    });
+
+    // 批量修改订单状态
+    app.post("/demo/batchUpdateOrderStatus", function (request, response) {
+        response.json(wrapResponse(null, true));
     });
 };

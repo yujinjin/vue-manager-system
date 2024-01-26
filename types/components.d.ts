@@ -2,13 +2,14 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:34:02
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-15 10:37:35
+ * @最后修改时间: 2024-01-25 21:14:54
  * @项目的路径: \vue-manager-system\types\components.d.ts
  * @描述: 自定义组件声明
  */
 import type { HandleCodes } from "@/services/enums";
-import type { ButtonProps, TableProps, TableColumnCtx, PaginationProps, FormProps, FormItemProps, FormItemRule, FormInstance, FormValidateCallback } from "element-plus";
+import type { ButtonProps, TableProps, TableColumnCtx, PaginationProps, FormProps, FormItemProps, FormItemRule, FormInstance, FormValidateCallback, FormValidationResult } from "element-plus";
 import type { Component } from "vue";
+import type { NotReadonly } from "./global";
 declare namespace Components {
     /** 自定义按钮组件 */
     interface Button {
@@ -31,7 +32,7 @@ declare namespace Components {
         click?: (button: Components.Button) => Promise<void>;
 
         /** element-plus里的button属性，具体见element-plus button文档 */
-        props?: Partial<ButtonProps>;
+        props?: NotReadonly<Partial<ButtonProps>>;
     }
 
     /** 数据表格按钮 */
@@ -126,6 +127,9 @@ declare namespace Components {
         /** 组件所占的列数,默认是24 */
         span?: number;
 
+        /** 是否显示 */
+        isShow?: boolean;
+
         /** 表单验证规则 */
         rules?: FormItemRule | FormItemRule[];
 
@@ -151,10 +155,13 @@ declare namespace Components {
         data?: Array<Record<string, any>>;
 
         /** header 插槽 */
-        slotHeader: string;
+        slotHeader?: string;
 
         /** 默认插槽 */
-        slot: string;
+        slot?: string;
+
+        /** 是否展示数据列 */
+        isShow?: boolean;
     }
 
     /** 列表操作栏组件属性 */
@@ -289,11 +296,18 @@ declare namespace Components {
 
         /** 初始化表格最大高度 */
         initTableMaxHeight: () => Promise<void>;
+
+        /**
+         * 更新数据列显示状态
+         * @param columnKeys 显示列key值数组（不传值表示都展示）
+         */
+        updateTableColumnsShowStatus: (columnKeys?: string[]) => void;
     }
 
     /** 列表操作栏实例 */
     interface ActionBarRef {
-        changeButtons: (buttons: Components.TableButton[]) => void;
+        /** 修改当前生成的button按钮值 */
+        changeButtons: (callback: (actionButtons: Components.TableButton[]) => void) => void;
     }
 
     /** 数据输入表单实例 */
@@ -308,10 +322,10 @@ declare namespace Components {
         changeFormFields: (callback: (formFields: Components.InputFormField[]) => void) => void;
 
         // 获取form Ref
-        getFormRef: () => FormInstance | null;
+        getFormRef: () => FormInstance;
 
         // 表单验证
-        validate: (callback?: FormValidateCallback) => Promise<void>
+        validate: (callback?: FormValidateCallback) => FormValidationResult;
     }
 
     /** form 弹窗组件实例 */
@@ -329,16 +343,16 @@ declare namespace Components {
         changeButtons: (callback: (actionButtons: Components.FormButton[]) => void) => void;
 
         // 获取form Ref
-        getFormRef: () => Components.InputFormRef | null;
+        getFormRef: () => FormInstance;
 
         // 表单验证
-        validate: (callback?: FormValidateCallback) => Promise<void>
+        validate: (callback?: FormValidateCallback) => FormValidationResult;
     }
 
     /** 搜索页实例 */
     interface SearchPageRef {
         // 搜索查询函数
-        query: (isInit?: boolean) => Promise<any>;
+        query: (isInit?: boolean) => Promise<any> | undefined;
 
         // 获取当前搜索表单实时值
         getSearchingValue: () => Record<string, any>;
@@ -350,6 +364,12 @@ declare namespace Components {
         changeFormFields: (callback: (formFields: Components.InputFormField[]) => void) => void;
 
         // 修改当前生成的button按钮值
-        changeButtons: (callback: (actionButtons: Components.FormButton[]) => void) => void;
+        changeButtons: (callback: (actionButtons: Components.TableButton[]) => void) => void;
+
+        /**
+         * 更新数据列显示状态
+         * @param columnKeys 显示列key值数组（不传值表示都展示）
+         */
+        updateTableColumnsShowStatus: (columnKeys?: string[]) => void;
     }
 }

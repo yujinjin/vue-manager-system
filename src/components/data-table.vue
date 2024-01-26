@@ -1,24 +1,26 @@
 <template>
     <div class="data-table-panel" ref="dataTablePanelRef">
         <el-table :data="dataList" v-bind="tableProps" v-on="events" @selection-change="selectionChangeHandle" v-loading="isLoadingForSearch" element-loading-text="拼命加载中...">
-            <el-table-column v-for="(columnItem, index) in columnList" :key="(columnItem.prop || '') + '_' + index" v-bind="columnItem">
-                <template v-if="columnItem.slotHeader" #header="scope">
-                    <slot :name="columnItem.slotHeader" v-bind="scope"></slot>
-                </template>
-                <template #default="scope">
-                    <slot v-if="columnItem.slot" :name="columnItem.slot" v-bind="scope"></slot>
-                    <!-- 日期 -->
-                    <table-column-date v-else-if="columnItem.type === 'date'" :value="getCellValue(scope.row, columnItem)" :formate="columnItem.formate" />
-                    <!-- 数字 -->
-                    <table-column-number v-else-if="columnItem.type === 'number'" :value="getCellValue(scope.row, columnItem)" :digit="columnItem.digit || 0" />
-                    <!-- 图片 -->
-                    <table-column-image v-else-if="columnItem.type === 'image'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
-                    <!-- 枚举 -->
-                    <table-column-enum v-else-if="columnItem.type === 'enum'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem)" />
-                    <!-- 操作按钮 -->
-                    <table-column-action v-else-if="columnItem.type === 'action'" v-bind="columnItem" :row="scope.row" />
-                </template>
-            </el-table-column>
+            <template v-for="(columnItem, index) in columnList">
+                <el-table-column v-if="columnItem.isShow" :key="(columnItem.prop || '') + '_' + index" v-bind="columnItem">
+                    <template v-if="columnItem.slotHeader" #header="scope">
+                        <slot :name="columnItem.slotHeader" v-bind="scope"></slot>
+                    </template>
+                    <template #default="scope">
+                        <slot v-if="columnItem.slot" :name="columnItem.slot" v-bind="scope"></slot>
+                        <!-- 日期 -->
+                        <table-column-date v-else-if="columnItem.type === 'date'" :value="getCellValue(scope.row, columnItem, scope.$index)" :formate="columnItem.formate" />
+                        <!-- 数字 -->
+                        <table-column-number v-else-if="columnItem.type === 'number'" :value="getCellValue(scope.row, columnItem, scope.$index)" :digit="columnItem.digit || 0" />
+                        <!-- 图片 -->
+                        <table-column-image v-else-if="columnItem.type === 'image'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem, scope.$index)" />
+                        <!-- 枚举 -->
+                        <table-column-enum v-else-if="columnItem.type === 'enum'" v-bind="columnItem" :value="getCellValue(scope.row, columnItem, scope.$index)" />
+                        <!-- 操作按钮 -->
+                        <table-column-action v-else-if="columnItem.type === 'action'" v-bind="columnItem" :row="scope.row" />
+                    </template>
+                </el-table-column>
+            </template>
         </el-table>
         <div v-if="isShowPagination" class="pagination-wrapper" ref="paginationRef">
             <el-pagination v-bind="paginationData" @size-change="pageSizeChangeHandle" @current-change="currentPageChangeHandle" />
@@ -47,7 +49,7 @@ const props = defineProps({
         type: Function as PropType<(...args) => Promise<any>>,
         required: true
     },
-    // type: "number|action|date|enum|img" // 数据列的自定义类型，可以不传
+    // type: "number|action|date|enum|image" // 数据列的自定义类型，可以不传
     // type是action => buttons: [], // 操作按钮列表| maxNumShow: 3, // 最多展示数 (默认是3)
     // type是number => digit: 0, // 数字格式化小数点位数(默认是0)
     // type是date => formate: 0, // 日期格式化字符串(默认是YYYY-MM-DD) | separator 分隔符，多个日期展示用。默认是“-”
@@ -210,7 +212,7 @@ const initTableProps = function () {
 const initColumns = function () {
     columnList.value = [];
     props.columns.forEach(columnItem => {
-        const newColumnItem = extend(true, {}, columnItem);
+        const newColumnItem = extend(true, { isShow: true }, columnItem);
         if (newColumnItem.type === "action" && newColumnItem.buttons && newColumnItem.buttons.length > 0) {
             if (props.pageName) {
                 newColumnItem.buttons = newColumnItem.buttons.filter(button => {
@@ -272,12 +274,10 @@ const queryDataList = async function (isInit = true) {
 };
 
 // 获取当前数据列的值
-const getCellValue = function (row, columnItem) {
-    // if (Object.prototype.toString.call(columnItem.prop) === "[object Array]") {
-    //     return columnItem.prop.map(key => row[key]);
-    // } else {
-    //     return row[columnItem.prop];
-    // }
+const getCellValue = function (row, columnItem, index: number) {
+    if (columnItem.formatter) {
+        return columnItem.formatter(row, columnItem, columnItem.prop ? row[columnItem.prop] : null, index);
+    }
     if (!columnItem.prop) {
         return null;
     }
@@ -345,7 +345,25 @@ onUnmounted(() => {
     }
 });
 
-defineExpose({ queryDataList, initTableMaxHeight });
+defineExpose<Components.DataTableRef>({
+    /** 初始化表格最大高度 */
+    initTableMaxHeight,
+
+    /** 查询数据列表 */
+    queryDataList,
+
+    /**
+     * 更新数据列显示状态
+     * @param columnKeys 显示列key值数组（不传值表示都展示）
+     */
+    updateTableColumnsShowStatus(columnKeys?: string[]) {
+        columnList.value.forEach(column => {
+            if (column.prop) {
+                column.isShow = !columnKeys || columnKeys.includes(column.prop);
+            }
+        });
+    }
+});
 </script>
 <style lang="less" scoped>
 .data-table-panel {

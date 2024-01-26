@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-17 10:20:31
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-17 10:33:14
+ * @最后修改时间: 2024-01-22 11:29:04
  * @项目的路径: \vue-manager-system\src\routers\plays.ts
  * @描述: 系统示例演示页面路由
  */
@@ -23,5 +23,10 @@ export default <Array<RouteRecordRaw>>[
         name: "play-icon-list", // 项目中已经引入的icon列表
         path: "/play/icon-list",
         component: () => import("@views/plays/icon-list/index.vue")
+    },
+    {
+        name: "play-order-list", // 订单列表查询
+        path: "/play/order-list",
+        component: () => import("@views/plays/order-list/index.vue")
     }
 ]

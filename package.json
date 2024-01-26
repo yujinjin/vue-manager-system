@@ -103,7 +103,8 @@
         "semi": true,
         "singleQuote": false,
         "quoteProps": "consistent",
-        "htmlWhitespaceSensitivity": "ignore"
+        "htmlWhitespaceSensitivity": "ignore",
+        "bracketSpacing": true
     },
     "engines": {
         "node": ">=18"

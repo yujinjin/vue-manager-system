@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 18:48:46
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-12 10:38:53
+ * @最后修改时间: 2024-01-22 15:03:26
  * @项目的路径: \vue-manager-system\src\components\table\table-column-image.vue
  * @描述: 图片数据列
 -->
@@ -10,7 +10,7 @@
     <div class="table-column-img">
         <div class="no-image" v-if="!previewImgList || previewImgList.length === 0">没有图片</div>
         <template v-else>
-            <el-image v-for="(img, index) in previewImgList" :key="img + '_' + index" :src="img" :preview-src-list="previewImgList" fit="contain" :preview-teleported="true">
+            <el-image v-for="(img, index) in previewImgList" @click="initialIndex = index" :key="img + '_' + index" :src="img" :initial-index="initialIndex" :preview-src-list="previewImgList" fit="contain" :preview-teleported="true">
                 <template #error>
                     <div class="error-box">
                         <el-icon><Picture /></el-icon>
@@ -22,7 +22,8 @@
 </template>
 <script setup lang="ts">
 import type { PropType } from "vue";
-import { computed } from "vue";
+import { ref, computed } from "vue";
+import { Picture } from "@element-plus/icons-vue";
 
 // TODO: 支持SVGA 图片格式
 const props = defineProps({
@@ -43,6 +44,10 @@ const previewImgList = computed<string[]>(() => {
     }
     return props.separator ? props.value.split(props.separator) : [props.value];
 });
+
+// 初始预览图像索引
+const initialIndex = ref(0);
+
 </script>
 <style lang="less" scoped>
 .table-column-img {

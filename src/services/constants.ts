@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 16:36:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-02 14:24:55
+ * @最后修改时间: 2024-01-22 17:27:21
  * @项目的路径: \vue-manager-system\src\services\constants.ts
  * @描述: 常量集合
  */
@@ -21,7 +21,6 @@ export const HANDLE_CODES = {
     EXPORT: "EXPORT", // 导出
     DOWNLOAD: "DOWNLOAD", // 下载
     RESET: "RESET", // 重置
-    DECORATION: "DECORATION",
     ONSHELF: "ONSHELF", // 上线
     OFFSHELF: "OFFSHELF", // 下线
     ENABLE: "ENABLE", // 启用
@@ -35,7 +34,9 @@ export const HANDLE_CODES = {
     PASS: "PASS", //通过
     REFUSE: "REFUSE", //拒绝
     MONITOR: "MONITOR", //监控
+    CANCEL: "CANCEL", // 取消
     BATCHCREATE: "BATCHCREATE", // 批量新增
+    BATCHCANCEL: "BATCHCANCEL", // 批量取消
     BATCHDELETE: "BATCHDELETE", // 批量删除
     BATCHEXAMINE: "BATCHEXAMINE", //批量审核
     BATCHUPDATE: "BATCHUPDATE", //批量修改

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-15 15:52:08
+ * @最后修改时间: 2024-01-25 21:15:10
  * @项目的路径: \vue-manager-system\src\components\dialog-form.vue
  * @描述: form 弹窗组件
 -->
@@ -59,7 +59,7 @@ const dialogVisible: Ref<boolean> = ref(false);
 
 const slots = useSlots();
 
-const inputFormRef: Ref<null | Components.InputFormRef> = ref(null);
+const inputFormRef = ref<Components.InputFormRef>();
 
 // 弹窗内部属性
 const dialogInnerProps: Ref<Partial<NotReadonly<DialogProps>>> = ref({});
@@ -145,10 +145,10 @@ watch(
     { deep: true, immediate: true }
 );
 
-defineExpose({
+defineExpose<Components.DialogFormRef>({
     // 获取表单的value
     getInputValue: function () {
-        return inputFormRef.value?.getInputValue();
+        return inputFormRef.value?.getInputValue() || {};
     },
 
     /**
@@ -174,11 +174,11 @@ defineExpose({
     },
     // 获取form Ref
     getFormRef: function () {
-        return inputFormRef.value?.getFormRef();
+        return inputFormRef.value!.getFormRef();
     },
     // 表单验证
     validate(callback?: FormValidateCallback) {
-        return inputFormRef.value?.validate(callback);
+        return inputFormRef.value!.validate(callback);
     }
 });
 </script>
@@ -187,7 +187,7 @@ defineExpose({
     width: 100%;
     .el-dialog__body {
         padding: 12px 20px 0px;
-        max-height: 600px;
+        max-height: 500px;
         overflow-y: auto;
     }
 

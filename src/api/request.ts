@@ -64,7 +64,7 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
                     return response;
                 } else if (response.data.success === true) {
                     return response.config.isResultData ? response.data.data : response.data;
-                } 
+                }
                 if (response.config.isShowError) {
                     ElMessage({
                         message: (response.data.error && response.data.error.message) || "很抱歉，服务出错，请稍后再试~",
@@ -76,8 +76,8 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
             },
             // 在发送请求数据的error函数
             error: function (error: Http.Error) {
-                //请求错误时做些事
-                const xhr: Http.ResponseData = (error.response && error.response.data) || { error: { message: null }, success: false, data: null };
+                // 请求错误时做些事
+                const xhr: Http.ResponseData = typeof error.response?.data === "object" ? error.response?.data : { error: { message: null }, success: false, data: null };
                 let errorMessage = xhr.error?.details || xhr.error?.message;
                 if (!errorMessage) {
                     switch (error.request.status) {
@@ -93,7 +93,7 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
                             break;
                         case 500:
                         case 502:
-                            errorMessage =  "服务器出错";
+                            errorMessage = "服务器出错";
                             break;
                         case 503:
                             errorMessage = "哦～服务器宕机了";
@@ -104,12 +104,6 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
                     }
                     xhr.error = Object.assign({}, xhr.error || {}, { message: errorMessage });
                 }
-                if (error.config.isShowError) {  
-                    ElMessage({
-                        message: errorMessage,
-                        type: "error"
-                    });  
-                }
                 logs.debug(errorMessage);
                 //如果配置传入显示加载选项就显示加载项
                 if (error.config.isShowLoading === true) {
@@ -118,6 +112,12 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
                     } else {
                         loading.hide();
                     }
+                }
+                if (error.config.isShowError) {
+                    ElMessage({
+                        message: errorMessage,
+                        type: "error"
+                    });
                 }
                 if (error.config) {
                     // 直接JSON error对象在app环境中会报错，现在只能做config、xhr实例

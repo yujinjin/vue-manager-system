@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-25 17:00:44
+ * @最后修改时间: 2024-01-18 16:10:50
  * @项目的路径: \vue-manager-system\.eslintrc.js
  * @描述: eslingt 配置
  */
@@ -62,6 +62,8 @@ module.exports = defineConfig({
         "no-lone-blocks": "error",
         // 禁用一成不变的循环条件
         "no-unmodified-loop-condition": "error",
+        // 此规则强制在对象字面量、解构赋值和导入/导出说明符的大括号内保持一致的间距。
+        "object-curly-spacing": ["error", "always"],
         "no-unused-vars": "off",
         // 强制在 parseInt() 使用基数参数
         "radix": "error",

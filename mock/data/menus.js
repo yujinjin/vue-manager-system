@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-13 14:33:59
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-17 10:37:59
+ * @最后修改时间: 2024-01-22 11:30:41
  * @项目的路径: \vue-manager-system\mock\data\menus.js
  * @描述: 用户菜单列表
  * { id: 菜单ID, parentId: 父级菜单ID(null表示顶级菜单), name: 菜单名称, icons: 菜单图标, url: 菜单地址(可为null), moduleCode: 菜单所属模块code }
@@ -92,6 +92,18 @@ module.exports = [
         icons: "icomoon-stack",
         code: "1002",
         url: "/play/icon-list",
+        moduleCode: "BASE",
+        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        updated: Mock.mock("@first()"),
+        updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
+    },
+    {
+        id: "1003",
+        parentId: "10",
+        name: "订单列表",
+        icons: "icomoon-coin-yen",
+        code: "1003",
+        url: "/play/order-list",
         moduleCode: "BASE",
         status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
         updated: Mock.mock("@first()"),

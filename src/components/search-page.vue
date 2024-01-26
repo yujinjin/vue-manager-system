@@ -1,15 +1,7 @@
 <template>
     <div class="search-page" v-loading="isLoadingForInit">
-        <search-form
-            v-if="searchFormProps"
-            v-bind="searchFormProps"
-            :pageName="pageName"
-            :isSearchLoading="isSearchLoading"
-            @search="searchHandle"
-            @change="searchValueChangeHandle"
-            @fieldsChange="searchFieldsChangeHandle"
-            ref="searchFormRef"
-        >
+        <search-form v-if="searchFormProps" v-bind="searchFormProps" :pageName="pageName" :isSearchLoading="isSearchLoading" @search="searchHandle" @change="searchValueChangeHandle"
+            @fieldsChange="searchFieldsChangeHandle" ref="searchFormRef">
             <template v-for="name in distributeSlots.searchForm" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -18,17 +10,12 @@
             <template v-for="name in distributeSlots.actionBar" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
+            <template v-if="distributeSlots.actionBarDefault" #default>
+                <slot :name="distributeSlots.actionBarDefault"></slot>
+            </template>
         </action-bar>
-        <data-table
-            v-if="dataTableProps"
-            v-bind="dataTableProps"
-            :pageName="pageName"
-            :filters="searchFormInput"
-            ref="dataTableRef"
-            v-model:selectRows="selectRows"
-            :autoInitQuery="!isLoadingForInit"
-            @search="isLoading => (isSearchLoading = isLoading)"
-        >
+        <data-table v-if="dataTableProps" v-bind="dataTableProps" :pageName="pageName" :filters="dataTableFilters" ref="dataTableRef" v-model:selectRows="selectRows" :autoInitQuery="!isLoadingForInit"
+            @search="isLoading => (isSearchLoading = isLoading)">
             <template v-for="name in distributeSlots.dataTable" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -65,17 +52,20 @@ const emits = defineEmits(["searchValueChange", "searchFieldsChange", "selectRow
 
 const slots = useSlots();
 
-// 当前搜索条件的表单值
-const searchFormInput: Ref<Record<string, any>> = ref(extend(true, {}, props.dataTableProps && props.dataTableProps.filters));
+// 当前数据表格的筛选参数值（searchFormValue和props.dataTableProps.filters的并集）
+const dataTableFilters: Ref<Record<string, any>> = ref({});
+
+// 当前搜索条件的筛选参数值
+const searchFormValue: Ref<Record<string, any>> = ref({});
 
 // datatable组件ref
-const dataTableRef: Ref<Components.DataTableRef | null> = ref(null);
+const dataTableRef = ref<Components.DataTableRef>();
 
 // searchForm组件ref
-const searchFormRef: Ref<Components.SearchFormRef | null> = ref(null);
+const searchFormRef = ref<Components.SearchFormRef>();
 
 // actionBar组件Ref
-const actionBarRef: Ref<Components.ActionBarRef | null> = ref(null);
+const actionBarRef = ref<Components.ActionBarRef>();
 
 // 当前搜索是否正在加载中
 const isSearchLoading = ref(false);
@@ -88,11 +78,14 @@ const distributeSlots = computed(() => {
     const typeSlotList = {
         searchForm: [] as string[],
         actionBar: [] as string[],
-        dataTable: [] as string[]
+        dataTable: [] as string[],
+        actionBarDefault: ""
     };
     Object.keys(slots).forEach(key => {
         if (key.startsWith("searchForm_")) {
             typeSlotList.searchForm.push(key);
+        } else if (key === "actionBar_default") {
+            typeSlotList.actionBarDefault = "actionBar_default";
         } else if (key.startsWith("actionBar_")) {
             typeSlotList.actionBar.push(key);
         } else if (key.startsWith("dataTable_")) {
@@ -113,13 +106,19 @@ const searchFieldsChangeHandle = function (formFields) {
 };
 
 // 查询方法
-const queryDataList = function (isInit = true) {
-    dataTableRef.value?.queryDataList(isInit);
+const queryDataList = async function (isInit = true) {
+    if (props.dataTableProps?.filters) {
+        dataTableFilters.value = extend(true, {}, searchFormValue.value, props.dataTableProps.filters);
+    } else {
+        dataTableFilters.value = searchFormValue.value;
+    }
+    await nextTick();
+    return dataTableRef.value?.queryDataList(isInit);
 };
 
 // 搜索操作
-const searchHandle = function (searchFormValue) {
-    extend(true, searchFormInput.value, searchFormValue);
+const searchHandle = function (formValue) {
+    searchFormValue.value = formValue;
     queryDataList();
 };
 
@@ -139,45 +138,63 @@ const unwatch = watch(
         unwatch();
         if (value) return;
         if (searchFormRef.value) {
-            extend(true, searchFormInput.value, searchFormRef.value.getValue());
+            searchFormValue.value = searchFormRef.value.getValue();
         }
-        await nextTick();
         queryDataList();
     }
 );
 
 onMounted(() => {
     if (searchFormRef.value) {
-        extend(true, searchFormInput.value, searchFormRef.value.getValue());
+        searchFormValue.value = searchFormRef.value.getValue();
     }
-    emits("selectRowsChange", selectRows.value);
+    if (props.dataTableProps?.filters) {
+        dataTableFilters.value = extend(true, {}, searchFormValue.value, props.dataTableProps.filters);
+    } else {
+        dataTableFilters.value = searchFormValue.value;
+    }
+    if (selectRows.value && selectRows.value.length > 0) {
+        emits("selectRowsChange", selectRows.value);
+    }
 });
 
-defineExpose({
+defineExpose<Components.SearchPageRef>({
     // 分页查询
     query: queryDataList,
+
     // 获取当前搜索表单实时值
     getSearchingValue: function () {
         if (searchFormRef.value) {
             return extend(true, {}, props.dataTableProps && props.dataTableProps.filters, searchFormRef.value.getValue());
         }
-        return extend(true, {}, searchFormInput.value);
+        return extend(true, {}, props.dataTableProps && props.dataTableProps.filters);
     },
+
     // 获取当前已经搜索出来的结果值，与getSearchFormValue区别是当前已经用它查询出来结果的搜索表单值
     getSearchedValue: function () {
-        return extend(true, {}, searchFormInput.value);
+        return extend(true, {}, dataTableFilters.value);
     },
+
     // 修改当前form字段的属性
-    changeFormFields: function (callback) {
+    changeFormFields: function (callback: (formFields: Components.InputFormField[]) => void) {
         searchFormRef.value?.changeFormFields(callback);
     },
+
     // 修改当前生成的button按钮值
-    changeButtons: function (callback) {
+    changeButtons: function (callback: (actionButtons: Components.TableButton[]) => void) {
         actionBarRef.value?.changeButtons(callback);
+    },
+
+    /**
+     * 更新数据列显示状态
+     * @param columnKeys 显示列key值数组（不传值表示都展示）
+     */
+    updateTableColumnsShowStatus(columnKeys?: string[]) {
+        dataTableRef.value?.updateTableColumnsShowStatus(columnKeys);
     }
 });
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .search-page {
     display: flex;
     flex-direction: column;

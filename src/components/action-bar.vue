@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:27:44
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-28 10:24:12
+ * @最后修改时间: 2024-01-22 18:27:39
  * @项目的路径: \vue-manager-system\src\components\action-bar.vue
  * @描述: 列表操作栏
 -->
@@ -99,7 +99,7 @@ watch(
     { deep: true, immediate: true }
 );
 
-defineExpose({
+defineExpose<Components.ActionBarRef>({
     // 修改当前生成的button按钮值
     changeButtons: function (callback: (actionButtons: Components.TableButton[]) => void) {
         if (callback && typeof callback === "function") {
@@ -113,13 +113,18 @@ defineExpose({
 <style lang="less" scoped>
 .action-bar-panel {
     padding: 16px 16px 0px;
+    display: flex;
+    align-items: center;
 
-    .el-button {
-        height: 28px;
-        min-width: 80px;
+    .buttons-panel {
+        flex: 1;
+        .el-button {
+            height: 28px;
+            min-width: 80px;
 
-        + .el-button {
-            margin-left: 6px;
+            + .el-button {
+                margin-left: 6px;
+            }
         }
     }
 }
