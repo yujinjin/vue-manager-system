@@ -22,8 +22,8 @@
             >
                 {{ button.text }}
             </el-button>
-            <el-button @click="searchHandle" :loading="isSearchLoading" type="primary">查询</el-button>
-            <el-button @click="resetHandle">重置</el-button>
+            <el-button v-if="isShowSearchButton" @click="searchHandle" :loading="isSearchLoading" type="primary">查询</el-button>
+            <el-button v-if="isShowResetButton" @click="resetHandle">重置</el-button>
             <el-button v-if="isShowCollapse" type="primary" link @click="collapseStatus = !collapseStatus">{{ collapseStatus ? "收起" : "展开" }}</el-button>
         </div>
     </div>
@@ -34,8 +34,7 @@ import type { Components } from "/#/components";
 import type { Ref, PropType } from "vue";
 import { onMounted, ref, watch, nextTick } from "vue";
 import { SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@/services/constants";
-import { setObjectProperty } from "@yujinjin/utils";
-import { extend } from "@yujinjin/utils";
+import { setObjectProperty, extend } from "@yujinjin/utils";
 
 const props = defineProps({
     // 查询表单字段列表 [{name: 查询项的名称，同时也是父级组件的字段属性, label: 选项的标签名称, value: 选项的值, type: 组件的类型, labelWidth: label宽度,  inputWidth: 表单宽度, data: 数据（比如：select的选项值列表）, props: 组件的自定义选项(可无), events: 组件自定义事件 slot: 自定义插槽名称（可无，如有值其他选项无效）}]
@@ -53,6 +52,16 @@ const props = defineProps({
     },
     // 是否显示折叠
     isShowCollapse: {
+        type: Boolean,
+        default: true
+    },
+    // 是否显示搜索按钮
+    isShowSearchButton: {
+        type: Boolean,
+        default: true
+    },
+    // 是否显示重置按钮
+    isShowResetButton: {
         type: Boolean,
         default: true
     },
@@ -262,7 +271,6 @@ defineExpose<Components.SearchFormRef>({
     font-size: 12px;
     color: #595959;
     position: relative;
-    
 
     &.collapse {
         height: 60px;

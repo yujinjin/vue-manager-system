@@ -2,26 +2,27 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-19 14:21:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-17 10:40:58
+ * @最后修改时间: 2024-03-04 11:53:41
  * @项目的路径: \vue-manager-system\src\views\home\index.vue
  * @描述: 中台主页
 -->
 <template>
     <div class="main">
-        <header-bar :menuCollapseState="menuCollapseState" @toggleMenuCollapseState="menuCollapseState = !menuCollapseState" />
+        <header-bar :menuCollapseState="storage.menuCollapseState" :breadcrumbNames="breadcrumbNames" @toggleMenuCollapseState="toggleMenuCollapseStateHandle" />
         <!-- 侧边栏 -->
-        <side-bar :menuCollapseState="menuCollapseState" @loaded="sideBarLoadedHandle" />
+        <side-bar :menuCollapseState="storage.menuCollapseState" @loaded="sideBarLoadedHandle" @navigationChange="value => (breadcrumbNames = value)" />
         <div class="page-content">
             <!-- 页面tab列表 -->
             <page-tabs />
             <router-view v-slot="{ Component }">
-                <keep-alive :include="cachedViews">
+                <keep-alive :include="cachedViews" :exclude="pageViews.excludeCacheViewNames">
                     <component class="page-view" :is="Component" />
                 </keep-alive>
             </router-view>
             <!-- 引用外链的iframe列表 -->
             <iframe-list />
         </div>
+        <system-tour />
     </div>
 </template>
 
@@ -29,13 +30,14 @@
 import type { Router } from "vue-router";
 import type { System } from "/#/modules/system";
 import { ElMessage } from "element-plus";
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { pageViewsStore, storageStore } from "@/stores";
 import headerBar from "./components/header-bar.vue";
 import sideBar from "./components/side-bar.vue";
 import pageTabs from "./components/page-tabs.vue";
 import iframeList from "./components/iframe-list.vue";
+import systemTour from "./components/system-tour.vue";
 
 defineOptions({
     // 在渲染该组件的对应路由被验证前调用
@@ -59,8 +61,8 @@ const storage = storageStore();
 
 const router: Router = useRouter();
 
-// 菜单折叠的状态
-const menuCollapseState = ref(false);
+// 面包屑导航名称列表
+const breadcrumbNames = ref<string[]>();
 
 // 当前需要缓存的页面列表
 const cachedViews = computed(() => {
@@ -73,6 +75,11 @@ const cachedViews = computed(() => {
     });
     return routeNames;
 });
+
+// 切换侧边菜单栏的折叠状态
+const toggleMenuCollapseStateHandle = function () {
+    storage.setMenuCollapseState(!storage.menuCollapseState);
+};
 
 // 查找菜单数据
 const findMenuById = function (menuList: System.MenuTree[], menuId: string): null | System.MenuTree {
@@ -148,17 +155,19 @@ const init = function () {
     if (window.screen.height < 768 || window.screen.width < 1366) {
         ElMessage.warning("当前管理系统屏幕分辨率最佳体验不低于1366*768!");
     }
-    // 初始化欢迎页面
-    pageViews.$patch(state => {
-        state.visitedViews.push({
-            id: "welcome",
-            routePath: router.resolve({ name: "welcome" }).fullPath,
-            title: "首页",
-            fullPath: router.resolve({ name: "welcome" }).fullPath,
-            isIframe: false,
-            isFixed: true
+    if (pageViews.visitedViews.findIndex(view => view.id === "welcome") === -1) {
+        // 初始化欢迎页面
+        pageViews.$patch(state => {
+            state.visitedViews.push({
+                id: "welcome",
+                routePath: router.resolve({ name: "welcome" }).fullPath,
+                title: "首页",
+                fullPath: router.resolve({ name: "welcome" }).fullPath,
+                isIframe: false,
+                isFixed: true
+            });
         });
-    });
+    }
 };
 
 init();
@@ -170,7 +179,7 @@ init();
     height: 100vh;
     position: relative;
     display: flex;
-    min-width: 1360px;
+    min-width: 1350px;
     min-height: 600px;
     padding-top: 45px;
 

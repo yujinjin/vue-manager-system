@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-19 10:26:09
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-26 11:58:17
+ * @最后修改时间: 2024-03-05 17:43:42
  * @项目的路径: \vue-manager-system\src\views\plays\order-list\search-config.ts
  * @描述: 订单查询配置
  */
@@ -57,18 +57,25 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                     },
                     value: [dayjs().add(-6, "day").format("YYYY-MM-DD"), dayjs().format("YYYY-MM-DD")]
                 }
-            ]
+            ] as Components.SearchFormField[]
         },
         actionBarProps: {
             align: "right",
             buttons: [
                 {
-                    text: "取消订单",
+                    text: "新增订单",
+                    handleCode: HANDLE_CODES.CREATE,
+                    click: showDialogHandle,
+                    props: {
+                        type: "primary"
+                    }
+                },
+                {
+                    text: "批量取消订单",
                     handleCode: HANDLE_CODES.BATCHCANCEL,
                     click: cancelOrderHandle,
                     props: {
-                        disabled: true,
-                        type: "primary"
+                        disabled: true
                     }
                 },
                 {

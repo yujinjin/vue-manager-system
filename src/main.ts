@@ -87,7 +87,7 @@ class AppMain {
         // 注册全局组件
         components(vueAppInstance);
         // 注册全局事件
-        registerEvents();
+        registerEvents(this.router);
         return vueAppInstance;
     }
 

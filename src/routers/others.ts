@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-17 10:23:14
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-17 10:28:04
+ * @最后修改时间: 2024-03-01 14:51:27
  * @项目的路径: \vue-manager-system\src\routers\others.ts
  * @描述: 其他页面路由
  */
@@ -25,4 +25,4 @@ export default <Array<RouteRecordRaw>>[
         path: "/transit",
         component: () => import("@views/others/transit.vue")
     }
-]
+];

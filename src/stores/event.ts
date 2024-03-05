@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-31 16:14:23
+ * @最后修改时间: 2024-01-30 14:50:24
  * @项目的路径: \vue-manager-system\src\stores\event.ts
  * @描述: app事件管理
  */
@@ -51,7 +51,7 @@ export default defineStore("events", {
             }
         },
         //事件触发
-        trigger({ eventName, args }) {
+        trigger({ eventName, args = [] as Array<any> }) {
             let callbacks = this.events[eventName];
             if (callbacks && callbacks.length > 0) {
                 for (let i = 0; i < callbacks.length; i++) {

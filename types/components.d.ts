@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:34:02
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-25 21:14:54
+ * @最后修改时间: 2024-03-04 16:50:06
  * @项目的路径: \vue-manager-system\types\components.d.ts
  * @描述: 自定义组件声明
  */
@@ -186,6 +186,12 @@ declare namespace Components {
 
         /** 是否正在搜索加载 */
         isSearchLoading?: boolean;
+
+        // 是否显示搜索按钮
+        isShowSearchButton?: boolean;
+
+        // 是否显示重置按钮
+        isShowResetButton?: boolean;
 
         /** 是否显示折叠 */
         isShowCollapse?: boolean;

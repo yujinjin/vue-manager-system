@@ -1,3 +1,11 @@
+<!--
+ * @创建者: yujinjin9@126.com
+ * @创建时间: 2023-12-26 15:15:41
+ * @最后修改作者: yujinjin9@126.com
+ * @最后修改时间: 2024-01-30 18:25:00
+ * @项目的路径: \vue-manager-system\src\views\others\transit.vue
+ * @描述: 中台中转页面（主要用来刷新当前正在展示的单页）
+-->
 <template>
     <div class="transit"></div>
 </template>
@@ -19,10 +27,11 @@ const init = async function () {
         // 如果是来自指定的页面索引，这里去除缓存再跳转
         const index = parseInt(route.query.fromPageIndex as string, 10);
         const routePath = pageViews.visitedViews[index].routePath;
-        pageViews.visitedViews[index].routePath = route.fullPath;
+        const routeName = router.resolve(routePath).name as string;
+        pageViews.insertExcludeCacheViewName(routeName);
         await nextTick();
-        pageViews.visitedViews[index].routePath = routePath;
         router.replace(routePath);
+        pageViews.deleteExcludeCacheViewName(routeName);
     } else if (route.query.fromPagePath) {
         // 如果直接指定跳转页面
         router.replace(route.query.fromPagePath as string);

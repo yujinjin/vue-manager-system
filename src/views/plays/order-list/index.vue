@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-19 16:44:26
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-26 12:00:18
+ * @最后修改时间: 2024-03-05 17:56:42
  * @项目的路径: \vue-manager-system\src\views\plays\order-list\index.vue
  * @描述: 订单查询页面
 -->
@@ -13,13 +13,13 @@
         </template>
         <template #actionBar_default>
             <el-radio-group v-model="searchConfigData.dataTableProps.filters.orderStatus" @change="refreshHandle">
-                <el-radio-button label="">全部订单({{ orertReportData.allCount }})</el-radio-button>
-                <el-radio-button :label="10">待付款({{ orertReportData.pendingCount }})</el-radio-button>
-                <el-radio-button :label="20">待发货({{ orertReportData.paidCount }})</el-radio-button>
-                <el-radio-button :label="30">已发货({{ orertReportData.deliveredCount }})</el-radio-button>
-                <el-radio-button :label="40">已签收({{ orertReportData.completedCount }})</el-radio-button>
-                <el-radio-button :label="-1">已取消({{ orertReportData.cancelledCount }})</el-radio-button>
-                <el-radio-button :label="-5">已退款({{ orertReportData.refundedCount }})</el-radio-button>
+                <el-radio-button value="">全部订单({{ orertReportData.allCount }})</el-radio-button>
+                <el-radio-button :value="10">待付款({{ orertReportData.pendingCount }})</el-radio-button>
+                <el-radio-button :value="20">待发货({{ orertReportData.paidCount }})</el-radio-button>
+                <el-radio-button :value="30">已发货({{ orertReportData.deliveredCount }})</el-radio-button>
+                <el-radio-button :value="40">已签收({{ orertReportData.completedCount }})</el-radio-button>
+                <el-radio-button :value="-1">已取消({{ orertReportData.cancelledCount }})</el-radio-button>
+                <el-radio-button :value="-5">已退款({{ orertReportData.refundedCount }})</el-radio-button>
             </el-radio-group>
         </template>
         <template #dataTable_orderStatusHeader>
@@ -63,6 +63,14 @@
             @save="saveColumnShowStatusHandle"
         />
         <view-order-details-dialog v-if="isShowViewOrderDetailsDialog" :row="selectedRow" @close="isShowViewOrderDetailsDialog = false" />
+        <excel-export-dialog
+            :isShow="isShowExcelExportDialog"
+            :searchFields="searchConfigData.searchFormProps.fields"
+            :tableColumns="searchConfigData.dataTableProps.columns"
+            :searchFormValue="searchFormValue"
+            @close="isShowExcelExportDialog = false"
+        />
+        <add-or-update-form-dialog v-if="isShowAddOrUpdateFormDialog" v-model:isShow="isShowAddOrUpdateFormDialog" @refresh="refreshHandle" />
     </search-page>
 </template>
 <script setup lang="ts">
@@ -70,14 +78,14 @@ import type { Components } from "/#/components";
 import { ref, reactive, nextTick } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
-import { dateFormat } from "@yujinjin/utils";
 import { HANDLE_CODES } from "@/services/constants";
 import searchConfig from "./search-config";
-import commonApi from "@/api/common";
 import demoAPI from "@api/demo";
 import customerColumnDialog from "@views/components/customer-column-dialog.vue";
 import tableColumnCopy from "./components/table-column-copy.vue";
 import viewOrderDetailsDialog from "./components/view-order-details-dialog.vue";
+import excelExportDialog from "./components/excel-export-dialog.vue";
+import addOrUpdateFormDialog from "./components/add-or-update-form-dialog.vue";
 
 // search page 组件
 const searchPageRef = ref<Components.SearchPageRef>();
@@ -88,8 +96,17 @@ const isShowCustomerColumnDialog = ref(false);
 // 是否显示订单详情信息弹窗
 const isShowViewOrderDetailsDialog = ref(false);
 
+// 是否显示excel导出弹窗
+const isShowExcelExportDialog = ref(false);
+
+// 是否显示新增弹窗
+const isShowAddOrUpdateFormDialog = ref(false);
+
 // 当前选中数据列
 const selectedRow = ref();
+
+// 搜索表单值
+const searchFormValue = ref({});
 
 // 当前订单统计数据
 const orertReportData = reactive({
@@ -123,7 +140,10 @@ const selectRowsChangeHandle = function (rows) {
 
 // 显示菜单相关操作信息弹
 const showDialogHandle = function (rows, { handleCode }) {
-    if (HANDLE_CODES.QUERY === handleCode) {
+    if (HANDLE_CODES.CREATE === handleCode) {
+        // 展示新增订单弹窗
+        isShowAddOrUpdateFormDialog.value = true;
+    } else if (HANDLE_CODES.QUERY === handleCode) {
         // 展示自定义列弹窗
         selectedRow.value = null;
         isShowCustomerColumnDialog.value = true;
@@ -159,11 +179,8 @@ const cancelOrderHandle = async function (rows, { handleCode }) {
 
 // excel 导出
 const excelExportHandle = function () {
-    commonApi.download({
-        type: "a",
-        url: require("@assets/templates/批量新增菜单模板.xlsx"),
-        fileName: "订单数据导出(" + dateFormat(Date.now()) + ").xlsx"
-    });
+    searchFormValue.value = searchPageRef.value!.getSearchedValue();
+    isShowExcelExportDialog.value = true;
 };
 
 // 修改数据列展示状态操作

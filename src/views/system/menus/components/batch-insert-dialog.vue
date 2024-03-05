@@ -7,7 +7,7 @@
  * @描述: 批量导入菜单弹窗
 -->
 <template>
-    <el-dialog v-model="dialogVisible" title="批量导入菜单" class="dialog-form" width="800px" @closed="dialogClosed">
+    <el-dialog v-model="dialogVisible" title="批量导入菜单" class="common-dialog" width="800px" @closed="dialogClosed">
         <el-steps :active="uploadInfo.step" simple>
             <el-step title="上传文件" :icon="Upload" />
             <el-step title="预览数据" :icon="Histogram" />

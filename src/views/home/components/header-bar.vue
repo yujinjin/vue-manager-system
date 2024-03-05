@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-16 13:53:57
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-16 11:24:20
+ * @最后修改时间: 2024-03-01 10:55:09
  * @项目的路径: \vue-manager-system\src\views\home\components\header-bar.vue
  * @描述: home 头部
 -->
@@ -18,16 +18,16 @@
             </div>
         </div>
         <div class="center-inner">
-            <el-breadcrumb :separator-icon="ArrowRight">
-                <el-breadcrumb-item>商城管理</el-breadcrumb-item>
-                <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-                <el-breadcrumb-item>品牌管理</el-breadcrumb-item>
+            <el-breadcrumb :separator-icon="ArrowRight" v-if="omitBreadcrumbNames.length > 0">
+                <el-breadcrumb-item v-for="(name, index) in omitBreadcrumbNames" :key="index">{{ name || "-" }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="right-inner">
             <div class="message-box"><messages /></div>
             <div class="icon-box">
-                <el-icon><Refresh /></el-icon>
+                <el-tooltip content="刷新当前正在展示的内容页">
+                    <el-icon @click="refreshCurrentPageHandle"><Refresh /></el-icon>
+                </el-tooltip>
             </div>
             <div class="login-info-box">
                 <el-dropdown @command="loginUserCommandHandle">
@@ -62,30 +62,62 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { Ref } from "vue";
+import type { PropType, Ref } from "vue";
+import type { Router } from "vue-router";
+import { computed } from "vue";
 import { ref } from "vue";
 import { Refresh, CaretBottom, ArrowRight } from "@element-plus/icons-vue";
-import { storageStore } from "@/stores";
+import { useRouter } from "vue-router";
+import { storageStore, pageViewsStore } from "@/stores";
+import { transitRoutePath } from "@/routers";
 import messages from "./messages.vue";
 import loginInfoDialog from "./login-info-dialog.vue";
 import updatePasswordDialog from "./update-password-dialog.vue";
 
-defineProps({
+const props = defineProps({
     menuCollapseState: {
         type: Boolean
+    },
+    breadcrumbNames: {
+        type: Array as PropType<Array<string>>
     }
 });
 
 const emits = defineEmits(["toggleMenuCollapseState"]);
 
+// 全局路由对象
+const router: Router = useRouter();
+
 // 存储data
 const storageData = storageStore();
+
+// vuex
+const pageViews = pageViewsStore();
 
 // 是否显示修改用户信息弹窗
 const isShowUserInfoDialog: Ref<boolean> = ref(false);
 
 // 是否显示修改用户密码弹窗
 const isShowUpdatePasswordDialog = ref<boolean>(false);
+
+// 省略面包屑名称（导航的名称最多显示6层，超过之后用省略号表示）
+const omitBreadcrumbNames = computed(() => {
+    if (props.breadcrumbNames && props.breadcrumbNames.length > 5) {
+        return [props.breadcrumbNames![0], "...", ...props.breadcrumbNames!.slice(-4)];
+    }
+    return props.breadcrumbNames || [];
+});
+
+const refreshCurrentPageHandle = function () {
+    const index = pageViews.currentVisiteIndex;
+    if (pageViews.visitedViews[index].isIframe) {
+        // 刷新iframe
+        (document.querySelector("iframe[id='" + pageViews.visitedViews[index].id + "']") as HTMLIFrameElement).src = pageViews.visitedViews[index].fullPath;
+    } else {
+        // 当前正在展示的单页刷新
+        router.push(transitRoutePath({ pageIndex: index }));
+    }
+};
 
 // 切换菜单折叠状态
 const toggleMenuCollapseState = function () {

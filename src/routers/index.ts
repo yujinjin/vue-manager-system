@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-17 10:34:01
+ * @最后修改时间: 2024-03-01 14:41:32
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
@@ -27,11 +27,7 @@ export default function (): Router {
             {
                 path: "/",
                 component: () => import("@views/home/index.vue"),
-                children: [
-                    ...system,
-                    ...others,
-                    ...plays
-                ]
+                children: [...system, ...others, ...plays]
             },
             {
                 path: "/login",
@@ -48,6 +44,23 @@ export default function (): Router {
                     requireAuth: false
                 },
                 component: () => import("@views/error/not-found.vue")
+            },
+            {
+                path: "/outside/home",
+                name: "outside-home", // 外部页面（测试专用）
+                meta: {
+                    requireAuth: false
+                },
+                component: () => import("@views/outside/home.vue")
+                // component: outsideHome
+            },
+            {
+                path: "/outside/about",
+                name: "outside-about", // 外部页面（测试专用）
+                meta: {
+                    requireAuth: false
+                },
+                component: () => import("@views/outside/about.vue")
             }
         ],
         scrollBehavior: () => ({ left: 0, top: 0 }),
@@ -56,8 +69,9 @@ export default function (): Router {
     // 注册一个全局前置守卫
     router.beforeEach(to => {
         if (to.meta.requireAuth !== false && !dataStorages.isLogin()) {
+            console.info("...........");
             // 未登录的用户进入了需要登录的页面, 全局触发去登录事件
-            dataEvents.trigger({ eventName: "gotoLogin", args: [router] });
+            dataEvents.trigger({ eventName: "gotoLogin", args: [to.fullPath] });
             // 取消当前的导航
             return false;
         }
@@ -75,10 +89,10 @@ export default function (): Router {
  * @params menuId 菜单ID
  * @params pageId 页面ID
  */
-export function externalRoutePath({ menuId, pageId } : { menuId?: string, pageId?: string}) {
-    if(menuId) {
+export function externalRoutePath({ menuId, pageId }: { menuId?: string; pageId?: string }) {
+    if (menuId) {
         return "/external/" + menuId;
-    } 
+    }
     return "/external?pageId=" + pageId;
 }
 
@@ -87,10 +101,10 @@ export function externalRoutePath({ menuId, pageId } : { menuId?: string, pageId
  * @params menuId 菜单ID
  * @params pageId 页面ID
  */
-export function transitRoutePath({ pageIndex, fromRoutePath } : { pageIndex?: number, fromRoutePath?: string}) {
-    if(pageIndex || pageIndex === 0 ) {
+export function transitRoutePath({ pageIndex, fromRoutePath }: { pageIndex?: number; fromRoutePath?: string }) {
+    if (pageIndex || pageIndex === 0) {
         return "/transit?fromPageIndex=" + pageIndex;
-    } 
+    }
     return "/external?fromRoutePath=" + fromRoutePath;
 }
 
@@ -100,9 +114,9 @@ export function transitRoutePath({ pageIndex, fromRoutePath } : { pageIndex?: nu
  * @params menuId 菜单ID
  * @params pageId 页面ID
  */
-export function innerRoutePath(url: string, { menuId, pageId } : { menuId?: string, pageId?: string}) {
+export function innerRoutePath(url: string, { menuId, pageId }: { menuId?: string; pageId?: string }) {
     url = url.replace(new RegExp("^http(s?)://" + window.location.host), "");
-    if(menuId) {
+    if (menuId) {
         url = changeUrlParameter(url, "menuId", menuId);
     } else {
         url = changeUrlParameter(url, "pageId", pageId);

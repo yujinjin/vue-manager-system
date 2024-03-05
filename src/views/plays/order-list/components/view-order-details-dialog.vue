@@ -7,7 +7,7 @@
  * @描述: 查看订单详情信息弹窗
 -->
 <template>
-    <el-dialog v-model="dialogVisible" title="查看订单详细信息" class="dialog-form" width="800px" @closed="dialogClosed">
+    <el-dialog v-model="dialogVisible" title="查看订单详细信息" class="common-dialog" width="800px" @closed="dialogClosed">
         <el-collapse v-model="activeCollapseNames">
             <el-collapse-item name="1">
                 <template #title>

@@ -94,3 +94,45 @@ a {
 div {
     display: block;
 }
+
+/**************************** 自定义dialog样式 start *********************************/
+.common-dialog {
+    padding: 0px;
+    --el-font-size-base: 14px;
+    .el-dialog__header {
+        border-bottom: 1px solid #eeeeee;
+        padding: 16px 24px;
+        margin-right: 0px;
+
+        .el-dialog__title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #262626;
+            line-height: 24px;
+            display: inline-block;
+        }
+
+        .el-dialog__headerbtn {
+            top: 1px;
+            right: 5px;
+        }
+    }
+
+    .el-dialog__body {
+        padding: 12px 20px 0px;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .el-dialog__footer {
+        padding: 8px 20px;
+        box-shadow:
+            0px -1px 0px 0px #f5f5f5,
+            0px 1px 30px 0px rgba(0, 21, 41, 0.12);
+
+        .el-button {
+            min-width: 80px;
+        }
+    }
+}
+/**************************** 自定义dialog样式 end *********************************/

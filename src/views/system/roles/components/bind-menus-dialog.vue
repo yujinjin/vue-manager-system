@@ -7,7 +7,7 @@
  * @描述: 角色绑定菜单弹窗
 -->
 <template>
-    <el-dialog v-model="dialogVisible" :title="'绑定角色【' + row.name + '】的菜单'" class="dialog-form" width="800px" @closed="dialogClosed">
+    <el-dialog v-model="dialogVisible" :title="'绑定角色【' + row.name + '】的菜单'" class="common-dialog" width="800px" @closed="dialogClosed">
         <div class="search-panel">
             <el-input v-model.trim="keyword" placeholder="搜索菜单名称/编码/地址" style="width: 250px; margin-right: 12px" clearable :prefix-icon="Search" />
             <el-select :model-value="row.moduleCode" disabled placeholder="搜索角色模块" style="width: 150px">

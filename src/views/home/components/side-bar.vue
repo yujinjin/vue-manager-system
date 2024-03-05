@@ -26,14 +26,14 @@ defineProps({
     menuCollapseState: Boolean
 });
 
-const emits = defineEmits(["loaded"]);
+const emits = defineEmits(["loaded", "navigationChange"]);
 
 const pageViews = pageViewsStore();
 
 const router: Router = useRouter();
 
 // 当前选中的菜单ID
-const currentMenuId = ref();
+const currentMenuId = ref<string>();
 
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>();
 
@@ -53,15 +53,48 @@ const searchMenuList = ref<
 // 菜单树数据
 const menuTreeData = ref<System.MenuTree[]>([]);
 
-// 监控当前页面tab page 的变化
-watch(
-    () => pageViews.visitedViews[pageViews.currentVisiteIndex]?.id,
-    () => {
-        if (pageViews.visitedViews[pageViews.currentVisiteIndex]?.menuId) {
-            currentMenuId.value = pageViews.visitedViews[pageViews.currentVisiteIndex].menuId;
-        }
+// 初始化当前页面导航（面包屑）名称列表
+const initCurrentNavigationNames = function () {
+    if (menuTreeData.value.length === 0) {
+        return;
     }
-);
+
+    const breadcrumbNames: Array<string> = [];
+
+    // 查找菜单名称
+    const findMenuNames = function (menuList: System.MenuTree[], menuId: string) {
+        menuList.find(menu => {
+            if (menuId.startsWith(menu.id)) {
+                breadcrumbNames.push(menu.name);
+                if (menu.childList.length > 0) {
+                    findMenuNames(menu.childList, menuId);
+                }
+                return true;
+            }
+            return false;
+        });
+    };
+    let menuId = pageViews.visitedViews[pageViews.currentVisiteIndex]?.menuId;
+    if (pageViews.visitedViews[pageViews.currentVisiteIndex]?.id === "welcome") {
+        breadcrumbNames.push("首页");
+    } else if (!menuId) {
+        // 如果当前页不是从菜单里进来的，这里追溯到来自菜单的名称
+        let findIndex = pageViews.currentVisiteIndex;
+        while (!menuId && findIndex !== -1) {
+            findIndex = pageViews.visitedViews.findIndex(view => view.id === pageViews.visitedViews[findIndex].fromPageId);
+            menuId = pageViews.visitedViews[findIndex]?.menuId;
+        }
+        if (pageViews.visitedViews[findIndex]?.id === "welcome") {
+            breadcrumbNames.push("首页");
+        } else if (menuId) {
+            findMenuNames(menuTreeData.value, menuId!);
+        }
+        breadcrumbNames.push(pageViews.visitedViews[pageViews.currentVisiteIndex].title);
+    } else {
+        findMenuNames(menuTreeData.value, menuId!);
+    }
+    emits("navigationChange", breadcrumbNames);
+};
 
 // 初始化菜单树数据
 const initMenuTreeData = async function () {
@@ -104,6 +137,7 @@ const initMenuTreeData = async function () {
         newMenuList = tempNewMenuList;
     }
     emits("loaded", menuTreeData.value);
+    initCurrentNavigationNames();
     // // 查找父级菜单
     // const findParentMenu = function(menuList: MenuTree[], menuTree: MenuTree): MenuTree | null {
     //     if(menuList.length === 0) {
@@ -172,6 +206,20 @@ const selectedMenuHandle = function (key: string, keyPath: string[]) {
     }
 };
 
+// 监控当前页面tab page 的变化
+watch(
+    () => pageViews.visitedViews[pageViews.currentVisiteIndex]?.id,
+    () => {
+        if (pageViews.visitedViews[pageViews.currentVisiteIndex]?.menuId) {
+            currentMenuId.value = pageViews.visitedViews[pageViews.currentVisiteIndex].menuId;
+        }
+        initCurrentNavigationNames();
+    },
+    {
+        immediate: true
+    }
+);
+
 initMenuTreeData();
 </script>
 <style lang="scss" scoped>
@@ -183,7 +231,7 @@ initMenuTreeData();
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: all 300ms ease-in-out;
+    // transition: all 300ms ease-in-out;
 
     &.collapse {
         width: 58px;
@@ -283,5 +331,50 @@ initMenuTreeData();
     --el-menu-item-height: 44px;
     --el-menu-item-font-size: 12px;
     --el-menu-sub-item-height: 44px;
+
+    .el-sub-menu__title,
+    .el-menu-item {
+        .el-icon {
+            color: #909399;
+            font-size: 14px;
+        }
+        .menu-text {
+            width: 100%;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+            color: #303133;
+        }
+
+        &:hover {
+            .menu-text,
+            .el-icon {
+                color: var(--el-color-primary);
+            }
+        }
+
+        &.is-active {
+            background-color: var(--el-menu-hover-bg-color);
+
+            &::after {
+                position: absolute;
+                content: "";
+                z-index: 1;
+                right: 0px;
+                top: 0px;
+                bottom: 0px;
+                width: 1px;
+                background-color: #15c359;
+            }
+
+            .menu-text,
+            .el-icon {
+                color: var(--el-color-primary);
+            }
+        }
+    }
 }
 </style>

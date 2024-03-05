@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-17 18:05:57
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-22 18:32:01
+ * @最后修改时间: 2024-03-04 18:36:03
  * @项目的路径: \vue-manager-system\src\views\components\customer-column-dialog.vue
  * @描述: 自定义数据列弹窗
 -->
@@ -17,7 +17,7 @@
                 <div v-else-if="noDataForSearch" class="empty-text">未匹配到数据</div>
                 <div v-else-if="groupColumnKeys" class="checkbox-list-wrapper">
                     <el-collapse v-model="activeNames">
-                        <el-collapse-item v-for="(item, index) in (customColumns as CustomerGroupColumnData[])" :key="item.key" :name="item.key" v-show="item.isShow">
+                        <el-collapse-item v-for="(item, index) in customColumns as CustomerGroupColumnData[]" :key="item.key" :name="item.key" v-show="item.isShow">
                             <template #title>
                                 <el-checkbox @click.stop v-model="item.selected" :indeterminate="item.indeterminate" :label="item.key" @change="checkChange(item.selected, true, index)">
                                     {{ item.name }}
@@ -34,14 +34,16 @@
                     </el-collapse>
                 </div>
                 <div v-else class="checkbox-list-wrapper">
-                    <el-col :span="24">
-                        <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" label="全选" @change="checkChange(checkAll, true)" />
-                    </el-col>
-                    <el-col v-for="item in (customColumns as CustomerColumnData[])" :key="item.key" v-show="item.isShow" :span="12">
-                        <el-checkbox v-model="item.selected" :disabled="item.disabled" @change="checkChange(item.selected, false)">
-                            <span class="checkbox-label-text" :title="item.name">{{ item.name }}</span>
-                        </el-checkbox>
-                    </el-col>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" label="全选" @change="checkChange(checkAll, true)" />
+                        </el-col>
+                        <el-col v-for="item in customColumns as CustomerColumnData[]" :key="item.key" v-show="item.isShow" :span="12">
+                            <el-checkbox v-model="item.selected" :disabled="item.disabled" @change="checkChange(item.selected, false)">
+                                <span class="checkbox-label-text" :title="item.name">{{ item.name }}</span>
+                            </el-checkbox>
+                        </el-col>
+                    </el-row>
                 </div>
             </div>
             <div class="right-contents">
@@ -197,7 +199,7 @@ const selectedColumns = computed<CustomerColumnData[]>(() => {
 // 初始化
 const init = function () {
     // 获取上次保存的自定义列数据
-    const columnKeys = props.localStorageKey && getValue(0, props.localStorageKey);
+    const columnKeys = props.localStorageKey && getValue(props.localStorageKey);
     if (props.groupColumnKeys) {
         // 当前数据列表有分组
         props.groupColumnKeys.forEach(({ name, key, childList }) => {
@@ -350,7 +352,7 @@ const deleteSelected = function (index) {
 const save = function () {
     const columnKeys = flapCustomColumns.value.filter(item => item.selected).map(item => item.key);
     if (props.localStorageKey) {
-        setValue(0, props.localStorageKey, columnKeys);
+        setValue(props.localStorageKey, columnKeys, 0);
     }
     emits("save", columnKeys);
     emits("close");
@@ -364,7 +366,7 @@ init();
 
     .el-dialog__header {
         border-bottom: 1px solid #eeeeee;
-        padding: 16px 24px;
+        padding: 0px 12px 12px;
         margin-right: 0px;
 
         .el-dialog__title {

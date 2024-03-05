@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-15 17:16:49
+ * @最后修改时间: 2024-03-05 17:18:08
  * @项目的路径: \vue-manager-system\src\views\home\components\update-password-dialog.vue
  * @描述: 修改密码弹窗
 -->
 <template>
-    <dialog-form ref="dialogFormRef" :isShow="isShow" :buttons="buttons" :inputFormProps="inputForm" :dialogProps="{ title: '修改密码' }" @close="emits('update:isShow', false)" />
+    <dialog-form ref="dialogFormRef" :isShow="isShow" :buttons="buttons" :inputFormProps="inputForm" :dialogProps="{ title: '修改密码', width: '500px' }" @close="emits('update:isShow', false)" />
 </template>
 <script setup lang="ts">
 import type { Components } from "/#/components";

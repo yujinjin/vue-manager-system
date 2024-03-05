@@ -107,7 +107,7 @@ watch(
         if (pageViews.visitedViews[pageViews.currentVisiteIndex].routePath === route.fullPath) {
             return;
         }
-        // 当前路由是通过浏览器的前进或后台方式来跳转的
+        // 当前路由是通过浏览器的前进或后台方式来跳转的,也存在外部某个页面跳转到某个tab页
         const findIndex = pageViews.visitedViews.findIndex(item => item.routePath === route.fullPath);
         if (findIndex !== -1) {
             pageViews.$patch({ currentVisiteIndex: findIndex });
@@ -205,9 +205,10 @@ const refreshPage = async function (index: number) {
     } else {
         // 未展示的单页刷新，只需短暂的把keep-alive 去掉就行了
         const routePath = pageViews.visitedViews[index].routePath;
-        pageViews.visitedViews[index].routePath = transitRoutePath({ pageIndex: index });
+        const routeName = router.resolve(routePath).name as string;
+        pageViews.insertExcludeCacheViewName(routeName);
         await nextTick();
-        pageViews.visitedViews[index].routePath = routePath;
+        pageViews.deleteExcludeCacheViewName(routeName);
     }
 };
 

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-11-15 13:51:57
+ * @最后修改时间: 2024-01-30 14:21:12
  * @项目的路径: \vue-manager-system\src\services\local-storage.ts
  * @描述: 站点本地存储信息
  */
@@ -47,8 +47,9 @@ let appStorageInstance: null | AppStorage = null;
 /**
  * 根据key值获取本地存储信息
  * @param key 存储业务对象key值，如果不传返回整个站点存储对象
+ * @param type 存储类型默认是0, 0: localStorage, 1: sessionStorage
  */
-export const getValue = function (type: 0 | 1 = 0, key?: string): any {
+export const getValue = function (key?: string | null, type: 0 | 1 = 0): any {
     if (!appStorageInstance) {
         appStorageInstance = new AppStorage();
     }
@@ -65,7 +66,7 @@ export const getValue = function (type: 0 | 1 = 0, key?: string): any {
     }
     if (key) {
         return localStorageObject[key];
-    } 
+    }
     return localStorageObject;
 };
 
@@ -74,8 +75,8 @@ export const getValue = function (type: 0 | 1 = 0, key?: string): any {
  * @param key 存储业务对象key值
  * @param value 存储的业务对象value值, undefined|''|null时表示删除
  */
-export const setValue = function (type: 0 | 1 = 0, key: string, value?: any): void {
-    const localStorageObject = getValue(type) || {};
+export const setValue = function (key: string, value?: any, type: 0 | 1 = 0): void {
+    const localStorageObject = getValue(undefined, type) || {};
     if (value === undefined || value === null || value === "") {
         if (Object.keys(localStorageObject).includes(key)) {
             delete localStorageObject[key];

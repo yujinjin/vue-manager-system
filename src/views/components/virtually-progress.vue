@@ -2,14 +2,14 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-04 11:23:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-04 14:14:53
+ * @最后修改时间: 2024-03-05 17:14:09
  * @项目的路径: \vue-manager-system\src\views\components\virtually-progress.vue
  * @描述: 虚构的进度条
 -->
 <template>
     <div class="virtually-progress">
         <el-progress v-bind="progressAttributes" :percentage="percentage" />
-        <slot></slot>
+        <div class="tips-text"><slot></slot></div>
     </div>
 </template>
 <script setup lang="ts">
@@ -109,6 +109,13 @@ onUnmounted(() => {
 });
 </script>
 <style lang="scss" scoped>
-.tpl {
+.virtually-progress {
+    width: 100%;
+
+    .tips-text {
+        padding-top: 12px;
+        text-align: center;
+        font-size: 12px;
+    }
 }
 </style>

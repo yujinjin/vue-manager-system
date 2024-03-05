@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-28 21:15:08
+ * @最后修改时间: 2024-03-05 17:18:40
  * @项目的路径: \vue-manager-system\src\views\home\components\login-info-dialog.vue
  * @描述: 登录用户信息弹窗
 -->
@@ -52,7 +52,8 @@ const storageData = storageStore();
 
 // 弹窗属性
 const dialogProps = reactive<Partial<NotReadonly<DialogProps>>>({
-    title: "修改用户信息"
+    title: "修改用户信息",
+    width: "500px"
 });
 
 // 输入表单信息

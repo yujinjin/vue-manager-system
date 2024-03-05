@@ -235,25 +235,12 @@ const sendValidateCodeHandle = async function () {
 };
 
 // 跳转主页
-const goPage = function () {
-    const routeName: string = (route.query.toName || "welcome") as string;
-    let query = {};
-    let params = {};
-    if (route.query.toQuery) {
-        try {
-            query = JSON.parse(route.query.toQuery as string);
-        } catch (error) {
-            logs.error("登录参数解析错误:" + route.query.toQuery);
-        }
+const gotoPage = function () {
+    if (route.query.toFullPath) {
+        router.replace(decodeURIComponent(route.query.toFullPath as string));
+    } else {
+        router.replace({ name: "welcome" });
     }
-    if (route.query.toParams) {
-        try {
-            params = JSON.parse(route.query.toParams as string);
-        } catch (error) {
-            logs.error("登录参数解析错误:" + route.query.toParams);
-        }
-    }
-    router.replace({ name: routeName, query, params });
 };
 
 // 提交操作
@@ -280,7 +267,7 @@ const submitHandle = async function () {
     }
     const userInfo: any = await systemAPI.login(inputForm, { isShowLoading: true });
     store.login(userInfo);
-    goPage();
+    gotoPage();
     // .then(data => {
     //     site.globalService.setLoginUserInfo(data);
     //     go();

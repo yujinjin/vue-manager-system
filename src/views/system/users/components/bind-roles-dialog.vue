@@ -7,7 +7,7 @@
  * @描述: 绑定用户的角色
 -->
 <template>
-    <el-dialog v-model="dialogVisible" :title="'绑定用户【' + row.name + '】的角色'" class="dialog-form" width="800px" @closed="dialogClosed">
+    <el-dialog v-model="dialogVisible" :title="'绑定用户【' + row.name + '】的角色'" class="common-dialog" width="800px" @closed="dialogClosed">
         <div class="search-panel">
             <el-input v-model.trim="keyword" style="width: 250px; margin-right: 12px" clearable placeholder="搜索角色名称或编码" :prefix-icon="Search" />
             <el-select v-model="modules" clearable multiple collapse-tags placeholder="搜索角色模块" style="width: 150px">

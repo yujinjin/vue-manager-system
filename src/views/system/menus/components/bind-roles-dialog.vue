@@ -21,7 +21,7 @@ import { ref, reactive } from "vue";
 import systemAPI from "@api/system";
 
 const props = defineProps({
-    // 是否显示弹窗
+    // 是否显示弹窗(TODO: 待优化，实际应该是勿需此属性)
     isShow: {
         type: Boolean,
         default: false

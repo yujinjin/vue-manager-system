@@ -2,13 +2,15 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-27 11:49:08
+ * @最后修改时间: 2024-03-05 17:53:55
  * @项目的路径: \vue-manager-system\src\components\web-editor.vue
  * @描述: web 富文本框编辑器
 -->
 <template>
-    <div class="web-editor" ref="webEditorRef"></div>
-    <input type="file" @change="imgFileChangeHandle" accept="image/*" ref="inputFileRef" v-show="false" />
+    <div class="web-editor-container">
+        <div class="web-editor" ref="webEditorRef"></div>
+        <input type="file" @change="imgFileChangeHandle" accept="image/*" ref="inputFileRef" v-show="false" />
+    </div>
 </template>
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch, inject } from "vue";

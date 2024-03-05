@@ -7,7 +7,7 @@
  * @描述: form 弹窗组件
 -->
 <template>
-    <el-dialog v-if="isShow" v-model="dialogVisible" v-bind="dialogInnerProps" class="dialog-form" @closed="dialogClosed">
+    <el-dialog v-if="isShow" v-model="dialogVisible" v-bind="dialogInnerProps" class="common-dialog form-dialog" @closed="dialogClosed">
         <input-form v-bind="inputFormProps" @fieldValueChange="inputFormFieldValueChange" ref="inputFormRef">
             <template v-for="name in Object.keys(slots)" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
@@ -182,24 +182,7 @@ defineExpose<Components.DialogFormRef>({
     }
 });
 </script>
-<style lang="less">
-.dialog-form {
-    width: 100%;
-    .el-dialog__body {
-        padding: 12px 20px 0px;
-        max-height: 500px;
-        overflow-y: auto;
-    }
-
-    .el-dialog__footer {
-        padding: 8px 20px;
-        box-shadow:
-            0px -1px 0px 0px #f5f5f5,
-            0px 1px 30px 0px rgba(0, 21, 41, 0.12);
-
-        .el-button {
-            min-width: 80px;
-        }
-    }
+<style lang="scss">
+.form-dialog {
 }
 </style>

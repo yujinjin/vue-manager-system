@@ -7,7 +7,7 @@
  * @描述: 菜单图标选择弹窗
 -->
 <template>
-    <el-dialog :model-value="isShow" @update:model-value="close" title="菜单图标" append-to-body class="dialog-form" width="800px">
+    <el-dialog :model-value="isShow" @update:model-value="close" title="菜单图标" append-to-body class="common-dialog" width="800px">
         <el-tabs v-model="tabIndex" type="border-card">
             <el-tab-pane label="选择系统定义的图标" :name="0">
                 <div class="icon-list">

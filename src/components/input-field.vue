@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-10-27 18:13:47
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-28 20:29:57
+ * @最后修改时间: 2024-03-05 14:47:40
  * @项目的路径: \vue-manager-system\src\components\input-field.vue
  * @描述: 表单输入字段组件
 -->
@@ -50,7 +50,7 @@
         <el-radio
             v-for="(item, index) in field.data"
             :key="(item[field.optionValueKey || 'value'] || '') + '_' + index"
-            :label="item[field.optionValueKey || 'value']"
+            :value="item[field.optionValueKey || 'value']"
             :disabled="item.disabled === true"
         >
             {{ item[field.optionLabelKey || "label"] }}
