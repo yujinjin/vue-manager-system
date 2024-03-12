@@ -12,6 +12,7 @@ import components from "@/components/index";
 import directives from "@/services/directives";
 import plugins from "@/plugins/index";
 import registerEvents from "@/services/register-events";
+// import "../mock/test.js";
 import "@style/element-variables.scss";
 import "@style/index.less";
 import "@style/icomoon.css";
@@ -49,6 +50,9 @@ class AppMain {
 
     // 初始化
     async init() {
+        if (process.env.VUE_MOCK_DATA === "1") {
+            require("@/mock/index");
+        }
         this.vueAppInstance = this.initVue();
         this.mount("#app");
     }

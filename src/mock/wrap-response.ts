@@ -1,14 +1,12 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-12-13 14:03:34
+ * @创建时间: 2024-03-07 16:10:04
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-06 16:21:19
- * @项目的路径: \vue-manager-system\mock\wrap-response.js
+ * @最后修改时间: 2024-03-07 16:17:38
+ * @项目的路径: \vue-manager-system\src\mock\wrap-response.ts
  * @描述: 接口的外部封装
  */
-const Mock = require("mockjs");
-
-// 设置拦截Ajax 请求
+import Mock from "mockjs";
 
 /**
  * @param template data的数据模板
@@ -16,15 +14,15 @@ const Mock = require("mockjs");
  * @param dataSize data数据的数组长度
  * @param codes 返回的异常CODES
  */
-module.exports = function (template, randomFlag = false, dataSize, codes) {
-    const wrapTemplate = {
+export default function (template: string | Record<string, any> | null, randomFlag = false, dataSize?: number, codes?: string[] | string) {
+    const wrapTemplate: Record<string, any> = {
         success: randomFlag ? Mock.Random.boolean(1, 9, false) : true,
         error: function () {
             if (this.success) {
                 return null;
             }
             return {
-                code: !codes ? "" : Object.prototype.toString.call([]) === "[object Array]" ? codes[Mock.Random.integer(0, codes.length)] : codes,
+                code: !codes ? "" : Object.prototype.toString.call(codes) === "[object Array]" ? codes[Mock.Random.integer(0, codes.length)] : codes,
                 message: Mock.Random.ctitle(5, 20)
             };
         }
@@ -35,4 +33,4 @@ module.exports = function (template, randomFlag = false, dataSize, codes) {
         wrapTemplate.data = template;
     }
     return Mock.mock(wrapTemplate);
-};
+}

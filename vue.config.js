@@ -7,8 +7,8 @@ console.log(chalk.bgBlueBright("------------------------------------------------
 console.log(chalk.blue(Alphabet("JACK YU", "planar")));
 console.log(chalk.bgBlueBright("--------------------------------------------------"));
 const pkg = require("./package.json");
-const mock = require("./mock/index");
-const bodyParser = require("body-parser");
+// const mock = require("./mock/index");
+// const bodyParser = require("body-parser");
 
 function pathResolve(dir) {
     return path.resolve(process.cwd(), ".", dir);
@@ -104,6 +104,7 @@ module.exports = {
             options[0]["process.env"]["VUE_APP_BUILD_TIME"] = new Date().getTime();
             options[0]["process.env"]["VUE_APP_VERSION"] = JSON.stringify(pkg.version);
             options[0]["process.env"]["VUE_APP_NAME"] = JSON.stringify(pkg.name);
+            options[0]["process.env"]["VUE_MOCK_DATA"] = JSON.stringify(process.env.MOCK_DATA);
             return options;
         });
 
@@ -117,19 +118,19 @@ module.exports = {
     },
     devServer: {
         // proxy: "",
-        setupMiddlewares: function (middlewares, devServer) {
-            if (!devServer) {
-                throw new Error("webpack-dev-server is not defined");
-            }
-            if (process.env.MOCK_DATA === "1") {
-                devServer.app.use(bodyParser.json());
-                mock(devServer.app);
-            }
-            // devServer.app.get('/some/path', function (req, res) {
-            //   res.json({ custom: 'response' });
-            // });
-            return middlewares;
-        },
+        // setupMiddlewares: function (middlewares, devServer) {
+        //     if (!devServer) {
+        //         throw new Error("webpack-dev-server is not defined");
+        //     }
+        //     if (process.env.MOCK_DATA === "1") {
+        //         devServer.app.use(bodyParser.json());
+        //         mock(devServer.app);
+        //     }
+        //     // devServer.app.get('/some/path', function (req, res) {
+        //     //   res.json({ custom: 'response' });
+        //     // });
+        //     return middlewares;
+        // },
         headers: {
             "Access-Control-Allow-Origin": "*"
         },

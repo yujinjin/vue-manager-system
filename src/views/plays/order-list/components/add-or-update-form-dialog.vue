@@ -4,7 +4,7 @@
 <script setup lang="ts">
 import type { Components } from "/#/components";
 import { ref, reactive } from "vue";
-import systemAPI from "@api/system";
+import demoAPI from "@api/demo";
 import { ElMessage } from "element-plus";
 
 defineProps({
@@ -109,7 +109,7 @@ const buttons = ref<Components.FormButton[]>([
         props: { type: "primary" },
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
-            await systemAPI.updateLoginPassword(inputFormValue);
+            await demoAPI.addOrder(inputFormValue);
             ElMessage.success("操作成功");
             emits("update:isShow", false);
             emits("refresh");
