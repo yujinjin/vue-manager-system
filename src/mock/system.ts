@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-03-07 18:03:44
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-12 14:59:42
+ * @最后修改时间: 2024-03-12 17:50:04
  * @项目的路径: \vue-manager-system\src\mock\system.ts
  * @描述: 系统模块mock数据
  */
@@ -315,7 +315,7 @@ export default [
     {
         url: "/system/updateRoleLockStatus",
         type: "post",
-        data: function ({ body }) {
+        data: function () {
             return wrapResponse(null, true);
         }
     },
@@ -323,7 +323,7 @@ export default [
     {
         url: "/system/deleteRole",
         type: "post",
-        data: function ({ body }) {
+        data: function () {
             return wrapResponse(null, true);
         }
     },
@@ -331,7 +331,7 @@ export default [
     {
         url: "/system/updateMenusByRoleId",
         type: "post",
-        data: function ({ body }) {
+        data: function () {
             return wrapResponse(null, true);
         }
     },
@@ -347,7 +347,7 @@ export default [
     {
         url: "/system/batchInsertRoles",
         type: "post",
-        data: function ({ body }) {
+        data: function () {
             return wrapResponse(null, true);
         }
     },

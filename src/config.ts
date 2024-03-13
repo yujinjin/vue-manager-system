@@ -28,6 +28,12 @@ export default <App.Config>{
     /** 请求的API版本号 */
     apiVersion: "0.0.1",
 
+    /** 当前web是否是hash 模式 */
+    isWebHash: process.env.VUE_APP_WEB_HASH === "1",
+
+    /** 当前web项目服务部署根目录（路径） */
+    projectContentPath: process.env.VUE_APP_PROJECT_CONTENT_PATH,
+
     /** 应该构建时间 */
     buildTime: new Date(process.env.VUE_APP_BUILD_TIME!),
 

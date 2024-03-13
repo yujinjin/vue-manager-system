@@ -15,7 +15,7 @@ function pathResolve(dir) {
 }
 
 module.exports = {
-    publicPath: "/",
+    publicPath: process.env.NODE_ENV === "production" && process.env.VUE_APP_PROJECT_CONTENT_PATH ? "" : "/",
     assetsDir: "build",
     productionSourceMap: process.env.VUE_APP_ENV === "UAT" || process.env.VUE_APP_ENV === "DEV",
     lintOnSave: true,

@@ -23,6 +23,12 @@ declare namespace App {
         /** 请求的API版本号 */
         readonly apiVersion: string;
 
+        /** 当前web是否是hash 模式 */
+        readonly isWebHash: boolean;
+
+        /** 当前web项目服务部署根目录（路径） */
+        readonly projectContentPath: string;
+
         /** 应该构建时间 */
         readonly buildTime: Date;
 

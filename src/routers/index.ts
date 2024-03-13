@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-01 14:41:32
+ * @最后修改时间: 2024-03-12 19:12:05
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
@@ -12,7 +12,7 @@
  */
 import { storageStore, eventsStore } from "@/stores";
 import type { RouteRecordRaw, Router } from "vue-router";
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import { changeUrlParameter } from "@yujinjin/utils";
 import system from "./system";
 import others from "./others";
@@ -22,7 +22,7 @@ export default function (): Router {
     const dataStorages = storageStore();
     const dataEvents = eventsStore();
     const router: Router = createRouter({
-        history: createWebHistory("/"), // HTML5 history模式
+        history: config.isWebHash ? createWebHashHistory(config.projectContentPath ? (config.projectContentPath + "/") : "") : createWebHistory(config.projectContentPath || "/"), // HTML5 hash模式 |history模式
         routes: <Array<RouteRecordRaw>>[
             {
                 path: "/",

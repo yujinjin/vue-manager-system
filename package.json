@@ -25,6 +25,7 @@
         "uat": "vue-cli-service serve --mode uat --copy",
         "prd": "vue-cli-service serve --mode prd --copy",
         "report": "vue-cli-service build --mode prd --report",
+        "B_GITHUB": "cross-env MOCK_DATA=1 vue-cli-service build --mode github",
         "B_DEV": "vue-cli-service build --mode dev",
         "B_UAT": "vue-cli-service build --mode uat",
         "B_PRE": "vue-cli-service build --mode pre",
