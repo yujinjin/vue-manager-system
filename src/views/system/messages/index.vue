@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-16 15:15:37
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-16 17:24:44
+ * @最后修改时间: 2024-03-14 16:37:03
  * @项目的路径: \vue-manager-system\src\views\system\messages\index.vue
  * @描述: 站内信页面
 -->
@@ -13,13 +13,20 @@
             <el-tag v-else-if="scope.row.status === '1'" type="success">发送完成</el-tag>
             <el-tag v-else-if="scope.row.status === '2'" type="danger">发送失败</el-tag>
         </template>
-        <add-form-dialog v-if="isShowAddDialog" v-model:isShow="isShowAddDialog" :moduleList="moduleList" :roleList="roleList" @refresh="refreshHandle" />
+        <template #dataTable_title="scope">
+            <el-link type="primary" @click="showDialogHandle(scope.row, { handleCode: HANDLE_CODES.VIEW })">
+                <tooltip-dynamics-text :content="scope.row.title" />
+            </el-link>
+        </template>
+        <add-form-dialog v-if="isShowAddDialog" v-model:isShow="isShowAddDialog" :actionType="actionType" :row="selectedRow" :moduleList="moduleList" :roleList="roleList" @refresh="refreshHandle" />
     </search-page>
 </template>
 <script setup lang="ts">
 import type { Components } from "/#/components";
 import { ref, reactive } from "vue";
 import systemAPI from "@api/system";
+import tooltipDynamicsText from "@views/components/tooltip-dynamics-text.vue";
+import { HANDLE_CODES } from "@/services/constants";
 import searchConfig from "./search-config";
 import addFormDialog from "./components/add-form-dialog.vue";
 
@@ -35,13 +42,25 @@ const moduleList = ref<Record<string, any>[]>([]);
 // 角色列表
 const roleList = ref<Record<string, any>[]>([]);
 
+// 当前选中数据列
+const selectedRow = ref();
+
+// 操作类型
+const actionType = ref<string>();
+
 // 数据刷新操作
 const refreshHandle = async function () {
     await searchPageRef.value!.query();
 };
 
 // 显示新增信息弹窗
-const showDialogHandle = function () {
+const showDialogHandle = function (rows, { handleCode }) {
+    actionType.value = handleCode;
+    if (handleCode === HANDLE_CODES.CREATE) {
+        selectedRow.value = null;
+    } else {
+        selectedRow.value = rows;
+    }
     isShowAddDialog.value = true;
 };
 

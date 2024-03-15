@@ -2,11 +2,10 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-03-07 18:03:44
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-12 17:50:04
+ * @最后修改时间: 2024-03-14 17:41:00
  * @项目的路径: \vue-manager-system\src\mock\system.ts
  * @描述: 系统模块mock数据
  */
-
 
 import Mock from "mockjs";
 import wrapResponse from "./wrap-response";
@@ -32,7 +31,7 @@ export default [
                 "avatar|1": new Array(20).fill(0).map(() => Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5))),
                 "gender|1": ["1", "2"],
                 "phoneNumber": Mock.mock(/1[3456789]\d{9}/) // 手机号码
-            })
+            });
         }
     },
     // 发送验证码
@@ -53,10 +52,11 @@ export default [
                 [
                     {
                         "id": "@id()",
-                        "title": "@cword(4, 10)",
+                        "title": "@cword(4, 20)",
                         "senderAvatar|1": new Array(20).fill(0).map(() => Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5))),
                         "content": "@csentence(5, 200)",
-                        "sendTime": "@integer(" + (time - 2 * 24 * 60 * 60 * 1000) + ", " + time + ")"
+                        "sendTime": "@integer(" + (time - 2 * 24 * 60 * 60 * 1000) + ", " + time + ")",
+                        "created": "@first()"
                     }
                 ],
                 false,
@@ -96,7 +96,7 @@ export default [
             const pageNo = parseInt(body.pageNo || "1", 10);
             const pageSize = parseInt(body.pageSize || "50", 10);
             const queryList = modules.filter(item => {
-                if(body.moduleName && !item.name.includes(body.moduleName) && !item.code.toLowerCase().includes(body.moduleName.toLowerCase())) {
+                if (body.moduleName && !item.name.includes(body.moduleName) && !item.code.toLowerCase().includes(body.moduleName.toLowerCase())) {
                     return false;
                 }
                 return true;
@@ -113,10 +113,10 @@ export default [
         type: "get",
         data: function ({ body }) {
             const queryList = modules.filter(item => {
-                if(body.moduleName && item.name !== body.moduleName) {
+                if (body.moduleName && item.name !== body.moduleName) {
                     return false;
                 }
-                if(body.code && !item.code === body.code) {
+                if (body.code && !item.code === body.code) {
                     return false;
                 }
                 return true;
@@ -148,7 +148,12 @@ export default [
             const pageNo = parseInt(body.pageNo || "1", 10);
             const pageSize = parseInt(body.pageSize || "50", 10);
             const queryList = menus.filter(item => {
-                if (body.keyword && !item.name.includes(body.keyword) && !item.code.toLowerCase().includes(body.keyword.toLowerCase()) && !item.url?.toLowerCase().includes(body.keyword.toLowerCase())) {
+                if (
+                    body.keyword &&
+                    !item.name.includes(body.keyword) &&
+                    !item.code.toLowerCase().includes(body.keyword.toLowerCase()) &&
+                    !item.url?.toLowerCase().includes(body.keyword.toLowerCase())
+                ) {
                     return false;
                 }
                 if (body.moduleCode && item.moduleCode !== body.moduleCode) {
@@ -248,23 +253,23 @@ export default [
         type: "get",
         data: function ({ body }) {
             const pageNo = parseInt(body.pageNo || "1", 10);
-        const pageSize = parseInt(body.pageSize || "50", 10);
-        // const status = body.status ? parseInt(body.status, 10) : null;
-        const queryList = roles.filter(item => {
-            // if (body.code && !item.code.includes(body.code)) {
-            //     return false;
-            // }
-            if (body.name && !item.name.includes(body.name) && !item.code.includes(body.name)) {
-                return false;
-            }
-            if (body.moduleCode && item.moduleCode !== body.moduleCode) {
-                return false;
-            }
-            if (body.status && item.status !== body.status) {
-                return false;
-            }
-            return true;
-        });
+            const pageSize = parseInt(body.pageSize || "50", 10);
+            // const status = body.status ? parseInt(body.status, 10) : null;
+            const queryList = roles.filter(item => {
+                // if (body.code && !item.code.includes(body.code)) {
+                //     return false;
+                // }
+                if (body.name && !item.name.includes(body.name) && !item.code.includes(body.name)) {
+                    return false;
+                }
+                if (body.moduleCode && item.moduleCode !== body.moduleCode) {
+                    return false;
+                }
+                if (body.status && item.status !== body.status) {
+                    return false;
+                }
+                return true;
+            });
             return wrapResponse({
                 total: queryList.length,
                 rows: queryList.slice((pageNo - 1) * pageSize, pageNo * pageSize)
@@ -357,19 +362,19 @@ export default [
         type: "get",
         data: function ({ body }) {
             const pageNo = parseInt(body.pageNo || "1", 10);
-        const pageSize = parseInt(body.pageSize || "50", 10);
-        const queryList = users.filter(item => {
-            if (body.name && !item.name.includes(body.name) && !item.loginName.includes(body.name)) {
-                return false;
-            }
-            if (body.email && !item.email.includes(body.email)) {
-                return false;
-            }
-            if (body.status && item.status !== body.status) {
-                return false;
-            }
-            return true;
-        });
+            const pageSize = parseInt(body.pageSize || "50", 10);
+            const queryList = users.filter(item => {
+                if (body.name && !item.name.includes(body.name) && !item.loginName.includes(body.name)) {
+                    return false;
+                }
+                if (body.email && !item.email.includes(body.email)) {
+                    return false;
+                }
+                if (body.status && item.status !== body.status) {
+                    return false;
+                }
+                return true;
+            });
             return wrapResponse({
                 total: queryList.length,
                 rows: queryList.slice((pageNo - 1) * pageSize, pageNo * pageSize)
@@ -447,16 +452,16 @@ export default [
         type: "get",
         data: function ({ body }) {
             const pageNo = parseInt(body.pageNo || "1", 10);
-        const pageSize = parseInt(body.pageSize || "50", 10);
-        const queryList = messages.filter(item => {
-            if (body.keyword && !item.title.includes(body.keyword) && !item.content.includes(body.keyword)) {
-                return false;
-            }
-            if (body.moduleCode && item.moduleCode !== body.moduleCode) {
-                return false;
-            }
-            return true;
-        });
+            const pageSize = parseInt(body.pageSize || "50", 10);
+            const queryList = messages.filter(item => {
+                if (body.keyword && !item.title.includes(body.keyword) && !item.content.includes(body.keyword)) {
+                    return false;
+                }
+                if (body.moduleCode && item.moduleCode !== body.moduleCode) {
+                    return false;
+                }
+                return true;
+            });
             return wrapResponse({
                 total: queryList.length,
                 rows: queryList.slice((pageNo - 1) * pageSize, pageNo * pageSize)
@@ -471,4 +476,4 @@ export default [
             return wrapResponse(null, true);
         }
     }
-]
+];

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 16:36:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-22 17:27:21
+ * @最后修改时间: 2024-03-14 16:47:38
  * @项目的路径: \vue-manager-system\src\services\constants.ts
  * @描述: 常量集合
  */
@@ -15,6 +15,7 @@ export const HANDLE_CODES = {
     CREATE: "CREATE", // 创建
     DELETE: "DELETE", // 删除
     UPDATE: "UPDATE", // 更新
+    VIEW: "VIEW", // 查看
     QUERY: "QUERY", // 查询
     IMPORT: "IMPORT", // 导入
     LOGS: "LOGS", // 日志
@@ -140,6 +141,7 @@ export const INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES = {
     select: {
         clearable: true,
         collapseTags: true,
+        collapseTagsTooltip: true,
         filterable: true,
         placeholder: "请选择"
     },

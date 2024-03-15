@@ -1,7 +1,6 @@
 <template>
     <dialog-form
         ref="dialogFormRef"
-        class="menu-info-form"
         :isShow="isShow"
         :buttons="buttons"
         :inputFormProps="inputForm"
@@ -14,8 +13,9 @@
 import type { PropType } from "vue";
 import type { Components } from "/#/components";
 import { ref, reactive } from "vue";
-import systemAPI from "@api/system";
 import { ElMessage } from "element-plus";
+import systemAPI from "@api/system";
+import { HANDLE_CODES } from "@/services/constants";
 
 const props = defineProps({
     // 是否显示弹窗
@@ -34,6 +34,12 @@ const props = defineProps({
         default: function () {
             return [];
         }
+    },
+    actionType: {
+        type: String
+    },
+    row: {
+        type: Object
     }
 });
 
@@ -43,6 +49,10 @@ const dialogFormRef = ref<Components.DialogFormRef>();
 
 // 输入表单信息
 const inputForm = reactive<Components.InputForm>({
+    value: Object.assign({}, props.row, { roles: props.row?.roles ? props.row?.roles.split(",") : [] }),
+    props: {
+        disabled: props.actionType === HANDLE_CODES.VIEW
+    },
     fields: [
         {
             name: "moduleCode",
@@ -57,11 +67,11 @@ const inputForm = reactive<Components.InputForm>({
             props: {
                 multiple: true
             },
-            data: []
+            data: props.roleList.map(item => ({ label: item.name + "(" + item.code + ")", value: item.code }))
         },
         {
             name: "title",
-            label: "名称",
+            label: "标题",
             type: "input",
             props: {
                 maxlength: 20

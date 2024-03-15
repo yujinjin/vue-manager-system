@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-10-27 18:13:47
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-05 14:47:40
+ * @最后修改时间: 2024-03-14 17:59:35
  * @项目的路径: \vue-manager-system\src\components\input-field.vue
  * @描述: 表单输入字段组件
 -->
@@ -84,3 +84,9 @@ const changeValue = function (value) {
     emits("update:modelValue", value);
 };
 </script>
+<style lang="scss" scoped>
+.label-contents {
+    font-weight: 500;
+    color: #121736;
+}
+</style>

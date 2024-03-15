@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-04 15:01:20
+ * @最后修改时间: 2024-03-15 11:34:19
  * @项目的路径: \vue-manager-system\src\views\home\components\messages.vue
  * @描述: 消息列表
 -->
 <template>
-    <el-dropdown @command="messageCommandHandle">
+    <el-dropdown max-height="300px" @command="messageCommandHandle">
         <span class="el-dropdown-link">
             <el-badge :value="unreadMessages.length" :max="99" :hidden="unreadMessages.length <= 0">
                 <el-icon><ChatLineRound /></el-icon>
@@ -16,7 +16,7 @@
         <template #dropdown>
             <el-dropdown-menu>
                 <template v-if="unreadMessages.length > 0">
-                    <el-dropdown-item v-for="(messageItem, index) in unreadMessages.slice(0, 4)" :key="messageItem.id" :command="index">
+                    <el-dropdown-item v-for="(messageItem, index) in unreadMessages" :key="messageItem.id" :command="index">
                         <div class="message-item">
                             <div class="avatar-img">
                                 <img v-if="messageItem.senderAvatar" :src="messageItem.senderAvatar" />
@@ -31,15 +31,15 @@
                     </el-dropdown-item>
                     <el-dropdown-item>
                         <div class="message-footer">
-                            <div class="text-box">查看更多</div>
-                            <div class="text-box">清空消息</div>
+                            <div class="text-box" @click.stop="gotoMessagePage">查看更多</div>
+                            <div class="text-box" @click.stop="clearUnreadMessagesHandle">清空消息</div>
                         </div>
                     </el-dropdown-item>
                 </template>
                 <template v-else>
                     <el-dropdown-item :command="-1">
                         <div class="message-item no-data">
-                            <i class="icomoon-info"></i>
+                            <el-empty :image-size="40" description="" />
                             没有未读消息
                         </div>
                     </el-dropdown-item>
@@ -47,15 +47,26 @@
             </el-dropdown-menu>
         </template>
     </el-dropdown>
+    <message-details-dialog v-if="isShowMessageDetailsDialog" :messageInfo="messageInfo" @close="isShowMessageDetailsDialog = false" />
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 import type { Ref } from "vue";
+import { useRouter } from "vue-router";
 import { ChatLineRound } from "@element-plus/icons-vue";
 import systemAPI from "@api/system";
 import { timeDifferenceFormat } from "@yujinjin/utils";
+import messageDetailsDialog from "./message-details-dialog.vue";
+
+const router = useRouter();
 
 const unreadMessages: Ref<Record<string, any>[]> = ref([]);
+
+// 是否显示消息详情弹窗
+const isShowMessageDetailsDialog = ref(false);
+
+// 当前选中消息信息
+const messageInfo = ref<Record<string, any>>();
 
 // 查询未读消息列表
 const queryUnreadMessages = async function () {
@@ -64,8 +75,22 @@ const queryUnreadMessages = async function () {
 
 // 消息查看
 const messageCommandHandle = function (index) {
-    // TODO: 消息操作
+    if (index === -1) {
+        return;
+    }
+    messageInfo.value = unreadMessages.value[index];
+    isShowMessageDetailsDialog.value = true;
     logs.info("messageCommandHandle........." + unreadMessages.value[index]);
+};
+
+// 跳转到消息列表页
+const gotoMessagePage = function () {
+    router.push({ name: "system-messages" });
+};
+
+// 清空未读消息列表
+const clearUnreadMessagesHandle = function () {
+    unreadMessages.value = [];
 };
 
 queryUnreadMessages();
@@ -85,6 +110,7 @@ queryUnreadMessages();
     display: flex;
     align-items: center;
     border-bottom: 1px solid #f7f7f7;
+    width: 236px;
 
     // &:hover {
     //     background-color: #f7f7f7;
@@ -123,6 +149,19 @@ queryUnreadMessages();
             font-size: 11px;
             color: var(--el-color-primary);
             line-height: 12px;
+        }
+    }
+
+    &.no-data {
+        justify-content: center;
+
+        :deep(.el-empty) {
+            padding: 0px;
+            margin-right: 12px;
+
+            .el-empty__description {
+                display: none;
+            }
         }
     }
 }

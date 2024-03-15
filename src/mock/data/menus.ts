@@ -2,8 +2,8 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-03-07 16:21:36
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-07 16:26:51
- * @项目的路径: \vue-manager-system\src\mock\data\menu.ts
+ * @最后修改时间: 2024-03-14 14:08:16
+ * @项目的路径: \vue-manager-system\src\mock\data\menus.ts
  * @描述: 用户菜单列表
  * { id: 菜单ID, parentId: 父级菜单ID(null表示顶级菜单), name: 菜单名称, icons: 菜单图标, url: 菜单地址(可为null), moduleCode: 菜单所属模块code }
  */
@@ -151,7 +151,7 @@ export default [
         name: "外部页面",
         icons: Mock.Random.pick(icons),
         code: "1104",
-        url: window.location.origin + "/outside/home",
+        url: window.location.origin + config.projectContentPath + (config.isWebHash ? "/#" : "") + "/outside/home",
         moduleCode: "DATA",
         status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
         updated: Mock.mock("@first()"),

@@ -197,6 +197,10 @@ const initTableProps = function () {
             rowKey: "id",
             size: "small",
             scrollbarAlwaysOn: true,
+            tooltipEffect: "light",
+            tooltipOptions: {
+                popperClass: "ellipsis-table-tooltip-popover"
+            },
             style: {
                 width: "100%"
             },
@@ -434,5 +438,22 @@ defineExpose<Components.DataTableRef>({
         justify-content: flex-end;
         padding-top: 10px;
     }
+}
+</style>
+<style lang="scss">
+.el-popper.ellipsis-table-tooltip-popover {
+    max-width: 500px;
+    background-color: #fff;
+    border: 0px;
+    box-shadow:
+        0px 9px 28px 8px rgba(0, 0, 0, 0.05),
+        0px 6px 16px 0px rgba(0, 0, 0, 0.08),
+        0px 3px 6px -4px rgba(0, 0, 0, 0.12);
+    color: #121736;
+    padding: 8px;
+    font-weight: 400;
+    color: #121736;
+    font-size: 14px;
+    line-height: 22px;
 }
 </style>

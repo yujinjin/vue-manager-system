@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-11-14 15:21:53
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-13 10:25:13
+ * @最后修改时间: 2024-03-14 14:08:45
  * @项目的路径: \vue-manager-system\src\views\home\components\men-text.vue
  * @描述: 侧边栏菜单名称展示
 -->
@@ -44,7 +44,7 @@ const menuHref = computed<string | undefined>(() => {
     if (!routePath.value) {
         return routePath.value;
     }
-    return config.projectContentPath + (config.isWebHash && "/#") + routePath.value;
+    return config.projectContentPath + (config.isWebHash ? "/#" : "") + routePath.value;
 });
 
 // 是否外链

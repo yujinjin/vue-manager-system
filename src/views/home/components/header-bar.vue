@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-16 13:53:57
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-01 10:55:09
+ * @最后修改时间: 2024-03-14 14:15:13
  * @项目的路径: \vue-manager-system\src\views\home\components\header-bar.vue
  * @描述: home 头部
 -->
@@ -12,7 +12,7 @@
             <div class="logo-box">
                 <svg-icon class="logo" value="vue-logo" />
             </div>
-            <div class="title-text">中台管理系统</div>
+            <div class="title-text">中台内容管理系统</div>
             <div class="icon-box" @click="toggleMenuCollapseState">
                 <svg-icon :class="{ actived: menuCollapseState }" value="fold" />
             </div>

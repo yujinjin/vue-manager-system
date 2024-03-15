@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-16 14:52:33
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-16 17:18:09
+ * @最后修改时间: 2024-03-14 16:23:53
  * @项目的路径: \vue-manager-system\src\views\system\messages\search-config.ts
  * @描述: 站内信查询配置
  */
@@ -45,7 +45,8 @@ export default function ({ showDialogHandle }) {
                 {
                     label: "标题",
                     prop: "title",
-                    minWidth: 150
+                    minWidth: 100,
+                    slot: "dataTable_title"
                 },
                 {
                     label: "内容",
