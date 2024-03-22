@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 18:52:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-27 11:51:41
+ * @最后修改时间: 2024-03-22 14:06:31
  * @项目的路径: \vue-manager-system\src\components\table\table-column-number.vue
  * @描述: 数字数据列
 -->
@@ -32,7 +32,3 @@ const numberText = computed(() => {
     return numberFormat(props.value, props.digit);
 });
 </script>
-<style lang="less" scoped>
-.table-column-number {
-}
-</style>

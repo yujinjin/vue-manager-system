@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-12 19:12:05
+ * @最后修改时间: 2024-03-22 13:57:10
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
@@ -14,6 +14,7 @@ import { storageStore, eventsStore } from "@/stores";
 import type { RouteRecordRaw, Router } from "vue-router";
 import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import { changeUrlParameter } from "@yujinjin/utils";
+import { ElMessage } from "element-plus";
 import system from "./system";
 import others from "./others";
 import plays from "./plays";
@@ -81,6 +82,28 @@ export default function (): Router {
     router.afterEach(() => {
         // TODO: 根据业务需要添加
     });
+
+    /**
+     * @description 监听路由错误，正则匹配对应的错误消息后，自动刷新界面
+     * 解决前端发版出现-跳转路由页面加载该页面js、css文件404时，触发router.onError的场景
+     * 为了避免在特殊情况下服务器丢失资源导致无限报错刷新，这里做了进一步控制判断（半个小时内只会刷新一次）
+     */
+    router.onError((error) => {
+        const pattern = /Loading( CSS)? chunk (\S)+ failed/g;
+        const isChunkLoadFailed = error.message.match(pattern);
+        if (isChunkLoadFailed && dataStorages.isExpireForTryReloadTime()) {
+            ElMessage({
+                message: "系统已升级，正在刷新本地存储，请稍候...",
+                type: "warning",
+                duration: 1500,
+                offset: 60
+            })
+            dataStorages.setTryReloadTimeValue();
+            setTimeout(() => {
+                location.reload()
+            }, 1500);
+        }
+    })
     return router;
 }
 

@@ -56,14 +56,9 @@ const enumText = computed(() => {
             const findItem = props.data.find(dateItem => dateItem[props.valueKey] === item);
             if (findItem) {
                 return findItem[props.textKey];
-            } 
-                return item;
-            
+            }
+            return item;
         })
         .join(props.separator);
 });
 </script>
-<style lang="less" scoped>
-.table-column-enum {
-}
-</style>

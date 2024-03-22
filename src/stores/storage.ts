@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-05 16:24:22
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-04 10:32:43
+ * @最后修改时间: 2024-03-22 12:03:02
  * @项目的路径: \vue-manager-system\src\stores\storage.ts
  * @描述: 本地存储数据管理
  */
@@ -127,6 +127,16 @@ export default defineStore("storage", {
         // 设置当前进入系统引导提示信息的版本值(这里不做缓存)
         setSystemTourVersionValue(value: string) {
             setValue("systemTourVersionValue", value);
+        },
+        // 刷新页面的时间是否过期
+        isExpireForTryReloadTime(): boolean {
+            const tryReloadTime = getValue("tryReloadTime", 1);
+            return !tryReloadTime || tryReloadTime < Date.now();
+        },
+        // 设置当前由于发版的缘故造成请求文件404问题，尝试刷新页面的时间过期时间(这里放sessionStorage，且不做缓存)
+        setTryReloadTimeValue() {
+            // 设置30 分钟后才可以尝试重新刷新页面
+            setValue("tryReloadTime", Date.now() + 30 * 60 * 1000, 1);
         },
         // 存储示例数据1-简单存储, 如果value 为 undefined|''|null时会删除本地存储
         setExampleData1(value: any) {

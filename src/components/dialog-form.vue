@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-14 17:56:31
+ * @最后修改时间: 2024-03-22 14:05:15
  * @项目的路径: \vue-manager-system\src\components\dialog-form.vue
  * @描述: form 弹窗组件
 -->
@@ -183,7 +183,3 @@ defineExpose<Components.DialogFormRef>({
     }
 });
 </script>
-<style lang="scss">
-.form-dialog {
-}
-</style>

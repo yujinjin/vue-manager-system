@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-05 17:49:00
+ * @最后修改时间: 2024-03-22 14:05:40
  * @项目的路径: \vue-manager-system\src\components\input-form.vue
  * @描述: 数据输入表单
 -->
@@ -245,7 +245,3 @@ defineExpose<Components.InputFormRef>({
     }
 });
 </script>
-<style lang="less" scoped>
-.input-form {
-}
-</style>

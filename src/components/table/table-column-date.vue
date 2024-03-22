@@ -36,12 +36,7 @@ const dateText = computed(() => {
     }
     if (Object.prototype.toString.call(props.value) === "[object Array]") {
         return (props.value as Array<string>).map(item => (item ? dateFormat(item, props.formate) : "")).join(props.separator);
-    } 
-        return props.value ? dateFormat(props.value as number | string, props.formate) : "-";
-    
+    }
+    return props.value ? dateFormat(props.value as number | string, props.formate) : "-";
 });
 </script>
-<style lang="less" scoped>
-.table-column-date {
-}
-</style>
