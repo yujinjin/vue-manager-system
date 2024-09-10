@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-16 13:53:57
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-14 14:15:13
+ * @最后修改时间: 2024-07-31 14:56:19
  * @项目的路径: \vue-manager-system\src\views\home\components\header-bar.vue
  * @描述: home 头部
 -->
@@ -62,13 +62,11 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { PropType, Ref } from "vue";
-import type { Router } from "vue-router";
 import { computed } from "vue";
-import { ref } from "vue";
+import { type PropType, type Ref, ref } from "vue";
 import { Refresh, CaretBottom, ArrowRight } from "@element-plus/icons-vue";
-import { useRouter } from "vue-router";
-import { storageStore, pageViewsStore } from "@/stores";
+import { type Router, useRouter } from "vue-router";
+import { storageStore, pageViewsStore, eventsStore } from "@/stores";
 import { transitRoutePath } from "@/routers";
 import messages from "./messages.vue";
 import loginInfoDialog from "./login-info-dialog.vue";
@@ -93,6 +91,9 @@ const storageData = storageStore();
 
 // vuex
 const pageViews = pageViewsStore();
+
+// 系统事件
+const events = eventsStore();
 
 // 是否显示修改用户信息弹窗
 const isShowUserInfoDialog: Ref<boolean> = ref(false);
@@ -129,6 +130,8 @@ const loginUserCommandHandle = function (command) {
         isShowUserInfoDialog.value = true;
     } else if (command === "showUpdatePasswordDialog") {
         isShowUpdatePasswordDialog.value = true;
+    } else if (command === "logout") {
+        events.trigger({ eventName: "gotoLogout" });
     }
 };
 </script>

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-30 14:21:12
+ * @最后修改时间: 2024-07-18 11:44:59
  * @项目的路径: \vue-manager-system\src\services\local-storage.ts
  * @描述: 站点本地存储信息
  */
@@ -11,7 +11,7 @@ class AppStorage {
     private localStorageName: string;
 
     constructor() {
-        this.localStorageName = config.appName + "Storage";
+        this.localStorageName = config.appName + "_Storage";
     }
 
     /**

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-22 14:05:15
+ * @最后修改时间: 2024-07-31 14:42:19
  * @项目的路径: \vue-manager-system\src\components\dialog-form.vue
  * @描述: form 弹窗组件
 -->
@@ -30,8 +30,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import { useSlots, ref, watch } from "vue";
-import type { Ref, PropType } from "vue";
+import { type Ref, type PropType, useSlots, ref, watch } from "vue";
 import type { DialogProps, FormValidateCallback } from "element-plus";
 import type { NotReadonly } from "/#/global";
 import type { Components } from "/#/components";

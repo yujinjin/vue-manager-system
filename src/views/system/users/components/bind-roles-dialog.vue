@@ -61,8 +61,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
-import { ref, watch } from "vue";
+import { type PropType, ref, watch } from "vue";
 import { Search, Delete } from "@element-plus/icons-vue";
 import { ElTable, ElMessage } from "element-plus";
 import { debounce } from "@yujinjin/utils";

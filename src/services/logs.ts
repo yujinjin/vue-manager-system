@@ -2,17 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-31 16:12:27
+ * @最后修改时间: 2024-07-31 14:51:06
  * @项目的路径: \vue-manager-system\src\services\logs.ts
- * @描述: 头部注释配置模板
+ * @描述: 日志输出
  */
-/**
- * 作者：yujinjin9@126.com
- * 时间：2020-12-30
- * 描述：日志输出
- */
-import { LogLevels, BuildEnv } from "@/services/enums";
 import type { App } from "/#/app";
+import { LogLevels, BuildEnv } from "@/services/enums";
 class Log {
     private level: LogLevels;
 
@@ -33,8 +28,8 @@ class Log {
         if (logLevel < this.level) {
             return;
         }
-        // eslint-disable-next-line no-console
-        console.log(...contents);
+        // 避免被代码打包把console的代码删除，同时eslint 配置不要使用console
+        window["console"]["log"](...contents);
     }
 }
 const log = new Log();

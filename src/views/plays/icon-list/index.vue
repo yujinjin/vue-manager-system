@@ -522,8 +522,7 @@ onMounted(() => {
             type: "success"
         });
     });
-    clipboard.on("error", function (error) {
-        console.info(error);
+    clipboard.on("error", function () {
         ElMessage.error("复制失败.");
     });
 });

@@ -30,8 +30,7 @@
 </template>
 <script setup lang="ts">
 import type { Components } from "/#/components";
-import type { Ref, PropType } from "vue";
-import { ref, watch, computed } from "vue";
+import { type Ref, type PropType, ref, watch, computed } from "vue";
 import { Loading } from "@element-plus/icons-vue";
 
 const props = defineProps({

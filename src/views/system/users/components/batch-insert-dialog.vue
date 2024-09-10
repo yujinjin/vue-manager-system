@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-02 14:41:33
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-09 10:56:53
+ * @最后修改时间: 2024-07-31 15:05:10
  * @项目的路径: \vue-manager-system\src\views\system\users\components\batch-insert-dialog.vue
  * @描述: 批量新增用户弹窗
 -->
@@ -135,9 +135,8 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import type { CheckboxValueType, UploadRequestOptions, UploadUserFile, UploadRawFile } from "element-plus";
 import { ref, reactive, watch } from "vue";
-import { ElUpload, genFileId, ElMessage } from "element-plus";
+import { type CheckboxValueType, type UploadRequestOptions, type UploadUserFile, type UploadRawFile, ElUpload, genFileId, ElMessage } from "element-plus";
 import { Upload, Histogram, Finished, Warning, SuccessFilled, CircleCloseFilled } from "@element-plus/icons-vue";
 import commonApi from "@/api/common";
 import systemAPI from "@api/system";
@@ -244,7 +243,6 @@ const httpRequest = async function (options: UploadRequestOptions) {
         const dataList = (await systemAPI.uploadUsersExcel(options.file, { isShowError: false })) as Record<string, any>[];
         uploadInfo.dataList = dataList;
     } catch (e: any) {
-        console.info(".............", e);
         uploadInfo.uploadErrorMessage = e.error.message;
     }
     uploadInfo.isLoading = false;

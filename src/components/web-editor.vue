@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-05 17:53:55
+ * @最后修改时间: 2024-07-31 14:29:38
  * @项目的路径: \vue-manager-system\src\components\web-editor.vue
  * @描述: web 富文本框编辑器
 -->
@@ -13,14 +13,12 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch, inject } from "vue";
-import type { Ref } from "vue";
+import { onMounted, onUnmounted, ref, watch, inject, type Ref } from "vue";
+import { type FormItemContext, type FormContext, formItemContextKey, formContextKey } from "element-plus";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { debounce } from "@yujinjin/utils";
 import commonAPI from "@api/common";
-import { formItemContextKey, formContextKey } from "element-plus";
-import type { FormContext, FormItemContext } from "element-plus";
 
 const props = defineProps({
     modelValue: String,

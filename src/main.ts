@@ -1,8 +1,7 @@
-import type { App as VueApplication } from "vue";
 import type { App } from "/#/app";
 import type { Pinia } from "pinia";
 import type { Router } from "vue-router";
-import { createApp } from "vue";
+import { createApp, type App as VueApplication } from "vue";
 import ElementPlus from "element-plus";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 import Appvue from "@/views/app.vue";

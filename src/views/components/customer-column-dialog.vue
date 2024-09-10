@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-17 18:05:57
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-04 18:36:03
+ * @最后修改时间: 2024-07-31 14:54:01
  * @项目的路径: \vue-manager-system\src\views\components\customer-column-dialog.vue
  * @描述: 自定义数据列弹窗
 -->
@@ -73,9 +73,8 @@
     </el-dialog>
 </template>
 <script lang="ts" setup>
-import type { PropType } from "vue";
 import type { Components } from "/#/components";
-import { computed, ref } from "vue";
+import { type PropType, computed, ref } from "vue";
 import { Search, Delete } from "@element-plus/icons-vue";
 import { debounce } from "@yujinjin/utils";
 import { getValue, setValue } from "@/services/local-storage";
@@ -144,6 +143,10 @@ const props = defineProps({
     localStorageKey: {
         type: String
     },
+    // 本地存储的自定列key的版本，新发版本字段有变动的兼容, 如果值为空就不做兼容
+    localStorageKeyVersion: {
+        type: String
+    },
     // 所有的自定义列key数据
     groupColumnKeys: {
         type: Array as PropType<GroupColumnData[]>
@@ -199,7 +202,14 @@ const selectedColumns = computed<CustomerColumnData[]>(() => {
 // 初始化
 const init = function () {
     // 获取上次保存的自定义列数据
-    const columnKeys = props.localStorageKey && getValue(props.localStorageKey);
+    let columnKeys = props.localStorageKey && getValue(props.localStorageKey);
+    if (columnKeys && props.localStorageKeyVersion) {
+        if (props.localStorageKeyVersion === columnKeys.version) {
+            columnKeys = columnKeys.value;
+        } else {
+            columnKeys = null;
+        }
+    }
     if (props.groupColumnKeys) {
         // 当前数据列表有分组
         props.groupColumnKeys.forEach(({ name, key, childList }) => {
@@ -216,7 +226,7 @@ const init = function () {
                         key,
                         disabled: props.fixedColumnKeys ? props.fixedColumnKeys.includes(key) : !!findTableColumn?.fixed || false,
                         isShow: true,
-                        selected: !columnKeys || columnKeys.includes(key)
+                        selected: columnKeys ? columnKeys.includes(key) : findTableColumn?.isShow !== false
                     };
                 })
             };
@@ -233,9 +243,9 @@ const init = function () {
                 (customColumns.value as CustomerColumnData[]).push({
                     name: column.label || "-",
                     key: column.prop,
-                    disabled: column.prop && props.fixedColumnKeys ? props.fixedColumnKeys.includes(column.prop) : !!column?.fixed || false,
+                    disabled: column.prop && props.fixedColumnKeys ? props.fixedColumnKeys.includes(column.prop) : !!column.fixed || false,
                     isShow: true,
-                    selected: !columnKeys || columnKeys.includes(column.prop)
+                    selected: column.fixed === true || (columnKeys ? columnKeys.includes(column.prop) : column.isShow !== false) // 当前数据是否有选中展示
                 });
             }
         });
@@ -352,7 +362,11 @@ const deleteSelected = function (index) {
 const save = function () {
     const columnKeys = flapCustomColumns.value.filter(item => item.selected).map(item => item.key);
     if (props.localStorageKey) {
-        setValue(props.localStorageKey, columnKeys, 0);
+        if (props.localStorageKeyVersion) {
+            setValue(props.localStorageKey, { value: columnKeys, version: props.localStorageKeyVersion });
+        } else {
+            setValue(props.localStorageKey, columnKeys);
+        }
     }
     emits("save", columnKeys);
     emits("close");

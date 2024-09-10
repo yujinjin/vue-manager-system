@@ -29,9 +29,9 @@
 </template>
 <script setup lang="ts">
 import type { Components } from "/#/components";
+import type { NotReadonly } from "/#/global";
 import type { PaginationProps, TableProps } from "element-plus";
-import type { Ref, PropType } from "vue";
-import { onMounted, onUnmounted, ref, watch, nextTick } from "vue";
+import { type Ref, type PropType, onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import { PAGE_ITEMS } from "@/services/constants";
 import tableColumnDate from "./table/table-column-date.vue";
 import tableColumnNumber from "./table/table-column-number.vue";
@@ -41,7 +41,6 @@ import tableColumnAction from "./table/table-column-action.vue";
 import { dataStore } from "@/stores/";
 import { extend } from "@yujinjin/utils";
 import { debounce } from "@yujinjin/utils";
-import type { NotReadonly } from "/#/global";
 
 const props = defineProps({
     // 当前列表查询函数, 可返回Promise
@@ -166,7 +165,7 @@ const initPaginationData = function () {
             layout: "total, sizes, prev, pager, next, jumper",
             pageSizes: [10, 20, 30, 50, 100],
             // background: true,
-            small: true
+            size: "small"
         },
         props.pagination,
         { total, currentPage }

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-12-20 15:14:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-01 11:17:21
+ * @最后修改时间: 2024-06-04 17:58:05
  * @项目的路径: \vue-manager-system\src\views\home\components\iframe-list.vue
  * @描述: 引用外链的iframe列表
 -->
@@ -19,7 +19,8 @@
             frameborder="0"
             width="100%"
             height="100%"
-            @load="iframeLoad(index)"
+            @load="iframeLoadEvent(index)"
+            @blur="iframeBlurEvent"
         ></iframe>
     </div>
 </template>
@@ -46,9 +47,13 @@ const showIframeIndex = computed(() => {
     return iframeList.value.findIndex(item => item.id === pageViews.visitedViews[pageViews.currentVisiteIndex].id);
 });
 
-const iframeLoad = function (index: number) {
+const iframeLoadEvent = function (index: number) {
     logs.info("设置 IframeId：" + iframeList.value[index].id);
     iframeRefList.value[index].contentWindow?.postMessage({ eventType: "setIframeId", value: iframeList.value[index].id }, "*");
+};
+
+const iframeBlurEvent = function () {
+    window.dispatchEvent(new Event("click"));
 };
 
 // 接手iframe发过来的消息

@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-05 17:18:40
+ * @最后修改时间: 2024-07-31 14:57:33
  * @项目的路径: \vue-manager-system\src\views\home\components\login-info-dialog.vue
  * @描述: 登录用户信息弹窗
 -->
@@ -25,14 +25,12 @@
     </dialog-form>
 </template>
 <script setup lang="ts">
-import type { Ref } from "vue";
 import type { Components } from "/#/components";
-import type { DialogProps } from "element-plus";
 import type { NotReadonly } from "/#/global";
-import { ref, reactive } from "vue";
+import { type Ref, ref, reactive } from "vue";
 import { storageStore } from "@/stores";
 import { Plus, Check, Close } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { type DialogProps, ElMessage } from "element-plus";
 import systemAPI from "@api/system";
 
 defineProps({

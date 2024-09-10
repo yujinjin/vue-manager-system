@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-10 15:05:55
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-10 15:16:47
+ * @最后修改时间: 2024-07-31 15:03:05
  * @项目的路径: \vue-manager-system\src\views\system\roles\components\info-form-dialog.vue
  * @描述: 角色信息弹窗
 -->
@@ -17,9 +17,8 @@
     />
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
 import type { Components } from "/#/components";
-import { ref, reactive } from "vue";
+import { type PropType, ref, reactive } from "vue";
 import systemAPI from "@api/system";
 import { ElMessage } from "element-plus";
 

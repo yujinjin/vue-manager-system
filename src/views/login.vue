@@ -109,10 +109,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { Ref } from "vue";
-import { onUnmounted, ref, reactive, watch } from "vue";
-import type { RouteLocationNormalizedLoaded, Router } from "vue-router";
-import { useRoute, useRouter } from "vue-router";
+import { type Ref, onUnmounted, ref, reactive, watch } from "vue";
+import { type RouteLocationNormalizedLoaded, type Router, useRoute, useRouter } from "vue-router";
 import { storageStore } from "@/stores/";
 import QRCode from "qrcode";
 import { ElMessage } from "element-plus";
@@ -274,14 +272,11 @@ const submitHandle = async function () {
     // });
 };
 
-watch(
-    () => loginType.value,
-    value => {
-        if (value === 2 && !qrcodeImgUrl.value) {
-            initQrcode();
-        }
+watch(loginType, value => {
+    if (value === 2 && !qrcodeImgUrl.value) {
+        initQrcode();
     }
-);
+});
 
 onUnmounted(() => {
     if (qrcodeTimerId) {

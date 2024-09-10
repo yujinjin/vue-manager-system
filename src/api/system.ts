@@ -4,7 +4,7 @@
  * 描述：系统管理API接口
  */
 
-import type { Http } from "../../types/http";
+import type { Http } from "/#/http";
 import request from "./request";
 import commonApi from "./common";
 

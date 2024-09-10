@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-10 15:33:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-11 11:46:43
+ * @最后修改时间: 2024-05-08 09:53:30
  * @项目的路径: \vue-manager-system\src\views\system\roles\components\bind-menus-dialog.vue
  * @描述: 角色绑定菜单弹窗
 -->
@@ -60,8 +60,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
-import { ref, watch, nextTick } from "vue";
+import { type PropType, ref, watch, nextTick } from "vue";
 import { Search, Delete, InfoFilled } from "@element-plus/icons-vue";
 import { ElLoading, ElTable, ElMessage } from "element-plus";
 import { debounce } from "@yujinjin/utils";
@@ -188,7 +187,7 @@ const saveHandle = async function () {
     isSubmiting.value = false;
 };
 
-watch(() => keyword.value, searchDebounce);
+watch(keyword, searchDebounce);
 
 const init = async function () {
     const loadingInstance = ElLoading.service();

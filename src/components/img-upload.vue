@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-29 11:47:58
+ * @最后修改时间: 2024-07-31 14:43:56
  * @项目的路径: \vue-manager-system\src\components\img-upload.vue
  * @描述: 图片上传组件
 -->
@@ -38,10 +38,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, nextTick } from "vue";
-import { ElMessage, ElMessageBox, ElUpload, genFileId } from "element-plus";
-import type { UploadProps, UploadRequestOptions, UploadFile, UploadFiles, UploadUserFile, UploadRawFile } from "element-plus";
-import type { Ref, PropType } from "vue";
+import { type Ref, type PropType, ref, watch, nextTick } from "vue";
+import { type UploadProps, type UploadRequestOptions, type UploadFile, type UploadFiles, type UploadUserFile, type UploadRawFile, ElMessage, ElMessageBox, ElUpload, genFileId } from "element-plus";
 import { numberFormat } from "@yujinjin/utils";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";

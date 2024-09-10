@@ -31,8 +31,7 @@
 
 <script setup lang="ts">
 import type { Components } from "/#/components";
-import type { Ref, PropType } from "vue";
-import { onMounted, ref, watch, nextTick } from "vue";
+import { type Ref, type PropType, onMounted, ref, watch, nextTick } from "vue";
 import { SEARCH_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@/services/constants";
 import { setObjectProperty, extend } from "@yujinjin/utils";
 
@@ -231,13 +230,10 @@ watch(
     }
 );
 
-watch(
-    () => collapseStatus.value,
-    () => {
-        emits("collapseStatusChange", collapseStatus.value);
-        triggerResizeEvent();
-    }
-);
+watch(collapseStatus, () => {
+    emits("collapseStatusChange", collapseStatus.value);
+    triggerResizeEvent();
+});
 
 onMounted(async () => {
     await nextTick();
@@ -304,6 +300,10 @@ defineExpose<Components.SearchFormRef>({
 
             :deep(.el-date-editor) {
                 --el-date-editor-daterange-width: 220px;
+            }
+
+            :deep(.el-switch) {
+                height: 28px;
             }
         }
     }

@@ -1,7 +1,15 @@
 <template>
     <div class="search-page" v-loading="isLoadingForInit">
-        <search-form v-if="searchFormProps" v-bind="searchFormProps" :pageName="pageName" :isSearchLoading="isSearchLoading" @search="searchHandle" @change="searchValueChangeHandle"
-            @fieldsChange="searchFieldsChangeHandle" ref="searchFormRef">
+        <search-form
+            v-if="searchFormProps"
+            v-bind="searchFormProps"
+            :pageName="pageName"
+            :isSearchLoading="isSearchLoading"
+            @search="searchHandle"
+            @change="searchValueChangeHandle"
+            @fieldsChange="searchFieldsChangeHandle"
+            ref="searchFormRef"
+        >
             <template v-for="name in distributeSlots.searchForm" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -14,8 +22,16 @@
                 <slot :name="distributeSlots.actionBarDefault"></slot>
             </template>
         </action-bar>
-        <data-table v-if="dataTableProps" v-bind="dataTableProps" :pageName="pageName" :filters="dataTableFilters" ref="dataTableRef" v-model:selectRows="selectRows" :autoInitQuery="!isLoadingForInit"
-            @search="isLoading => (isSearchLoading = isLoading)">
+        <data-table
+            v-if="dataTableProps"
+            v-bind="dataTableProps"
+            :pageName="pageName"
+            :filters="dataTableFilters"
+            ref="dataTableRef"
+            v-model:selectRows="selectRows"
+            :autoInitQuery="!isLoadingForInit"
+            @search="isLoading => (isSearchLoading = isLoading)"
+        >
             <template v-for="name in distributeSlots.dataTable" #[name]="scope">
                 <slot :name="name" v-bind="scope"></slot>
             </template>
@@ -25,8 +41,7 @@
 </template>
 <script setup lang="ts">
 import type { Components } from "/#/components";
-import type { Ref, PropType } from "vue";
-import { onMounted, ref, useSlots, computed, watch, nextTick } from "vue";
+import { type Ref, type PropType, onMounted, ref, useSlots, computed, watch, nextTick } from "vue";
 import { extend } from "@yujinjin/utils";
 
 const props = defineProps({
@@ -132,15 +147,18 @@ watch(
     }
 );
 
-const unwatch = watch(
+// 只运行一次
+watch(
     () => props.isLoadingForInit,
     async value => {
-        unwatch();
         if (value) return;
         if (searchFormRef.value) {
             searchFormValue.value = searchFormRef.value.getValue();
         }
         queryDataList();
+    },
+    {
+        once: true
     }
 );
 

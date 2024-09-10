@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-19 10:26:09
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-05 17:43:42
+ * @最后修改时间: 2024-03-28 11:19:25
  * @项目的路径: \vue-manager-system\src\views\plays\order-list\search-config.ts
  * @描述: 订单查询配置
  */
@@ -214,6 +214,7 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                 },
                 {
                     label: "订单备注",
+                    isShow: false,
                     prop: "remark",
                     minWidth: 150,
                     showOverflowTooltip: true

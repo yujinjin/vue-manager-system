@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-03-01 11:25:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-01 14:46:46
+ * @最后修改时间: 2024-07-18 11:24:44
  * @项目的路径: \vue-manager-system\src\views\outside\home.vue
  * @描述: 外部系统home页（此页面仅做框架测试用）
 -->
@@ -31,7 +31,7 @@ const pageId = ref<string>("");
 const newIFramePage = function () {
     pageId.value = Date.now() + "";
     iframeMessage.openNewTabPage({
-        url: "http://localhost:" + process.env.VUE_APP_PORT + "/outside/about",
+        url: window.location.origin + config.projectContentPath + (config.isWebHash ? "/#" : "") + "/outside/about",
         title: "外部about页面",
         pageId: pageId.value
     });
@@ -47,7 +47,7 @@ const gotoNewIFramePage = function () {
     iframeMessage.gotoTabPage({
         pageId: pageId.value,
         callback: function (result: boolean) {
-            console.info("打开页面回调函数结果: " + result);
+            logs.info("打开页面回调函数结果: " + result);
         }
     });
 };

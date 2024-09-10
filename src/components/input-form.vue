@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-22 14:05:40
+ * @最后修改时间: 2024-07-31 14:45:17
  * @项目的路径: \vue-manager-system\src\components\input-form.vue
  * @描述: 数据输入表单
 -->
@@ -10,34 +10,34 @@
     <div class="input-form" v-loading="isLoading">
         <el-form v-bind="formProps" :model="inputFormValue" ref="inputFormRef">
             <el-row>
-                <el-col v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index" :span="field.span" v-show="field.isShow !== false">
-                    <el-form-item v-bind="field.formItemProps">
-                        <input-field :field="field" :modelValue="getObjectProperty(inputFormValue, field.name)" @update:modelValue="value => setFieldValue(value, field)">
-                            <!-- 自定义插件，插槽 -->
-                            <slot
-                                v-if="field.slot"
-                                :name="field.slot"
-                                :field="field"
-                                :value="getObjectProperty(inputFormValue, field.name)"
-                                :formValue="inputFormValue"
-                                :formFields="formFields"
-                            ></slot>
-                        </input-field>
-                    </el-form-item>
-                </el-col>
+                <template v-for="(field, index) in formFields" :key="(field.name || '') + '_' + index">
+                    <el-col v-if="field.isShow !== false" :span="field.span" :key="index">
+                        <el-form-item v-bind="field.formItemProps">
+                            <input-field :field="field" :modelValue="getObjectProperty(inputFormValue, field.name)" @update:modelValue="value => setFieldValue(value, field)">
+                                <!-- 自定义插件，插槽 -->
+                                <slot
+                                    v-if="field.slot"
+                                    :name="field.slot"
+                                    :field="field"
+                                    :value="getObjectProperty(inputFormValue, field.name)"
+                                    :formValue="inputFormValue"
+                                    :formFields="formFields"
+                                ></slot>
+                            </input-field>
+                        </el-form-item>
+                    </el-col>
+                </template>
             </el-row>
         </el-form>
     </div>
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
-import type { Ref, PropType } from "vue";
-import type { FormInstance, FormProps, FormValidateCallback } from "element-plus";
-import { ref, watch } from "vue";
-import { INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@/services/constants";
-import { setObjectProperty, getObjectProperty } from "@yujinjin/utils";
-import { extend } from "@yujinjin/utils";
 import type { NotReadonly } from "/#/global";
+import type { Components } from "/#/components";
+import type { FormInstance, FormProps, FormValidateCallback } from "element-plus";
+import { type Ref, type PropType, ref, watch } from "vue";
+import { INPUT_FORM_FIELD_DEFAULT_ATTRIBUTES } from "@/services/constants";
+import { setObjectProperty, getObjectProperty, extend } from "@yujinjin/utils";
 
 const props = defineProps({
     fields: {
@@ -165,7 +165,7 @@ const generateFormFields = function () {
 
 // 设置字段的值
 const setFieldValue = function (fieldValue, field: Components.InputFormField) {
-    if (field.type === "input") {
+    if (field.type === "input" && field.props?.type !== "textarea" && field.props?.trim !== false) {
         fieldValue = fieldValue.trim();
     }
     setObjectProperty(inputFormValue.value, field.name, fieldValue);

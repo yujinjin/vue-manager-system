@@ -53,6 +53,18 @@ module.exports = {
         }
     },
     chainWebpack: config => {
+        if (process.env.NODE_ENV === "production") {
+            config.optimization.minimizer("terser").tap(options => {
+                // 删除console、debugger、注释
+                options[0].terserOptions.compress["drop_console"] = true;
+                options[0].terserOptions.compress["drop_debugger"] = true;
+                options[0].terserOptions.format = {
+                    comments: false
+                };
+                return options;
+            });
+        }
+
         config.module.rule("svg").exclude.add(pathResolve("src/components/icons")).end();
 
         config.module
@@ -100,8 +112,9 @@ module.exports = {
             .end();
 
         config.plugin("define").tap(options => {
+            options[0]["__VUE_PROD_HYDRATION_MISMATCH_DETAILS__"] = process.env.NODE_ENV === "production" ? "false" : "true"
             // DefinePlugin注入全局变量
-            options[0]["process.env"]["VUE_APP_BUILD_TIME"] = new Date().getTime();
+            options[0]["process.env"]["VUE_APP_BUILD_TIME"] = new Date().getTime(); // 注意：添加该变量无论文件有没有变化打包后的hash值都会变
             options[0]["process.env"]["VUE_APP_VERSION"] = JSON.stringify(pkg.version);
             options[0]["process.env"]["VUE_APP_NAME"] = JSON.stringify(pkg.name);
             options[0]["process.env"]["VUE_MOCK_DATA"] = JSON.stringify(process.env.MOCK_DATA);

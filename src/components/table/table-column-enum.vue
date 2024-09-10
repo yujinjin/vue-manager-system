@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 18:46:49
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-01-06 17:35:02
+ * @最后修改时间: 2024-07-31 14:47:33
  * @项目的路径: \vue-manager-system\src\components\table\table-column-enum.vue
  * @描述: 枚举数据列
 -->
@@ -10,8 +10,7 @@
     <div class="table-column-enum">{{ enumText }}</div>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
-import { computed } from "vue";
+import { type PropType, computed } from "vue";
 
 const props = defineProps({
     value: {

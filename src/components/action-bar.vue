@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-07 14:27:44
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-22 18:27:39
+ * @最后修改时间: 2024-07-31 14:39:36
  * @项目的路径: \vue-manager-system\src\components\action-bar.vue
  * @描述: 列表操作栏
 -->
@@ -25,8 +25,7 @@
 </template>
 <script setup lang="ts">
 import type { Components } from "/#/components";
-import type { PropType, Ref } from "vue";
-import { ref, watch } from "vue";
+import { type PropType, type Ref, ref, watch } from "vue";
 import { dataStore } from "@/stores/";
 
 const props = defineProps({

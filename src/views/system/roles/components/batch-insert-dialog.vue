@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-11 11:55:45
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-11 14:18:35
+ * @最后修改时间: 2024-07-31 15:02:22
  * @项目的路径: \vue-manager-system\src\views\system\roles\components\batch-insert-dialog.vue
  * @描述: 批量新增角色弹窗
 -->
@@ -124,10 +124,8 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { CheckboxValueType, UploadRequestOptions, UploadUserFile, UploadRawFile } from "element-plus";
-import { ref, reactive, watch } from "vue";
-import { ElUpload, genFileId, ElMessage } from "element-plus";
+import { type PropType, ref, reactive, watch } from "vue";
+import { type CheckboxValueType, type UploadRequestOptions, type UploadUserFile, type UploadRawFile, ElUpload, genFileId, ElMessage } from "element-plus";
 import { Upload, Histogram, Finished, Warning, SuccessFilled, CircleCloseFilled } from "@element-plus/icons-vue";
 import commonApi from "@/api/common";
 import systemAPI from "@api/system";

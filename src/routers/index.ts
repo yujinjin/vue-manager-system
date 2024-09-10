@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-22 13:57:10
+ * @最后修改时间: 2024-07-31 14:50:21
  * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
@@ -11,8 +11,7 @@
  * }
  */
 import { storageStore, eventsStore } from "@/stores";
-import type { RouteRecordRaw, Router } from "vue-router";
-import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
+import { type RouteRecordRaw, type Router, createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import { changeUrlParameter } from "@yujinjin/utils";
 import { ElMessage } from "element-plus";
 import system from "./system";
@@ -70,7 +69,6 @@ export default function (): Router {
     // 注册一个全局前置守卫
     router.beforeEach(to => {
         if (to.meta.requireAuth !== false && !dataStorages.isLogin()) {
-            console.info("...........");
             // 未登录的用户进入了需要登录的页面, 全局触发去登录事件
             dataEvents.trigger({ eventName: "gotoLogin", args: [to.fullPath] });
             // 取消当前的导航
@@ -93,7 +91,7 @@ export default function (): Router {
         const isChunkLoadFailed = error.message.match(pattern);
         if (isChunkLoadFailed && dataStorages.isExpireForTryReloadTime()) {
             ElMessage({
-                message: "系统已升级，正在刷新本地存储，请稍候...",
+                message: "系统已升级，正在刷新本地缓存，请稍候...",
                 type: "warning",
                 duration: 1500,
                 offset: 60
@@ -103,7 +101,7 @@ export default function (): Router {
                 location.reload()
             }, 1500);
         }
-    })
+    });
     return router;
 }
 

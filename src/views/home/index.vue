@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-12-19 14:21:12
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-04 11:53:41
+ * @最后修改时间: 2024-07-31 14:55:10
  * @项目的路径: \vue-manager-system\src\views\home\index.vue
  * @描述: 中台主页
 -->
@@ -27,11 +27,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Router } from "vue-router";
 import type { System } from "/#/modules/system";
-import { ElMessage } from "element-plus";
 import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
+import { type Router, useRouter } from "vue-router";
 import { pageViewsStore, storageStore } from "@/stores";
 import headerBar from "./components/header-bar.vue";
 import sideBar from "./components/side-bar.vue";

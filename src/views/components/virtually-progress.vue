@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-04 11:23:48
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-05 17:14:09
+ * @最后修改时间: 2024-07-31 14:54:27
  * @项目的路径: \vue-manager-system\src\views\components\virtually-progress.vue
  * @描述: 虚构的进度条
 -->
@@ -13,9 +13,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
 import type { ProgressProps } from "element-plus";
-import { onUnmounted, ref, watch, onMounted, computed } from "vue";
+import { type PropType, onUnmounted, ref, watch, onMounted, computed } from "vue";
 
 const props = defineProps({
     // 实际进度是否完成

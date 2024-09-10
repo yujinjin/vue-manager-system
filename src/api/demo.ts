@@ -2,12 +2,12 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-01-06 15:33:53
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-07 14:59:02
+ * @最后修改时间: 2024-07-31 16:36:44
  * @项目的路径: \vue-manager-system\src\api\demo.ts
  * @描述: demo 查询API
  */
 import request from "./request";
-import type { Http } from "../../types/http";
+import type { Http } from "/#/http";
 
 export default {
     /**
@@ -64,7 +64,7 @@ export default {
         return request(
             Object.assign(
                 {
-                    url: "http://10.96.144.203:8081/demo/addOrder",
+                    url: "/demo/addOrder",
                     data: inputData
                 },
                 ajaxOptions || {}

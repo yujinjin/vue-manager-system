@@ -10,9 +10,8 @@
     />
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
 import type { Components } from "/#/components";
-import { ref, reactive } from "vue";
+import { type PropType, ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import systemAPI from "@api/system";
 import { HANDLE_CODES } from "@/services/constants";

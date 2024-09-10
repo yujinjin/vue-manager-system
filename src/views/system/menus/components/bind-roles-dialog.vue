@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-15 11:45:54
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-15 14:23:20
+ * @最后修改时间: 2024-07-31 15:00:27
  * @项目的路径: \vue-manager-system\src\views\system\menus\components\bind-roles-dialog.vue
  * @描述: 当前菜单已经绑定的角色列表
 -->
@@ -16,8 +16,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
-import { ref, reactive } from "vue";
+import { type PropType, ref, reactive } from "vue";
 import systemAPI from "@api/system";
 
 const props = defineProps({

@@ -35,7 +35,7 @@
     },
     "dependencies": {
         "core-js": "^3.33.1",
-        "vue": "^3.3.7",
+        "vue": "^3.4.24",
         "pinia": "^2.1.7",
         "vue-router": "^4.2.5",
         "axios": "^1.6.0",
@@ -87,7 +87,7 @@
         "@vue/cli-plugin-vuex": "~5.0.8",
         "@vue/cli-plugin-typescript": "~5.0.8",
         "@vue/cli-plugin-unit-mocha": "~5.0.8",
-        "@vue/compiler-sfc": "^3.3.7",
+        "@vue/compiler-sfc": "^3.4.24",
         "@rushstack/eslint-patch": "^1.5.1",
         "@vue/eslint-config-prettier": "^8.0.0",
         "@vue/eslint-config-typescript": "^12.0.0",

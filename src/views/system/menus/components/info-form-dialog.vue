@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-15 09:41:32
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-17 09:57:10
+ * @最后修改时间: 2024-07-31 15:01:01
  * @项目的路径: \vue-manager-system\src\views\system\menus\components\info-form-dialog.vue
  * @描述: 菜单新增或修改弹窗
 -->
@@ -34,9 +34,8 @@
     <icons-select-dialog v-model:isShow="isShowIconsSelectDialog" @save="updateIconHandle" />
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
 import type { Components } from "/#/components";
-import { ref, reactive } from "vue";
+import { type PropType, ref, reactive } from "vue";
 import systemAPI from "@api/system";
 import { ElMessage } from "element-plus";
 import { Plus, Check, Close } from "@element-plus/icons-vue";

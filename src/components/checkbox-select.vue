@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-10-27 14:17:32
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-31 16:04:39
+ * @最后修改时间: 2024-07-31 14:40:12
  * @项目的路径: \vue-manager-system\src\components\checkbox-select.vue
  * @描述: 下拉选项带复选框的选项
 -->
@@ -36,9 +36,8 @@
     </el-select>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
 import { ElSelect } from "element-plus";
-import { ref, computed } from "vue";
+import { type PropType, ref, computed } from "vue";
 import { escapeStringRegexp } from "@/utils/index";
 
 const props = defineProps({
