@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:29:38
+ * @最后修改时间: 2024-09-11 10:29:32
  * @项目的路径: \vue-manager-system\src\components\web-editor.vue
  * @描述: web 富文本框编辑器
 -->
@@ -24,7 +24,7 @@ const props = defineProps({
     modelValue: String,
     disabled: {
         type: Boolean,
-        default: false
+        default: null
     }
 });
 
@@ -47,7 +47,7 @@ let quillInstance;
 
 // 输入内容变化操作
 const textChangeHandle = debounce(() => {
-    emits("update:modelValue", quillInstance.getText());
+    emits("update:modelValue", quillInstance.getSemanticHTML());
     elFormItem?.validate("change");
 }, 300);
 
@@ -65,7 +65,7 @@ const imgFileChangeHandle = async function (e) {
 
 // 初始化quill
 const initQuill = function () {
-    quillInstance = new Quill(webEditorRef.value, {
+    quillInstance = new Quill(webEditorRef.value!, {
         modules: {
             toolbar: {
                 container: ["bold", "italic", "underline", { header: 1 }, { header: 2 }, "blockquote", "code-block", "code", "link", { list: "ordered" }, { list: "bullet" }, "image", ["clean"]],
@@ -77,12 +77,16 @@ const initQuill = function () {
             }
         },
         theme: "snow",
-        readOnly: props.disabled === true,
+        readOnly: props.disabled === true || (elForm?.disabled === true && props.disabled !== false),
         placeholder: "输入内容..."
     });
     if (props.modelValue) {
-        quillInstance.setText(props.modelValue);
+        // quillInstance.pasteHTML(props.modelValue);
+        quillInstance.setContents(quillInstance.clipboard.convert({ html: props.modelValue }));
     }
+    // if (elForm?.disabled === true && props.disabled !== false) {
+    //     quillInstance.enable(false);
+    // }
     quillInstance.on("text-change", function () {
         textChangeHandle();
     });
@@ -91,8 +95,9 @@ const initQuill = function () {
 watch(
     () => props.modelValue,
     value => {
-        if (!quillInstance || value === quillInstance.getText()) return;
-        quillInstance.setText(props.modelValue);
+        if (!quillInstance || value === quillInstance.getSemanticHTML()) return;
+        // quillInstance.pasteHTML(props.modelValue);
+        quillInstance.setContents(quillInstance.clipboard.convert({ html: props.modelValue }));
     }
 );
 
