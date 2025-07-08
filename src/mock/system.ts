@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-03-07 18:03:44
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-14 17:41:00
+ * @最后修改时间: 2024-11-01 16:39:19
  * @项目的路径: \vue-manager-system\src\mock\system.ts
  * @描述: 系统模块mock数据
  */
@@ -156,7 +156,7 @@ export default [
                 ) {
                     return false;
                 }
-                if (body.moduleCode && item.moduleCode !== body.moduleCode) {
+                if (body.moduleCode && body.moduleCodes.length > 0 && !body.moduleCodes.includes(item.moduleCode)) {
                     return false;
                 }
                 if (body.status && item.status !== body.status) {

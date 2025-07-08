@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-10-27 11:53:51
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-10-27 18:24:49
+ * @最后修改时间: 2024-11-04 16:21:51
  * @项目的路径: \vue-manager-system\src\components\search-field.vue
  * @描述: 搜索表单字段
 -->
@@ -12,13 +12,13 @@
         <slot></slot>
 
         <!-- input -->
-        <el-input v-if="field.type === 'input'" :modelValue="field.value" @update:modelValue="value => changeValue(value.trim())" v-bind="field.props || {}" v-on="field.events || {}" />
+        <el-input v-if="field.type === 'input'" :modelValue="modelValue" @update:modelValue="value => changeValue(value.trim())" v-bind="field.props || {}" v-on="field.events || {}" />
 
         <!-- input-number -->
-        <el-input-number v-else-if="field.type === 'inputNumber'" :modelValue="field.value" @update:modelValue="changeValue" v-bind="field.props || {}" v-on="field.events || {}" />
+        <el-input-number v-else-if="field.type === 'inputNumber'" :modelValue="modelValue" @update:modelValue="changeValue" v-bind="field.props || {}" v-on="field.events || {}" />
 
         <!-- select -->
-        <el-select v-else-if="field.type === 'select'" :modelValue="field.value" @update:modelValue="changeValue" v-bind="field.props || {}" v-on="field.events || {}">
+        <el-select v-else-if="field.type === 'select'" :modelValue="modelValue" @update:modelValue="changeValue" v-bind="field.props || {}" v-on="field.events || {}">
             <el-option
                 v-for="(item, index) in field.data"
                 :key="(item[field.props?.valueKey || field.optionValueKey || 'value'] || '') + '_' + index"
@@ -29,10 +29,17 @@
         </el-select>
 
         <!-- checkbox-select -->
-        <checkbox-select v-else-if="field.type === 'checkboxSelect'" :modelValue="field.value" @update:modelValue="changeValue" v-bind="field.props || {}" v-on="field.events || {}" />
+        <checkbox-select
+            v-else-if="field.type === 'checkboxSelect'"
+            :modelValue="modelValue"
+            :data="field.data"
+            @update:modelValue="changeValue"
+            v-bind="field.props || {}"
+            v-on="field.events || {}"
+        />
 
         <!-- date-picker -->
-        <el-date-picker v-else-if="field.type === 'datePicker'" :modelValue="field.value" @update:modelValue="changeValue" v-bind="field.props || {}" v-on="field.events || {}" />
+        <el-date-picker v-else-if="field.type === 'datePicker'" :modelValue="modelValue" @update:modelValue="changeValue" v-bind="field.props || {}" v-on="field.events || {}" />
     </div>
 </template>
 <script setup lang="ts">
@@ -43,6 +50,9 @@ const props = defineProps({
     field: {
         type: Object as PropType<Components.SearchFormField>,
         required: true
+    },
+    modelValue: {
+        type: [String, Number, Array, Boolean, Object, Date] as PropType<Components.SearchFormField["value"]>
     }
 });
 

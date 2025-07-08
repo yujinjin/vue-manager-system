@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "esnext", // 指定ECMAScript目标版本
         "module": "esnext", // 指定生成哪个模块系统代码
-        "moduleResolution": "node", // 决定如何处理模块。
+        "moduleResolution": "bundler", // 决定如何处理模块。
         "isolatedModules": true,
         // 启用所有严格类型检查选项。
         // 启用 --strict相当于启用 --noImplicitAny, --noImplicitThis, --alwaysStrict，--strictNullChecks和 --strictFunctionTypes和--strictPropertyInitialization。
@@ -18,7 +18,7 @@
         "sourceMap": true,
         "esModuleInterop": true,
         "resolveJsonModule": true,
-        "noUnusedLocals": true, // 有未使用的变量时，抛出错误
+        "noUnusedLocals": true, //s 有未使用的变量时，抛出错误
         "noUnusedParameters": false, // 有未使用的参数时，不抛出错误
         "experimentalDecorators": true,
         "noImplicitAny": false,
@@ -38,6 +38,6 @@
         }, // 模块名到基于 baseUrl的路径映射的列表。
         "lib": ["esnext", "dom", "dom.iterable", "scripthost"] // 编译过程中需要引入的库文件的列表。
     },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts", "types/**/*.ts", "mock/**/*.ts", "mock/index.js"],
+    "include": ["src", "types", "mock"],
     "exclude": ["node_modules", "dist", "**/*.js"]
 }

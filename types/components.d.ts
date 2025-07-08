@@ -367,7 +367,7 @@ declare namespace Components {
         getSearchedValue: () => Record<string, any>;
 
         // 修改当前form字段的属性
-        changeFormFields: (callback: (formFields: Components.InputFormField[]) => void) => void;
+        changeFormFields: (callback: (formFields: Components.SearchFormField[]) => void) => void;
 
         // 修改当前生成的button按钮值
         changeButtons: (callback: (actionButtons: Components.TableButton[]) => void) => void;

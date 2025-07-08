@@ -3,12 +3,14 @@ const path = require("path");
 const webpack = require("webpack");
 const Alphabet = require("alphabetjs");
 const chalk = require("chalk");
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 console.log(chalk.bgBlueBright("--------------------------------------------------"));
 console.log(chalk.blue(Alphabet("JACK YU", "planar")));
 console.log(chalk.bgBlueBright("--------------------------------------------------"));
 const pkg = require("./package.json");
 // const mock = require("./mock/index");
 // const bodyParser = require("body-parser");
+
 
 function pathResolve(dir) {
     return path.resolve(process.cwd(), ".", dir);
@@ -50,7 +52,10 @@ module.exports = {
                     }
                 }
             }
-        }
+        },
+        plugins: [
+            new MonacoWebpackPlugin()
+        ]
     },
     chainWebpack: config => {
         if (process.env.NODE_ENV === "production") {

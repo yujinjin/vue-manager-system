@@ -194,7 +194,7 @@ defineExpose<Components.SearchPageRef>({
     },
 
     // 修改当前form字段的属性
-    changeFormFields: function (callback: (formFields: Components.InputFormField[]) => void) {
+    changeFormFields: function (callback: (formFields: Components.SearchFormField[]) => void) {
         searchFormRef.value?.changeFormFields(callback);
     },
 

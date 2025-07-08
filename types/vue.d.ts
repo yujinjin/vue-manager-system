@@ -2,15 +2,21 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-09-12 19:58:09
+ * @最后修改时间: 2024-11-28 11:15:05
  * @项目的路径: \vue-manager-system\types\vue.d.ts
  * @描述: vue 声明
  */
 import type { App } from "/#/app";
+import type { ComponentPublicInstance, FunctionalComponent } from "vue";
 import type { Router, RouteLocationNormalizedLoaded } from "vue-router";
 
 /** 将第三方变量挂载到每一个 vue 示例中 */
 declare module "vue" {
+    export type JSXComponent<Props = any> = { new (): ComponentPublicInstance<Props> } | FunctionalComponent<Props>;
+    import type { CompatVue } from "vue";
+    const Vue: CompatVue;
+    export default Vue;
+    export * from "vue";
     interface ComponentCustomProperties {
         $store: Store<App.StoreStateType>;
         $route: RouteLocationNormalizedLoaded;
@@ -28,4 +34,10 @@ declare module "vue-router" {
         /** 是否需要登录，没有默认为true */
         requireAuth?: boolean;
     }
+}
+
+declare module "*.vue" {
+    import type { DefineComponent } from "vue";
+    const Component: DefineComponent<object, object, any>;
+    export default Component;
 }

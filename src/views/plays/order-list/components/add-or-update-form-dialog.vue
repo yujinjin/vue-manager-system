@@ -1,11 +1,21 @@
 <template>
-    <dialog-form ref="dialogFormRef" :isShow="isShow" :buttons="buttons" :inputFormProps="inputForm" :dialogProps="{ title: '新增订单数据', width: '800px' }" @close="emits('update:isShow', false)" />
+    <dialog-form ref="dialogFormRef" :isShow="isShow" :buttons="buttons" :inputFormProps="inputForm" :dialogProps="{ title: '新增订单数据', width: '800px' }" @close="emits('update:isShow', false)">
+        <template #remark="{ formValue }">
+            <web-editor v-model="formValue.remark">
+                <el-tooltip content="全屏源码编辑">
+                    <svg-icon @click.stop.prevent="toggleHtmlEditorDialogShowStatus(true)" class="full-screen-icon" value="full-screen" />
+                </el-tooltip>
+            </web-editor>
+        </template>
+    </dialog-form>
+    <html-editor-dialog v-if="isShowHtmlEditorDialog" @close="toggleHtmlEditorDialogShowStatus(false)" v-model="htmlEditorValue" />
 </template>
 <script setup lang="ts">
 import type { Components } from "/#/components";
 import { ref, reactive } from "vue";
-import demoAPI from "@api/demo";
 import { ElMessage } from "element-plus";
+import demoAPI from "@api/demo";
+import htmlEditorDialog from "@views/components/html-editor-dialog.vue";
 
 defineProps({
     // 是否显示弹窗
@@ -18,6 +28,12 @@ defineProps({
 const emits = defineEmits(["update:isShow", "refresh"]);
 
 const dialogFormRef = ref<Components.DialogFormRef>();
+
+// 是否显示HTML编辑器弹窗
+const isShowHtmlEditorDialog = ref(false);
+
+// html编辑器值
+const htmlEditorValue = ref("");
 
 // 输入表单信息
 const inputForm = reactive<Components.InputForm>({
@@ -93,8 +109,9 @@ const inputForm = reactive<Components.InputForm>({
         {
             name: "remark",
             label: "备注",
-            span: 24,
-            type: "webEditor"
+            slot: "remark",
+            span: 24
+            // type: "webEditor"
         }
     ]
 });
@@ -116,4 +133,32 @@ const buttons = ref<Components.FormButton[]>([
         }
     }
 ]);
+
+// 切换HTML编辑器弹窗显示状态
+const toggleHtmlEditorDialogShowStatus = function (isShow: boolean) {
+    if (isShow) {
+        htmlEditorValue.value = dialogFormRef.value?.getInputValue()?.remark;
+    } else {
+        dialogFormRef.value?.setInputPropertyValue("remark", htmlEditorValue.value);
+    }
+    isShowHtmlEditorDialog.value = isShow;
+};
 </script>
+<style lang="scss" scoped>
+.full-screen-icon {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    z-index: 99;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 16px;
+    height: 16px;
+    width: 16px;
+    color: #999;
+
+    &:hover {
+        color: var(--el-color-primary);
+    }
+}
+</style>

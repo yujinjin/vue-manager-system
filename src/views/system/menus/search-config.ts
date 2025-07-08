@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-11 21:29:42
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-12 15:41:55
+ * @最后修改时间: 2024-11-01 16:37:54
  * @项目的路径: \vue-manager-system\src\views\system\menus\search-config.ts
  * @描述: 菜单查询配置
  */
@@ -21,8 +21,8 @@ export default function ({ showDialogHandle, toggleMenuLockStatusHandle, deleteH
                     label: "菜单名称/编码/URL"
                 },
                 {
-                    name: "module",
-                    type: "select",
+                    name: "moduleCodes",
+                    type: "checkboxSelect",
                     label: "模块",
                     data: []
                 },

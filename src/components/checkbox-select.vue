@@ -2,22 +2,15 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2023-10-27 14:17:32
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:40:12
+ * @最后修改时间: 2024-11-05 11:50:41
  * @项目的路径: \vue-manager-system\src\components\checkbox-select.vue
  * @描述: 下拉选项带复选框的选项
 -->
 <template>
-    <el-select
-        :modelValue="modelValue"
-        @update:modelValue="value => emits('update:modelValue', value)"
-        ref="checkboxSelectRef"
-        @change="value => emits('change', value)"
-        v-bind="selectProps || {}"
-        v-on="events || {}"
-    >
+    <el-select v-model="modelValue" ref="checkboxSelectRef" @change="value => emits('change', value)" v-bind="selectProps || {}" v-on="events || {}">
         <el-option v-if="isShowCheckAll" :created="true" value="" label="">
             <div class="option-inner" @click.stop.prevent="checkAllChangeHandle">
-                <el-checkbox :modelValue="checkAllStatus.isCheckAll" :indeterminate="checkAllStatus.isIndeterminate" />
+                <el-checkbox :model-value="checkAllStatus.isCheckAll" :indeterminate="checkAllStatus.isIndeterminate" />
                 <span>全选</span>
             </div>
         </el-option>
@@ -29,7 +22,11 @@
             :disabled="item.disabled === true"
         >
             <div class="option-inner">
-                <el-checkbox :modelValue="modelValue && modelValue.includes(item[optionValueKey || 'value'])" @change="isCheck => checkChangeHandle(isCheck, item[optionValueKey || 'value'])" />
+                <el-checkbox
+                    :model-value="modelValue && modelValue.includes(item[optionValueKey || 'value'])"
+                    :disabled="item.disabled === true"
+                    @change="isCheck => checkChangeHandle(isCheck, item[optionValueKey || 'value'])"
+                />
                 <span>{{ item[optionLabelKey || "label"] }}</span>
             </div>
         </el-option>
@@ -37,13 +34,9 @@
 </template>
 <script setup lang="ts">
 import { ElSelect } from "element-plus";
-import { type PropType, ref, computed } from "vue";
-import { escapeStringRegexp } from "@/utils/index";
+import { type PropType, type ComputedRef, ref, computed, nextTick } from "vue";
 
 const props = defineProps({
-    modelValue: {
-        type: Array as PropType<Array<object | string | number>>
-    },
     data: {
         type: Array as PropType<Array<Record<string, any>>>,
         required: true
@@ -64,15 +57,28 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(["update:modelValue", "change"]);
+const emits = defineEmits(["change"]);
+
+const modelValue = defineModel({ type: Array as PropType<Array<object | string | number>> });
 
 // select 实例
 const checkboxSelectRef = ref<InstanceType<typeof ElSelect>>();
+
+const selectDataList: ComputedRef<Array<Record<string, any>>> = computed(() => {
+    if (!props.data || props.data.length === 0) {
+        return [];
+    }
+    if (typeof props.data[0] === "string" || typeof props.data[0] === "number") {
+        return props.data.map(item => ({ label: item, value: item }));
+    }
+    return props.data as Array<Record<string, any>>;
+});
 
 const selectProps = computed(() => {
     return Object.assign(
         {
             collapseTags: true,
+            collapseTagsTooltip: true,
             filterable: true
         },
         props.props || {},
@@ -81,11 +87,16 @@ const selectProps = computed(() => {
 });
 
 const isShowCheckAll = computed(() => {
-    if (!props.data || props.data.length === 0 || !checkboxSelectRef.value || !checkboxSelectRef.value.query) {
+    if (selectDataList.value.length === 0 || !checkboxSelectRef.value) {
         return false;
     }
-    const regexp = new RegExp(escapeStringRegexp(checkboxSelectRef.value.query), "i");
-    return props.data.findIndex(item => regexp.test(item[props.optionLabelKey])) !== -1;
+    let isShow = false;
+    checkboxSelectRef.value!.states.options.forEach(item => {
+        if (item.isDisabled !== true && item.visible && !item.created) {
+            isShow = true;
+        }
+    });
+    return isShow;
 });
 
 // 初始化全选状态
@@ -94,46 +105,43 @@ const checkAllStatus = computed(() => {
         isCheckAll: false,
         isIndeterminate: false
     };
-    if (!isShowCheckAll.value || !props.modelValue || props.modelValue.length === 0) {
+    if (!isShowCheckAll.value || !modelValue.value || modelValue.value.length === 0 || !checkboxSelectRef.value?.states) {
         return status;
     }
-    const regexp = new RegExp(escapeStringRegexp(checkboxSelectRef.value!.query), "i");
-    props.data.find(item => {
-        if (!regexp.test(item[props.optionLabelKey])) {
-            return false;
+    checkboxSelectRef.value.states.options.forEach(item => {
+        if (!item.visible || item.created || (!status.isCheckAll && status.isIndeterminate)) {
+            return;
         }
-        if (props.modelValue?.includes(item[props.optionValueKey])) {
+        if (item.itemSelected) {
             status.isCheckAll = true;
         } else if (status.isCheckAll) {
-            status.isCheckAll = false;
             status.isIndeterminate = true;
+            status.isCheckAll = false;
         }
-        return status.isIndeterminate;
     });
     return status;
 });
 
-const checkAllChangeHandle = function () {
-    const values = (props.modelValue || []).slice();
-    const regexp = new RegExp(escapeStringRegexp(checkboxSelectRef.value!.query), "i");
-
-    props.data.find(item => {
-        if (!regexp.test(item[props.optionLabelKey])) {
-            return false;
+const checkAllChangeHandle = async function () {
+    await nextTick();
+    const values = modelValue.value || [];
+    checkboxSelectRef.value?.states.options.forEach(item => {
+        if (!item.visible || item.created) {
+            return;
         }
-        const findIndex = values.indexOf(item[props.optionValueKey]);
+        const findIndex = values.indexOf(item.value);
         if (checkAllStatus.value.isCheckAll && findIndex !== -1) {
             values.splice(findIndex, 1);
         } else if (!checkAllStatus.value.isCheckAll && findIndex === -1) {
-            values.push(item[props.optionValueKey]);
+            values.push(item.value);
         }
     });
-    emits("update:modelValue", values);
+    modelValue.value = values;
     emits("change", values);
 };
 
 const checkChangeHandle = function (isCheck, value) {
-    const values = (props.modelValue || []).slice();
+    const values = modelValue.value || [];
     if (isCheck) {
         values.splice(
             values.findIndex(item => item === value),
@@ -142,7 +150,7 @@ const checkChangeHandle = function (isCheck, value) {
     } else {
         values.push(value);
     }
-    emits("update:modelValue", values);
+    modelValue.value = values;
     emits("change", values);
 };
 </script>

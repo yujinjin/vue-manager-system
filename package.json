@@ -47,6 +47,7 @@
         "qrcode": "^1.5.3",
         "cropperjs": "^1.6.1",
         "quill": "^2.0.2",
+        "monaco-editor": "^0.51.0",
         "clipboard": "^2.0.11",
         "mockjs": "^1.1.0",
         "@yujinjin/utils": "^0.0.2",
@@ -91,6 +92,7 @@
         "@rushstack/eslint-patch": "^1.5.1",
         "@vue/eslint-config-prettier": "^8.0.0",
         "@vue/eslint-config-typescript": "^12.0.0",
+        "monaco-editor-webpack-plugin": "^7.1.0",
         "svg-sprite-loader": "^6.0.11",
         "cross-env": "^7.0.3"
     },

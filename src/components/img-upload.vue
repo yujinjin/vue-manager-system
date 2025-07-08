@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:43:56
+ * @最后修改时间: 2024-12-03 14:12:38
  * @项目的路径: \vue-manager-system\src\components\img-upload.vue
  * @描述: 图片上传组件
 -->
@@ -165,19 +165,23 @@ const closeCroppDialog = function () {
 };
 
 // 图片上传API
-const imageUploadApi = async function (file: File) {
+const imageUploadApi = async function (file: File | UploadRawFile) {
     const img = (await commonAPI.uploadImage({ file })) as string;
     if (uploadInnerProps.value.limit === 1) {
-        fileList.value = [{ name: img.substring(img.lastIndexOf("/")), url: img }];
+        fileList.value = [{ name: img.substring(img.lastIndexOf("/") + 1), url: img }];
+    } else if ((file as UploadRawFile).uid && fileList.value.some(item => item.uid === (file as UploadRawFile).uid)) {
+        const findFile: UploadUserFile = fileList.value.find(item => item.uid === (file as UploadRawFile).uid)!;
+        findFile.name = img.substring(img.lastIndexOf("/") + 1);
+        findFile.url = img;
     } else {
-        fileList.value.splice(0, 0, { name: img.substring(img.lastIndexOf("/")), url: img });
+        fileList.value.splice(0, 0, { name: img.substring(img.lastIndexOf("/") + 1), url: img });
     }
 };
 
 // 文件列表变化
 const fileListChange = function () {
     if (Array.isArray(props.modelValue)) {
-        newModelValue = JSON.stringify(fileList.value);
+        newModelValue = JSON.stringify(fileList.value.map(item => item.url));
         emits("update:modelValue", JSON.parse(newModelValue));
     } else {
         newModelValue = fileList.value.map(item => item.url).join(props.separator);
@@ -220,6 +224,7 @@ const saveCropper = function () {
 // 默认上传属性
 const defaultUploadProps = {
     action: "", // 图片上传地址
+    autoUpload: true, // 默认自动上传
     // 覆盖默认的 Xhr 行为，允许自行实现上传文件的请求
     httpRequest: function (options: UploadRequestOptions): Promise<void> {
         return imageUploadApi(options.file).then(() => {
@@ -228,15 +233,10 @@ const defaultUploadProps = {
         });
     },
     // 图片上传变化
-    onChange: function (file: UploadFile, files: UploadFiles) {
-        if (!props.cropperProps) {
-            // 当前图片无需剪切
-            return;
+    onChange: function (file: UploadFile) {
+        if (props.cropperProps) {
+            startCroppHandle(file.raw!);
         }
-        // 由于element plus upload组件上传之后会自动添加一个预览文件。
-        // 这里是自定义实现的文件上传请求，所以必须是上传完文件之后才展示处理， 这里删除掉
-        files.pop();
-        startCroppHandle(file.raw!);
     },
     // 图片上传前操作
     beforeUpload: async function (file) {
@@ -244,25 +244,21 @@ const defaultUploadProps = {
             ElMessage.error("文件大小超出限制！");
             return false;
         }
+        return true;
     },
     onExceed(files: File[]) {
-        if (uploadInnerProps.value.limit && uploadInnerProps.value.limit > 1) {
+        if (uploadInnerProps.value.limit! > 1) {
             ElMessageBox.alert("您最多只能上传" + uploadInnerProps.value.limit + "个图片!", "上传图片", {
                 confirmButtonText: "确定",
                 type: "warning"
             });
-        } else if (uploadInnerProps.value.limit === 1) {
-            if (props.cropperProps) {
-                // 当前图片需要剪切
-                startCroppHandle(files[0] as UploadRawFile);
-            } else {
-                updloadRef.value!.clearFiles();
-                const file = files[0] as UploadRawFile;
-                file.uid = genFileId();
-                updloadRef.value!.handleStart(file);
-                if (uploadInnerProps.value.autoUpload !== false) {
-                    updloadRef.value!.submit();
-                }
+        } else {
+            updloadRef.value!.clearFiles();
+            const file = files[0] as UploadRawFile;
+            file.uid = genFileId();
+            updloadRef.value!.handleStart(file);
+            if (uploadInnerProps.value.autoUpload !== false) {
+                updloadRef.value!.submit();
             }
         }
     },
@@ -279,7 +275,8 @@ watch(
     () => [props.uploadProps, props.cropperProps],
     () => {
         uploadInnerProps.value = Object.assign({}, defaultUploadProps, props.uploadProps, {
-            autoUpload: !props.cropperProps
+            autoUpload: props.cropperProps || props.uploadProps?.autoUpload === false ? false : true,
+            multiple: props.cropperProps || props.uploadProps?.multiple !== true ? false : true
         });
     },
     { immediate: true, deep: true }

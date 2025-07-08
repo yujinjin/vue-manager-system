@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2024-01-19 10:26:09
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-28 11:19:25
+ * @最后修改时间: 2024-11-04 16:59:04
  * @项目的路径: \vue-manager-system\src\views\plays\order-list\search-config.ts
  * @描述: 订单查询配置
  */
@@ -28,10 +28,10 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                 //     data: ORDER_STATUS_ENUM
                 // },
                 {
-                    name: "deviceSource",
-                    type: "select",
+                    name: "deviceSources",
+                    type: "checkboxSelect",
                     label: "下单设备",
-                    data: DEVICE_SOURCE_ENUM
+                    data: DEVICE_SOURCE_ENUM.map(({ label, value }) => ({ label, value, disabled: value === "WXXCX" }))
                 },
                 {
                     name: "buyer",
@@ -102,6 +102,9 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                     parameters.endDate = parameters.dateRange[1];
                 }
                 delete parameters.dateRange;
+                if(parameters.deviceSources && parameters.deviceSources.length > 0){    
+                    parameters.deviceSources = parameters.deviceSources.join(",");
+                }
                 return parameters;
             },
             queryResponseProcess(queryResult: Record<string, any>) {

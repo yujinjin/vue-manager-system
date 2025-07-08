@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @创建时间: 2022-08-09 13:49:25
  * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-09-11 10:29:32
+ * @最后修改时间: 2024-09-13 10:49:58
  * @项目的路径: \vue-manager-system\src\components\web-editor.vue
  * @描述: web 富文本框编辑器
 -->
@@ -10,6 +10,7 @@
     <div class="web-editor-container">
         <div class="web-editor" ref="webEditorRef"></div>
         <input type="file" @change="imgFileChangeHandle" accept="image/*" ref="inputFileRef" v-show="false" />
+        <slot></slot>
     </div>
 </template>
 <script setup lang="ts">
@@ -125,6 +126,7 @@ onUnmounted(() => {
     min-height: 200px;
     display: flex;
     flex-direction: column;
+    position: relative;
 
     .web-editor {
         width: 100%;
