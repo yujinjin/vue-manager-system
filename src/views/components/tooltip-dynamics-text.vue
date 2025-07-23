@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-14 15:50:32
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-14 16:05:09
- * @项目的路径: \vue-manager-system\src\views\components\tooltip-dynamics-text.vue
  * @描述: 内容超出省略并展示提示信息
 -->
 <template>

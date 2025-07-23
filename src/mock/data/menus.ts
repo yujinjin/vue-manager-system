@@ -1,13 +1,10 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-07 16:21:36
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-14 14:08:16
- * @项目的路径: \vue-manager-system\src\mock\data\menus.ts
  * @描述: 用户菜单列表
  * { id: 菜单ID, parentId: 父级菜单ID(null表示顶级菜单), name: 菜单名称, icons: 菜单图标, url: 菜单地址(可为null), moduleCode: 菜单所属模块code }
  */
 import Mock from "mockjs";
+import config from "@/config";
 
 const icons = [
     "icomoon-home",
@@ -69,7 +66,7 @@ export default [
         code: "10",
         url: null,
         moduleCode: "DATA",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -81,7 +78,7 @@ export default [
         code: "1001",
         url: "/play/order-list",
         moduleCode: "DATA",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -93,7 +90,7 @@ export default [
         code: "1002",
         url: "/play/icon-list",
         moduleCode: "DATA",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -105,7 +102,7 @@ export default [
         code: "11",
         url: null,
         moduleCode: "DATA",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -117,7 +114,7 @@ export default [
         code: "1101",
         url: "/play/cache",
         moduleCode: "DATA",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -129,7 +126,7 @@ export default [
         code: "1102",
         url: "/play/details?id=0001",
         moduleCode: "DATA",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -141,7 +138,7 @@ export default [
         code: "1103",
         url: "/play/details?id=0003",
         moduleCode: "DATA",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -153,7 +150,7 @@ export default [
         code: "1104",
         url: window.location.origin + config.projectContentPath + (config.isWebHash ? "/#" : "") + "/outside/home",
         moduleCode: "DATA",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -165,7 +162,7 @@ export default [
         code: "12",
         url: null,
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -177,7 +174,7 @@ export default [
         code: "1201",
         url: "/play/details?id=1201",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -189,7 +186,7 @@ export default [
         code: "1202",
         url: "/play/details?id=1202",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -201,7 +198,7 @@ export default [
         code: "1203",
         url: "/play/details?id=1203",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -213,7 +210,7 @@ export default [
         code: "1204",
         url: "/play/details?id=1204",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -225,7 +222,7 @@ export default [
         code: "1205",
         url: "/play/details?id=1205",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -237,7 +234,7 @@ export default [
         code: "1206",
         url: "/play/details?id=1206",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -249,7 +246,7 @@ export default [
         code: "1207",
         url: "/play/details?id=1207",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -261,7 +258,7 @@ export default [
         code: "1208",
         url: null,
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -273,7 +270,7 @@ export default [
         code: "120801",
         url: null,
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -285,7 +282,7 @@ export default [
         code: "12080101",
         url: "/play/details?id=12080101",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -297,7 +294,7 @@ export default [
         code: "12080102",
         url: "/play/details?id=12080102",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -309,7 +306,7 @@ export default [
         code: "12080103",
         url: "/play/details?id=12080103",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -321,7 +318,7 @@ export default [
         code: "120802",
         url: null,
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -333,7 +330,7 @@ export default [
         code: "12080201",
         url: null,
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -345,7 +342,7 @@ export default [
         code: "1208020101",
         url: "/play/details?id=1208020101",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -357,7 +354,7 @@ export default [
         code: "12080202",
         url: null,
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -369,7 +366,7 @@ export default [
         code: "1208020201",
         url: null,
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -381,7 +378,7 @@ export default [
         code: "120802020101",
         url: "/play/details?id=120802020101",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -393,7 +390,7 @@ export default [
         code: "12080203",
         url: null,
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -405,7 +402,7 @@ export default [
         code: "1208020301",
         url: "/play/details?id=1208020301",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -417,7 +414,7 @@ export default [
         code: "1208020302",
         url: "/play/details?id=1208020302",
         moduleCode: "PAY",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -429,7 +426,7 @@ export default [
         code: "15",
         url: null,
         moduleCode: "BASE",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -441,7 +438,7 @@ export default [
         code: "1501",
         url: "/system/modules",
         moduleCode: "BASE",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -453,7 +450,7 @@ export default [
         code: "1502",
         url: "/system/roles",
         moduleCode: "BASE",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -465,7 +462,7 @@ export default [
         code: "1503",
         url: "/system/menus",
         moduleCode: "BASE",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -477,7 +474,7 @@ export default [
         code: "1504",
         url: "/system/users",
         moduleCode: "BASE",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     },
@@ -489,7 +486,7 @@ export default [
         code: "1505",
         url: "/system/messages",
         moduleCode: "BASE",
-        status: Mock.mock("@pick([\"0\", \"1\"])"), // 状态
+        status: Mock.mock('@pick(["0", "1"])'), // 状态
         updated: Mock.mock("@first()"),
         updateTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000)
     }

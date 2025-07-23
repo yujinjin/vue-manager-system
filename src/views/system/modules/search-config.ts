@@ -1,15 +1,11 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-12-27 11:41:13
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-28 19:46:05
- * @项目的路径: \vue-manager-system\src\views\system\modules\search-config.js
  * @描述: 模块搜索配置
  */
 import systemAPI from "@api/system";
 import { HANDLE_CODES } from "@/services/constants";
 
-export default function ({ showDialogHandle, deleteHandle }) {
+export default function ({ showDialogHandle, deleteHandle }: any) {
     return {
         searchFormProps: {
             isShowCollapse: false,
@@ -24,7 +20,7 @@ export default function ({ showDialogHandle, deleteHandle }) {
         actionBarProps: {
             buttons: [
                 {
-                    text: "新增",
+                    contents: "新增",
                     handleCode: HANDLE_CODES.CREATE,
                     click: showDialogHandle,
                     props: {
@@ -63,12 +59,12 @@ export default function ({ showDialogHandle, deleteHandle }) {
                     width: 100,
                     buttons: [
                         {
-                            text: "修改",
+                            contents: "修改",
                             handleCode: HANDLE_CODES.UPDATE,
                             click: showDialogHandle
                         },
                         {
-                            text: "删除",
+                            contents: "删除",
                             handleCode: HANDLE_CODES.DELETE,
                             click: deleteHandle
                         }

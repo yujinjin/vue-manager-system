@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-10 15:05:55
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 15:03:05
- * @项目的路径: \vue-manager-system\src\views\system\roles\components\info-form-dialog.vue
  * @描述: 角色信息弹窗
 -->
 <template>
@@ -17,7 +13,7 @@
     />
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { DialogFormButton, DialogFormRef, InputFormProps } from "@yujinjin/cms-components";
 import { type PropType, ref, reactive } from "vue";
 import systemAPI from "@api/system";
 import { ElMessage } from "element-plus";
@@ -41,10 +37,10 @@ const props = defineProps({
 
 const emits = defineEmits(["update:isShow", "refresh"]);
 
-const dialogFormRef = ref<Components.DialogFormRef>();
+const dialogFormRef = ref<DialogFormRef>();
 
 // 输入表单信息
-const inputForm = reactive<Components.InputForm>({
+const inputForm = reactive<InputFormProps>({
     value: props.row && JSON.parse(JSON.stringify(props.row)),
     fields: [
         {
@@ -92,13 +88,13 @@ const inputForm = reactive<Components.InputForm>({
 });
 
 // 底部按钮列表
-const buttons = ref<Components.FormButton[]>([
+const buttons = ref<DialogFormButton[]>([
     {
-        text: "取消"
+        contents: "取消"
     },
     {
-        text: "保存",
-        props: { type: "primary" },
+        contents: "保存",
+        type: "primary",
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
             await systemAPI.addOrUpdateRole(inputFormValue);

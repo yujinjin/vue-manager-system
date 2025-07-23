@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-11 11:55:45
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 15:02:22
- * @项目的路径: \vue-manager-system\src\views\system\roles\components\batch-insert-dialog.vue
  * @描述: 批量新增角色弹窗
 -->
 <template>
@@ -206,7 +202,7 @@ const dialogClosed = function () {
 const downExcelTemplateHandle = function () {
     commonApi.download({
         type: "a",
-        url: require("@assets/templates/批量新增角色模板.xlsx"),
+        url: require("/templates/批量新增角色模板.xlsx"),
         fileName: "批量新增角色模板.xlsx"
     });
 };
@@ -276,7 +272,7 @@ const batchInsertHandle = async function () {
         uploadInfo.isLoading = true;
         await systemAPI.batchInsertRoles(
             uploadInfo.dataList.map(item => {
-                const newItem = {};
+                const newItem: Record<string, any> = {};
                 uploadInfo.selectColumns.forEach(value => (newItem[value] = item[value]));
                 return newItem;
             })

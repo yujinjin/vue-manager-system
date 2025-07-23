@@ -1,19 +1,10 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-08-09 13:49:25
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-11-28 11:11:33
- * @项目的路径: \vue-manager-system\types\global.d.ts
  * @描述: 全局声明
  */
-import type { App } from "/#/app";
 
 // 定义全局属性，如果当前文件只有此内容，需要添加“export {}”内容在，通过创建一个空的导出对象来告诉 TypeScript 这是一个模块文件。然后声明了一个扩展的全局接口
 declare global {
-    const config: App.Config;
-
-    const logs: App.Logs;
-
     interface Window {
         appMain: any;
     }
@@ -27,3 +18,5 @@ declare global {
 declare type NotReadonly<T> = {
     -readonly [K in keyof T]: T[K];
 };
+
+export {};

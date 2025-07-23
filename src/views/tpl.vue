@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-08-09 13:49:25
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-22 14:06:55
- * @项目的路径: \vue-manager-system\src\views\tpl.vue
  * @描述: 头部注释配置模板
 -->
 <template>
@@ -23,7 +19,7 @@
 
 // const emits = defineEmits([""])
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .tpl {
     text-align: center;
 }

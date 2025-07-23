@@ -1,6 +1,5 @@
 /**
  * 作者：yujinjin9@126.com
- * 时间：2022-03-08
  * 描述：系统自定义插件入口
  */
 import type { App } from "vue";

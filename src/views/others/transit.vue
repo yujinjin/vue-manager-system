@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-12-26 15:15:41
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-22 14:07:55
- * @项目的路径: \vue-manager-system\src\views\others\transit.vue
  * @描述: 中台中转页面（主要用来刷新当前正在展示的单页）
 -->
 <template>

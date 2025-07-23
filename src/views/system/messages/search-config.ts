@@ -1,15 +1,11 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-16 14:52:33
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-14 16:23:53
- * @项目的路径: \vue-manager-system\src\views\system\messages\search-config.ts
  * @描述: 站内信查询配置
  */
 import systemAPI from "@api/system";
 import { HANDLE_CODES } from "@/services/constants";
 
-export default function ({ showDialogHandle }) {
+export default function ({ showDialogHandle }: any) {
     return {
         searchFormProps: {
             isShowCollapse: false,
@@ -30,7 +26,7 @@ export default function ({ showDialogHandle }) {
         actionBarProps: {
             buttons: [
                 {
-                    text: "新增",
+                    contents: "新增",
                     handleCode: HANDLE_CODES.CREATE,
                     click: showDialogHandle,
                     props: {

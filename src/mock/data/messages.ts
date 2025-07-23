@@ -1,9 +1,5 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-07 16:27:49
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-14 16:27:02
- * @项目的路径: \vue-manager-system\src\mock\data\messages.ts
  * @描述: 站内信列表
  */
 import Mock from "mockjs";
@@ -18,14 +14,14 @@ export default (function () {
             "content": "@cparagraph", // 内容
             "moduleCode": Mock.mock("@boolean(1, 4, false)") ? Mock.Random.pick(modules.map(item => item.code)) : null, // 所属模块
             "roles": function () {
-                if(this.moduleCode) {
+                if (this.moduleCode) {
                     const moduleList = roles.filter(item => item.moduleCode === this.moduleCode).map(item => item.code);
                     // @ts-ignore
                     return Mock.Random.shuffle(moduleList, 0, moduleList.length).join(",");
-                } 
+                }
                 return null;
             },
-            "status": "@pick([\"0\", \"1\", \"2\"])", // 状态
+            "status": '@pick(["0", "1", "2"])', // 状态
             "estimateSendNumber|0-1000": 0, // 预计发送数量
             "realSendNumber|0-1000": 0, // 实际发送数量
             "created": "@first()",

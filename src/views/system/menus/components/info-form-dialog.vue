@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-15 09:41:32
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 15:01:01
- * @项目的路径: \vue-manager-system\src\views\system\menus\components\info-form-dialog.vue
  * @描述: 菜单新增或修改弹窗
 -->
 <template>
@@ -34,7 +30,7 @@
     <icons-select-dialog v-model:isShow="isShowIconsSelectDialog" @save="updateIconHandle" />
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { InputFormProps, DialogFormRef, DialogFormButton, InputFormField } from "@yujinjin/cms-components";
 import { type PropType, ref, reactive } from "vue";
 import systemAPI from "@api/system";
 import { ElMessage } from "element-plus";
@@ -63,10 +59,10 @@ const emits = defineEmits(["update:isShow", "refresh"]);
 // 是否显示选择图标弹窗
 const isShowIconsSelectDialog = ref(false);
 
-const dialogFormRef = ref<Components.DialogFormRef>();
+const dialogFormRef = ref<DialogFormRef>();
 
 // 输入表单信息
-const inputForm = reactive<Components.InputForm>({
+const inputForm = reactive<InputFormProps>({
     value: props.row && JSON.parse(JSON.stringify(props.row)),
     fields: [
         {
@@ -140,13 +136,13 @@ const inputForm = reactive<Components.InputForm>({
 });
 
 // 底部按钮列表
-const buttons = ref<Components.FormButton[]>([
+const buttons = ref<DialogFormButton[]>([
     {
-        text: "取消"
+        contents: "取消"
     },
     {
-        text: "保存",
-        props: { type: "primary" },
+        contents: "保存",
+        type: "primary",
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
             await systemAPI.addOrUpdateMenu(inputFormValue);
@@ -157,7 +153,7 @@ const buttons = ref<Components.FormButton[]>([
 ]);
 
 // 初始化父级菜单下拉选项值
-const initParentSelectOptions = async function (formFields: Components.InputFormField[], moduleCode: string) {
+const initParentSelectOptions = async function (formFields: InputFormField[], moduleCode: string) {
     if (moduleCode) {
         const moduleList = ((await systemAPI.queryMenuList({ moduleCode })) as Record<string, any>[]) || [];
         formFields.find(field => field.name === "parentId")!.data = moduleList.map(item => ({ label: item.name + "(" + item.code + ")", value: item.code }));
@@ -167,7 +163,7 @@ const initParentSelectOptions = async function (formFields: Components.InputForm
 };
 
 // 表单字段变化
-const fieldValueChangeHandle = async function (field: Components.InputFormField, fieldValue: string, formFields: Components.InputFormField[], inputValue: Record<string, any>) {
+const fieldValueChangeHandle = async function (field: InputFormField, fieldValue: string, formFields: InputFormField[], inputValue: Record<string, any>) {
     if (field.name === "moduleCode") {
         // 所属模块数据变化
         inputValue.parentId = null;
@@ -176,7 +172,7 @@ const fieldValueChangeHandle = async function (field: Components.InputFormField,
 };
 
 // 修改icon操作
-const updateIconHandle = function (value) {
+const updateIconHandle = function (value: string) {
     dialogFormRef.value?.setInputPropertyValue("icons", value);
 };
 

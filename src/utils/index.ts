@@ -1,11 +1,8 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-10-27 09:43:46
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-06 16:36:11
- * @项目的路径: \vue-manager-system\src\utils\index.ts
  * @描述: 常用工具方法
  */
+import { changeUrlParameter } from "@yujinjin/utils";
 
 // 特殊字符替换
 export function escapeStringRegexp(string = "") {
@@ -16,4 +13,44 @@ export function escapeStringRegexp(string = "") {
 export function isExternalLink(url: string) {
     // return !!url.match(new RegExp("^http(s?)://")) && !url.match(new RegExp("^http(s?)://" + window.location.host));
     return new RegExp("^http(s?)://").test(url) || !new RegExp("^/").test(url);
+}
+
+/**
+ * 外部链接路由路径
+ * @params menuId 菜单ID
+ * @params pageId 页面ID
+ */
+export function externalRoutePath({ menuId, pageId }: { menuId?: string; pageId?: string }) {
+    if (menuId) {
+        return "/external/" + menuId;
+    }
+    return "/external?pageId=" + pageId;
+}
+
+/**
+ * 中转页链接路由路径
+ * @params menuId 菜单ID
+ * @params pageId 页面ID
+ */
+export function transitRoutePath({ pageIndex, fromRoutePath }: { pageIndex?: number; fromRoutePath?: string }) {
+    if (pageIndex || pageIndex === 0) {
+        return "/transit?fromPageIndex=" + pageIndex;
+    }
+    return "/external?fromRoutePath=" + fromRoutePath;
+}
+
+/**
+ * 内部链接路由路径
+ * @params url 当前地址
+ * @params menuId 菜单ID
+ * @params pageId 页面ID
+ */
+export function innerRoutePath(url: string, { menuId, pageId }: { menuId?: string; pageId?: string }) {
+    url = url.replace(new RegExp("^http(s?)://" + window.location.host), "");
+    if (menuId) {
+        url = changeUrlParameter(url, "menuId", menuId);
+    } else {
+        url = changeUrlParameter(url, "pageId", pageId);
+    }
+    return url;
 }

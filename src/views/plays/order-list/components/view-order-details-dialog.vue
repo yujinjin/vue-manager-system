@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-23 11:53:58
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-26 11:54:17
- * @项目的路径: \vue-manager-system\src\views\plays\order-list\components\view-order-details-dialog.vue
  * @描述: 查看订单详情信息弹窗
 -->
 <template>
@@ -107,7 +103,7 @@
                         <data-table
                             :isShowPagination="false"
                             :props="{ maxHeight: 100 }"
-                            :columns="goodsDataTableFields.filter(item => ['name', 'img', 'specs', 'code', 'quantity'].includes(item.prop))"
+                            :columns="goodsDataTableFields.filter(item => ['name', 'img', 'specs', 'code', 'quantity'].includes(item.prop!))"
                             :query="() => logisticsItem.goodsList"
                         />
                     </el-descriptions-item>
@@ -141,7 +137,7 @@
                         <data-table
                             :isShowPagination="false"
                             :props="{ maxHeight: 100 }"
-                            :columns="goodsDataTableFields.filter(item => ['name', 'img', 'specs', 'code', 'quantity'].includes(item.prop))"
+                            :columns="goodsDataTableFields.filter(item => ['name', 'img', 'specs', 'code', 'quantity'].includes(item.prop!))"
                             :query="() => afterSalesItem.goodsList"
                         />
                     </el-descriptions-item>
@@ -159,6 +155,7 @@
 import { ref } from "vue";
 import { dateFormat, numberFormat } from "@yujinjin/utils";
 import demoAPI from "@api/demo";
+import type { DataTableColumn } from "@yujinjin/cms-components";
 import { DEVICE_SOURCE_ENUM, ORDER_STATUS_ENUM, PAY_WAY_ENUM } from "../constants";
 
 const props = defineProps({
@@ -184,7 +181,7 @@ const dialogVisible = ref(false);
 const orderDetails = ref<Record<string, any>>({});
 
 // 订单商品列表
-const goodsDataTableFields = [
+const goodsDataTableFields: DataTableColumn<any>[] = [
     {
         label: "商品名称",
         prop: "name",
@@ -237,15 +234,15 @@ const goodsDataTableFields = [
         prop: "totalAmount",
         type: "number",
         digit: 2,
-        formatter: function (row) {
-            return row.price * row.quantity;
+        formatter: function (row: any) {
+            return String(row.price * row.quantity);
         },
         width: 100
     }
 ];
 
 // 使用优惠券列表
-const couponDataTableFields = [
+const couponDataTableFields: DataTableColumn<any>[] = [
     {
         label: "优惠类型",
         prop: "type",

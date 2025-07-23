@@ -1,16 +1,12 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-08-09 13:49:25
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-05 17:18:08
- * @项目的路径: \vue-manager-system\src\views\home\components\update-password-dialog.vue
  * @描述: 修改密码弹窗
 -->
 <template>
     <dialog-form ref="dialogFormRef" :isShow="isShow" :buttons="buttons" :inputFormProps="inputForm" :dialogProps="{ title: '修改密码', width: '500px' }" @close="emits('update:isShow', false)" />
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { DialogFormRef, InputFormProps, DialogFormButton } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
 import systemAPI from "@api/system";
 import { storageStore } from "@/stores";
@@ -26,13 +22,13 @@ defineProps({
 
 const emits = defineEmits(["update:isShow"]);
 
-const dialogFormRef = ref<Components.DialogFormRef>();
+const dialogFormRef = ref<DialogFormRef>();
 
 // 存储data
 const storageData = storageStore();
 
 // 输入表单信息
-const inputForm = reactive<Components.InputForm>({
+const inputForm = reactive<InputFormProps>({
     fields: [
         {
             name: "userName",
@@ -93,13 +89,13 @@ const inputForm = reactive<Components.InputForm>({
 });
 
 // 底部按钮列表
-const buttons = ref<Components.FormButton[]>([
+const buttons = ref<DialogFormButton[]>([
     {
-        text: "取消"
+        contents: "取消"
     },
     {
-        text: "修改",
-        props: { type: "primary" },
+        contents: "修改",
+        type: "primary",
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
             await systemAPI.updateLoginPassword(inputFormValue);

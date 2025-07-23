@@ -13,7 +13,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { System } from "/#/modules/system";
+import { type MenuTree } from "../menu-tree";
 import type { Router } from "vue-router";
 import { ref, watch } from "vue";
 import { ElMessageBox, ElScrollbar } from "element-plus";
@@ -21,6 +21,7 @@ import systemAPI from "@api/system";
 import menuList from "./menu-list.vue";
 import { pageViewsStore } from "@/stores";
 import { useRouter } from "vue-router";
+import logs from "@/services/logs";
 
 defineProps({
     menuCollapseState: Boolean
@@ -40,18 +41,18 @@ const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>();
 const isLoadingForMenus = ref(true);
 
 // 菜单搜索所选中的选项
-const searchSelectValue = ref<System.MenuTree>();
+const searchSelectValue = ref<MenuTree>();
 
 // 当前菜单搜索出来的选项列表
 const searchMenuList = ref<
     Array<{
         label: string;
-        value: System.MenuTree;
+        value: MenuTree;
     }>
 >([]);
 
 // 菜单树数据
-const menuTreeData = ref<System.MenuTree[]>([]);
+const menuTreeData = ref<MenuTree[]>([]);
 
 // 初始化当前页面导航（面包屑）名称列表
 const initCurrentNavigationNames = function () {
@@ -62,7 +63,7 @@ const initCurrentNavigationNames = function () {
     const breadcrumbNames: Array<string> = [];
 
     // 查找菜单名称
-    const findMenuNames = function (menuList: System.MenuTree[], menuId: string) {
+    const findMenuNames = function (menuList: MenuTree[], menuId: string) {
         menuList.find(menu => {
             if (menuId.startsWith(menu.id)) {
                 breadcrumbNames.push(menu.name);
@@ -105,9 +106,9 @@ const initMenuTreeData = async function () {
         ElMessageBox.alert("当前用户还没有配置任何菜单信息，请联系系统管理员", "提示", { type: "warning" });
         return;
     }
-    const tempMenuTreeList: System.MenuTree[] = [];
+    const tempMenuTreeList: MenuTree[] = [];
     menuTreeList.forEach(item => {
-        const menuTree: System.MenuTree = {
+        const menuTree: MenuTree = {
             id: item.id,
             parentId: item.parentId,
             name: item.name,
@@ -122,9 +123,9 @@ const initMenuTreeData = async function () {
             tempMenuTreeList.push(menuTree);
         }
     });
-    let newMenuList: System.MenuTree[] = menuTreeData.value;
+    let newMenuList: MenuTree[] = menuTreeData.value;
     while (newMenuList.length > 0 && tempMenuTreeList.length > 0) {
-        const tempNewMenuList: System.MenuTree[] = [];
+        const tempNewMenuList: MenuTree[] = [];
         for (let i = 0; i < tempMenuTreeList.length; i++) {
             const findMenu = newMenuList.find(tree => tree.id === tempMenuTreeList[i].parentId);
             if (findMenu) {
@@ -161,7 +162,7 @@ const searchMenuHandle = function (query: string) {
     }
     logs.debug("..........searchMenuHandle");
     // 匹配菜单名称
-    const matchMenuTreeName = function (menuList: System.MenuTree[], menuNames: Array<string>, isAllInsert: boolean) {
+    const matchMenuTreeName = function (menuList: MenuTree[], menuNames: Array<string>, isAllInsert: boolean) {
         menuList.forEach(menu => {
             if (menu.childList.length > 0 || isAllInsert || menu.name.includes(query)) {
                 const newMenuNames = menuNames.slice(0);
@@ -182,13 +183,13 @@ const searchMenuHandle = function (query: string) {
 };
 
 // 菜单链接跳转
-const gotoPage = function (menu: System.MenuTree) {
+const gotoPage = function (menu: MenuTree) {
     pageViews.openPageByMenu({ id: menu.id, url: menu.url, name: menu.name });
     router.push(pageViews.visitedViews[pageViews.currentVisiteIndex].routePath);
 };
 
 // 菜单选择变化
-const menuSelectChange = function (menu: System.MenuTree) {
+const menuSelectChange = function (menu: MenuTree) {
     searchSelectValue.value = undefined;
     gotoPage(menu);
 };

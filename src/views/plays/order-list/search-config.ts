@@ -1,18 +1,14 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-19 10:26:09
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-11-04 16:59:04
- * @项目的路径: \vue-manager-system\src\views\plays\order-list\search-config.ts
  * @描述: 订单查询配置
  */
-import type { Components } from "/#/components";
+import type { DataTableColumn, SearchFormField, ActionBarProps } from "@yujinjin/cms-components";
 import dayjs from "dayjs";
 import demoAPI from "@api/demo";
 import { HANDLE_CODES } from "@/services/constants";
 import { DEVICE_SOURCE_ENUM, ORDER_STATUS_ENUM } from "./constants";
 
-export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandle, orertReportData }) {
+export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandle, orertReportData }: any) {
     return {
         searchFormProps: {
             fields: [
@@ -29,7 +25,7 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                 // },
                 {
                     name: "deviceSources",
-                    type: "checkboxSelect",
+                    type: "checkSelect",
                     label: "下单设备",
                     data: DEVICE_SOURCE_ENUM.map(({ label, value }) => ({ label, value, disabled: value === "WXXCX" }))
                 },
@@ -57,13 +53,13 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                     },
                     value: [dayjs().add(-6, "day").format("YYYY-MM-DD"), dayjs().format("YYYY-MM-DD")]
                 }
-            ] as Components.SearchFormField[]
+            ] as SearchFormField[]
         },
         actionBarProps: {
             align: "right",
             buttons: [
                 {
-                    text: "新增订单",
+                    contents: "新增订单",
                     handleCode: HANDLE_CODES.CREATE,
                     click: showDialogHandle,
                     props: {
@@ -71,7 +67,7 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                     }
                 },
                 {
-                    text: "批量取消订单",
+                    contents: "批量取消订单",
                     handleCode: HANDLE_CODES.BATCHCANCEL,
                     click: cancelOrderHandle,
                     props: {
@@ -79,17 +75,17 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                     }
                 },
                 {
-                    text: "自定义列",
+                    contents: "自定义列",
                     handleCode: HANDLE_CODES.QUERY,
                     click: showDialogHandle
                 },
                 {
-                    text: "导出Excel",
+                    contents: "导出Excel",
                     handleCode: HANDLE_CODES.EXPORT,
                     click: excelExportHandle
                 }
             ]
-        },
+        } as ActionBarProps,
         dataTableProps: {
             filters: {
                 orderStatus: ""
@@ -102,7 +98,7 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                     parameters.endDate = parameters.dateRange[1];
                 }
                 delete parameters.dateRange;
-                if(parameters.deviceSources && parameters.deviceSources.length > 0){    
+                if (parameters.deviceSources && parameters.deviceSources.length > 0) {
                     parameters.deviceSources = parameters.deviceSources.join(",");
                 }
                 return parameters;
@@ -227,21 +223,21 @@ export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandl
                     width: 120,
                     buttons: [
                         {
-                            text: "查看",
+                            contents: "查看",
                             handleCode: HANDLE_CODES.SEARCH,
                             click: showDialogHandle
                         },
                         {
-                            text: "取消订单",
+                            contents: "取消订单",
                             handleCode: HANDLE_CODES.CANCEL,
-                            display: function (row) {
+                            display: function (row: any) {
                                 return row.orderStatus === 10;
                             },
                             click: cancelOrderHandle
                         }
                     ]
                 }
-            ] as Components.TableColumn<any>[]
+            ] as DataTableColumn<any>[]
         }
     };
 }

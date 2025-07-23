@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-12-28 11:10:17
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-11 11:49:03
- * @项目的路径: \vue-manager-system\src\views\system\users\components\bind-roles-dialog.vue
  * @描述: 绑定用户的角色
 -->
 <template>
@@ -66,6 +62,7 @@ import { Search, Delete } from "@element-plus/icons-vue";
 import { ElTable, ElMessage } from "element-plus";
 import { debounce } from "@yujinjin/utils";
 import systemAPI from "@api/system";
+import logs from "@/services/logs";
 
 const props = defineProps({
     isShow: {
@@ -116,7 +113,7 @@ const selectedRoleRows = ref<Record<string, any>[]>([]);
 const isSubmiting = ref(false);
 
 // 获取模块名称
-const getModuleText = function (moduleCode) {
+const getModuleText = function (moduleCode: string) {
     if (!moduleCode) {
         return "-";
     }
@@ -129,7 +126,7 @@ const dialogClosed = function () {
 };
 
 // 选择的角色数据变化
-const selectionChangeHandle = function (rows) {
+const selectionChangeHandle = function (rows: any) {
     selectedRoleRows.value = rows;
 };
 
@@ -140,7 +137,7 @@ const clearSelectionHandle = function () {
 };
 
 // 数据表格中的行点击事件
-const rowClickHandle = function (row) {
+const rowClickHandle = function (row: any) {
     roleTableRef.value!.toggleRowSelection(row, selectedRoleRows.value.findIndex(item => item.id === row.id) === -1);
 };
 

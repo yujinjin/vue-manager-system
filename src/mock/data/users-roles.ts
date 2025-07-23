@@ -1,9 +1,5 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-07 17:17:59
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-07 17:21:03
- * @项目的路径: \vue-manager-system\src\mock\data\users-roles.ts
  * @描述: 用户角色信息列表（多对多关系）
  */
 import Mock from "mockjs";
@@ -12,7 +8,7 @@ import users from "./users";
 
 export default (function () {
     const usersRoles: Array<Record<string, any>> = [];
-    const roleIds = {};
+    const roleIds: Record<string, any> = {};
     roles.forEach(role => {
         roleIds[role.id] = role.id;
     });

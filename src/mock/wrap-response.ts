@@ -1,9 +1,5 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-07 16:10:04
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-07 16:17:38
- * @项目的路径: \vue-manager-system\src\mock\wrap-response.ts
  * @描述: 接口的外部封装
  */
 import Mock from "mockjs";

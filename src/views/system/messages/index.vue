@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-16 15:15:37
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-14 16:37:03
- * @项目的路径: \vue-manager-system\src\views\system\messages\index.vue
  * @描述: 站内信页面
 -->
 <template>
@@ -22,7 +18,7 @@
     </search-page>
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { SearchPageRef } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
 import systemAPI from "@api/system";
 import tooltipDynamicsText from "@views/components/tooltip-dynamics-text.vue";
@@ -31,7 +27,7 @@ import searchConfig from "./search-config";
 import addFormDialog from "./components/add-form-dialog.vue";
 
 // search page 组件
-const searchPageRef = ref<Components.SearchPageRef>();
+const searchPageRef = ref<SearchPageRef>();
 
 // 是否显示信息弹窗
 const isShowAddDialog = ref(false);
@@ -54,7 +50,7 @@ const refreshHandle = async function () {
 };
 
 // 显示新增信息弹窗
-const showDialogHandle = function (rows, { handleCode }) {
+const showDialogHandle = function (rows: any, { handleCode }: { handleCode: string }) {
     actionType.value = handleCode;
     if (handleCode === HANDLE_CODES.CREATE) {
         selectedRow.value = null;

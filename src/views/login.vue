@@ -2,7 +2,7 @@
     <div class="login">
         <div class="header">
             <div class="logo-img">
-                <img src="@assets/static/logo.png" />
+                <img src="/logo.png" />
             </div>
             <div class="title-text">平台管理系统</div>
         </div>
@@ -147,7 +147,7 @@ const activeInputType: Ref<number> = ref(-1);
 const countDownSecond: Ref<number> = ref(-1);
 
 // 登录表单
-const inputForm = reactive({
+const inputForm = reactive<Record<string, string>>({
     userName: "", // 用户名|手机号
     password: "", // 密码
     mobile: "", // 手机号
@@ -175,7 +175,6 @@ const initQrcode = async function () {
         qrcodeImgUrl.value = await QRCode.toDataURL("https://github.com/yujinjin/vue-manager-system.git", {
             errorCorrectionLevel: "H",
             type: "image/jpeg",
-            quality: 0.3,
             margin: 1,
             width: 120,
             color: {
@@ -199,7 +198,7 @@ const refreshQrcode = function () {
 };
 
 // 验证数字
-const checkNumber = function (name) {
+const checkNumber = function (name: string) {
     if (!inputForm[name]) return false;
     const reg = /[^\d]/g;
     if (reg.test(inputForm[name])) {
@@ -287,7 +286,7 @@ onUnmounted(() => {
     }
 });
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .login {
     position: relative;
     height: 100%;

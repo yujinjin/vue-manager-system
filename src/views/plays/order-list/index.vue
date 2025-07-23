@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-19 16:44:26
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2025-01-21 10:06:03
- * @项目的路径: \vue-manager-system\src\views\plays\order-list\index.vue
  * @描述: 订单查询页面
 -->
 <template>
@@ -75,7 +71,7 @@
     </search-page>
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { SearchPageRef, TableButton } from "@yujinjin/cms-components";
 import { ref, reactive, nextTick } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
@@ -89,7 +85,7 @@ import excelExportDialog from "./components/excel-export-dialog.vue";
 import addOrUpdateFormDialog from "./components/add-or-update-form-dialog.vue";
 
 // search page 组件
-const searchPageRef = ref<Components.SearchPageRef>();
+const searchPageRef = ref<SearchPageRef>();
 
 // 是否显示自定义列信息弹窗
 const isShowCustomerColumnDialog = ref(false);
@@ -126,21 +122,18 @@ const refreshHandle = async function () {
 };
 
 // 当前选择的数据变化事件
-const selectRowsChangeHandle = function (rows) {
-    searchPageRef.value?.changeButtons((actionButtons: Components.TableButton[]) => {
+const selectRowsChangeHandle = function (rows: any[]) {
+    searchPageRef.value?.changeButtons((actionButtons: TableButton[]) => {
         const button = actionButtons.find(button => button.handleCode === HANDLE_CODES.BATCHCANCEL);
         if (!button) {
             return;
         }
-        if (!button.props) {
-            button.props = {};
-        }
-        button.props.disabled = rows.length === 0 || rows.some(row => row.orderStatus !== 10);
+        button.disabled = rows.length === 0 || rows.some(row => row.orderStatus !== 10);
     });
 };
 
 // 显示菜单相关操作信息弹
-const showDialogHandle = function (rows, { handleCode }) {
+const showDialogHandle = function (row: any, { handleCode }: { handleCode: string }) {
     if (HANDLE_CODES.CREATE === handleCode) {
         // 展示新增订单弹窗
         isShowAddOrUpdateFormDialog.value = true;
@@ -150,13 +143,13 @@ const showDialogHandle = function (rows, { handleCode }) {
         isShowCustomerColumnDialog.value = true;
     } else if (HANDLE_CODES.SEARCH === handleCode) {
         // 查看订单详情
-        selectedRow.value = rows;
+        selectedRow.value = row;
         isShowViewOrderDetailsDialog.value = true;
     }
 };
 
 // 渠道订单操作
-const cancelOrderHandle = async function (rows, { handleCode }) {
+const cancelOrderHandle = async function (rows: any, { handleCode }: { handleCode: string }) {
     let tips = "确定要取消当前选中的订单信息吗?";
     if (handleCode === HANDLE_CODES.CANCEL) {
         rows = [rows];
@@ -169,7 +162,7 @@ const cancelOrderHandle = async function (rows, { handleCode }) {
         cancelButtonText: "取消",
         type: "warning"
     });
-    await demoAPI.batchUpdateOrderStatus({ orderNoList: rows.map(row => row.orderNo), status: 10 });
+    await demoAPI.batchUpdateOrderStatus({ orderNoList: rows.map((row: any) => row.orderNo), status: 10 });
     ElMessage({
         customClass: "custom-message",
         message: "操作成功",

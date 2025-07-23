@@ -1,16 +1,70 @@
 /**
  * 作者：yujinjin9@126.com
- * 时间：2022-01-10
  * 描述：交互式数据请求
  */
-import type { Http } from "/#/http";
-import type { AxiosRequestHeaders } from "axios";
+import type { AxiosRequestHeaders, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import axios from "axios";
 import loading from "@/plugins/loading";
-
 import { ElMessage } from "element-plus";
+import config from "@/config";
+import logs from "@/services/logs";
 
-export default function request<T>(requestConfig: Http.RequestConfig): Promise<Http.Response<T> | Http.ResponseData<T> | T> {
+export interface RequestConfig extends AxiosRequestConfig {
+    // 是否让框架自动显示错误提示信息
+    isShowError?: boolean;
+
+    // 是否处理返回的response数据，默认系统框架会处理数据
+    isResultData?: boolean;
+
+    // 是否显示loading加载
+    isShowLoading?: boolean;
+
+    // 延迟加载定时器ID
+    showLoadingTimerId?: number;
+}
+
+// 拦截请求配置
+export interface InternalRequestConfig extends InternalAxiosRequestConfig {
+    // 是否让框架自动显示错误提示信息
+    isShowError?: boolean;
+
+    // 是否处理返回的response数据，默认系统框架会处理数据
+    isResultData?: boolean;
+
+    // 是否显示loading加载
+    isShowLoading?: boolean;
+
+    // 延迟加载定时器ID
+    showLoadingTimerId?: number;
+}
+
+// 请求接口返回的错误
+export interface ResponseError {
+    message?: string; // 返回的错误消息
+    details?: any; // 返回详细错误消息对象
+}
+
+// 请求接口返回的结果数据
+export interface ResponseData<T = any> {
+    success: boolean;
+    code?: string;
+    error?: ResponseError;
+    data: T;
+}
+
+// 请求接口响应返回数据
+export interface HttpResponse<T = any> extends AxiosResponse {
+    config: InternalRequestConfig;
+    data: ResponseData<T> | T;
+}
+
+// 异常失败
+export interface HttpError extends AxiosError {
+    config: InternalRequestConfig;
+    response?: HttpResponse;
+}
+
+export default function request<T>(requestConfig: RequestConfig): Promise<HttpResponse<T> | ResponseData<T> | T> {
     // 自定义非axios的配置
     const customerOptions = {
         // 是否让框架自动显示错误提示信息
@@ -28,7 +82,7 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
         }, // 开始请求数据时的函数，返回Promise,如果是false就不再去请求数据
         request: {
             // 在发送请求之前的函数
-            before: function (axiosConfig: Http.InternalRequestConfig) {
+            before: function (axiosConfig: InternalRequestConfig) {
                 //如果配置传入显示加载选项就显示加载项
                 if (axiosConfig.isShowLoading === true) {
                     axiosConfig.showLoadingTimerId = window.setTimeout(() => {
@@ -39,7 +93,7 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
                 return axiosConfig;
             },
             // 在发送请求之前的error函数
-            error: function (error: Http.Error) {
+            error: function (error: HttpError) {
                 if (error.config) {
                     // 直接JSON error对象在app环境中会报错，现在只能做config、xhr实例
                     logs.warn("接口出错:" + JSON.stringify({ config: error.config }));
@@ -50,7 +104,7 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
         },
         response: {
             // 在响应请求数据的函数
-            before: function (response: Http.Response) {
+            before: function (response: HttpResponse) {
                 //对响应数据做些事
                 //如果配置传入显示加载选项就显示加载项
                 if (response.config.isShowLoading === true) {
@@ -75,9 +129,9 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
                 return Promise.reject(response.data);
             },
             // 在发送请求数据的error函数
-            error: function (error: Http.Error) {
+            error: function (error: HttpError) {
                 // 请求错误时做些事
-                const xhr: Http.ResponseData = typeof error.response?.data === "object" ? error.response?.data : { error: { message: null }, success: false, data: null };
+                const xhr: ResponseData = typeof error.response?.data === "object" ? error.response?.data : { error: { message: null }, success: false, data: null };
                 let errorMessage = xhr.error?.details || xhr.error?.message;
                 if (!errorMessage) {
                     switch (error.request.status) {
@@ -128,7 +182,7 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
         }
     };
     // 自定义Axios配置项
-    const customerAxiosOptions: Http.RequestConfig = {
+    const customerAxiosOptions: RequestConfig = {
         // 将被添加到`url`前面，除非`url`是绝对的。
         baseURL: config.webApiDomain,
         //是发出请求时使用的请求方法
@@ -178,13 +232,13 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
     const instance = axios.create(customerAxiosOptions);
     //添加请求拦截器
     instance.interceptors.request.use(
-        function (axiosConfig: Http.InternalRequestConfig) {
+        function (axiosConfig: InternalRequestConfig) {
             if (customerInterceptor.request && customerInterceptor.request.before) {
                 return customerInterceptor.request.before(axiosConfig);
             }
             return axiosConfig;
         },
-        function (error: Http.Error) {
+        function (error: HttpError) {
             if (customerInterceptor.request && customerInterceptor.request.error) {
                 return customerInterceptor.request.error(error);
             }
@@ -194,13 +248,13 @@ export default function request<T>(requestConfig: Http.RequestConfig): Promise<H
 
     //添加响应拦截器
     instance.interceptors.response.use(
-        function (response: Http.Response) {
+        function (response: HttpResponse) {
             if (customerInterceptor.response && customerInterceptor.response.before) {
                 return customerInterceptor.response.before(response);
             }
             return response;
         },
-        function (error: Http.Error) {
+        function (error: HttpError) {
             if (customerInterceptor.response && customerInterceptor.response.error) {
                 return customerInterceptor.response.error(error);
             }

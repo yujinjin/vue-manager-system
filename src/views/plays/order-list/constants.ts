@@ -1,9 +1,5 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-26 10:48:24
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-11-04 14:42:53
- * @项目的路径: \vue-manager-system\src\views\plays\order-list\constants.ts
  * @描述: 订单常量数据
  */
 

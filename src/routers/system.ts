@@ -1,9 +1,5 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-11 20:22:00
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-17 10:25:53
- * @项目的路径: \vue-manager-system\src\routers\system.ts
  * @描述: 系统页面路由
  */
 import type { RouteRecordRaw } from "vue-router";
@@ -34,4 +30,4 @@ export default <Array<RouteRecordRaw>>[
         path: "/system/messages",
         component: () => import("@views/system/messages/index.vue")
     }
-]
+];

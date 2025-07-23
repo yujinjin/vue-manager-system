@@ -23,7 +23,7 @@
         </el-row>
     </div>
 </template>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .not-found {
     position: absolute;
     top: 0;

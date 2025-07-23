@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-11-14 16:14:46
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-16 16:17:53
- * @项目的路径: \vue-manager-system\src\views\home\components\menu-list.vue
  * @描述: 菜单列表
 -->
 <template>
@@ -31,7 +27,7 @@
 </template>
 <script lang="ts">
 import type { PropType } from "vue";
-import type { System } from "/#/modules/system";
+import { type MenuTree } from "../menu-tree";
 import { defineComponent } from "vue";
 import menuText from "./men-text.vue";
 
@@ -43,7 +39,7 @@ export default defineComponent({
     },
     props: {
         menuTreeData: {
-            type: Array as PropType<Array<System.MenuTree>>,
+            type: Array as PropType<Array<MenuTree>>,
             require: true
         }
     }

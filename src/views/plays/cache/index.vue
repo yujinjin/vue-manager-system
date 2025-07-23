@@ -1,7 +1,7 @@
 <template>
     <div class="play-cache">
         <h2>缓存路由测试</h2>
-        <img alt="Vue logo" src="@assets/logo.png" />
+        <img alt="Vue logo" src="/logo.png" />
         <div class="contents-box">
             <el-alert show-icon title="说明" description="这里输入文案内容后，切换到其他页面去再打开此页面时，确认刚刚输入的内容文案没有变化" type="info" />
             <el-form-item label-width="120" label="输入内容：" style="margin-top: 24px">

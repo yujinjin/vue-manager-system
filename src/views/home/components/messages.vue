@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-08-09 13:49:25
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-15 11:34:19
- * @项目的路径: \vue-manager-system\src\views\home\components\messages.vue
  * @描述: 消息列表
 -->
 <template>
@@ -56,6 +52,7 @@ import { useRouter } from "vue-router";
 import { ChatLineRound } from "@element-plus/icons-vue";
 import systemAPI from "@api/system";
 import { timeDifferenceFormat } from "@yujinjin/utils";
+import logs from "@/services/logs";
 import messageDetailsDialog from "./message-details-dialog.vue";
 
 const router = useRouter();
@@ -74,7 +71,7 @@ const queryUnreadMessages = async function () {
 };
 
 // 消息查看
-const messageCommandHandle = function (index) {
+const messageCommandHandle = function (index: number) {
     if (index === -1) {
         return;
     }

@@ -4,15 +4,14 @@
  * 描述：系统管理API接口
  */
 
-import type { Http } from "/#/http";
-import request from "./request";
+import request, { type RequestConfig } from "./request";
 import commonApi from "./common";
 
 export default {
     /**
      * 用户登录
      */
-    login(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    login(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -27,7 +26,7 @@ export default {
     /**
      * 发送验证码
      */
-    sendValidateCode(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    sendValidateCode(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -43,7 +42,7 @@ export default {
     /**
      * 获取未读消息列表
      */
-    queryUnreadMessages(ajaxOptions?: Http.RequestConfig) {
+    queryUnreadMessages(ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -58,7 +57,7 @@ export default {
     /**
      * 查询登录用户的菜单列表
      */
-    queryLoginUserMenus<T>(ajaxOptions?: Http.RequestConfig) {
+    queryLoginUserMenus<T>(ajaxOptions?: RequestConfig) {
         return request<T>(
             Object.assign(
                 {
@@ -73,7 +72,7 @@ export default {
     /**
      * 修改当前用户登录的密码
      */
-    updateLoginPassword(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    updateLoginPassword(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -88,7 +87,7 @@ export default {
     /**
      * 修改当前登录用户的基本信息
      */
-    updateLoginUserInfo(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    updateLoginUserInfo(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -103,7 +102,7 @@ export default {
     /**
      * 分页查询系统模块列表
      */
-    queryPageModuleList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryPageModuleList(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -119,7 +118,7 @@ export default {
     /**
      * 查询系统模块列表
      */
-    queryModuleList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryModuleList(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -135,7 +134,7 @@ export default {
     /**
      * 新增或修改模块
      */
-    addOrUpdateModule(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    addOrUpdateModule(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -150,7 +149,7 @@ export default {
     /**
      * 删除模块
      */
-    deleteModuleById(id: string, ajaxOptions?: Http.RequestConfig) {
+    deleteModuleById(id: string, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -165,7 +164,7 @@ export default {
     /**
      * 分页查询系统菜单列表
      */
-    queryPageMenuList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryPageMenuList(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -181,7 +180,7 @@ export default {
     /**
      * 查询系统菜单列表
      */
-    queryMenuList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryMenuList(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -197,7 +196,7 @@ export default {
     /**
      * 新增或修改菜单
      */
-    addOrUpdateMenu(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    addOrUpdateMenu(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -212,7 +211,7 @@ export default {
     /**
      * 切换菜单锁定状态信息
      */
-    toggleMenuLockStatus(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    toggleMenuLockStatus(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -227,7 +226,7 @@ export default {
     /**
      * 根据菜单ID查询角色列表（菜单页面查询绑定的角色列表）
      */
-    queryRoleListByMenuId(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryRoleListByMenuId(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -243,7 +242,7 @@ export default {
     /**
      * 删除菜单
      */
-    deleteMenu(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    deleteMenu(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -258,14 +257,14 @@ export default {
     /**
      * 上传批量菜单EXCEL(批量新增菜单)
      */
-    uploadMenusExcel(file: File, ajaxOptions?: Http.RequestConfig) {
+    uploadMenusExcel(file: File, ajaxOptions?: RequestConfig) {
         return commonApi.upload({ file }, "/system/uploadMenusExcel", ajaxOptions);
     },
 
     /**
      * 批量新增菜单信息
      */
-    batchInsertMenus(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+    batchInsertMenus(inputData: Record<string, any>[], ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -280,7 +279,7 @@ export default {
     /**
      * 分页查询角色列表
      */
-    queryPageRoleList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryPageRoleList(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -296,7 +295,7 @@ export default {
     /**
      * 查询角色列表
      */
-    queryRoleList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryRoleList(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -312,7 +311,7 @@ export default {
     /**
      * 根据角色ID查询菜单列表（角色页面查询绑定的菜单）
      */
-    queryMenuListByRoleId(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryMenuListByRoleId(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -328,7 +327,7 @@ export default {
     /**
      * 修改角色信息
      */
-    addOrUpdateRole(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    addOrUpdateRole(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -343,7 +342,7 @@ export default {
     /**
      * 切换角色锁定状态信息
      */
-    toggleRoleLockStatus(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    toggleRoleLockStatus(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -358,7 +357,7 @@ export default {
     /**
      * 更新角色的菜单列表(角色页面绑定菜单)
      */
-    updateMenusByRoleId(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    updateMenusByRoleId(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -373,7 +372,7 @@ export default {
     /**
      * 删除角色信息
      */
-    deleteRole(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    deleteRole(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -388,14 +387,14 @@ export default {
     /**
      * 上传批量角色EXCEL(批量新增角色)
      */
-    uploadRolesExcel(file: File, ajaxOptions?: Http.RequestConfig) {
+    uploadRolesExcel(file: File, ajaxOptions?: RequestConfig) {
         return commonApi.upload({ file }, "/system/uploadRolesExcel", ajaxOptions);
     },
 
     /**
      * 批量新增角色信息
      */
-    batchInsertRoles(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+    batchInsertRoles(inputData: Record<string, any>[], ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -410,7 +409,7 @@ export default {
     /**
      * 分页查询系统用户列表
      */
-    queryPageUserList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryPageUserList(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -426,7 +425,7 @@ export default {
     /**
      * 根据用户ID查询角色列表（用户页面查询绑定角色列表）
      */
-    queryRoleListByUserId(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryRoleListByUserId(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -442,7 +441,7 @@ export default {
     /**
      * 新增或修改用户信息
      */
-    addOrUpdateUser(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    addOrUpdateUser(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -457,7 +456,7 @@ export default {
     /**
      * 根据用户ID绑定角色列表（用户页面绑定角色信息）
      */
-    updateRoleListByUserId(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    updateRoleListByUserId(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -472,7 +471,7 @@ export default {
     /**
      * 删除用户信息
      */
-    deleteUser(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    deleteUser(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -487,7 +486,7 @@ export default {
     /**
      * 切换用户锁定状态信息
      */
-    toggleUserLockStatus(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    toggleUserLockStatus(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -502,7 +501,7 @@ export default {
     /**
      * 重置用户密码
      */
-    resetUerPassword(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    resetUerPassword(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -517,14 +516,14 @@ export default {
     /**
      * 上传批量用户EXCEL(批量新增用户)
      */
-    uploadUsersExcel(file: File, ajaxOptions?: Http.RequestConfig) {
+    uploadUsersExcel(file: File, ajaxOptions?: RequestConfig) {
         return commonApi.upload({ file }, "/system/uploadUsersExcel", ajaxOptions);
     },
 
     /**
      * 批量新增用户信息
      */
-    batchInsertUers(inputData: Record<string, any>[], ajaxOptions?: Http.RequestConfig) {
+    batchInsertUers(inputData: Record<string, any>[], ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -539,7 +538,7 @@ export default {
     /**
      * 分页查询站内信列表（创建的数量）
      */
-    queryPageMessageList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryPageMessageList(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -555,7 +554,7 @@ export default {
     /**
      * 发送站内信
      */
-    insertMessage(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    insertMessage(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {

@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-12-28 10:10:08
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-15 09:42:55
- * @项目的路径: \vue-manager-system\src\views\system\users\components\info-form-dialog.vue
  * @描述: 新增或编辑用户信息弹窗
 -->
 <template>
@@ -32,7 +28,7 @@
     </dialog-form>
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { DialogFormButton, DialogFormRef, InputFormProps } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
 import systemAPI from "@api/system";
 import { ElMessage } from "element-plus";
@@ -51,10 +47,10 @@ const props = defineProps({
 
 const emits = defineEmits(["update:isShow", "refresh"]);
 
-const dialogFormRef = ref<Components.DialogFormRef>();
+const dialogFormRef = ref<DialogFormRef>();
 
 // 输入表单信息
-const inputForm = reactive<Components.InputForm>({
+const inputForm = reactive<InputFormProps>({
     value: props.row && JSON.parse(JSON.stringify(props.row)),
     fields: [
         {
@@ -122,13 +118,13 @@ const inputForm = reactive<Components.InputForm>({
 });
 
 // 底部按钮列表
-const buttons = ref<Components.FormButton[]>([
+const buttons = ref<DialogFormButton[]>([
     {
-        text: "取消"
+        contents: "取消"
     },
     {
-        text: "保存",
-        props: { type: "primary" },
+        contents: "保存",
+        type: "primary",
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
             await systemAPI.addOrUpdateUser(inputFormValue);

@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-15 11:45:54
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 15:00:27
- * @项目的路径: \vue-manager-system\src\views\system\menus\components\bind-roles-dialog.vue
  * @描述: 当前菜单已经绑定的角色列表
 -->
 <template>
@@ -80,7 +76,7 @@ const dataTableConfig = reactive({
 });
 
 // 获取状态的内容
-const getStatusText = function (status) {
+const getStatusText = function (status: string) {
     if (!status) return "-";
     if (status === "0") {
         return "正常";

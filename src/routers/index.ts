@@ -1,9 +1,5 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-08-09 13:49:25
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:50:21
- * @项目的路径: \vue-manager-system\src\routers\index.ts
  * @描述: 路由配置
  * meta: {
  *  requiresAuth: boolean, // 是否需要登录
@@ -12,8 +8,8 @@
  */
 import { storageStore, eventsStore } from "@/stores";
 import { type RouteRecordRaw, type Router, createRouter, createWebHashHistory, createWebHistory } from "vue-router";
-import { changeUrlParameter } from "@yujinjin/utils";
 import { ElMessage } from "element-plus";
+import config from "@/config";
 import system from "./system";
 import others from "./others";
 import plays from "./plays";
@@ -22,7 +18,7 @@ export default function (): Router {
     const dataStorages = storageStore();
     const dataEvents = eventsStore();
     const router: Router = createRouter({
-        history: config.isWebHash ? createWebHashHistory(config.projectContentPath ? (config.projectContentPath + "/") : "") : createWebHistory(config.projectContentPath || "/"), // HTML5 hash模式 |history模式
+        history: config.isWebHash ? createWebHashHistory(config.projectContentPath ? config.projectContentPath + "/" : "") : createWebHistory(config.projectContentPath || "/"), // HTML5 hash模式 |history模式
         routes: <Array<RouteRecordRaw>>[
             {
                 path: "/",
@@ -86,7 +82,7 @@ export default function (): Router {
      * 解决前端发版出现-跳转路由页面加载该页面js、css文件404时，触发router.onError的场景
      * 为了避免在特殊情况下服务器丢失资源导致无限报错刷新，这里做了进一步控制判断（半个小时内只会刷新一次）
      */
-    router.onError((error) => {
+    router.onError(error => {
         const pattern = /Loading( CSS)? chunk (\S)+ failed/g;
         const isChunkLoadFailed = error.message.match(pattern);
         if (isChunkLoadFailed && dataStorages.isExpireForTryReloadTime()) {
@@ -95,52 +91,12 @@ export default function (): Router {
                 type: "warning",
                 duration: 1500,
                 offset: 60
-            })
+            });
             dataStorages.setTryReloadTimeValue();
             setTimeout(() => {
-                location.reload()
+                location.reload();
             }, 1500);
         }
     });
     return router;
-}
-
-/**
- * 外部链接路由路径
- * @params menuId 菜单ID
- * @params pageId 页面ID
- */
-export function externalRoutePath({ menuId, pageId }: { menuId?: string; pageId?: string }) {
-    if (menuId) {
-        return "/external/" + menuId;
-    }
-    return "/external?pageId=" + pageId;
-}
-
-/**
- * 中转页链接路由路径
- * @params menuId 菜单ID
- * @params pageId 页面ID
- */
-export function transitRoutePath({ pageIndex, fromRoutePath }: { pageIndex?: number; fromRoutePath?: string }) {
-    if (pageIndex || pageIndex === 0) {
-        return "/transit?fromPageIndex=" + pageIndex;
-    }
-    return "/external?fromRoutePath=" + fromRoutePath;
-}
-
-/**
- * 内部链接路由路径
- * @params url 当前地址
- * @params menuId 菜单ID
- * @params pageId 页面ID
- */
-export function innerRoutePath(url: string, { menuId, pageId }: { menuId?: string; pageId?: string }) {
-    url = url.replace(new RegExp("^http(s?)://" + window.location.host), "");
-    if (menuId) {
-        url = changeUrlParameter(url, "menuId", menuId);
-    } else {
-        url = changeUrlParameter(url, "pageId", pageId);
-    }
-    return url;
 }

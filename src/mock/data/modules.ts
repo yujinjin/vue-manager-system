@@ -1,9 +1,5 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-07 16:28:48
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-07 16:31:08
- * @项目的路径: \vue-manager-system\src\mock\data\modules.ts
  * @描述: 模块列表
  */
 import Mock from "mockjs";

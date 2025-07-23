@@ -1,7 +1,7 @@
 <template>
     <div class="icon-list">
         <div class="icon-table" ref="iconListRef">
-            <div class="icon-item" v-for="icon in icons" :key="icon" :data-clipboard-text="'<i class=\'' + icon + '\' />'">
+            <div class="icon-item" v-for="icon in icons" :key="icon" @click="copyHandle('<i class=\'' + icon + '\' />')">
                 <i :class="icon"></i>
                 <span class="icon-name">{{ icon }}</span>
             </div>
@@ -9,8 +9,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
-import Clipboard from "clipboard";
+import { ref } from "vue";
+import { useClipboard } from "@vueuse/core";
 import { ElMessage } from "element-plus";
 
 const iconListRef = ref<HTMLDivElement>();
@@ -511,27 +511,19 @@ const icons = ref([
     "icomoon-icomoon"
 ]);
 
-let clipboard: Clipboard;
+const { copy, isSupported } = useClipboard({ legacy: true });
 
-onMounted(() => {
-    clipboard = new Clipboard(iconListRef.value!.querySelectorAll(".icon-table > .icon-item"));
-
-    clipboard.on("success", function () {
-        ElMessage({
-            message: "已复制.",
-            type: "success"
-        });
-    });
-    clipboard.on("error", function () {
-        ElMessage.error("复制失败.");
-    });
-});
-
-onUnmounted(() => {
-    if (clipboard) {
-        clipboard.destroy();
+const copyHandle = async function (text: string) {
+    if (!isSupported.value) {
+        ElMessage.error("您的浏览器不支持 Clipboard API");
+        return;
     }
-});
+    await copy(text);
+    ElMessage({
+        message: "已复制.",
+        type: "success"
+    });
+};
 </script>
 <style lang="scss" scoped>
 .icon-list {

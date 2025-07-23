@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { DocumentCopy } from "@element-plus/icons-vue";
-import Clipboard from "clipboard";
+import { useClipboard } from "@vueuse/core";
 import { ElMessage } from "element-plus";
 
 const props = defineProps({
@@ -28,26 +28,20 @@ const props = defineProps({
 
 const elIconRef = ref<HTMLDivElement>();
 
+const { copy, isSupported } = useClipboard({ legacy: true });
+
 // 复制操作
-const copyTextHandle = function () {
-    const clipboard = new Clipboard(elIconRef.value!, {
-        text: function () {
-            return props.value!;
-        }
+const copyTextHandle = async function () {
+    if (!isSupported.value) {
+        ElMessage.error("您的浏览器不支持 Clipboard API");
+        return;
+    }
+    await copy(props.value!);
+    ElMessage({
+        message: "已复制.",
+        type: "success"
     });
-    clipboard.on("success", () => {
-        ElMessage({
-            message: "复制成功",
-            type: "success",
-            duration: 1000
-        })
-        clipboard.destroy();
-    });
-    clipboard.on("error", () => {
-        ElMessage.error("复制失败");
-        clipboard.destroy();
-    });
-}
+};
 </script>
 <style lang="scss" scoped>
 .table-column-copy {
@@ -62,7 +56,7 @@ const copyTextHandle = function () {
         text-overflow: ellipsis;
         overflow: hidden;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
+        line-clamp: 1;
     }
 
     .icon-box {

@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-10 15:33:12
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-05-08 09:53:30
- * @项目的路径: \vue-manager-system\src\views\system\roles\components\bind-menus-dialog.vue
  * @描述: 角色绑定菜单弹窗
 -->
 <template>
@@ -65,6 +61,7 @@ import { Search, Delete, InfoFilled } from "@element-plus/icons-vue";
 import { ElLoading, ElTable, ElMessage } from "element-plus";
 import { debounce } from "@yujinjin/utils";
 import systemAPI from "@api/system";
+import logs from "@/services/logs";
 
 const props = defineProps({
     isShow: {
@@ -113,7 +110,7 @@ const dialogClosed = function () {
 };
 
 // 选择的角色数据变化
-const selectionChangeHandle = function (rows) {
+const selectionChangeHandle = function (rows: any) {
     selectedMenuRows.value = rows;
 };
 
@@ -124,7 +121,7 @@ const clearSelectionHandle = function () {
 };
 
 // 数据表格中的行点击事件
-const rowClickHandle = function (row) {
+const rowClickHandle = function (row: any) {
     dataTableRef.value!.toggleRowSelection(row, selectedMenuRows.value.findIndex(item => item.id === row.id) === -1);
 };
 

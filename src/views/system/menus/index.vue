@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-11 21:47:54
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-15 16:41:41
- * @项目的路径: \vue-manager-system\src\views\system\menus\index.vue
  * @描述: 系统菜单管理页面
 -->
 <template>
@@ -22,7 +18,7 @@
     </search-page>
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { SearchPageRef } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import systemAPI from "@api/system";
@@ -33,7 +29,7 @@ import bindRolesDialog from "./components/bind-roles-dialog.vue";
 import batchInsertDialog from "./components/batch-insert-dialog.vue";
 
 // search page 组件
-const searchPageRef = ref<Components.SearchPageRef>();
+const searchPageRef = ref<SearchPageRef>();
 
 // 是否显示信息弹窗
 const isShowInfoDialog = ref(false);
@@ -51,7 +47,7 @@ const selectedRow = ref();
 const moduleList = ref<Record<string, any>[]>([]);
 
 // 获取状态的内容
-const getStatusText = function (status) {
+const getStatusText = function (status: string) {
     if (!status) return "-";
     if (status === "0") {
         return "正常";
@@ -67,7 +63,7 @@ const refreshHandle = async function () {
 };
 
 // 显示菜单相关操作信息弹
-const showDialogHandle = function (rows, { handleCode }) {
+const showDialogHandle = function (rows: any, { handleCode }: { handleCode: string }) {
     if (handleCode === HANDLE_CODES.CREATE) {
         selectedRow.value = null;
     } else {
@@ -86,7 +82,7 @@ const showDialogHandle = function (rows, { handleCode }) {
 };
 
 // 切换菜单的锁定状态
-const toggleMenuLockStatusHandle = async function (row, { handleCode }) {
+const toggleMenuLockStatusHandle = async function (row: any, { handleCode }: { handleCode: string }) {
     await ElMessageBox.confirm("确定" + (handleCode === HANDLE_CODES.DISABLE ? "锁定" : "解锁") + "当前菜单信息吗?", "信息确认", {
         customClass: "custom-confirm",
         confirmButtonText: "确认",
@@ -103,7 +99,7 @@ const toggleMenuLockStatusHandle = async function (row, { handleCode }) {
 };
 
 // 删除操作
-const deleteHandle = async function (row) {
+const deleteHandle = async function (row: any) {
     await ElMessageBox.confirm("确定删除当前菜单信息吗?", "信息确认", {
         customClass: "custom-confirm",
         confirmButtonText: "确认",

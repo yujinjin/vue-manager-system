@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-12-20 15:14:12
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-06-04 17:58:05
- * @项目的路径: \vue-manager-system\src\views\home\components\iframe-list.vue
  * @描述: 引用外链的iframe列表
 -->
 <template>
@@ -28,6 +24,7 @@
 import { ref, computed, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { pageViewsStore } from "@/stores";
+import logs from "@/services/logs";
 
 const router = useRouter();
 

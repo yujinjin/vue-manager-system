@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-04-24 11:11:38
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-04-26 16:58:00
- * @项目的路径: \vue-manager-system\src\views\plays\form-design\index.vue
  * @描述: PC端动态表单设计器
 -->
 <template>

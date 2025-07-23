@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-04 16:06:43
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:58:48
- * @项目的路径: \vue-manager-system\src\views\plays\order-list\components\excel-export-dialog.vue
  * @描述: Excel大数据导出弹窗
 -->
 <template>
@@ -53,7 +49,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { SearchFormField, DataTableColumn, SearchFormRef } from "@yujinjin/cms-components";
 import { type PropType, ref, watch, computed, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { debounce, getObjectProperty, dateFormat } from "@yujinjin/utils";
@@ -66,7 +62,7 @@ const props = defineProps({
     },
     // 搜索字段列表
     searchFields: {
-        type: Array as PropType<Components.SearchFormField[]>,
+        type: Array as PropType<SearchFormField[]>,
         default: function () {
             return [];
         }
@@ -78,7 +74,7 @@ const props = defineProps({
         }
     },
     tableColumns: {
-        type: Array as PropType<Components.TableColumn<any>[]>,
+        type: Array as PropType<DataTableColumn<any>[]>,
         default() {
             return [];
         }
@@ -96,7 +92,7 @@ const activeCollapseNames = ref(["1", "2"]);
 const isStorageSearchFormValue = ref(false);
 
 // 搜索表单实例
-const searchFormRef = ref<Components.SearchFormRef>();
+const searchFormRef = ref<SearchFormRef>();
 
 // 搜索加载中
 const searchLoading = ref(false);
@@ -131,7 +127,7 @@ const minSelecedFields = computed(() => exportFields.value.filter(item => item.d
 // 初始化筛选条件的值
 const initSearchFieldsValue = function () {
     if (!isStorageSearchFormValue.value && searchFormRef.value) {
-        searchFormRef.value!.changeFormFields(function (formFields: Components.SearchFormField[]) {
+        searchFormRef.value!.changeFormFields(function (formFields: SearchFormField[]) {
             formFields.forEach(fieldItem => {
                 if (fieldItem.props) {
                     fieldItem.value = getObjectProperty(props.searchFormValue, fieldItem.name, null);
@@ -211,7 +207,7 @@ const submitHandle = function () {
         async () => {
             await commonApi.download({
                 type: "a",
-                url: require("@assets/templates/批量新增菜单模板.xlsx"),
+                url: require("/templates/批量新增菜单模板.xlsx"),
                 fileName: "订单数据导出(" + dateFormat(Date.now()) + ").xlsx"
             });
             progressInfo.isLoading = false;

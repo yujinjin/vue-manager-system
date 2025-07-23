@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-12-16 13:53:57
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-11-08 17:05:11
- * @项目的路径: \vue-manager-system\src\views\home\components\header-bar.vue
  * @描述: home 头部
 -->
 <template>
@@ -67,7 +63,7 @@ import { type PropType, type Ref, ref } from "vue";
 import { Refresh, CaretBottom, ArrowRight } from "@element-plus/icons-vue";
 import { type Router, useRouter } from "vue-router";
 import { storageStore, pageViewsStore, eventsStore } from "@/stores";
-import { transitRoutePath } from "@/routers";
+import { transitRoutePath } from "@/utils/index";
 import messages from "./messages.vue";
 import loginInfoDialog from "./login-info-dialog.vue";
 import updatePasswordDialog from "./update-password-dialog.vue";
@@ -125,7 +121,7 @@ const toggleMenuCollapseState = function () {
     emits("toggleMenuCollapseState");
 };
 
-const loginUserCommandHandle = function (command) {
+const loginUserCommandHandle = function (command: string) {
     if (command === "showUserInfoDialog") {
         isShowUserInfoDialog.value = true;
     } else if (command === "showUpdatePasswordDialog") {
@@ -135,7 +131,7 @@ const loginUserCommandHandle = function (command) {
     }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .header-bar {
     width: 100%;
     padding: 0;

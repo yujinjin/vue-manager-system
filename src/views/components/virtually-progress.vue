@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-04 11:23:48
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:54:27
- * @项目的路径: \vue-manager-system\src\views\components\virtually-progress.vue
  * @描述: 虚构的进度条
 -->
 <template>

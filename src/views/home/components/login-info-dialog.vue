@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-08-09 13:49:25
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:57:33
- * @项目的路径: \vue-manager-system\src\views\home\components\login-info-dialog.vue
  * @描述: 登录用户信息弹窗
 -->
 <template>
@@ -25,12 +21,11 @@
     </dialog-form>
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
-import type { NotReadonly } from "/#/global";
 import { type Ref, ref, reactive } from "vue";
+import { type InputFormProps, type DialogFormButton, type DialogFormRef } from "@yujinjin/cms-components";
 import { storageStore } from "@/stores";
 import { Plus, Check, Close } from "@element-plus/icons-vue";
-import { type DialogProps, ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 import systemAPI from "@api/system";
 
 defineProps({
@@ -43,19 +38,19 @@ defineProps({
 
 const emits = defineEmits(["update:isShow"]);
 
-const dialogFormRef = ref<Components.DialogFormRef>();
+const dialogFormRef = ref<DialogFormRef>();
 
 // 存储data
 const storageData = storageStore();
 
 // 弹窗属性
-const dialogProps = reactive<Partial<NotReadonly<DialogProps>>>({
+const dialogProps = reactive({
     title: "修改用户信息",
     width: "500px"
 });
 
 // 输入表单信息
-const inputForm = reactive<Components.InputForm>({
+const inputForm = reactive<InputFormProps>({
     fields: [
         {
             name: "userName",
@@ -113,13 +108,13 @@ const inputForm = reactive<Components.InputForm>({
 });
 
 // 底部按钮列表
-const buttons: Ref<Components.FormButton[]> = ref([
+const buttons: Ref<DialogFormButton[]> = ref([
     {
-        text: "取消"
+        contents: "取消"
     },
     {
-        text: "修改",
-        props: { type: "primary" },
+        contents: "修改",
+        type: "primary",
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
             await systemAPI.updateLoginUserInfo(inputFormValue);

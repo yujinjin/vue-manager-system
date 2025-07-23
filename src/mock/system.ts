@@ -1,13 +1,9 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-07 18:03:44
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-11-01 16:39:19
- * @项目的路径: \vue-manager-system\src\mock\system.ts
  * @描述: 系统模块mock数据
  */
 
-import Mock from "mockjs";
+import Mock, { type MockjsRequestOptions } from "mockjs";
 import wrapResponse from "./wrap-response";
 import menus from "./data/menus";
 import modules from "./data/modules";
@@ -92,7 +88,7 @@ export default [
     {
         url: "/system/queryPageModuleList",
         type: "",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const pageNo = parseInt(body.pageNo || "1", 10);
             const pageSize = parseInt(body.pageSize || "50", 10);
             const queryList = modules.filter(item => {
@@ -111,7 +107,7 @@ export default [
     {
         url: "/system/queryModuleList",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const queryList = modules.filter(item => {
                 if (body.moduleName && item.name !== body.moduleName) {
                     return false;
@@ -144,7 +140,7 @@ export default [
     {
         url: "/system/queryPageMenuList",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const pageNo = parseInt(body.pageNo || "1", 10);
             const pageSize = parseInt(body.pageSize || "50", 10);
             const queryList = menus.filter(item => {
@@ -174,7 +170,7 @@ export default [
     {
         url: "/system/queryMenuList",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             return wrapResponse(
                 menus.filter(item => {
                     if (body.code && item.code !== body.code) {
@@ -198,7 +194,7 @@ export default [
     {
         url: "/system/queryRoleListByMenuId",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const menuId = body.menuId;
             const roleIdList = rolesMenus.filter(item => item.menuId.includes(menuId));
             return wrapResponse(
@@ -251,7 +247,7 @@ export default [
     {
         url: "/system/queryPageRoleList",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const pageNo = parseInt(body.pageNo || "1", 10);
             const pageSize = parseInt(body.pageSize || "50", 10);
             // const status = body.status ? parseInt(body.status, 10) : null;
@@ -280,7 +276,7 @@ export default [
     {
         url: "/system/queryRoleList",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const queryList = roles.filter(item => {
                 if (body.code && item.code !== body.code) {
                     return false;
@@ -303,7 +299,7 @@ export default [
     {
         url: "/system/queryMenuListByRoleId",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const roleId = body.roleId;
             return wrapResponse(rolesMenus.filter(item => item.roleId === roleId));
         }
@@ -360,7 +356,7 @@ export default [
     {
         url: "/system/queryPageUserList",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const pageNo = parseInt(body.pageNo || "1", 10);
             const pageSize = parseInt(body.pageSize || "50", 10);
             const queryList = users.filter(item => {
@@ -385,7 +381,7 @@ export default [
     {
         url: "/system/queryRoleListByUserId",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const userId = body.userId;
             return wrapResponse(usersRoles.filter(item => item.userId === userId));
         }
@@ -450,7 +446,7 @@ export default [
     {
         url: "/system/queryPageMessageList",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const pageNo = parseInt(body.pageNo || "1", 10);
             const pageSize = parseInt(body.pageSize || "50", 10);
             const queryList = messages.filter(item => {

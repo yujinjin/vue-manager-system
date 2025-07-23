@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-09-13 15:51:49
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-09-14 09:36:01
- * @项目的路径: \vue-manager-system\src\views\components\html-editor-dialog.vue
  * @描述: html编辑器弹窗
 -->
 <template>

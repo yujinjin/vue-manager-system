@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-17 18:05:57
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:54:01
- * @项目的路径: \vue-manager-system\src\views\components\customer-column-dialog.vue
  * @描述: 自定义数据列弹窗
 -->
 <template>
@@ -15,9 +11,9 @@
             <div class="left-contents">
                 <div v-if="searchLoading" class="loading-text">数据匹配中...</div>
                 <div v-else-if="noDataForSearch" class="empty-text">未匹配到数据</div>
-                <div v-else-if="groupColumnKeys" class="checkbox-list-wrapper">
+                <div v-else-if="groupColumnKeys && customGroupColumns?.length" class="checkbox-list-wrapper">
                     <el-collapse v-model="activeNames">
-                        <el-collapse-item v-for="(item, index) in customColumns as CustomerGroupColumnData[]" :key="item.key" :name="item.key" v-show="item.isShow">
+                        <el-collapse-item v-for="(item, index) in customGroupColumns" :key="item.key" :name="item.key" v-show="item.isShow">
                             <template #title>
                                 <el-checkbox @click.stop v-model="item.selected" :indeterminate="item.indeterminate" :label="item.key" @change="checkChange(item.selected, true, index)">
                                     {{ item.name }}
@@ -33,7 +29,7 @@
                         </el-collapse-item>
                     </el-collapse>
                 </div>
-                <div v-else class="checkbox-list-wrapper">
+                <div v-else-if="customColumns?.length" class="checkbox-list-wrapper">
                     <el-row>
                         <el-col :span="24">
                             <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" label="全选" @change="checkChange(checkAll, true)" />
@@ -73,8 +69,8 @@
     </el-dialog>
 </template>
 <script lang="ts" setup>
-import type { Components } from "/#/components";
 import { type PropType, computed, ref } from "vue";
+import { type DataTableColumn } from "@yujinjin/cms-components";
 import { Search, Delete } from "@element-plus/icons-vue";
 import { debounce } from "@yujinjin/utils";
 import { getValue, setValue } from "@/services/local-storage";
@@ -153,7 +149,7 @@ const props = defineProps({
     },
     // 数据列表中的列
     tableColumns: {
-        type: Array as PropType<Components.TableColumn<any>[]>,
+        type: Array as PropType<DataTableColumn<any>[]>,
         required: true
     },
     // 至少选择列的数量
@@ -166,7 +162,10 @@ const props = defineProps({
 const emits = defineEmits(["close", "save"]);
 
 // 自定义列数据
-const customColumns = ref<CustomerColumnData[] | CustomerGroupColumnData[]>([]);
+const customColumns = ref<CustomerColumnData[]>();
+
+// 自定义列分组数据
+const customGroupColumns = ref<CustomerGroupColumnData[]>();
 
 // 搜索加载中
 const searchLoading = ref(false);
@@ -189,9 +188,9 @@ const activeNames = ref<string[]>([]);
 // 拉平后的数据列表
 const flapCustomColumns = computed<CustomerColumnData[]>(() => {
     if (props.groupColumnKeys) {
-        return customColumns.value.map(item => item.childList).flat();
+        return customGroupColumns.value?.map(item => item.childList).flat() || [];
     }
-    return customColumns.value;
+    return customColumns.value || [];
 });
 
 // 当前选中的数据列表
@@ -212,6 +211,7 @@ const init = function () {
     }
     if (props.groupColumnKeys) {
         // 当前数据列表有分组
+        customGroupColumns.value = [];
         props.groupColumnKeys.forEach(({ name, key, childList }) => {
             const columnItem: CustomerGroupColumnData = {
                 name,
@@ -233,14 +233,15 @@ const init = function () {
             const selectedNumber = columnItem.childList.filter(childItem => childItem.selected).length;
             columnItem.selected = columnItem.childList.length === selectedNumber;
             columnItem.indeterminate = selectedNumber > 0 && selectedNumber < columnItem.childList.length;
-            (customColumns.value as CustomerGroupColumnData[]).push(columnItem);
+            customGroupColumns.value!.push(columnItem);
             activeNames.value.push(key);
         });
     } else {
+        customColumns.value = [];
         props.tableColumns.forEach(column => {
             if (column.prop && (!column.type || !["index", "selection", "expand", "action"].includes(column.type))) {
                 // 排除非正常的数据列且必须定义了prop属性的
-                (customColumns.value as CustomerColumnData[]).push({
+                customColumns.value!.push({
                     name: column.label || "-",
                     key: column.prop,
                     disabled: column.prop && props.fixedColumnKeys ? props.fixedColumnKeys.includes(column.prop) : !!column.fixed || false,
@@ -262,21 +263,22 @@ const init = function () {
 // 搜索（防抖）
 const searchDebounce = debounce(function () {
     if (props.groupColumnKeys) {
-        customColumns.value.forEach((item, index) => {
+        customGroupColumns.value!.forEach((item, index) => {
             item.childList.forEach(childItem => {
                 childItem.isShow = childItem.name.includes(keyword.value);
             });
             item.isShow = item.childList.some(childItem => childItem.isShow);
             checkChange(item.selected, false, index);
         });
+        noDataForSearch.value = customGroupColumns.value!.every(item => !item.isShow);
     } else {
-        customColumns.value.forEach(item => {
+        customColumns.value!.forEach(item => {
             item.isShow = item.name.includes(keyword.value);
         });
         checkChange(checkAll.value, false);
+        noDataForSearch.value = customColumns.value!.every(item => !item.isShow);
     }
     searchLoading.value = false;
-    noDataForSearch.value = customColumns.value.every(item => !item.isShow);
 }, 200);
 
 // 搜索操作
@@ -298,30 +300,30 @@ const close = function () {
 const checkChange = function (selected: boolean, isCheckAll: boolean, index?: number) {
     if (isCheckAll && !props.groupColumnKeys) {
         // 当前没有分组，全选check触发
-        customColumns.value.forEach(item => {
+        customColumns.value!.forEach(item => {
             if (item.isShow && !item.disabled) {
                 item.selected = selected;
             }
         });
-        isIndeterminate.value = !selected && customColumns.value.some(item => item.selected);
+        isIndeterminate.value = !selected && customColumns.value!.some(item => item.selected);
     } else if (isCheckAll && props.groupColumnKeys) {
         // 当前有分组，全选check触发
-        (customColumns.value[index!] as CustomerGroupColumnData).childList.forEach(item => {
+        customGroupColumns.value![index!].childList.forEach(item => {
             if (item.isShow && !item.disabled) {
                 item.selected = selected;
             }
         });
-        (customColumns.value[index!] as CustomerGroupColumnData).indeterminate = !selected && (customColumns.value[index!] as CustomerGroupColumnData).childList.some(item => item.selected);
+        customGroupColumns.value![index!].indeterminate = !selected && customGroupColumns.value![index!].childList.some(item => item.selected);
     } else if (props.groupColumnKeys) {
         // 当前是分组，其childList中的数据选择有变化
-        const selectedNumber = (customColumns.value[index!] as CustomerGroupColumnData).childList.filter(childItem => childItem.selected && childItem.isShow).length;
-        const totalNumber = (customColumns.value[index!] as CustomerGroupColumnData).childList.filter(childItem => childItem.isShow).length;
-        (customColumns.value[index!] as CustomerGroupColumnData).selected = totalNumber > 0 && selectedNumber === totalNumber;
-        (customColumns.value[index!] as CustomerGroupColumnData).indeterminate = selectedNumber > 0 && selectedNumber < totalNumber;
+        const selectedNumber = customGroupColumns.value![index!].childList.filter(childItem => childItem.selected && childItem.isShow).length;
+        const totalNumber = customGroupColumns.value![index!].childList.filter(childItem => childItem.isShow).length;
+        customGroupColumns.value![index!].selected = totalNumber > 0 && selectedNumber === totalNumber;
+        customGroupColumns.value![index!].indeterminate = selectedNumber > 0 && selectedNumber < totalNumber;
     } else {
         // 当前未分组，其childList中的数据选择有变化
-        const selectedNumber = customColumns.value.filter(item => item.selected && item.isShow).length;
-        const totalNumber = customColumns.value.filter(item => item.isShow).length;
+        const selectedNumber = customColumns.value!.filter(item => item.selected && item.isShow).length;
+        const totalNumber = customColumns.value!.filter(item => item.isShow).length;
         checkAll.value = totalNumber > 0 && selectedNumber === totalNumber;
         isIndeterminate.value = selectedNumber > 0 && selectedNumber < totalNumber;
     }
@@ -330,7 +332,7 @@ const checkChange = function (selected: boolean, isCheckAll: boolean, index?: nu
 // 恢复初始
 const restoreColumns = function () {
     if (props.groupColumnKeys) {
-        customColumns.value.forEach(item => {
+        customGroupColumns.value!.forEach(item => {
             item.selected = true;
             item.indeterminate = false;
             item.childList.forEach(childItem => {
@@ -338,7 +340,7 @@ const restoreColumns = function () {
             });
         });
     } else {
-        customColumns.value.forEach(item => {
+        customColumns.value!.forEach(item => {
             item.selected = true;
         });
         checkAll.value = true;
@@ -347,13 +349,28 @@ const restoreColumns = function () {
 };
 
 // 删除当前选中的数据
-const deleteSelected = function (index) {
-    flapCustomColumns.value[index].selected = false;
+const deleteSelected = function (index: number) {
+    const key = flapCustomColumns.value[index].key;
     if (props.groupColumnKeys) {
-        const key = flapCustomColumns.value[index].key;
-        const findIndex = customColumns.value.findIndex(item => item.childList.findIndex(childItem => childItem.key === key) !== -1);
+        const findIndex = customGroupColumns.value!.findIndex(
+            item =>
+                item.childList.findIndex(childItem => {
+                    if (childItem.key === key) {
+                        childItem.isShow = false;
+                        return true;
+                    }
+                    return false;
+                }) !== -1
+        );
         checkChange(false, false, findIndex);
     } else {
+        customColumns.value!.findIndex(item => {
+            if (item.key === key) {
+                item.selected = false;
+                return true;
+            }
+            return false;
+        });
         checkChange(false, false);
     }
 };

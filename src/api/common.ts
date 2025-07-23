@@ -1,11 +1,17 @@
 /**
  * 作者：yujinjin9@126.com
- * 时间：2022-02-24
  * 描述：公用api 应用程序接口
  */
+import request, { type RequestConfig, type HttpResponse } from "./request";
 
-import type { Http } from "/#/http";
-import request from "./request";
+// 下载配置项
+interface DownloadConfig {
+    url: string; // 下载地址URL
+    method?: "get" | "post"; // 请求的地址方法（post只能使用form提交）
+    inputData?: Record<string, number | string | boolean>; // 请求的参数
+    type: "iframe" | "form" | "a" | "open" | "blob"; // 下载使用的技术方案
+    fileName?: string; // 下载下来的自定义文件名（只有a标签才有用）
+}
 
 export default {
     /**
@@ -37,7 +43,7 @@ export default {
      * @param url 请求的地址URL
      * @param requestConfig 请求配置参数
      */
-    upload(inputData: Record<string, any>, url: string, requestConfig?: Http.RequestConfig) {
+    upload(inputData: Record<string, any>, url: string, requestConfig?: RequestConfig) {
         const formData = new FormData();
         if (inputData && typeof inputData === "object") {
             for (const key in inputData) {
@@ -69,7 +75,7 @@ export default {
      * @param inputData 请求的参数
      */
     // download({ url = "", method = <"get" | "post">"get", type = <"iframe" | "form" | "a" | "open" | "blob">"iframe", fileName = "", inputData = <Record<string, any> | null>null } = {}) {
-    async download(downloadConfig: Http.DownloadConfig) {
+    async download(downloadConfig: DownloadConfig) {
         // DownloadConfig
         downloadConfig = Object.assign({ mehthod: "get", type: "iframe" }, downloadConfig);
         const iframeElement: HTMLIFrameElement = document.createElement("iframe");
@@ -130,7 +136,7 @@ export default {
                     method: downloadConfig.method,
                     data: downloadConfig.inputData,
                     responseType: "blob"
-                })) as Http.Response;
+                })) as HttpResponse;
                 if (!downloadConfig.fileName) {
                     if (fileName) {
                         downloadConfig.fileName = decodeURIComponent(fileName.split("filename=")[1]);
@@ -151,7 +157,7 @@ export default {
     },
 
     // 上传图片
-    uploadImage(inputData: Record<string, any>, requestConfig?: Http.RequestConfig) {
+    uploadImage(inputData: Record<string, any>, requestConfig?: RequestConfig) {
         return this.upload(inputData, "/common/uploadImage", requestConfig);
     }
 };

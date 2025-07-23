@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-11-14 15:21:53
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-14 14:08:45
- * @项目的路径: \vue-manager-system\src\views\home\components\men-text.vue
  * @描述: 侧边栏菜单名称展示
 -->
 <template>
@@ -14,17 +10,18 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
 import { computed, onMounted } from "vue";
-import type { System } from "/#/modules/system";
+import { type MenuTree } from "../menu-tree";
 import { ref } from "vue";
 import type { Router } from "vue-router";
 import { useRouter } from "vue-router";
+import config from "@/config";
 import { pageViewsStore } from "@/stores";
 import { isExternalLink } from "@/utils/index";
-import { externalRoutePath, innerRoutePath } from "@/routers";
+import { externalRoutePath, innerRoutePath } from "@/utils/index";
 
 const props = defineProps({
     menuItem: {
-        type: Object as PropType<System.MenuTree>,
+        type: Object as PropType<MenuTree>,
         require: true
     }
 });

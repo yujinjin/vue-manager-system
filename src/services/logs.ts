@@ -1,21 +1,25 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-08-09 13:49:25
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:51:06
- * @项目的路径: \vue-manager-system\src\services\logs.ts
  * @描述: 日志输出
  */
-import type { App } from "/#/app";
 import { LogLevels, BuildEnv } from "@/services/enums";
+import config from "@/config";
+
+/** 日志 */
+export interface Logs {
+    debug(...contents: any[]): void;
+    info(...contents: any[]): void;
+    warn(...contents: any[]): void;
+    error(...contents: any[]): void;
+    fatal(...contents: any[]): void;
+}
+
 class Log {
     private level: LogLevels;
 
     constructor() {
         if (config.buildEnv === BuildEnv.DEVELOPMENT) {
             this.level = LogLevels.DEBUG;
-        } else if (config.buildEnv === BuildEnv.TEST) {
-            this.level = LogLevels.INFO;
         } else {
             this.level = LogLevels.ERROR;
         }
@@ -33,7 +37,7 @@ class Log {
     }
 }
 const log = new Log();
-export default <App.Logs>{
+export default {
     debug(...contents: any[]) {
         log.print(LogLevels.DEBUG, "DEBUG: ");
         log.print(LogLevels.DEBUG, ...contents);

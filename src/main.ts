@@ -1,28 +1,31 @@
-import type { App } from "/#/app";
 import type { Pinia } from "pinia";
 import type { Router } from "vue-router";
 import { createApp, type App as VueApplication } from "vue";
 import ElementPlus from "element-plus";
-import zhCn from "element-plus/dist/locale/zh-cn.mjs";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
+import CMSComponents from "@yujinjin/cms-components";
 import Appvue from "@/views/app.vue";
+import config, { type Config } from "@/config";
+import logs, { type Logs } from "@/services/logs";
 import routers from "@/routers/";
 import store from "@/stores/index";
-import components from "@/components/index";
+// import components from "@/components/index";
 import directives from "@/services/directives";
 import plugins from "@/plugins/index";
 import registerEvents from "@/services/register-events";
 // import "../mock/test.js";
 import "@style/element-variables.scss";
-import "@style/index.less";
+import "@yujinjin/cms-components/dist/index.css";
+import "@style/index.scss";
 import "@style/icomoon.css";
 
 /** App Main类 */
 class AppMain {
     // 项目配置
-    config: App.Config;
+    config: Config;
 
     // 日志
-    logs: App.Logs;
+    logs: Logs;
 
     // 当前vue实例
     vueAppInstance: VueApplication | null;
@@ -49,8 +52,8 @@ class AppMain {
 
     // 初始化
     async init() {
-        if (process.env.VUE_MOCK_DATA === "1") {
-            require("@/mock/index");
+        if (VITE_MOCK_DATA === "1") {
+            await import("@/mock/index");
         }
         this.vueAppInstance = this.initVue();
         this.mount("#app");
@@ -79,6 +82,7 @@ class AppMain {
         }
         vueAppInstance.use(this.store);
         vueAppInstance.use(ElementPlus, { locale: zhCn });
+        vueAppInstance.use(CMSComponents);
         this.router = routers();
         vueAppInstance.use(this.router);
         // 注册全局指令
@@ -88,7 +92,7 @@ class AppMain {
         // 注册全局插件
         plugins(vueAppInstance);
         // 注册全局组件
-        components(vueAppInstance);
+        // components(vueAppInstance);
         // 注册全局事件
         registerEvents(this.router);
         return vueAppInstance;

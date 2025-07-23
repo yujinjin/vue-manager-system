@@ -1,19 +1,14 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-01-06 15:33:53
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 16:36:44
- * @项目的路径: \vue-manager-system\src\api\demo.ts
  * @描述: demo 查询API
  */
-import request from "./request";
-import type { Http } from "/#/http";
+import request, { type RequestConfig } from "./request";
 
 export default {
     /**
      * 常用页面 demo 分页查询列表
      */
-    queryPageListForCommon(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryPageListForCommon(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -29,7 +24,7 @@ export default {
     /**
      * 获取配置数据
      */
-    queryConfigData(ajaxOptions?: Http.RequestConfig) {
+    queryConfigData(ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -44,7 +39,7 @@ export default {
     /**
      * 分页查询订单列表(demo演示页面)
      */
-    queryPageOrderList(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    queryPageOrderList(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -60,7 +55,7 @@ export default {
     /**
      * 新增订单信息
      */
-    addOrder(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    addOrder(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -75,7 +70,7 @@ export default {
     /**
      * 查询订单详情信息(demo演示页面)
      */
-    queryOrderDetails(orderNo: string, ajaxOptions?: Http.RequestConfig) {
+    queryOrderDetails(orderNo: string, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {
@@ -91,7 +86,7 @@ export default {
     /**
      * 批量修改订单状态(demo演示页面)
      */
-    batchUpdateOrderStatus(inputData: Record<string, any>, ajaxOptions?: Http.RequestConfig) {
+    batchUpdateOrderStatus(inputData: Record<string, any>, ajaxOptions?: RequestConfig) {
         return request(
             Object.assign(
                 {

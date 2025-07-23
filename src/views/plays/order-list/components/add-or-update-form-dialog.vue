@@ -11,7 +11,7 @@
     <html-editor-dialog v-if="isShowHtmlEditorDialog" @close="toggleHtmlEditorDialogShowStatus(false)" v-model="htmlEditorValue" />
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { DialogFormRef, InputFormProps, DialogFormButton } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import demoAPI from "@api/demo";
@@ -27,7 +27,7 @@ defineProps({
 
 const emits = defineEmits(["update:isShow", "refresh"]);
 
-const dialogFormRef = ref<Components.DialogFormRef>();
+const dialogFormRef = ref<DialogFormRef>();
 
 // 是否显示HTML编辑器弹窗
 const isShowHtmlEditorDialog = ref(false);
@@ -36,7 +36,7 @@ const isShowHtmlEditorDialog = ref(false);
 const htmlEditorValue = ref("");
 
 // 输入表单信息
-const inputForm = reactive<Components.InputForm>({
+const inputForm = reactive<InputFormProps>({
     columns: 2,
     fields: [
         {
@@ -117,13 +117,13 @@ const inputForm = reactive<Components.InputForm>({
 });
 
 // 底部按钮列表
-const buttons = ref<Components.FormButton[]>([
+const buttons = ref<DialogFormButton[]>([
     {
-        text: "取消"
+        contents: "取消"
     },
     {
-        text: "保存",
-        props: { type: "primary" },
+        contents: "保存",
+        type: "primary",
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
             await demoAPI.addOrder(inputFormValue);

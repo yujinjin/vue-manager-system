@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-12-27 11:25:18
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2023-12-27 17:05:03
- * @项目的路径: \vue-manager-system\src\views\system\modules\index.vue
  * @描述: 模块管理页面
 -->
 <template>
@@ -12,7 +8,7 @@
     </search-page>
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { SearchPageRef } from "@yujinjin/cms-components";
 import { ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import systemAPI from "@api/system";
@@ -21,7 +17,7 @@ import searchConfig from "./search-config";
 import infoFormDialog from "./components/info-form-dialog.vue";
 
 // search page 组件
-const searchPageRef = ref<Components.SearchPageRef>();
+const searchPageRef = ref<SearchPageRef>();
 
 // 是否显示信息弹窗
 const isShowDialog = ref(false);
@@ -35,7 +31,7 @@ const refreshHandle = async function () {
 };
 
 // 显示弹窗操作
-const showDialogHandle = function (rows, { handleCode }) {
+const showDialogHandle = function (rows: any, { handleCode }: { handleCode: string }) {
     if (handleCode === HANDLE_CODES.CREATE) {
         selectedRow.value = null;
     } else {
@@ -45,7 +41,7 @@ const showDialogHandle = function (rows, { handleCode }) {
 };
 
 // 删除操作
-const deleteHandle = async function (row) {
+const deleteHandle = async function (row: any) {
     await ElMessageBox.confirm("是否删除当前模块信息?", "信息确认", {
         customClass: "custom-confirm",
         confirmButtonText: "确认",

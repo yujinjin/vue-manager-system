@@ -1,14 +1,11 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-01 11:25:25
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-18 11:24:44
- * @项目的路径: \vue-manager-system\src\views\outside\home.vue
+ * @创建时间: 2024-03-01 11kw
  * @描述: 外部系统home页（此页面仅做框架测试用）
 -->
 <template>
     <div class="home">
-        <img alt="Vue logo" src="@assets/logo.png" />
+        <img alt="Vue logo" src="/logo.png" />
         <div class="button-panel">
             <el-button type="primary" @click="newIFramePage">打开新页面</el-button>
             <el-button type="primary" @click="closeCurrentIFramePage">关闭当前页面</el-button>
@@ -22,6 +19,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import iframeMessage from "@/services/iframe-message";
+import config from "@/config";
+import logs from "@/services/logs";
 
 iframeMessage.init();
 

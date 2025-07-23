@@ -1,11 +1,8 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-12-20 17:47:33
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-01 14:48:24
- * @项目的路径: \vue-manager-system\src\services\iframe-message.ts
  * @描述: 子应用和中台系统的通信框架
  */
+import logs from "./logs";
 
 // 中台系统当前页面的唯一标识
 let iframeId: string;

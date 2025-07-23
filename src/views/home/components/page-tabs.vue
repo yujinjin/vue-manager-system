@@ -61,7 +61,7 @@ import { onMounted, onUnmounted, reactive, ref, nextTick } from "vue";
 import { debounce } from "@yujinjin/utils";
 import { useRouter, useRoute } from "vue-router";
 import { pageViewsStore, storageStore } from "@/stores";
-import { transitRoutePath } from "@/routers";
+import { transitRoutePath } from "@/utils/index";
 
 // 全局路由对象
 const router: Router = useRouter();

@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-12 15:53:49
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 15:00:42
- * @项目的路径: \vue-manager-system\src\views\system\menus\components\icons-select-dialog.vue
  * @描述: 菜单图标选择弹窗
 -->
 <template>

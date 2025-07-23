@@ -1,15 +1,12 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-10 10:22:18
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-11 21:29:58
- * @项目的路径: \vue-manager-system\src\views\system\roles\search-config.ts
  * @描述: 角色查询配置
  */
+import type { DataTableColumn, SearchFormField } from "@yujinjin/cms-components";
 import systemAPI from "@api/system";
 import { HANDLE_CODES } from "@/services/constants";
 
-export default function ({ showDialogHandle, toggleRoleLockStatusHandle, deleteHandle }) {
+export default function ({ showDialogHandle, toggleRoleLockStatusHandle, deleteHandle }: any) {
     return {
         searchFormProps: {
             fields: [
@@ -39,13 +36,13 @@ export default function ({ showDialogHandle, toggleRoleLockStatusHandle, deleteH
                         }
                     ]
                 }
-            ],
+            ] as SearchFormField[],
             isShowCollapse: false
         },
         actionBarProps: {
             buttons: [
                 {
-                    text: "新增",
+                    contents: "新增",
                     handleCode: HANDLE_CODES.CREATE,
                     click: showDialogHandle,
                     props: {
@@ -53,7 +50,7 @@ export default function ({ showDialogHandle, toggleRoleLockStatusHandle, deleteH
                     }
                 },
                 {
-                    text: "批量新增",
+                    contents: "批量新增",
                     handleCode: HANDLE_CODES.BATCHCREATE,
                     click: showDialogHandle
                 }
@@ -90,35 +87,35 @@ export default function ({ showDialogHandle, toggleRoleLockStatusHandle, deleteH
                     width: 180,
                     buttons: [
                         {
-                            text: "编辑",
+                            contents: "编辑",
                             handleCode: HANDLE_CODES.UPDATE,
                             click: showDialogHandle
                         },
                         {
-                            text: "绑定菜单",
+                            contents: "绑定菜单",
                             handleCode: HANDLE_CODES.AUTH,
                             click: showDialogHandle
                         },
                         {
-                            text: "锁定",
+                            contents: "锁定",
                             handleCode: HANDLE_CODES.DISABLE,
                             display: row => row.status === "0",
                             click: toggleRoleLockStatusHandle
                         },
                         {
-                            text: "解锁",
+                            contents: "解锁",
                             handleCode: HANDLE_CODES.ENABLE,
                             display: row => row.status === "1",
                             click: toggleRoleLockStatusHandle
                         },
                         {
-                            text: "删除",
+                            contents: "删除",
                             handleCode: HANDLE_CODES.DELETE,
                             click: deleteHandle
                         }
                     ]
                 }
-            ]
+            ] as DataTableColumn<any>[]
         }
     };
 }

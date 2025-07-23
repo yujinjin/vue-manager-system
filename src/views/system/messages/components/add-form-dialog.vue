@@ -10,7 +10,7 @@
     />
 </template>
 <script setup lang="ts">
-import type { Components } from "/#/components";
+import type { DialogFormButton, DialogFormRef, InputFormField, InputFormProps } from "@yujinjin/cms-components";
 import { type PropType, ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import systemAPI from "@api/system";
@@ -44,10 +44,10 @@ const props = defineProps({
 
 const emits = defineEmits(["update:isShow", "refresh"]);
 
-const dialogFormRef = ref<Components.DialogFormRef>();
+const dialogFormRef = ref<DialogFormRef>();
 
 // 输入表单信息
-const inputForm = reactive<Components.InputForm>({
+const inputForm = reactive<InputFormProps>({
     value: Object.assign({}, props.row, { roles: props.row?.roles ? props.row?.roles.split(",") : [] }),
     props: {
         disabled: props.actionType === HANDLE_CODES.VIEW
@@ -91,13 +91,13 @@ const inputForm = reactive<Components.InputForm>({
 });
 
 // 底部按钮列表
-const buttons = ref<Components.FormButton[]>([
+const buttons = ref<DialogFormButton[]>([
     {
-        text: "取消"
+        contents: "取消"
     },
     {
-        text: "保存",
-        props: { type: "primary" },
+        contents: "保存",
+        type: "primary",
         click: async function (inputFormValue) {
             await dialogFormRef.value?.validate();
             if (inputFormValue.roles) {
@@ -110,7 +110,7 @@ const buttons = ref<Components.FormButton[]>([
     }
 ]);
 // 表单字段变化
-const fieldValueChangeHandle = async function (field: Components.InputFormField, fieldValue: string, formFields: Components.InputFormField[], inputValue: Record<string, any>) {
+const fieldValueChangeHandle = async function (field: InputFormField, fieldValue: string, formFields: InputFormField[], inputValue: Record<string, any>) {
     if (field.name === "moduleCode") {
         // 所属模块数据变化
         inputValue.roles = [];

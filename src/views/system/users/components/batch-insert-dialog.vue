@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-01-02 14:41:33
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 15:05:10
- * @项目的路径: \vue-manager-system\src\views\system\users\components\batch-insert-dialog.vue
  * @描述: 批量新增用户弹窗
 -->
 <template>
@@ -179,7 +175,7 @@ const uploadInfo = reactive({
             label: "性别",
             prop: "gender",
             width: 80,
-            formatter: (row, column, cellValue) => {
+            formatter: (row: any, column: any, cellValue: string) => {
                 if (!cellValue) {
                     return "-";
                 } else if (cellValue === "1") {
@@ -230,7 +226,7 @@ const dialogClosed = function () {
 const downExcelTemplateHandle = function () {
     commonApi.download({
         type: "a",
-        url: require("@assets/templates/批量新增用户模板.xlsx"),
+        url: require("/templates/批量新增用户模板.xlsx"),
         fileName: "批量新增用户模板.xlsx"
     });
 };
@@ -300,7 +296,7 @@ const batchInsertHandle = async function () {
         uploadInfo.isLoading = true;
         await systemAPI.batchInsertUers(
             uploadInfo.dataList.map(item => {
-                const newItem = {};
+                const newItem: Record<string, any> = {};
                 uploadInfo.selectColumns.forEach(value => (newItem[value] = item[value]));
                 return newItem;
             })

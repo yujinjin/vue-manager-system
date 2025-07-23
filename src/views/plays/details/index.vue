@@ -1,16 +1,12 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2023-12-14 15:28:35
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-01-30 10:34:34
- * @项目的路径: \vue-manager-system\src\views\plays\details\index.vue
  * @描述: 详情页路由测试
 -->
 <template>
     <div class="play-details">
         <div class="params-box">
             <el-alert title="说明" description="这里是验证中台框架内部同一个页面但不同参数展示的内容，比如：菜单配置了多个订单详情页的入口" type="info" show-icon />
-            <img alt="Vue logo" src="@assets/logo.png" />
+            <img alt="Vue logo" src="/logo.png" />
             <el-form-item label-width="120" label="页面ID：">
                 <el-input v-model="inputForm.parameterId" placeholder="Please input" style="width: 350px" />
             </el-form-item>

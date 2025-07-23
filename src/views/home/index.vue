@@ -1,9 +1,5 @@
 <!--
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-12-19 14:21:12
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-07-31 14:55:10
- * @项目的路径: \vue-manager-system\src\views\home\index.vue
  * @描述: 中台主页
 -->
 <template>
@@ -27,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import type { System } from "/#/modules/system";
+import { type MenuTree } from "./menu-tree";
 import { computed, ref } from "vue";
 import { ElMessage } from "element-plus";
 import { type Router, useRouter } from "vue-router";
@@ -81,7 +77,7 @@ const toggleMenuCollapseStateHandle = function () {
 };
 
 // 查找菜单数据
-const findMenuById = function (menuList: System.MenuTree[], menuId: string): null | System.MenuTree {
+const findMenuById = function (menuList: MenuTree[], menuId: string): null | MenuTree {
     const findMenu = menuList.find(menuItem => menuId.startsWith(menuItem.id));
     if (!findMenu) {
         return null;
@@ -94,14 +90,14 @@ const findMenuById = function (menuList: System.MenuTree[], menuId: string): nul
 };
 
 // 初始化上次固定展示的页面列表
-const initLocalStoragePageViews = function (menuTreeData: System.MenuTree[]) {
+const initLocalStoragePageViews = function (menuTreeData: MenuTree[]) {
     const menuIdList = storage.getFixedMenuData();
 
     if (!menuIdList || menuIdList.length === 0) {
         return;
     }
 
-    const findMenuList: System.MenuTree[] = [];
+    const findMenuList: MenuTree[] = [];
 
     menuIdList.forEach(menuId => {
         const findMenu = findMenuById(menuTreeData, menuId);
@@ -128,7 +124,7 @@ const initLocalStoragePageViews = function (menuTreeData: System.MenuTree[]) {
 };
 
 // 侧边栏加载完成
-const sideBarLoadedHandle = function (menuTreeData: System.MenuTree[]) {
+const sideBarLoadedHandle = function (menuTreeData: MenuTree[]) {
     initLocalStoragePageViews(menuTreeData);
     if (pageViews.currentVisiteIndex !== 0) {
         pageViews.$patch({
@@ -172,7 +168,7 @@ const init = function () {
 init();
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .main {
     width: 100%;
     height: 100vh;

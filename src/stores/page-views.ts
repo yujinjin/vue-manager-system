@@ -1,26 +1,73 @@
 /**
  * 作者：yujinjin9@126.com
- * 时间：2022-02-28
  * 页面视图管理
  */
-import type { App } from "/#/app";
 import { defineStore } from "pinia";
 import { randomId } from "@yujinjin/utils";
 import { isExternalLink } from "@/utils/index";
-import { externalRoutePath, innerRoutePath } from "@/routers";
+import { externalRoutePath, innerRoutePath } from "@/utils/index";
+import logs from "@/services/logs";
+
+/** 访问的页面视图 */
+interface PageView {
+    /** 页面视图ID(自动生成唯一值) */
+    id: string;
+
+    /** 菜单ID(如果当前页面来自左边的菜单) */
+    menuId?: string;
+
+    /** 来自页面视图ID(如果当前页面通过已经点开的页面内部触发的) */
+    fromPageId?: string;
+
+    // 路由的名称(考虑到useRouter只能适用在组件setup里而且只是用来判断路由的keep alive，所以这里不在保存而是放在home里动态生成)
+    // routeName: string;
+
+    /** 当前页面路由地址 /#/XXX?menuId(来自菜单ID参数)|pageId（来自页面ID参数） */
+    routePath: string;
+
+    /** 页面的标题 */
+    title: string;
+
+    /** 页面实际全路径地址(如果当前页面是外部页面，指实际iframe的url地址) */
+    fullPath: string;
+
+    /** 是否是iframe页面 */
+    isIframe: boolean;
+
+    /** 是否固定展示(每次登录都自动展示出来，由于权限问题只能固定来自menuId的page) */
+    isFixed: boolean;
+}
+
+/** 页面菜单 */
+interface PageMenu {
+    /** 菜单ID */
+    id: string;
+
+    /** 菜单名称 */
+    name: string;
+
+    /** 菜单URL */
+    url: string;
+
+    /** 路由路径 */
+    routePath?: string;
+
+    /** 是否外链 */
+    externalLink?: boolean;
+}
 
 export default defineStore("pageViews", {
     state: () => ({
         currentVisiteIndex: 0, // 当前正在访问的页面视图索引
-        visitedViews: [] as App.PageView[], // 当前已经访问的页面视图列表
+        visitedViews: [] as PageView[], // 当前已经访问的页面视图列表
         excludeCacheViewNames: [] as string[] // 排除不用缓存视图的名称列表
     }),
     actions: {
         /**
          * 通过点击菜单打开页面路由
-         * @param object { id: 菜单ID, name: 菜单名称, url: 菜单URL, routePath: 路由路径, externalLink: 是否外链 }
+         * @param pageMenu { id: 菜单ID, name: 菜单名称, url: 菜单URL, routePath: 路由路径, externalLink: 是否外链 }
          */
-        openPageByMenu({ id, name, url, routePath = "", externalLink = false }: { id: string; name: string; url: string; routePath?: string; externalLink?: boolean }) {
+        openPageByMenu({ id, name, url, routePath = "", externalLink = false }: PageMenu) {
             const findVisiteIndex = this.visitedViews.findIndex(item => item.menuId === id);
             if (findVisiteIndex === -1) {
                 if (!routePath) {
@@ -32,7 +79,7 @@ export default defineStore("pageViews", {
                         routePath = innerRoutePath(url, { menuId: id });
                     }
                 }
-                const pageView: App.PageView = {
+                const pageView: PageView = {
                     id: randomId(),
                     menuId: id,
                     routePath,
@@ -66,7 +113,7 @@ export default defineStore("pageViews", {
                 this.currentVisiteIndex = this.visitedViews.findIndex(item => item.id === pageId);
                 return;
             }
-            const pageView: App.PageView = {
+            const pageView: PageView = {
                 id: pageId || randomId(),
                 fromPageId,
                 routePath: "",

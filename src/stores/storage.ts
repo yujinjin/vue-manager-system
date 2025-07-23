@@ -1,15 +1,34 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2022-12-05 16:24:22
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-22 12:03:02
- * @项目的路径: \vue-manager-system\src\stores\storage.ts
  * @描述: 本地存储数据管理
  */
-import type { App } from "/#/app";
 import { defineStore } from "pinia";
 import { getValue, setValue } from "@/services/local-storage";
 import { randomId } from "@yujinjin/utils";
+
+/** 当前登录用户信息 */
+interface LoginUserInfo {
+    /** 登录用户号 */
+    userName: string;
+
+    /** 手机号 */
+    phoneNumber: string;
+
+    /** 邮箱 */
+    email: string;
+
+    /** 头像 */
+    avatar: string;
+
+    /** 性别 */
+    gender: string;
+
+    /** 过期时间 */
+    expiredTime: number;
+
+    /** 用户授权码 */
+    authAccessCode: string;
+}
 
 export default defineStore("storage", {
     // 把本地存储放在缓存里的数据
@@ -18,7 +37,7 @@ export default defineStore("storage", {
             // 页面路由数据（页面URL传参内容太大会有限制，这里临时存储到sessionStorage到另外一个页面取用）
             pageRouteDatas: getValue("pageRouteDatas", 1) || {},
             // 当前用户登录信息
-            loginUserInfo: <App.LoginUserInfo>{
+            loginUserInfo: <LoginUserInfo>{
                 // isLogin: false, // 是否登录
                 userName: "", // 用户名
                 phoneNumber: "", // 手机号
@@ -29,11 +48,13 @@ export default defineStore("storage", {
                 expiredTime: -1 // 过期时间
             },
             // 侧边菜单栏的折叠状态
-            menuCollapseState: getValue("menuCollapseState") || false,
+            menuCollapseState: getValue("menuCollapseState") || false
+            /*****
             // 示例数据1(简单获取)
             exampleData1: getValue("exampleData1", 1) as any,
             // 示例数据3(带有过期时间，需要走getters判断)
             exampleData3: getValue("exampleData3") as any
+            ****/
         };
     },
     actions: {
@@ -42,7 +63,7 @@ export default defineStore("storage", {
             return JSON.parse(JSON.stringify(this.pageRouteDatas[id]));
         },
         // 存储页面路由数据, 返回一个随机ID作为唯一标识
-        setPageRouteData(data) {
+        setPageRouteData(data: Record<string, any> | Array<Record<string, any>> | string) {
             const id = randomId();
             this.pageRouteDatas[id] = JSON.parse(JSON.stringify(data));
             setValue("pageRouteDatas", this.pageRouteDatas, 1);
@@ -137,7 +158,8 @@ export default defineStore("storage", {
         setTryReloadTimeValue() {
             // 设置30 分钟后才可以尝试重新刷新页面
             setValue("tryReloadTime", Date.now() + 30 * 60 * 1000, 1);
-        },
+        }
+        /**
         // 存储示例数据1-简单存储, 如果value 为 undefined|''|null时会删除本地存储
         setExampleData1(value: any) {
             if (value === undefined) {
@@ -152,7 +174,7 @@ export default defineStore("storage", {
             return getValue("exampleData2");
         },
         // 存储示例数据2-简单存储, 如果value 为 undefined|''|null时会删除本地存储
-        setExampleData2(value) {
+        setExampleData2(value?: any) {
             if (value === undefined) {
                 value = null;
             }
@@ -167,7 +189,7 @@ export default defineStore("storage", {
             return null;
         },
         // 存储示例数据3-加入过期时间, 如果value 为 undefined|''|null时会删除本地存储
-        setExampleData3(value) {
+        setExampleData3(value?: any) {
             if (value === undefined || value === null || value === "") {
                 setValue("exampleData3");
                 this.exampleData3 = null;
@@ -187,7 +209,7 @@ export default defineStore("storage", {
             return null;
         },
         // 存储示例数据4-加入过期时间(这里不做缓存), 如果value 为 undefined|''|null时会删除本地存储
-        setExampleData4(value) {
+        setExampleData4(value?: any) {
             if (value === undefined || value === null || value === "") {
                 setValue("exampleData4");
             } else {
@@ -198,5 +220,6 @@ export default defineStore("storage", {
                 });
             }
         }
+        */
     }
 });

@@ -1,12 +1,8 @@
 /*
  * @创建者: yujinjin9@126.com
- * @创建时间: 2024-03-07 17:51:26
- * @最后修改作者: yujinjin9@126.com
- * @最后修改时间: 2024-03-07 18:02:04
- * @项目的路径: \vue-manager-system\src\mock\demo.ts
  * @描述: demo 模块mock数据
  */
-import Mock from "mockjs";
+import Mock, { type MockjsRequestOptions } from "mockjs";
 import wrapResponse from "./wrap-response";
 
 export default [
@@ -166,14 +162,14 @@ export default [
                         }
                     }
                 ]
-            })
+            });
         }
     },
     // demo订单分页查询
     {
         url: "/demo/queryPageOrderList",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const pageSize = parseInt(body.pageSize || "50", 10);
             return wrapResponse({
                 "total|10-1000": 0,
@@ -193,8 +189,10 @@ export default [
                         "orderStatus|1": [-1, -6, -7, -5, 10, 20, 30, 40, 50], // 订单状态
                         "goodsNumber|1-20": 1, // 商品数量
                         "goodsImgs": function () {
-                            // @ts-ignore
-                            return Mock.Random.shuffle(new Array(20).fill(0).map(() => Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5))), 1, this.goodsNumber).join(",");
+                            return new Array(this.goodsNumber)
+                                .fill(0)
+                                .map(() => Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5)))
+                                .join(",");
                         }, // 商品图片
                         "buyerId": "UR@string('number', 12)", // 购买人ID（用户ID）
                         "buyerName": "@cname()", // 购买人名称（真实姓名|昵称）
@@ -202,7 +200,7 @@ export default [
                         "receiver": "@cname()", // 收货人
                         "receiverMobileNumber": /1[3456789]\d{9}/, // 收货电话
                         "remark": "@csentence(0, 100)", // 备注
-                        "payTime": function (){
+                        "payTime": function () {
                             return Mock.mock("@boolean(1, 4, false)") ? new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000) : null;
                         }, // 付款时间
                         "createTime": function () {
@@ -210,14 +208,14 @@ export default [
                         } // 创建时间
                     }
                 ]
-            })
+            });
         }
     },
     // demo 查询订单详情
     {
         url: "/demo/queryOrderDetails",
         type: "get",
-        data: function ({ body }) {
+        data: function ({ body }: MockjsRequestOptions) {
             const orderNo = body.orderNo;
             return wrapResponse({
                 "orderNo": orderNo,
@@ -242,7 +240,10 @@ export default [
                     name: Mock.Random.ctitle(), // 商品名称
                     img: Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5)), // 商品图片
                     code: Mock.Random.string("upper", 4) + Mock.Random.string("number", 5), // 商品CODE
-                    specs: new Array(Mock.Random.integer(1, 4)).fill(0).map(() => Mock.mock("@cword(2, 6)")).join(";"), // 规格
+                    specs: new Array(Mock.Random.integer(1, 4))
+                        .fill(0)
+                        .map(() => Mock.mock("@cword(2, 6)"))
+                        .join(";"), // 规格
                     price: Mock.Random.float(1, 1000, 3), // 商品金额
                     quantity: Mock.Random.integer(1, 4), // 商品数量
                     discountPriceInYuan: Mock.Random.float(1, 10), // 优惠金额（元）
@@ -260,7 +261,10 @@ export default [
                     goodsList: new Array(Mock.Random.integer(1, 3)).fill(0).map(() => ({
                         name: Mock.Random.ctitle(), // 商品名称
                         img: Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5)), // 商品图片
-                        specs: new Array(Mock.Random.integer(1, 4)).fill(0).map(() => Mock.mock("@cword(2, 6)")).join(";"), // 规格
+                        specs: new Array(Mock.Random.integer(1, 4))
+                            .fill(0)
+                            .map(() => Mock.mock("@cword(2, 6)"))
+                            .join(";"), // 规格
                         code: Mock.Random.string("upper", 4) + Mock.Random.string("number", 5), // 商品CODE
                         quantity: Mock.Random.integer(1, 4) // 商品数量
                     })) // 商品列表
@@ -268,19 +272,25 @@ export default [
                 "afterSalesList": new Array(Mock.Random.integer(0, 2)).fill(0).map(() => ({
                     type: Mock.Random.pick(["退款退货", "全部退款", "部分退款", "部分退款退货", "换货", "部分换货"]),
                     createTime: new Date().getTime() - Mock.Random.integer(0, 30 * 24 * 60 * 60 * 1000), // 创建时间
-                    logisticsNumbers: new Array(Mock.Random.integer(1, 3)).fill(0).map(() => "WL" + Mock.Random.string("number", 10)).join(","), // 涉及物流单号
+                    logisticsNumbers: new Array(Mock.Random.integer(1, 3))
+                        .fill(0)
+                        .map(() => "WL" + Mock.Random.string("number", 10))
+                        .join(","), // 涉及物流单号
                     refundAmount: Mock.Random.float(0, 1000, 3), // 退款金额
                     reason: Mock.Random.pick(["商品质量有问题", "商品快递过程中损坏", "买错规格", "颜色有问题", "其他"]), // 原因
-                    remark: Mock.Random.ctitle(),// 用户备注
+                    remark: Mock.Random.ctitle(), // 用户备注
                     goodsList: new Array(Mock.Random.integer(0, 3)).fill(0).map(() => ({
                         name: Mock.Random.ctitle(), // 商品名称
                         img: Mock.Random.image("200x200", Mock.Random.color(), "#FFF", "png", Mock.Random.string("upper", 2, 5)), // 商品图片
-                        specs: new Array(Mock.Random.integer(1, 4)).fill(0).map(() => Mock.mock("@cword(2, 6)")).join(";"), // 规格
+                        specs: new Array(Mock.Random.integer(1, 4))
+                            .fill(0)
+                            .map(() => Mock.mock("@cword(2, 6)"))
+                            .join(";"), // 规格
                         code: Mock.Random.string("upper", 4) + Mock.Random.string("number", 5), // 商品CODE
                         quantity: Mock.Random.integer(1, 4) // 商品数量
                     })) // 商品列表
                 })) // 售后信息列表
-            })
+            });
         }
     },
     // 批量修改订单状态
