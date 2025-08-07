@@ -3,7 +3,9 @@
         <template #remark="{ formValue }">
             <web-editor v-model="formValue.remark">
                 <el-tooltip content="全屏源码编辑">
-                    <svg-icon @click.stop.prevent="toggleHtmlEditorDialogShowStatus(true)" class="full-screen-icon" value="full-screen" />
+                    <i class="svg-icon full-screen-icon" @click.stop.prevent="toggleHtmlEditorDialogShowStatus(true)">
+                        <icon-full-screen />
+                    </i>
                 </el-tooltip>
             </web-editor>
         </template>
@@ -16,6 +18,7 @@ import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import demoAPI from "@api/demo";
 import htmlEditorDialog from "@views/components/html-editor-dialog.vue";
+import { IconFullScreen } from "@/components/icon-svg";
 
 defineProps({
     // 是否显示弹窗
@@ -103,7 +106,8 @@ const inputForm = reactive<InputFormProps>({
             props: {
                 uploadProps: {
                     multiple: true
-                }
+                },
+                uploadRequest: () => ""
             }
         },
         {

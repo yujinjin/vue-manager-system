@@ -4,6 +4,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import svgLoader from "vite-svg-loader";
+// import createSvgSpritePlugin from "vite-plugin-svg-sprite";
 
 export default defineConfig(({ mode }) => {
     const isDev = process.env.NODE_ENV === "development" || mode === "dev";
@@ -27,8 +28,21 @@ export default defineConfig(({ mode }) => {
             VITE_APP_PROJECT_CONTENT_PATH: JSON.stringify(PROJECT_CONTENT_PATH),
             VITE_MOCK_DATA: JSON.stringify(process.env.MOCK_DATA || "0")
         },
+        // 配置monaco-editor
+        optimizeDeps: {
+            include: ["monaco-editor"]
+        },
         // plugins,
-        plugins: [vue(), vueJsx(), svgLoader()],
+        plugins: [
+            vue(),
+            vueJsx(),
+            // createSvgSpritePlugin({
+            //     symbolId: "icon-[name]"
+            // })
+            svgLoader({
+                defaultImport: "component"
+            })
+        ],
         esbuild: {
             drop: isDev ? [] : ["console", "debugger"]
         },
@@ -50,9 +64,9 @@ export default defineConfig(({ mode }) => {
                     assetFileNames: assetInfo => {
                         if (assetInfo.names[0]?.endsWith(".css")) {
                             return "assets/style/[name]-[hash].[ext]";
-                        } else if (assetInfo.names[0]?.endsWith(".eot") || assetInfo.names[0]?.endsWith(".svg") || assetInfo.names[0]?.endsWith(".ttf") || assetInfo.names[0]?.endsWith(".woff")) {
+                        } else if (/\.(eot|svg|ttf|woff|woff2)$/.test(assetInfo.names[0])) {
                             return "assets/fonts/[name]-[hash].[ext]";
-                        } else if (assetInfo.names[0]?.endsWith(".png") || assetInfo.names[0]?.endsWith(".jpg") || assetInfo.names[0]?.endsWith(".jpeg") || assetInfo.names[0]?.endsWith(".gif")) {
+                        } else if (/\.(png|jpg|jpeg|gif|webp|bmp|svga|apng|tif)$/.test(assetInfo.names[0])) {
                             return "assets/images/[name]-[hash].[ext]";
                         }
                         return "assets/[ext]/[name]-[hash].[ext]";
@@ -82,5 +96,12 @@ export default defineConfig(({ mode }) => {
                 }
             }
         }
+        // worker: {
+        //     rollupOptions: {
+        //         output: {
+        //             chunkFileNames: "assets/js/monaco-editor/worker-[name]-[hash].js"
+        //         }
+        //     }
+        // }
     };
 });

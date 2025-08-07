@@ -15,8 +15,35 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, reactive, watch } from "vue";
+import { onMounted, onUnmounted, ref, reactive, watch, nextTick } from "vue";
+import { useDebounceFn } from "@vueuse/core";
 import * as monacoEditor from "monaco-editor";
+// 导入各个语言的Worker
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
+import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
+import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
+import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
+import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
+
+// 配置Worker工厂
+self.MonacoEnvironment = {
+    getWorker(_, label) {
+        if (label === "json") {
+            return new jsonWorker();
+        }
+        if (label === "css" || label === "scss" || label === "less") {
+            return new cssWorker();
+        }
+        if (label === "html" || label === "handlebars" || label === "razor") {
+            return new htmlWorker();
+        }
+        if (label === "typescript" || label === "javascript") {
+            return new tsWorker();
+        }
+        // 默认使用编辑器Worker
+        return new editorWorker();
+    }
+};
 
 // 双向绑定的value
 const modelValue = defineModel({ type: String, default: "" });
@@ -50,8 +77,10 @@ let startSplit = 0;
 // 编辑器示例
 let editorInstance: monacoEditor.editor.IStandaloneCodeEditor | null = null;
 
+let isValueChanging = false;
+
 watch(modelValue, newValue => {
-    if (editorInstance && newValue !== editorInstance.getValue()) {
+    if (!isValueChanging && editorInstance && newValue !== editorInstance.getValue()) {
         editorInstance.setValue(newValue);
         previewIFrameRef.value!.contentWindow!.document.body.innerHTML = modelValue.value;
     }
@@ -146,9 +175,17 @@ onMounted(() => {
         // lineNumbers: "off" // 隐藏控制行号
     });
 
-    editorInstance.onDidChangeModelContent(() => {
+    const debouncedFn = useDebounceFn(() => {
         modelValue.value = editorInstance!.getValue();
-        previewIFrameRef.value!.contentWindow!.document.body.innerHTML = modelValue.value;
+        previewIFrameRef.value!.contentWindow!.document.body.innerHTML = editorInstance!.getValue();
+        nextTick(() => {
+            isValueChanging = false;
+        });
+    }, 100);
+
+    editorInstance.onDidChangeModelContent(() => {
+        isValueChanging = true;
+        debouncedFn();
     });
 
     if (modelValue.value) {

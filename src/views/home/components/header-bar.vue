@@ -6,11 +6,15 @@
     <div class="header-bar">
         <div class="left-inner">
             <div class="logo-box">
-                <svg-icon class="logo" value="vue-logo" />
+                <i class="svg-icon">
+                    <icon-vue-logo />
+                </i>
             </div>
             <div class="title-text">中台内容管理系统</div>
             <div class="icon-box" @click="toggleMenuCollapseState">
-                <svg-icon :class="{ actived: menuCollapseState }" value="fold" />
+                <i class="svg-icon" :class="{ actived: menuCollapseState }">
+                    <icon-fold />
+                </i>
             </div>
         </div>
         <div class="center-inner">
@@ -67,6 +71,7 @@ import { transitRoutePath } from "@/utils/index";
 import messages from "./messages.vue";
 import loginInfoDialog from "./login-info-dialog.vue";
 import updatePasswordDialog from "./update-password-dialog.vue";
+import { IconFold, IconVueLogo } from "@/components/icon-svg";
 
 const props = defineProps({
     menuCollapseState: {
@@ -153,9 +158,13 @@ const loginUserCommandHandle = function (command: string) {
         .logo-box {
             width: 60px;
             text-align: center;
-            :deep(.svg-icon) {
+            i {
                 height: 44px;
                 width: 44px;
+                svg {
+                    height: 44px;
+                    width: 44px;
+                }
             }
         }
 

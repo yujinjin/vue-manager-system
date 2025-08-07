@@ -6,7 +6,9 @@
     <el-dialog v-model="dialogVisible" appendToBody destroyOnClose fullscreen :show-close="false" class="html-editor-dialog" @closed="dialogClosed">
         <template #header>
             <span>{{ title }}</span>
-            <svg-icon @click="dialogClosed" value="exit-full-screen" />
+            <i class="svg-icon" @click="dialogClosed">
+                <icon-exit-full-screen />
+            </i>
         </template>
         <html-editor v-model="modelValue" />
     </el-dialog>
@@ -14,6 +16,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import htmlEditor from "./html-editor.vue";
+import { IconExitFullScreen } from "@/components/icon-svg";
 
 defineProps({
     title: {

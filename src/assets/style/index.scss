@@ -83,7 +83,7 @@ ul {
     text-overflow: ellipsis;
     overflow: hidden;
     -webkit-box-orient: vertical;
-    line-clamp: 1;
+    -webkit-line-clamp: 1;
 }
 
 a {
@@ -93,6 +93,25 @@ a {
 
 div {
     display: block;
+}
+
+i.svg-icon {
+    --color: inherit;
+    height: 1em;
+    width: 1em;
+    line-height: 1em;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    fill: currentColor;
+    color: var(--color);
+    font-size: inherit;
+
+    svg {
+        height: 1em;
+        width: 1em;
+    }
 }
 
 /**************************** 自定义dialog样式 start *********************************/

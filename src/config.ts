@@ -66,7 +66,7 @@ export default <Config>{
     webApiDomain: import.meta.env.VITE_APP_API_DOMAIN,
 
     /** 资源服务站点的地址 */
-    resourceDomain: import.meta.env.VITE_APP_API_DOMAIN,
+    resourceDomain: import.meta.env.VITE_APP_RESOURCE_DOMAIN,
 
     /** 上传服务站点的地址 */
     uploadDomain: import.meta.env.VITE_APP_UPLOAD_DOMAIN

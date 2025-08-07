@@ -32,16 +32,18 @@
     "typescript.updateImportsOnFileMove.enabled": "always",
     "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
     "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
-    "vetur.format.options.tabSize": 4,
-    "vetur.format.defaultFormatter.html": "js-beautify-html",
-    "vetur.format.defaultFormatter.js": "prettier",
-    "vetur.format.defaultFormatterOptions": {
-        "js-beautify-html": {
-            "wrap_line_length": 200,
-            "wrap_attributes": "auto",
-            "end_with_newline": false
-        }
-    },
+    // 禁用 Vetur 的所有功能
+    "vetur.enable": false,
+    // 启用 Volar 的功能
+    "volar.enable": true,
+    // 自动补全 ref() 语法糖
+    "volar.autoCompleteRefs": true,
+    // 自动导入组件
+    "volar.autoImportComponent": true,
+    // 启用组件名称补全的前缀匹配（如输入 "Btn" 匹配 "BaseButton"）
+    "volar.completion.prefixMatching": true,
+    // 控制是否在自动补全中显示导入建议
+    "volar.completion.showAutoImportSuggestions": true,
     "[vue]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },

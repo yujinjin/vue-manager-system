@@ -56,7 +56,7 @@ const copyTextHandle = async function () {
         text-overflow: ellipsis;
         overflow: hidden;
         -webkit-box-orient: vertical;
-        line-clamp: 1;
+        -webkit-line-clamp: 1;
     }
 
     .icon-box {

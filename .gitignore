@@ -18,5 +18,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-/index.html
 /package-lock.json
