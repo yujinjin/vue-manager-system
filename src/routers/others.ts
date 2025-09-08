@@ -3,7 +3,7 @@
  * @描述: 其他页面路由
  */
 
-import type { RouteRecordRaw } from "vue-router";
+import { type RouteRecordRaw } from "vue-router";
 
 export default <Array<RouteRecordRaw>>[
     {

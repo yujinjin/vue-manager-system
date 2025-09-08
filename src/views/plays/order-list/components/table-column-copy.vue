@@ -2,7 +2,7 @@
     <div class="table-column-copy">
         <span class="text">{{ value || "-" }}</span>
         <el-tooltip v-if="value" effect="dark" :content="copyTips">
-            <div class="icon-box" ref="elIconRef">
+            <div ref="elIconRef" class="icon-box">
                 <el-icon @click="copyTextHandle">
                     <DocumentCopy />
                 </el-icon>
@@ -18,7 +18,8 @@ import { ElMessage } from "element-plus";
 
 const props = defineProps({
     value: {
-        type: String
+        type: String,
+        default: ""
     },
     copyTips: {
         type: String,

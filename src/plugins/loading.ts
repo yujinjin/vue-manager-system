@@ -2,11 +2,10 @@
  * @创建者: yujinjin9@126.com
  * @描述：封装第三方加载插件，由于Loading的加载是单例的，所以这里要做到如果被多次调用显示，以最后一次的close才真正关闭
  */
-import logs from "@/services/logs";
 import { type LoadingOptions, ElLoading } from "element-plus";
-import type { LoadingInstance } from "element-plus/lib/components/loading/src/loading";
+import logs from "@/services/logs";
 
-let loadingInstance: LoadingInstance | null = null;
+let loadingInstance: any = null;
 let showTimes = 0;
 
 export default {

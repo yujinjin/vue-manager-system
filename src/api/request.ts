@@ -2,10 +2,10 @@
  * 作者：yujinjin9@126.com
  * 描述：交互式数据请求
  */
-import type { AxiosRequestHeaders, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import { type AxiosRequestHeaders, type AxiosRequestConfig, type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from "axios";
 import axios from "axios";
-import loading from "@/plugins/loading";
 import { ElMessage } from "element-plus";
+import loading from "@/plugins/loading";
 import config from "@/config";
 import logs from "@/services/logs";
 

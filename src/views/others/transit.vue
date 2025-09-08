@@ -7,9 +7,8 @@
 </template>
 <script setup lang="ts">
 import { nextTick } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { pageViewsStore } from "@/stores";
-import { useRoute } from "vue-router";
 
 // 全局路由对象
 const router = useRouter();

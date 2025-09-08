@@ -3,15 +3,16 @@
  * @描述: 站内信详细内容查看
 -->
 <template>
-    <dialog-form ref="dialogFormRef" :isShow="true" :inputFormProps="inputForm" :dialogProps="{ title: '查看站内信', width: '600px' }" @close="emits('close')" />
+    <dialog-form ref="dialogFormRef" :is-show="true" :input-form-props="inputForm" :dialog-props="{ title: '查看站内信', width: '600px' }" @close="emits('close')" />
 </template>
 <script setup lang="ts">
-import type { InputFormProps } from "@yujinjin/cms-components";
+import { type InputFormProps } from "@yujinjin/cms-components";
 import { reactive } from "vue";
 
 const props = defineProps({
     messageInfo: {
-        type: Object
+        type: Object,
+        default: () => ({})
     }
 });
 

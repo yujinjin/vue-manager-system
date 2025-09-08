@@ -2,8 +2,8 @@
  * @创建者: yujinjin9@126.com
  * @描述: 站点本地存储信息
  */
-import config from "@/config";
 import logs from "./logs";
+import config from "@/config";
 
 class AppStorage {
     /** 本地存储的应用名称 */

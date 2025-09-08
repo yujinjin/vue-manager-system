@@ -24,9 +24,9 @@
                     </li>
                 </ul>
                 <el-upload
-                    class="upload-excel"
                     ref="uploadExcelRef"
                     v-model:file-list="uploadInfo.fileList"
+                    class="upload-excel"
                     action="#"
                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                     :auto-upload="false"
@@ -38,7 +38,8 @@
                         <el-button type="primary">选择文件</el-button>
                     </template>
                 </el-upload>
-                <el-alert title="异常提示" type="error" show-icon v-if="uploadInfo.uploadErrorMessage">
+                <el-alert v-if="uploadInfo.uploadErrorMessage" title="异常提示" type="error" show-icon>
+                    <!-- eslint-disable-next-line vue/no-v-html -->
                     <div class="content" v-html="uploadInfo.uploadErrorMessage"></div>
                 </el-alert>
             </div>
@@ -58,7 +59,7 @@
                 </div>
             </div>
             <el-table :data="uploadInfo.dataList" border stripe style="width: 100%" max-height="300">
-                <el-table-column v-bind="column" :key="index" v-for="(column, index) in uploadInfo.tableColumnList">
+                <el-table-column v-for="(column, index) in uploadInfo.tableColumnList" v-bind="column" :key="index">
                     <template #header>
                         {{ column.label }}
                         <el-checkbox :checked="uploadInfo.selectColumns.includes(column.prop)" @change="value => toggleCheckColumn(column.prop, value)" />
@@ -77,10 +78,11 @@
                 <el-icon><CircleCloseFilled /></el-icon>
                 <div class="fail-tips">
                     <div class="title-text">异常提示</div>
+                    <!-- eslint-disable-next-line vue/no-v-html -->
                     <div class="subtitle-text" v-html="uploadInfo.batchInsertErrorMessage"></div>
                 </div>
             </div>
-            <div class="succes-box" v-else>
+            <div v-else class="succes-box">
                 <el-icon><SuccessFilled /></el-icon>
                 <div class="title-text">批量导入完成</div>
                 <div class="subtitle-text">
@@ -126,6 +128,7 @@ import { Upload, Histogram, Finished, Warning, SuccessFilled, CircleCloseFilled 
 import commonApi from "@/api/common";
 import systemAPI from "@api/system";
 import virtuallyProgress from "@views/components/virtually-progress.vue";
+import templateFile from "/templates/批量新增菜单模板.xlsx?url";
 
 const props = defineProps({
     isShow: {
@@ -191,14 +194,6 @@ const uploadInfo = reactive({
     batchInsertErrorMessage: "" // 批量新增失败错误信息
 });
 
-watch(
-    () => uploadInfo.fileList[0]?.uid,
-    () => {
-        // 文件变化，重新初始化
-        init();
-    }
-);
-
 // 初始化
 const init = function () {
     uploadInfo.step = 1;
@@ -217,7 +212,7 @@ const dialogClosed = function () {
 const downExcelTemplateHandle = function () {
     commonApi.download({
         type: "a",
-        url: require("/templates/批量新增菜单模板.xlsx"),
+        url: templateFile,
         fileName: "批量新增菜单模板.xlsx"
     });
 };
@@ -303,6 +298,14 @@ const batchInsertHandle = async function () {
 const againUploadHandle = function () {
     uploadInfo.fileList = [];
 };
+
+watch(
+    () => uploadInfo.fileList[0]?.uid,
+    () => {
+        // 文件变化，重新初始化
+        init();
+    }
+);
 </script>
 <style lang="scss" scoped>
 .upload-excel-panel {

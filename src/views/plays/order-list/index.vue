@@ -3,7 +3,7 @@
  * @描述: 订单查询页面
 -->
 <template>
-    <search-page v-bind="searchConfigData" ref="searchPageRef" @selectRowsChange="selectRowsChangeHandle">
+    <search-page v-bind="searchConfigData" ref="searchPageRef" @select-rows-change="selectRowsChangeHandle">
         <template #dataTable_orderNo="{ row }">
             <table-column-copy :value="row.orderNo" />
         </template>
@@ -53,36 +53,36 @@
         </template>
         <customer-column-dialog
             :is-show="isShowCustomerColumnDialog"
-            :tableColumns="searchConfigData.dataTableProps.columns"
-            localStorageKey="orderListCustomerColumns"
-            localStorageKeyVersion="2.0"
+            :table-columns="searchConfigData.dataTableProps.columns"
+            local-storage-key="orderListCustomerColumns"
+            local-storage-key-version="2.0"
             @close="isShowCustomerColumnDialog = false"
             @save="saveColumnShowStatusHandle"
         />
         <view-order-details-dialog v-if="isShowViewOrderDetailsDialog" :row="selectedRow" @close="isShowViewOrderDetailsDialog = false" />
         <excel-export-dialog
-            :isShow="isShowExcelExportDialog"
-            :searchFields="searchConfigData.searchFormProps.fields"
-            :tableColumns="searchConfigData.dataTableProps.columns"
-            :searchFormValue="searchFormValue"
+            :is-show="isShowExcelExportDialog"
+            :search-fields="searchConfigData.searchFormProps.fields"
+            :table-columns="searchConfigData.dataTableProps.columns"
+            :search-form-value="searchFormValue"
             @close="isShowExcelExportDialog = false"
         />
-        <add-or-update-form-dialog v-if="isShowAddOrUpdateFormDialog" v-model:isShow="isShowAddOrUpdateFormDialog" @refresh="refreshHandle" />
+        <add-or-update-form-dialog v-if="isShowAddOrUpdateFormDialog" v-model:is-show="isShowAddOrUpdateFormDialog" @refresh="refreshHandle" />
     </search-page>
 </template>
 <script setup lang="ts">
-import type { SearchPageRef, TableButton } from "@yujinjin/cms-components";
+import { type SearchPageRef, type TableButton } from "@yujinjin/cms-components";
 import { ref, reactive, nextTick } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
-import { HANDLE_CODES } from "@/services/constants";
 import searchConfig from "./search-config";
-import demoAPI from "@api/demo";
-import customerColumnDialog from "@views/components/customer-column-dialog.vue";
 import tableColumnCopy from "./components/table-column-copy.vue";
 import viewOrderDetailsDialog from "./components/view-order-details-dialog.vue";
 import excelExportDialog from "./components/excel-export-dialog.vue";
 import addOrUpdateFormDialog from "./components/add-or-update-form-dialog.vue";
+import customerColumnDialog from "@views/components/customer-column-dialog.vue";
+import demoAPI from "@api/demo";
+import { HANDLE_CODES } from "@/services/constants";
 
 // search page 组件
 const searchPageRef = ref<SearchPageRef>();

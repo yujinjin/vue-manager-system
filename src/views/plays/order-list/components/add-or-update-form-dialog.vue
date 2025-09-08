@@ -1,5 +1,12 @@
 <template>
-    <dialog-form ref="dialogFormRef" :isShow="isShow" :buttons="buttons" :inputFormProps="inputForm" :dialogProps="{ title: '新增订单数据', width: '800px' }" @close="emits('update:isShow', false)">
+    <dialog-form
+        ref="dialogFormRef"
+        :is-show="isShow"
+        :buttons="buttons"
+        :input-form-props="inputForm"
+        :dialog-props="{ title: '新增订单数据', width: '800px' }"
+        @close="emits('update:isShow', false)"
+    >
         <template #remark="{ formValue }">
             <web-editor v-model="formValue.remark">
                 <el-tooltip content="全屏源码编辑">
@@ -10,10 +17,10 @@
             </web-editor>
         </template>
     </dialog-form>
-    <html-editor-dialog v-if="isShowHtmlEditorDialog" @close="toggleHtmlEditorDialogShowStatus(false)" v-model="htmlEditorValue" />
+    <html-editor-dialog v-if="isShowHtmlEditorDialog" v-model="htmlEditorValue" @close="toggleHtmlEditorDialogShowStatus(false)" />
 </template>
 <script setup lang="ts">
-import type { DialogFormRef, InputFormProps, DialogFormButton } from "@yujinjin/cms-components";
+import { type DialogFormRef, type InputFormProps, type DialogFormButton } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import demoAPI from "@api/demo";

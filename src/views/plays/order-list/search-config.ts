@@ -2,11 +2,11 @@
  * @创建者: yujinjin9@126.com
  * @描述: 订单查询配置
  */
-import type { DataTableColumn, SearchFormField, ActionBarProps } from "@yujinjin/cms-components";
+import { type DataTableColumn, type SearchFormField, type ActionBarProps } from "@yujinjin/cms-components";
 import dayjs from "dayjs";
+import { DEVICE_SOURCE_ENUM, ORDER_STATUS_ENUM } from "./constants";
 import demoAPI from "@api/demo";
 import { HANDLE_CODES } from "@/services/constants";
-import { DEVICE_SOURCE_ENUM, ORDER_STATUS_ENUM } from "./constants";
 
 export default function ({ showDialogHandle, excelExportHandle, cancelOrderHandle, orertReportData }: any) {
     return {

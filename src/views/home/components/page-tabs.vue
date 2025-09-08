@@ -3,14 +3,14 @@
         <div v-if="isShowScrollDirection" class="icon-box" @click="scrollTo('left')">
             <el-icon><ArrowLeft /></el-icon>
         </div>
-        <div class="page-tabs" ref="pageTabsRef">
+        <div ref="pageTabsRef" class="page-tabs">
             <div class="page-tabs-inner">
                 <div
-                    class="page-tab"
-                    :class="{ actived: pageViews.currentVisiteIndex === index, fixed: item.isFixed }"
                     v-for="(item, index) in pageViews.visitedViews"
                     :key="item.id"
                     ref="pageTabRefs"
+                    class="page-tab"
+                    :class="{ actived: pageViews.currentVisiteIndex === index, fixed: item.isFixed }"
                     @click="showPageTab(index)"
                     @contextmenu.stop.prevent="showContextmenuHandle(index)"
                 >
@@ -25,11 +25,11 @@
     </div>
     <el-popover
         v-if="pageTabRefs[tabMenuPopover.tabIndex]"
+        v-model:visible="tabMenuPopover.isShow"
         virtual-triggering
         :virtual-ref="pageTabRefs[tabMenuPopover.tabIndex]"
         :disabled="!tabMenuPopover.isShow"
         popper-class="page-tab-menu-popper"
-        v-model:visible="tabMenuPopover.isShow"
     >
         <div class="page-tab-menu" @click="tabMenuPopover.isShow = false">
             <div class="menu-item" @click="refreshPage(tabMenuPopover.tabIndex)">刷新</div>
@@ -51,13 +51,13 @@
     </el-popover>
 </template>
 <script setup lang="ts">
-import type { Router } from "vue-router";
-import type { BScrollConstructor } from "@better-scroll/core/dist/types/BScroll";
+import { type Router } from "vue-router";
+import { type BScrollConstructor } from "@better-scroll/core/dist/types/BScroll";
 import BScroll from "@better-scroll/core";
 import MouseWheel from "@better-scroll/mouse-wheel";
 import { ArrowLeft, Close, ArrowRight } from "@element-plus/icons-vue";
-import { computed, watch } from "vue";
-import { onMounted, onUnmounted, reactive, ref, nextTick } from "vue";
+import { computed, watch, onMounted, onUnmounted, reactive, ref, nextTick } from "vue";
+
 import { debounce } from "@yujinjin/utils";
 import { useRouter, useRoute } from "vue-router";
 import { pageViewsStore, storageStore } from "@/stores";
@@ -93,28 +93,6 @@ const tabMenuPopover = reactive({
     isShow: false,
     tabIndex: -1
 });
-
-watch(
-    () => pageViews.visitedViews.length,
-    () => {
-        refreshScroll();
-    }
-);
-
-watch(
-    () => route.fullPath,
-    () => {
-        if (pageViews.visitedViews[pageViews.currentVisiteIndex].routePath === route.fullPath) {
-            return;
-        }
-        // 当前路由是通过浏览器的前进或后台方式来跳转的,也存在外部某个页面跳转到某个tab页
-        const findIndex = pageViews.visitedViews.findIndex(item => item.routePath === route.fullPath);
-        if (findIndex !== -1) {
-            pageViews.$patch({ currentVisiteIndex: findIndex });
-            scrollToElement(pageTabRefs.value[findIndex]);
-        }
-    }
-);
 
 // 显示右键菜单操作
 const showContextmenuHandle = function (index: number) {
@@ -214,6 +192,28 @@ const refreshPage = async function (index: number) {
 
 // 屏幕尺寸变化事件
 const resizeHandle = debounce(refreshScroll, 100);
+
+watch(
+    () => pageViews.visitedViews.length,
+    () => {
+        refreshScroll();
+    }
+);
+
+watch(
+    () => route.fullPath,
+    () => {
+        if (pageViews.visitedViews[pageViews.currentVisiteIndex].routePath === route.fullPath) {
+            return;
+        }
+        // 当前路由是通过浏览器的前进或后台方式来跳转的,也存在外部某个页面跳转到某个tab页
+        const findIndex = pageViews.visitedViews.findIndex(item => item.routePath === route.fullPath);
+        if (findIndex !== -1) {
+            pageViews.$patch({ currentVisiteIndex: findIndex });
+            scrollToElement(pageTabRefs.value[findIndex]);
+        }
+    }
+);
 
 onMounted(() => {
     BScroll.use(MouseWheel);

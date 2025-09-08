@@ -64,11 +64,16 @@
         "prettier": "^3.6.2",
         "ts-node": "^10.9.2",
         "typescript": "^5.8.3",
+        "globals": "^16.3.0",
         "eslint": "^9.30.1",
         "eslint-config-prettier": "^10.1.5",
         "eslint-plugin-prettier": "^5.5.1",
-        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-import-x": "^4.16.1",
+        "eslint-import-resolver-typescript": "^4.4.4",
         "eslint-plugin-vue": "^10.3.0",
+        "eslint-plugin-jsonc": "^2.20.1",
+        "eslint-plugin-markdown": "^5.1.0",
+        "eslint-plugin-vitest": "^0.5.4",
         "@types/mockjs": "^1.0.10",
         "@types/node": "^24.0.10",
         "@types/qrcode": "^1.5.5",
@@ -90,7 +95,8 @@
         "singleQuote": false,
         "quoteProps": "consistent",
         "htmlWhitespaceSensitivity": "ignore",
-        "bracketSpacing": true
+        "bracketSpacing": true,
+        "endOfLine": "crlf"
     },
     "engines": {
         "node": ">=22"

@@ -1,26 +1,26 @@
 <template>
-    <div class="side-bar" :class="{ collapse: menuCollapseState }" v-loading="isLoadingForMenus" element-loading-text="加载菜单中...">
-        <div class="search-box" v-show="!menuCollapseState">
+    <div v-loading="isLoadingForMenus" class="side-bar" :class="{ collapse: menuCollapseState }" element-loading-text="加载菜单中...">
+        <div v-show="!menuCollapseState" class="search-box">
             <el-select v-model="searchSelectValue" filterable remote default-first-option value-key="id" placeholder="搜索菜单" :remote-method="searchMenuHandle" @change="menuSelectChange">
                 <el-option v-for="item in searchMenuList" :key="item.value.id" :label="item.label" :value="item.value" />
             </el-select>
         </div>
-        <el-scrollbar class="menus-wrapper" ref="scrollbarRef">
+        <el-scrollbar ref="scrollbarRef" class="menus-wrapper">
             <el-menu :default-active="currentMenuId" :collapse="menuCollapseState" @select="selectedMenuHandle">
-                <menu-list :menuTreeData="menuTreeData" />
+                <menu-list :menu-tree-data="menuTreeData" />
             </el-menu>
         </el-scrollbar>
     </div>
 </template>
 <script setup lang="ts">
-import { type MenuTree } from "../menu-tree";
-import type { Router } from "vue-router";
+import { type Router } from "vue-router";
 import { ref, watch } from "vue";
 import { ElMessageBox, ElScrollbar } from "element-plus";
-import systemAPI from "@api/system";
-import menuList from "./menu-list.vue";
-import { pageViewsStore } from "@/stores";
 import { useRouter } from "vue-router";
+import { type MenuTree } from "../menu-tree";
+import menuList from "./menu-list.vue";
+import systemAPI from "@api/system";
+import { pageViewsStore } from "@/stores";
 import logs from "@/services/logs";
 
 defineProps({

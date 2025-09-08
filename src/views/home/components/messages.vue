@@ -43,17 +43,17 @@
             </el-dropdown-menu>
         </template>
     </el-dropdown>
-    <message-details-dialog v-if="isShowMessageDetailsDialog" :messageInfo="messageInfo" @close="isShowMessageDetailsDialog = false" />
+    <message-details-dialog v-if="isShowMessageDetailsDialog" :message-info="messageInfo" @close="isShowMessageDetailsDialog = false" />
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Ref } from "vue";
+import { type Ref } from "vue";
 import { useRouter } from "vue-router";
 import { ChatLineRound } from "@element-plus/icons-vue";
-import systemAPI from "@api/system";
 import { timeDifferenceFormat } from "@yujinjin/utils";
-import logs from "@/services/logs";
 import messageDetailsDialog from "./message-details-dialog.vue";
+import systemAPI from "@api/system";
+import logs from "@/services/logs";
 
 const router = useRouter();
 

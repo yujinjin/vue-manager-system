@@ -6,13 +6,13 @@
  *  title: "首页" // 页面标题
  * }
  */
-import { storageStore, eventsStore } from "@/stores";
 import { type RouteRecordRaw, type Router, createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import { ElMessage } from "element-plus";
-import config from "@/config";
 import system from "./system";
 import others from "./others";
 import plays from "./plays";
+import config from "@/config";
+import { storageStore, eventsStore } from "@/stores";
 
 export default function (): Router {
     const dataStorages = storageStore();

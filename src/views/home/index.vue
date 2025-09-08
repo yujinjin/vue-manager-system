@@ -4,15 +4,15 @@
 -->
 <template>
     <div class="main">
-        <header-bar :menuCollapseState="storage.menuCollapseState" :breadcrumbNames="breadcrumbNames" @toggleMenuCollapseState="toggleMenuCollapseStateHandle" />
+        <header-bar :menu-collapse-state="storage.menuCollapseState" :breadcrumb-names="breadcrumbNames" @toggle-menu-collapse-state="toggleMenuCollapseStateHandle" />
         <!-- 侧边栏 -->
-        <side-bar :menuCollapseState="storage.menuCollapseState" @loaded="sideBarLoadedHandle" @navigationChange="value => (breadcrumbNames = value)" />
+        <side-bar :menu-collapse-state="storage.menuCollapseState" @loaded="sideBarLoadedHandle" @navigation-change="value => (breadcrumbNames = value)" />
         <div class="page-content">
             <!-- 页面tab列表 -->
             <page-tabs />
             <router-view v-slot="{ Component }">
                 <keep-alive :include="cachedViews" :exclude="pageViews.excludeCacheViewNames">
-                    <component class="page-view" :is="Component" />
+                    <component :is="Component" class="page-view" />
                 </keep-alive>
             </router-view>
             <!-- 引用外链的iframe列表 -->
@@ -23,16 +23,16 @@
 </template>
 
 <script setup lang="ts">
-import { type MenuTree } from "./menu-tree";
 import { computed, ref } from "vue";
 import { ElMessage } from "element-plus";
 import { type Router, useRouter } from "vue-router";
-import { pageViewsStore, storageStore } from "@/stores";
+import { type MenuTree } from "./menu-tree";
 import headerBar from "./components/header-bar.vue";
 import sideBar from "./components/side-bar.vue";
 import pageTabs from "./components/page-tabs.vue";
 import iframeList from "./components/iframe-list.vue";
 import systemTour from "./components/system-tour.vue";
+import { pageViewsStore, storageStore } from "@/stores";
 
 defineOptions({
     // 在渲染该组件的对应路由被验证前调用

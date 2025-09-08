@@ -10,7 +10,7 @@
                 <i :class="menuItem.icons"></i>
             </el-icon>
             <template #title>
-                <menu-text :menuItem="menuItem" />
+                <menu-text :menu-item="menuItem" />
             </template>
         </el-menu-item>
         <el-sub-menu v-else :index="menuItem.id" popper-class="side-bar-menu-popper">
@@ -19,29 +19,30 @@
                     <!--icomoon-forward <svg-icon class="menu-icon" :value="menuItem.icons" /> -->
                     <i :class="menuItem.icons"></i>
                 </el-icon>
-                <menu-text :menuItem="menuItem" />
+                <menu-text :menu-item="menuItem" />
             </template>
-            <menu-list :menuTreeData="menuItem.childList" />
+            <menu-list :menu-tree-data="menuItem.childList" />
         </el-sub-menu>
     </template>
 </template>
 <script lang="ts">
-import type { PropType } from "vue";
-import { type MenuTree } from "../menu-tree";
+import { type PropType } from "vue";
 import { defineComponent } from "vue";
+import { type MenuTree } from "../menu-tree";
 import menuText from "./men-text.vue";
 
 export default defineComponent({
-    name: "menuList",
+    name: "menu-list",
     components: { menuText },
-    data() {
-        return {};
-    },
     props: {
         menuTreeData: {
             type: Array as PropType<Array<MenuTree>>,
-            require: true
+            require: true,
+            default: () => []
         }
+    },
+    data() {
+        return {};
     }
 });
 </script>

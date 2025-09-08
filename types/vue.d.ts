@@ -2,13 +2,13 @@
  * @创建者: yujinjin9@126.com
  * @描述: vue 声明
  */
-import type { ComponentPublicInstance, FunctionalComponent } from "vue";
-import type { Router, RouteLocationNormalizedLoaded } from "vue-router";
+import { type ComponentPublicInstance, type FunctionalComponent } from "vue";
+import { type Router, type RouteLocationNormalizedLoaded } from "vue-router";
 
 /** 将第三方变量挂载到每一个 vue 示例中 */
 declare module "vue" {
     export type JSXComponent<Props = any> = { new (): ComponentPublicInstance<Props> } | FunctionalComponent<Props>;
-    import type { CompatVue } from "vue";
+    import { type CompatVue } from "vue";
     const Vue: CompatVue;
     export default Vue;
     export * from "vue";
@@ -32,7 +32,7 @@ declare module "vue-router" {
 }
 
 declare module "*.vue" {
-    import type { DefineComponent } from "vue";
+    import { type DefineComponent } from "vue";
     const Component: DefineComponent<object, object, any>;
     export default Component;
 }

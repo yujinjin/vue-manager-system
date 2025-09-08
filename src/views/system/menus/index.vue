@@ -12,21 +12,21 @@
         <template #dataTable_status="scope">
             <div class="state-text" :class="{ disable: scope.row.status === '1', enable: scope.row.status === '0' }">{{ getStatusText(scope.row.status) }}</div>
         </template>
-        <info-form-dialog v-if="isShowInfoDialog" v-model:isShow="isShowInfoDialog" :moduleList="moduleList" @refresh="refreshHandle" :row="selectedRow" />
-        <bind-roles-dialog v-if="isShowBindRolesDialog" v-model:isShow="isShowBindRolesDialog" :row="selectedRow" :moduleList="moduleList" />
-        <batch-insert-dialog v-if="isShowBatchInsertDialog" v-model:isShow="isShowBatchInsertDialog" :moduleList="moduleList" />
+        <info-form-dialog v-if="isShowInfoDialog" v-model:is-show="isShowInfoDialog" :module-list="moduleList" :row="selectedRow" @refresh="refreshHandle" />
+        <bind-roles-dialog v-if="isShowBindRolesDialog" v-model:is-show="isShowBindRolesDialog" :row="selectedRow" :module-list="moduleList" />
+        <batch-insert-dialog v-if="isShowBatchInsertDialog" v-model:is-show="isShowBatchInsertDialog" :module-list="moduleList" />
     </search-page>
 </template>
 <script setup lang="ts">
-import type { SearchPageRef } from "@yujinjin/cms-components";
+import { type SearchPageRef } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
-import systemAPI from "@api/system";
-import { HANDLE_CODES } from "@/services/constants";
 import searchConfig from "./search-config";
 import infoFormDialog from "./components/info-form-dialog.vue";
 import bindRolesDialog from "./components/bind-roles-dialog.vue";
 import batchInsertDialog from "./components/batch-insert-dialog.vue";
+import { HANDLE_CODES } from "@/services/constants";
+import systemAPI from "@api/system";
 
 // search page 组件
 const searchPageRef = ref<SearchPageRef>();

@@ -1,7 +1,7 @@
 <template>
     <div class="icon-list">
-        <div class="icon-table" ref="iconListRef">
-            <div class="icon-item" v-for="icon in icons" :key="icon" @click="copyHandle('<i class=\'' + icon + '\' />')">
+        <div ref="iconListRef" class="icon-table">
+            <div v-for="icon in icons" :key="icon" class="icon-item" @click="copyHandle('<i class=\'' + icon + '\' />')">
                 <i :class="icon"></i>
                 <span class="icon-name">{{ icon }}</span>
             </div>

@@ -3,13 +3,13 @@
  * @描述: 引用外链的iframe列表
 -->
 <template>
-    <div class="iframe-list" v-show="route.name === 'external'">
+    <div v-show="route.name === 'external'" class="iframe-list">
         <iframe
             v-for="(iframe, index) in iframeList"
             v-show="index === showIframeIndex"
+            :id="iframe.id"
             ref="iframeRefList"
             :key="iframe.id"
-            :id="iframe.id"
             :src="iframe.fullPath"
             scrolling="yes"
             frameborder="0"

@@ -4,8 +4,8 @@
  */
 import { defineStore } from "pinia";
 import { randomId } from "@yujinjin/utils";
-import { isExternalLink } from "@/utils/index";
-import { externalRoutePath, innerRoutePath } from "@/utils/index";
+import { isExternalLink, externalRoutePath, innerRoutePath } from "@/utils/index";
+
 import logs from "@/services/logs";
 
 /** 访问的页面视图 */

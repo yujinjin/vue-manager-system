@@ -27,8 +27,8 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
-import { pageViewsStore } from "@/stores";
 import { randomId } from "@yujinjin/utils";
+import { pageViewsStore } from "@/stores";
 
 defineOptions({
     name: "play-details"

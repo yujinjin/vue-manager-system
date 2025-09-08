@@ -9,7 +9,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { ProgressProps } from "element-plus";
+import { type ProgressProps } from "element-plus";
 import { type PropType, onUnmounted, ref, watch, onMounted, computed } from "vue";
 
 const props = defineProps({
@@ -48,15 +48,6 @@ const percentage = ref(0);
 // 定时器ID
 let timeIntervalId = 0;
 
-watch(
-    () => props.finished,
-    value => {
-        if (!value) {
-            start();
-        }
-    }
-);
-
 // 进度条自定义属性
 const progressAttributes = computed<ProgressProps>(() => {
     return Object.assign({ textInside: true, strokeWidth: 26 }, props.progress);
@@ -92,6 +83,15 @@ const start = function () {
         percentage.value = parseInt((percentage.value + (99 - percentage.value) * ratio * Math.random()).toFixed(4), 10);
     }, props.time);
 };
+
+watch(
+    () => props.finished,
+    value => {
+        if (!value) {
+            start();
+        }
+    }
+);
 
 onMounted(() => {
     start();

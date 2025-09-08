@@ -52,7 +52,7 @@
                 <template #title>
                     <div class="title-bar">支付信息</div>
                 </template>
-                <el-descriptions direction="vertical" :column="2" border v-if="orderDetails.payInfo">
+                <el-descriptions v-if="orderDetails.payInfo" direction="vertical" :column="2" border>
                     <el-descriptions-item label="支付流水号">
                         <el-tag>{{ orderDetails.payInfo.payNo }}</el-tag>
                     </el-descriptions-item>
@@ -72,13 +72,13 @@
                 <template #title>
                     <div class="title-bar">商品列表</div>
                 </template>
-                <data-table :isShowPagination="false" :props="{ maxHeight: 250 }" :columns="goodsDataTableFields" :query="() => orderDetails.goodsList" />
+                <data-table :is-show-pagination="false" :props="{ maxHeight: 250 }" :columns="goodsDataTableFields" :query="() => orderDetails.goodsList" />
             </el-collapse-item>
             <el-collapse-item name="4">
                 <template #title>
                     <div class="title-bar">使用优惠券列表</div>
                 </template>
-                <data-table :isShowPagination="false" :props="{ maxHeight: 250 }" :columns="couponDataTableFields" :query="() => orderDetails.couponList" />
+                <data-table :is-show-pagination="false" :props="{ maxHeight: 250 }" :columns="couponDataTableFields" :query="() => orderDetails.couponList" />
             </el-collapse-item>
             <el-collapse-item name="5">
                 <template #title>
@@ -101,7 +101,7 @@
                     </el-descriptions-item>
                     <el-descriptions-item label="商品列表" :span="2">
                         <data-table
-                            :isShowPagination="false"
+                            :is-show-pagination="false"
                             :props="{ maxHeight: 100 }"
                             :columns="goodsDataTableFields.filter(item => ['name', 'img', 'specs', 'code', 'quantity'].includes(item.prop!))"
                             :query="() => logisticsItem.goodsList"
@@ -135,7 +135,7 @@
                     </el-descriptions-item>
                     <el-descriptions-item label="涉及商品列表" :span="2">
                         <data-table
-                            :isShowPagination="false"
+                            :is-show-pagination="false"
                             :props="{ maxHeight: 100 }"
                             :columns="goodsDataTableFields.filter(item => ['name', 'img', 'specs', 'code', 'quantity'].includes(item.prop!))"
                             :query="() => afterSalesItem.goodsList"
@@ -154,13 +154,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { dateFormat, numberFormat } from "@yujinjin/utils";
-import demoAPI from "@api/demo";
-import type { DataTableColumn } from "@yujinjin/cms-components";
+import { type DataTableColumn } from "@yujinjin/cms-components";
 import { DEVICE_SOURCE_ENUM, ORDER_STATUS_ENUM, PAY_WAY_ENUM } from "../constants";
+import demoAPI from "@api/demo";
 
 const props = defineProps({
     row: {
-        type: Object
+        type: Object,
+        default: () => {}
     }
 });
 

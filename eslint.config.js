@@ -1,4 +1,6 @@
 import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
+import globals from "globals";
 import tseslint from "typescript-eslint";
 import eslintPluginImportX from "eslint-plugin-import-x";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
@@ -11,7 +13,7 @@ import eslintPluginVitest from "eslint-plugin-vitest";
 // const DOMGlobals = ['window', 'document']
 // const NodeGlobals = ['module', 'require']
 
-export default tseslint.config(
+export default defineConfig(
     /** js推荐配置*/
     eslint.configs.recommended,
     /** ts推荐配置 */
@@ -61,8 +63,12 @@ export default tseslint.config(
     {
         files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx,vue}"],
         languageOptions: {
+            ecmaVersion: "latest",
+            sourceType: "module",
             globals: {
-                Nullable: true
+                Nullable: true,
+                ...globals.browser,
+                ...globals.node
             },
             parserOptions: {
                 ecmaFeatures: {
@@ -136,8 +142,11 @@ export default tseslint.config(
     },
     /** d.ts 配置 */
     {
-        files: ["*.d.ts"],
-        rules: {}
+        files: ["**/*.d.ts"],
+        rules: {
+            "no-unused-vars": "off",
+            "@typescript-eslint/no-unused-vars": "off"
+        }
     },
     /** js 配置 */
     {
@@ -160,7 +169,8 @@ export default tseslint.config(
         },
         rules: {
             // vue
-            "vue/multi-word-component-names": "off"
+            "vue/multi-word-component-names": "off",
+            "vue/component-definition-name-casing": ["error", "kebab-case"]
         }
     },
     /** json 配置 */

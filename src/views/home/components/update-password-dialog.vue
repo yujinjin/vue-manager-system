@@ -3,14 +3,14 @@
  * @描述: 修改密码弹窗
 -->
 <template>
-    <dialog-form ref="dialogFormRef" :isShow="isShow" :buttons="buttons" :inputFormProps="inputForm" :dialogProps="{ title: '修改密码', width: '500px' }" @close="emits('update:isShow', false)" />
+    <dialog-form ref="dialogFormRef" :is-show="isShow" :buttons="buttons" :input-form-props="inputForm" :dialog-props="{ title: '修改密码', width: '500px' }" @close="emits('update:isShow', false)" />
 </template>
 <script setup lang="ts">
-import type { DialogFormRef, InputFormProps, DialogFormButton } from "@yujinjin/cms-components";
+import { type DialogFormRef, type InputFormProps, type DialogFormButton } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
+import { ElMessage } from "element-plus";
 import systemAPI from "@api/system";
 import { storageStore } from "@/stores";
-import { ElMessage } from "element-plus";
 
 defineProps({
     // 是否显示弹窗

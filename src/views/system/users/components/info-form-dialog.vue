@@ -5,14 +5,14 @@
 <template>
     <dialog-form
         ref="dialogFormRef"
-        :isShow="isShow"
+        :is-show="isShow"
         :buttons="buttons"
-        :inputFormProps="inputForm"
-        :dialogProps="{ title: row ? '编辑用户信息' : '新增用户信息', width: '600px' }"
+        :input-form-props="inputForm"
+        :dialog-props="{ title: row ? '编辑用户信息' : '新增用户信息', width: '600px' }"
         @close="emits('update:isShow', false)"
     >
         <template #avatar="{ formValue }">
-            <img-upload v-model="formValue.avatar" :uploadProps="{ showFileList: false, class: 'upload-avatar', limit: 1 }">
+            <img-upload v-model="formValue.avatar" :upload-props="{ showFileList: false, class: 'upload-avatar', limit: 1 }">
                 <div class="avatar-box" :class="{ empty: !formValue.avatar }">
                     <template v-if="formValue.avatar">
                         <img :src="formValue.avatar" class="avatar-pic" />
@@ -28,11 +28,11 @@
     </dialog-form>
 </template>
 <script setup lang="ts">
-import type { DialogFormButton, DialogFormRef, InputFormProps } from "@yujinjin/cms-components";
+import { type DialogFormButton, type DialogFormRef, type InputFormProps } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
-import systemAPI from "@api/system";
 import { ElMessage } from "element-plus";
 import { Plus, Check, Close } from "@element-plus/icons-vue";
+import systemAPI from "@api/system";
 
 const props = defineProps({
     // 是否显示弹窗
@@ -41,7 +41,10 @@ const props = defineProps({
         default: false
     },
     row: {
-        type: Object
+        type: Object,
+        default: function () {
+            return null;
+        }
     }
 });
 

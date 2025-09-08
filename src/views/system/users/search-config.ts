@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @描述: 用户查询配置
  */
-import type { DataTableColumn } from "@yujinjin/cms-components";
+import { type DataTableColumn } from "@yujinjin/cms-components";
 import systemAPI from "@api/system";
 import { HANDLE_CODES } from "@/services/constants";
 

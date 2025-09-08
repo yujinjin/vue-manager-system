@@ -14,7 +14,10 @@
 import { ref } from "vue";
 
 defineProps({
-    content: String,
+    content: {
+        type: String,
+        default: ""
+    },
     lineNumber: {
         type: Number,
         default: 1

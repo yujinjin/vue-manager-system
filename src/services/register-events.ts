@@ -2,7 +2,7 @@
  * @创建者: yujinjin9@126.com
  * @描述: 注册全局事件
  */
-import type { Router } from "vue-router";
+import { type Router } from "vue-router";
 import { eventsStore, storageStore } from "@/stores";
 
 export default function (router: Router) {

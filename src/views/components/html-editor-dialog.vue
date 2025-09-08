@@ -3,7 +3,7 @@
  * @描述: html编辑器弹窗
 -->
 <template>
-    <el-dialog v-model="dialogVisible" appendToBody destroyOnClose fullscreen :show-close="false" class="html-editor-dialog" @closed="dialogClosed">
+    <el-dialog v-model="dialogVisible" append-to-body destroy-on-close fullscreen :show-close="false" class="html-editor-dialog" @closed="dialogClosed">
         <template #header>
             <span>{{ title }}</span>
             <i class="svg-icon" @click="dialogClosed">

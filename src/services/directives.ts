@@ -3,8 +3,8 @@
  * @描述: 自定义指令
  */
 import { type Directive, type DirectiveBinding } from "vue";
-import { dataStore } from "@/stores";
 import { storeToRefs } from "pinia";
+import { dataStore } from "@/stores";
 
 export default <Record<string, Directive>>{
     // 用户操作权限指令

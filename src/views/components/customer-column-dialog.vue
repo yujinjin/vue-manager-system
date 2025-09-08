@@ -3,7 +3,7 @@
  * @描述: 自定义数据列弹窗
 -->
 <template>
-    <el-dialog :model-value="isShow" title="自定义列" width="750px" appendToBody destroyOnClose @closed="close" :close-on-click-modal="false" class="custom-column-dialog">
+    <el-dialog :model-value="isShow" title="自定义列" width="750px" append-to-body destroy-on-close :close-on-click-modal="false" class="custom-column-dialog" @closed="close">
         <div class="search-panel">
             <el-input v-model.trim="keyword" style="width: 360px" clearable placeholder="搜索列名" :prefix-icon="Search" @input="searchHandle" />
         </div>
@@ -13,14 +13,14 @@
                 <div v-else-if="noDataForSearch" class="empty-text">未匹配到数据</div>
                 <div v-else-if="groupColumnKeys && customGroupColumns?.length" class="checkbox-list-wrapper">
                     <el-collapse v-model="activeNames">
-                        <el-collapse-item v-for="(item, index) in customGroupColumns" :key="item.key" :name="item.key" v-show="item.isShow">
+                        <el-collapse-item v-for="(item, index) in customGroupColumns" v-show="item.isShow" :key="item.key" :name="item.key">
                             <template #title>
-                                <el-checkbox @click.stop v-model="item.selected" :indeterminate="item.indeterminate" :label="item.key" @change="checkChange(item.selected, true, index)">
+                                <el-checkbox v-model="item.selected" :indeterminate="item.indeterminate" :label="item.key" @click.stop @change="checkChange(item.selected, true, index)">
                                     {{ item.name }}
                                 </el-checkbox>
                             </template>
                             <el-row>
-                                <el-col :span="12" v-for="childItem in item.childList" :key="childItem.key" v-show="childItem.isShow">
+                                <el-col v-for="childItem in item.childList" v-show="childItem.isShow" :key="childItem.key" :span="12">
                                     <el-checkbox v-model="childItem.selected" :label="childItem.key" :disabled="childItem.disabled" @change="checkChange(item.selected, false, index)">
                                         <span class="checkbox-label-text" :title="childItem.name">{{ childItem.name }}</span>
                                     </el-checkbox>
@@ -34,7 +34,7 @@
                         <el-col :span="24">
                             <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" label="全选" @change="checkChange(checkAll, true)" />
                         </el-col>
-                        <el-col v-for="item in customColumns as CustomerColumnData[]" :key="item.key" v-show="item.isShow" :span="12">
+                        <el-col v-for="item in customColumns" v-show="item.isShow" :key="item.key" :span="12">
                             <el-checkbox v-model="item.selected" :disabled="item.disabled" @change="checkChange(item.selected, false)">
                                 <span class="checkbox-label-text" :title="item.name">{{ item.name }}</span>
                             </el-checkbox>
@@ -48,7 +48,7 @@
                     <div class="label-text active" @click="restoreColumns">恢复初始</div>
                 </div>
                 <div class="inner-row">
-                    <div class="row-info" v-for="(item, index) in flapCustomColumns" v-show="item.selected" :key="item.key">
+                    <div v-for="(item, index) in flapCustomColumns" v-show="item.selected" :key="item.key" class="row-info">
                         <div class="name-text" :title="item.name">
                             {{ item.name }}
                         </div>
@@ -133,19 +133,23 @@ const props = defineProps({
     },
     // 固定展示自定义列的key，如果不传值取tableColumns中的fixed属性值来判断，如果传空数组表示没有固定展示的自定义列
     fixedColumnKeys: {
-        type: Array as PropType<string[]>
+        type: Array as PropType<string[]>,
+        default: () => []
     },
     // 本地存储列表名称的key值, 如果值为空就不做本地保存
     localStorageKey: {
-        type: String
+        type: String,
+        default: ""
     },
     // 本地存储的自定列key的版本，新发版本字段有变动的兼容, 如果值为空就不做兼容
     localStorageKeyVersion: {
-        type: String
+        type: String,
+        default: ""
     },
     // 所有的自定义列key数据
     groupColumnKeys: {
-        type: Array as PropType<GroupColumnData[]>
+        type: Array as PropType<GroupColumnData[]>,
+        default: () => []
     },
     // 数据列表中的列
     tableColumns: {
@@ -260,37 +264,6 @@ const init = function () {
     }
 };
 
-// 搜索（防抖）
-const searchDebounce = debounce(function () {
-    if (props.groupColumnKeys) {
-        customGroupColumns.value!.forEach((item, index) => {
-            item.childList.forEach(childItem => {
-                childItem.isShow = childItem.name.includes(keyword.value);
-            });
-            item.isShow = item.childList.some(childItem => childItem.isShow);
-            checkChange(item.selected, false, index);
-        });
-        noDataForSearch.value = customGroupColumns.value!.every(item => !item.isShow);
-    } else {
-        customColumns.value!.forEach(item => {
-            item.isShow = item.name.includes(keyword.value);
-        });
-        checkChange(checkAll.value, false);
-        noDataForSearch.value = customColumns.value!.every(item => !item.isShow);
-    }
-    searchLoading.value = false;
-}, 200);
-
-// 搜索操作
-const searchHandle = function () {
-    searchLoading.value = true;
-    searchDebounce();
-};
-
-const close = function () {
-    emits("close");
-};
-
 /**
  * 复选框check变化
  * @param selected check的值
@@ -327,6 +300,37 @@ const checkChange = function (selected: boolean, isCheckAll: boolean, index?: nu
         checkAll.value = totalNumber > 0 && selectedNumber === totalNumber;
         isIndeterminate.value = selectedNumber > 0 && selectedNumber < totalNumber;
     }
+};
+
+// 搜索（防抖）
+const searchDebounce = debounce(function () {
+    if (props.groupColumnKeys) {
+        customGroupColumns.value!.forEach((item, index) => {
+            item.childList.forEach(childItem => {
+                childItem.isShow = childItem.name.includes(keyword.value);
+            });
+            item.isShow = item.childList.some(childItem => childItem.isShow);
+            checkChange(item.selected, false, index);
+        });
+        noDataForSearch.value = customGroupColumns.value!.every(item => !item.isShow);
+    } else {
+        customColumns.value!.forEach(item => {
+            item.isShow = item.name.includes(keyword.value);
+        });
+        checkChange(checkAll.value, false);
+        noDataForSearch.value = customColumns.value!.every(item => !item.isShow);
+    }
+    searchLoading.value = false;
+}, 200);
+
+// 搜索操作
+const searchHandle = function () {
+    searchLoading.value = true;
+    searchDebounce();
+};
+
+const close = function () {
+    emits("close");
 };
 
 // 恢复初始
@@ -431,7 +435,7 @@ init();
         font-weight: bold;
     }
 
-    .search-panel {
+    .cms-search-panel {
         padding-bottom: 8px;
     }
 
@@ -456,6 +460,7 @@ init();
             .checkbox-list-wrapper {
                 max-height: 284px;
                 overflow-y: auto;
+                overflow-x: hidden;
 
                 .el-checkbox__label {
                     display: inline-flex;

@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="center-inner">
-            <el-breadcrumb :separator-icon="ArrowRight" v-if="omitBreadcrumbNames.length > 0">
+            <el-breadcrumb v-if="omitBreadcrumbNames.length > 0" :separator-icon="ArrowRight">
                 <el-breadcrumb-item v-for="(name, index) in omitBreadcrumbNames" :key="index">{{ name || "-" }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -57,8 +57,8 @@
                 </el-dropdown>
             </div>
         </div>
-        <login-info-dialog v-model:isShow="isShowUserInfoDialog" />
-        <update-password-dialog v-model:isShow="isShowUpdatePasswordDialog" />
+        <login-info-dialog v-model:is-show="isShowUserInfoDialog" />
+        <update-password-dialog v-model:is-show="isShowUpdatePasswordDialog" />
     </div>
 </template>
 <script setup lang="ts">
@@ -66,11 +66,11 @@ import { computed } from "vue";
 import { type PropType, type Ref, ref } from "vue";
 import { Refresh, CaretBottom, ArrowRight } from "@element-plus/icons-vue";
 import { type Router, useRouter } from "vue-router";
-import { storageStore, pageViewsStore, eventsStore } from "@/stores";
-import { transitRoutePath } from "@/utils/index";
 import messages from "./messages.vue";
 import loginInfoDialog from "./login-info-dialog.vue";
 import updatePasswordDialog from "./update-password-dialog.vue";
+import { transitRoutePath } from "@/utils/index";
+import { storageStore, pageViewsStore, eventsStore } from "@/stores";
 import { IconFold, IconVueLogo } from "@/components/icon-svg";
 
 const props = defineProps({
@@ -78,7 +78,8 @@ const props = defineProps({
         type: Boolean
     },
     breadcrumbNames: {
-        type: Array as PropType<Array<string>>
+        type: Array as PropType<Array<string>>,
+        default: () => []
     }
 });
 

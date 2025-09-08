@@ -15,33 +15,33 @@
                         <div class="tab-text" :class="{ active: loginType == 1 }" @click="loginType = 1">验证码登录</div>
                         <div class="tab-qrcode">
                             <img class="qrcode-tips" src="@imgs/login/qrcode-tips.png" />
-                            <img class="qrcode-icon" @click="loginType = 2" src="@imgs/login/qrcode-icon.png" />
+                            <img class="qrcode-icon" src="@imgs/login/qrcode-icon.png" @click="loginType = 2" />
                         </div>
                     </template>
                     <template v-else>
                         <div class="tab-text active">扫码登录</div>
                         <div class="tab-qrcode">
                             <img class="password-tips" src="@imgs/login/password-tips.png" />
-                            <img class="computer-icon" @click="loginType = 0" src="@imgs/login/computer-icon.png" />
+                            <img class="computer-icon" src="@imgs/login/computer-icon.png" @click="loginType = 0" />
                         </div>
                     </template>
                 </div>
                 <div v-show="loginType == 0">
                     <div class="input-row" :class="{ active: activeInputType == 0 }">
                         <div class="input-box">
-                            <input type="text" @focus="activeInputType = 0" @blur="activeInputType = -1" maxlength="20" placeholder="登录用户名" v-model="inputForm.userName" />
+                            <input v-model="inputForm.userName" type="text" maxlength="20" placeholder="登录用户名" @focus="activeInputType = 0" @blur="activeInputType = -1" />
                         </div>
                     </div>
                     <div class="input-row" :class="{ active: activeInputType == 1 }">
                         <div class="input-box">
                             <input
+                                v-model="inputForm.password"
                                 maxlength="20"
-                                @keyup.enter="submitHandle"
                                 :type="isShowPassword ? 'text' : 'password'"
+                                placeholder="登录密码"
+                                @keyup.enter="submitHandle"
                                 @focus="activeInputType = 1"
                                 @blur="activeInputType = -1"
-                                placeholder="登录密码"
-                                v-model="inputForm.password"
                             />
                         </div>
                         <div class="icon-box" @click="isShowPassword = !isShowPassword">
@@ -55,42 +55,40 @@
                         <div class="label-text">中国 +86</div>
                         <div class="input-box">
                             <input
+                                v-model="inputForm.mobile"
                                 type="text"
                                 maxlength="15"
+                                placeholder="登录手机号"
                                 @keyup="checkNumber('mobile')"
                                 @focus="activeInputType = 2"
                                 @blur="activeInputType = -1"
-                                placeholder="登录手机号"
-                                v-model="inputForm.mobile"
                             />
                         </div>
                     </div>
                     <div class="input-row" :class="{ active: activeInputType == 3 }">
                         <div class="input-box">
                             <input
+                                v-model="inputForm.code"
                                 type="text"
                                 maxlength="8"
+                                placeholder="填写短信验证码"
                                 @keyup.enter="submitHandle"
                                 @keyup="checkNumber('code')"
                                 @focus="activeInputType = 3"
                                 @blur="activeInputType = -1"
-                                placeholder="填写短信验证码"
-                                v-model="inputForm.code"
                             />
                         </div>
-                        <div
-                            class="code-text"
-                            @click="sendValidateCodeHandle"
-                            v-html="countDownSecond === -1 ? '获取短信验证码' : countDownSecond === 0 ? '重新发送验证码' : countDownSecond + 's后重新发送'"
-                        ></div>
+                        <div class="code-text" @click="sendValidateCodeHandle">
+                            {{ countDownSecond === -1 ? "获取短信验证码" : countDownSecond === 0 ? "重新发送验证码" : countDownSecond + "s后重新发送" }}
+                        </div>
                     </div>
                 </div>
                 <div v-show="loginType == 2">
-                    <div class="qrcode-box" :key="0">
-                        <div class="qrcode-img" v-loading="isLoadingForQRcode">
+                    <div :key="0" class="qrcode-box">
+                        <div v-loading="isLoadingForQRcode" class="qrcode-img">
                             <img :src="qrcodeImgUrl!" />
                         </div>
-                        <div class="mask" v-show="isTimeoutForQrcode">
+                        <div v-show="isTimeoutForQrcode" class="mask">
                             <div class="timeout-tips-text">二维码已失效</div>
                             <div class="btn-refresh" @click="refreshQrcode">点击刷新</div>
                         </div>
@@ -100,7 +98,7 @@
                         <img src="@imgs/login/wechat-icon.png" />
                     </div>
                 </div>
-                <div class="btn-panel" v-show="loginType == 0 || loginType == 1">
+                <div v-show="loginType == 0 || loginType == 1" class="btn-panel">
                     <div class="btn" @click="submitHandle">登 录</div>
                 </div>
             </div>
@@ -111,10 +109,10 @@
 <script setup lang="ts">
 import { type Ref, onUnmounted, ref, reactive, watch } from "vue";
 import { type RouteLocationNormalizedLoaded, type Router, useRoute, useRouter } from "vue-router";
-import { storageStore } from "@/stores/";
 import QRCode from "qrcode";
 import { ElMessage } from "element-plus";
 import { chinaPhoneNumberValidate } from "@yujinjin/utils";
+import { storageStore } from "@/stores/";
 import systemAPI from "@api/system";
 
 // 当前路由

@@ -14,17 +14,25 @@
                 <tooltip-dynamics-text :content="scope.row.title" />
             </el-link>
         </template>
-        <add-form-dialog v-if="isShowAddDialog" v-model:isShow="isShowAddDialog" :actionType="actionType" :row="selectedRow" :moduleList="moduleList" :roleList="roleList" @refresh="refreshHandle" />
+        <add-form-dialog
+            v-if="isShowAddDialog"
+            v-model:is-show="isShowAddDialog"
+            :action-type="actionType"
+            :row="selectedRow"
+            :module-list="moduleList"
+            :role-list="roleList"
+            @refresh="refreshHandle"
+        />
     </search-page>
 </template>
 <script setup lang="ts">
-import type { SearchPageRef } from "@yujinjin/cms-components";
+import { type SearchPageRef } from "@yujinjin/cms-components";
 import { ref, reactive } from "vue";
+import searchConfig from "./search-config";
+import addFormDialog from "./components/add-form-dialog.vue";
 import systemAPI from "@api/system";
 import tooltipDynamicsText from "@views/components/tooltip-dynamics-text.vue";
 import { HANDLE_CODES } from "@/services/constants";
-import searchConfig from "./search-config";
-import addFormDialog from "./components/add-form-dialog.vue";
 
 // search page 组件
 const searchPageRef = ref<SearchPageRef>();

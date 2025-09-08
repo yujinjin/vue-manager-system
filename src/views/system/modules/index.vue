@@ -4,17 +4,17 @@
 -->
 <template>
     <search-page v-bind="searchConfigData" ref="searchPageRef">
-        <info-form-dialog v-if="isShowDialog" v-model:isShow="isShowDialog" @refresh="refreshHandle" :row="selectedRow" />
+        <info-form-dialog v-if="isShowDialog" v-model:is-show="isShowDialog" :row="selectedRow" @refresh="refreshHandle" />
     </search-page>
 </template>
 <script setup lang="ts">
-import type { SearchPageRef } from "@yujinjin/cms-components";
+import { type SearchPageRef } from "@yujinjin/cms-components";
 import { ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
-import systemAPI from "@api/system";
-import { HANDLE_CODES } from "@/services/constants";
 import searchConfig from "./search-config";
 import infoFormDialog from "./components/info-form-dialog.vue";
+import systemAPI from "@api/system";
+import { HANDLE_CODES } from "@/services/constants";
 
 // search page 组件
 const searchPageRef = ref<SearchPageRef>();

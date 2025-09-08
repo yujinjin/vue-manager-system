@@ -6,11 +6,11 @@
     <dialog-form
         ref="dialogFormRef"
         class="menu-info-form"
-        :isShow="isShow"
+        :is-show="isShow"
         :buttons="buttons"
-        :inputFormProps="inputForm"
-        :dialogProps="{ title: row ? '编辑菜单信息' : '新增菜单信息', width: '600px' }"
-        @fieldValueChange="fieldValueChangeHandle"
+        :input-form-props="inputForm"
+        :dialog-props="{ title: row ? '编辑菜单信息' : '新增菜单信息', width: '600px' }"
+        @field-value-change="fieldValueChangeHandle"
         @close="emits('update:isShow', false)"
     >
         <template #icons="{ formValue }">
@@ -27,15 +27,15 @@
             </div>
         </template>
     </dialog-form>
-    <icons-select-dialog v-model:isShow="isShowIconsSelectDialog" @save="updateIconHandle" />
+    <icons-select-dialog v-model:is-show="isShowIconsSelectDialog" @save="updateIconHandle" />
 </template>
 <script setup lang="ts">
-import type { InputFormProps, DialogFormRef, DialogFormButton, InputFormField } from "@yujinjin/cms-components";
+import { type InputFormProps, type DialogFormRef, type DialogFormButton, type InputFormField } from "@yujinjin/cms-components";
 import { type PropType, ref, reactive } from "vue";
-import systemAPI from "@api/system";
 import { ElMessage } from "element-plus";
 import { Plus, Check, Close } from "@element-plus/icons-vue";
 import iconsSelectDialog from "./icons-select-dialog.vue";
+import systemAPI from "@api/system";
 
 const props = defineProps({
     // 是否显示弹窗
@@ -44,7 +44,10 @@ const props = defineProps({
         default: false
     },
     row: {
-        type: Object
+        type: Object,
+        default: function () {
+            return null;
+        }
     },
     moduleList: {
         type: Array as PropType<Record<string, any>[]>,

@@ -1,16 +1,16 @@
 <template>
     <dialog-form
         ref="dialogFormRef"
-        :isShow="isShow"
+        :is-show="isShow"
         :buttons="buttons"
-        :inputFormProps="inputForm"
-        :dialogProps="{ title: '发送站内信', width: '600px' }"
-        @fieldValueChange="fieldValueChangeHandle"
+        :input-form-props="inputForm"
+        :dialog-props="{ title: '发送站内信', width: '600px' }"
+        @field-value-change="fieldValueChangeHandle"
         @close="emits('update:isShow', false)"
     />
 </template>
 <script setup lang="ts">
-import type { DialogFormButton, DialogFormRef, InputFormField, InputFormProps } from "@yujinjin/cms-components";
+import { type DialogFormButton, type DialogFormRef, type InputFormField, type InputFormProps } from "@yujinjin/cms-components";
 import { type PropType, ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import systemAPI from "@api/system";
@@ -35,10 +35,14 @@ const props = defineProps({
         }
     },
     actionType: {
-        type: String
+        type: String,
+        default: HANDLE_CODES.CREATE
     },
     row: {
-        type: Object
+        type: Object,
+        default: function () {
+            return null;
+        }
     }
 });
 

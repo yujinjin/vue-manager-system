@@ -1,12 +1,17 @@
 import path from "node:path";
 // import { type PluginOption, defineConfig } from "vite";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import svgLoader from "vite-svg-loader";
 // import createSvgSpritePlugin from "vite-plugin-svg-sprite";
 
 export default defineConfig(({ mode }) => {
+    const env = loadEnv(mode, process.cwd(), "VITE_");
+    // 现在可以通过 env 访问变量了
+    console.log("环境变量：", env);
+    console.log("接口地址：", env.VITE_APP_WEB_HASH);
+
     const isDev = process.env.NODE_ENV === "development" || mode === "dev";
 
     const PROJECT_CONTENT_PATH = isDev ? "/" : "/crm";

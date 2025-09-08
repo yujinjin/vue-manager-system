@@ -4,25 +4,25 @@
 -->
 <template>
     <el-tooltip effect="light" :content="menuItem!.name" placement="right" :disabled="isDisabledTips">
-        <a class="menu-text" @mouseenter="mouseenterEvent" :href="menuHref" @click="clickEvent">{{ menuItem!.name }}</a>
+        <a class="menu-text" :href="menuHref" @mouseenter="mouseenterEvent" @click="clickEvent">{{ menuItem!.name }}</a>
     </el-tooltip>
 </template>
 <script setup lang="ts">
-import type { PropType } from "vue";
-import { computed, onMounted } from "vue";
-import { type MenuTree } from "../menu-tree";
-import { ref } from "vue";
-import type { Router } from "vue-router";
+import { type PropType } from "vue";
+import { computed, onMounted, ref } from "vue";
+
+import { type Router } from "vue-router";
 import { useRouter } from "vue-router";
+import { type MenuTree } from "../menu-tree";
 import config from "@/config";
 import { pageViewsStore } from "@/stores";
-import { isExternalLink } from "@/utils/index";
-import { externalRoutePath, innerRoutePath } from "@/utils/index";
+import { isExternalLink, externalRoutePath, innerRoutePath } from "@/utils/index";
 
 const props = defineProps({
     menuItem: {
         type: Object as PropType<MenuTree>,
-        require: true
+        require: true,
+        default: () => ({})
     }
 });
 

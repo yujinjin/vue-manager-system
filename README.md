@@ -2,62 +2,62 @@
 
 #### 产生页面 tab 方式三种
 
--   1.通过左边的菜单打开一个新页面
--   2.通过已经打开的页面里新开一个页面
-    -   iframe 页面内打开 iframe 页面
-    -   iframe 页面内打开内部页面
-    -   内部页面直接跳转内部页面（不会新增 tab 页）
-    -   内部页面打开一个 iframe 页面
--   3.页面初始化时打开上次固定展示的页面（菜单页面）
+- 1.通过左边的菜单打开一个新页面
+- 2.通过已经打开的页面里新开一个页面
+    - iframe 页面内打开 iframe 页面
+    - iframe 页面内打开内部页面
+    - 内部页面直接跳转内部页面（不会新增 tab 页）
+    - 内部页面打开一个 iframe 页面
+- 3.页面初始化时打开上次固定展示的页面（菜单页面）
 
 #### 新打开页面传值
 
--   title: 页面标题
+- title: 页面标题
 
--   url: 页面 URL 地址
+- url: 页面 URL 地址
 
--   id: 页面 ID(可不传，如果有传判断当前已经打开的 tab 页里是否存在该 ID，存在的情况展示该 tab 页,不存在就新增一个 tab 页)
+- id: 页面 ID(可不传，如果有传判断当前已经打开的 tab 页里是否存在该 ID，存在的情况展示该 tab 页,不存在就新增一个 tab 页)
 
--   当前项目的 tab 页面 URL 上必须有 fromMenuId|fromPageId 这 2 个参数名
+- 当前项目的 tab 页面 URL 上必须有 fromMenuId|fromPageId 这 2 个参数名
 
 ## 目录
 
--   [目录](#目录)
--   [介绍](#介绍)
--   [快速开始](#快速开始)
--   [组件的 API 文档](#组件的api文档)
--   [项目所用到的第三方组件列表](#项目所用到的第三方组件列表)
--   [项目 UI 及页面示例](#项目ui及页面示例)
-    -   [1.登录界面](#1登录界面)
-    -   [2.主界面布局](#2主界面布局)
-    -   [3.简单查询页面示例](#3简单查询页面示例)
-    -   [4.复杂查询页面示例](#4复杂查询页面示例)
-    -   [5.普通页面表单示例](#5普通页面表单示例)
-    -   [6.复杂表单](#6复杂表单)
--   [独立组件示例](#独立组件示例)
-    -   [1. 图片上传（img-upload）](#1-图片上传img-upload)
-    -   [2. 视频上传（video-upload）](#2-视频上传video-upload)
-    -   [3. 视频播放（web-player）](#3-视频播放web-player)
-    -   [4. 富文本框（web-editor）](#4-富文本框web-editor)
-    -   [5. 数据列表栏显示隐藏状态的切换（toggle-table-column）](#5-数据列表栏显示隐藏状态的切换toggle-table-column)
-    -   [6. 数据列表的操作列（table-column-action）](#6-数据列表的操作列table-column-action)
-    -   [7. 数据列表的枚举列（table-column-enum）](#7-数据列表的枚举列table-column-enum)
-    -   [8. 数据列表的图片列（table-column-img）](#8-数据列表的图片列table-column-img)
-    -   [9. 数据列表的链接列（table-column-link）](#9-数据列表的链接列table-column-link)
-    -   [10. 数据列表的标签列（table-column-tags）](#10-数据列表的标签列table-column-tags)
-    -   [11. 数据列表的二维码预览（table-column-qrcode）](#11-数据列表的二维码预览table-column-qrcode)
--   [页面级组件示例](#页面级组件示例)
-    -   [1. 查询表单（search-form）](#1-查询表单search-form)
-    -   [2. 操作栏（action-bar）](#2-操作栏action-bar)
-    -   [3. 数据列表（table-data)](#3-数据列表table-data)
-    -   [4. form 表单（form-input)](#4-form表单form-input)
-    -   [5. 信息表单（view-info)](#5-信息表单view-info)
-    -   [6. 弹窗表单（dialog-form)](#6-弹窗表单dialog-form)
-    -   [7. 页面表单（page-form)](#7-页面表单page-form)
-    -   [8.excel 导入（excel-import-dialog）](#8excel导入excel-import-dialog)
-    -   [9.excel 导出（excel-export-dialog）](#9excel导出excel-export-dialog)
--   [项目框架的目录规范说明](#项目框架的目录规范说明)
--   [最后](#最后)
+- [目录](#目录)
+- [介绍](#介绍)
+- [快速开始](#快速开始)
+- [组件的 API 文档](#组件的api文档)
+- [项目所用到的第三方组件列表](#项目所用到的第三方组件列表)
+- [项目 UI 及页面示例](#项目ui及页面示例)
+    - [1.登录界面](#1登录界面)
+    - [2.主界面布局](#2主界面布局)
+    - [3.简单查询页面示例](#3简单查询页面示例)
+    - [4.复杂查询页面示例](#4复杂查询页面示例)
+    - [5.普通页面表单示例](#5普通页面表单示例)
+    - [6.复杂表单](#6复杂表单)
+- [独立组件示例](#独立组件示例)
+    - [1. 图片上传（img-upload）](#1-图片上传img-upload)
+    - [2. 视频上传（video-upload）](#2-视频上传video-upload)
+    - [3. 视频播放（web-player）](#3-视频播放web-player)
+    - [4. 富文本框（web-editor）](#4-富文本框web-editor)
+    - [5. 数据列表栏显示隐藏状态的切换（toggle-table-column）](#5-数据列表栏显示隐藏状态的切换toggle-table-column)
+    - [6. 数据列表的操作列（table-column-action）](#6-数据列表的操作列table-column-action)
+    - [7. 数据列表的枚举列（table-column-enum）](#7-数据列表的枚举列table-column-enum)
+    - [8. 数据列表的图片列（table-column-img）](#8-数据列表的图片列table-column-img)
+    - [9. 数据列表的链接列（table-column-link）](#9-数据列表的链接列table-column-link)
+    - [10. 数据列表的标签列（table-column-tags）](#10-数据列表的标签列table-column-tags)
+    - [11. 数据列表的二维码预览（table-column-qrcode）](#11-数据列表的二维码预览table-column-qrcode)
+- [页面级组件示例](#页面级组件示例)
+    - [1. 查询表单（search-form）](#1-查询表单search-form)
+    - [2. 操作栏（action-bar）](#2-操作栏action-bar)
+    - [3. 数据列表（table-data)](#3-数据列表table-data)
+    - [4. form 表单（form-input)](#4-form表单form-input)
+    - [5. 信息表单（view-info)](#5-信息表单view-info)
+    - [6. 弹窗表单（dialog-form)](#6-弹窗表单dialog-form)
+    - [7. 页面表单（page-form)](#7-页面表单page-form)
+    - [8.excel 导入（excel-import-dialog）](#8excel导入excel-import-dialog)
+    - [9.excel 导出（excel-export-dialog）](#9excel导出excel-export-dialog)
+- [项目框架的目录规范说明](#项目框架的目录规范说明)
+- [最后](#最后)
 
 ## 介绍
 
@@ -69,11 +69,11 @@
 
 ## 快速开始
 
--   [在线 demo](https://yujinjin.github.io/vue-manager-system/)
--   克隆仓库： `git clone https://github.com/yujinjin/vue-manager-system`
--   使用 npm 安装： `npm install`
--   使用 npm 运行： `npm run R_UAT`
--   使用 npm 打包： `npm run B_UAT`
+- [在线 demo](https://yujinjin.github.io/vue-manager-system/)
+- 克隆仓库： `git clone https://github.com/yujinjin/vue-manager-system`
+- 使用 npm 安装： `npm install`
+- 使用 npm 运行： `npm run R_UAT`
+- 使用 npm 打包： `npm run B_UAT`
 
 ## 组件的 API 文档
 
@@ -81,19 +81,19 @@
 
 ## 项目所用到的第三方组件列表
 
--   vue
--   vue-router
--   vuex
--   axios
--   element-ui
--   jquery(v1.12.4,部分插件需要依赖于 jquery)
--   toastr(由于 element-ui 中的 Message 组件同时调用多次显示有问题，所以采用了它，[官方文档](https://github.com/CodeSeven/toastr))
--   cropperjs(图片裁剪，[官方文档](https://github.com/fengyuanchen/cropperjs))
--   echarts(百度 echarts，[官方文档](https://echarts.apache.org/zh/index.html))
--   aliyun-oss-sdk(阿里云 OSS SDK)
--   aliyun-upload-sdk(阿里云 OSS 上传)
--   summernote(一个不依赖于 boostrap 的富文本框组件，发现部分功能有 BUG，所以把源代码做了修复改动。因此如果使用该插件就不能再升级版本了)
--   qrcode(二维码)
+- vue
+- vue-router
+- vuex
+- axios
+- element-ui
+- jquery(v1.12.4,部分插件需要依赖于 jquery)
+- toastr(由于 element-ui 中的 Message 组件同时调用多次显示有问题，所以采用了它，[官方文档](https://github.com/CodeSeven/toastr))
+- cropperjs(图片裁剪，[官方文档](https://github.com/fengyuanchen/cropperjs))
+- echarts(百度 echarts，[官方文档](https://echarts.apache.org/zh/index.html))
+- aliyun-oss-sdk(阿里云 OSS SDK)
+- aliyun-upload-sdk(阿里云 OSS 上传)
+- summernote(一个不依赖于 boostrap 的富文本框组件，发现部分功能有 BUG，所以把源代码做了修复改动。因此如果使用该插件就不能再升级版本了)
+- qrcode(二维码)
 
 ## 项目 UI 及页面示例
 
@@ -487,9 +487,9 @@
 
 ## 最后
 
--   如果喜欢一定要 star 哈!!!（谢谢!!）
+- 如果喜欢一定要 star 哈!!!（谢谢!!）
 
--   如果有意见和问题 请在 lssues 提出，我会在线解答。
+- 如果有意见和问题 请在 lssues 提出，我会在线解答。
 
 中台框架测试页
 打开新页面

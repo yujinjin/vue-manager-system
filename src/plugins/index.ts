@@ -2,7 +2,7 @@
  * 作者：yujinjin9@126.com
  * 描述：系统自定义插件入口
  */
-import type { App } from "vue";
+import { type App } from "vue";
 import loading from "./loading";
 
 export default function (vueAppInstance: App) {

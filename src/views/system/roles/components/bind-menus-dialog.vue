@@ -40,7 +40,7 @@
                     <div class="label-text active" @click="clearSelectionHandle">清空</div>
                 </div>
                 <div class="inner-row">
-                    <div class="row-info" v-for="(menu, index) in selectedMenuRows" :key="menu.code">
+                    <div v-for="(menu, index) in selectedMenuRows" :key="menu.code" class="row-info">
                         <div class="name-text" :title="menu.name + '(' + menu.code + ')'">{{ menu.name }}({{ menu.code }})</div>
                         <el-icon @click="deleteSelectedHandle(index)"><Delete /></el-icon>
                     </div>
@@ -207,7 +207,7 @@ const init = async function () {
 init();
 </script>
 <style lang="scss" scoped>
-.search-panel {
+.cms-search-panel {
     padding-bottom: 8px;
     display: flex;
     align-items: center;

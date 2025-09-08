@@ -3,18 +3,18 @@
  * @描述: 菜单图标选择弹窗
 -->
 <template>
-    <el-dialog :model-value="isShow" @update:model-value="close" title="菜单图标" append-to-body class="common-dialog" width="800px">
+    <el-dialog :model-value="isShow" title="菜单图标" append-to-body class="common-dialog" width="800px" @update:model-value="close">
         <el-tabs v-model="tabIndex" type="border-card">
             <el-tab-pane label="选择系统定义的图标" :name="0">
                 <div class="icon-list">
-                    <div v-for="(icon, index) in icons" :key="icon" @click="selectedIconIndex = index" class="icon-item" :class="{ actived: index === selectedIconIndex }">
+                    <div v-for="(icon, index) in icons" :key="icon" class="icon-item" :class="{ actived: index === selectedIconIndex }" @click="selectedIconIndex = index">
                         <i :class="icon"></i>
                         <span class="icon-name">{{ icon }}</span>
                     </div>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="自定义上传图片" :name="1">
-                <img-upload v-model="uploadImage" :uploadProps="{ limit: 1 }" />
+                <img-upload v-model="uploadImage" :upload-props="{ limit: 1 }" />
             </el-tab-pane>
         </el-tabs>
         <template #footer>

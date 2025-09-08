@@ -3,12 +3,12 @@
  * @描述: html编辑器
 -->
 <template>
-    <div class="html-editor-container" :class="{ dragging: state.dragging }" ref="containerRef" @mousemove="dragMove" @mouseup="dragEnd" @mouseleave="dragEnd">
+    <div ref="containerRef" class="html-editor-container" :class="{ dragging: state.dragging }" @mousemove="dragMove" @mouseup="dragEnd" @mouseleave="dragEnd">
         <div class="left-panel" :style="{ width: state.split + '%' }">
-            <div class="editor" ref="editorRef"></div>
+            <div ref="editorRef" class="editor"></div>
             <div class="dragger" @mousedown.prevent="dragStart"></div>
         </div>
-        <div class="right-panel" ref="rightRef" :style="{ width: 100 - state.split + '%' }">
+        <div ref="rightRef" class="right-panel" :style="{ width: 100 - state.split + '%' }">
             <div v-show="state.dragging" class="preview-size">{{ `${state.previewWidth}px x ${state.previewHeight}px` }}</div>
             <iframe ref="previewIFrameRef" frameborder="0"></iframe>
         </div>
@@ -19,11 +19,13 @@ import { onMounted, onUnmounted, ref, reactive, watch, nextTick } from "vue";
 import { useDebounceFn } from "@vueuse/core";
 import * as monacoEditor from "monaco-editor";
 // 导入各个语言的Worker
+/* eslint-disable import-x/default */
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
+/* eslint-enable import-x/default */
 
 // 配置Worker工厂
 self.MonacoEnvironment = {

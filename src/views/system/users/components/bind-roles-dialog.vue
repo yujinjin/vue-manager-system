@@ -41,7 +41,7 @@
                     <div class="label-text active" @click="clearSelectionHandle">清空</div>
                 </div>
                 <div class="inner-row">
-                    <div class="row-info" v-for="(role, index) in selectedRoleRows" :key="role.code">
+                    <div v-for="(role, index) in selectedRoleRows" :key="role.code" class="row-info">
                         <div class="name-text" :title="role.name + '(' + role.code + ')'">{{ role.name }}({{ role.code }})</div>
                         <el-icon @click="deleteSelectedHandle(index)"><Delete /></el-icon>
                     </div>
@@ -209,7 +209,7 @@ watch(
 watch(() => [keyword.value, modules.value], searchDebounce, { immediate: true });
 </script>
 <style lang="scss" scoped>
-.search-panel {
+.cms-search-panel {
     padding-bottom: 8px;
     display: flex;
 }

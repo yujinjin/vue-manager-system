@@ -23,10 +23,7 @@ const props = defineProps({
     },
     row: {
         type: Object,
-        required: true,
-        default: function () {
-            return {};
-        }
+        required: true
     },
     moduleList: {
         type: Array as PropType<Record<string, any>[]>,

@@ -1,5 +1,5 @@
-import type { Pinia } from "pinia";
-import type { Router } from "vue-router";
+import { type Pinia } from "pinia";
+import { type Router } from "vue-router";
 import { createApp, type App as VueApplication } from "vue";
 import ElementPlus from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";

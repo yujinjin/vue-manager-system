@@ -3,9 +3,9 @@
  * @描述: 登录用户信息弹窗
 -->
 <template>
-    <dialog-form :isShow="isShow" ref="dialogFormRef" :buttons="buttons" :inputFormProps="inputForm" :dialogProps="dialogProps" @close="emits('update:isShow', false)">
+    <dialog-form ref="dialogFormRef" :is-show="isShow" :buttons="buttons" :input-form-props="inputForm" :dialog-props="dialogProps" @close="emits('update:isShow', false)">
         <template #avatar="{ formValue }">
-            <img-upload v-model="formValue.avatar" :uploadProps="{ showFileList: false, class: 'upload-avatar', limit: 1 }" :cropperProps="true">
+            <img-upload v-model="formValue.avatar" :upload-props="{ showFileList: false, class: 'upload-avatar', limit: 1 }" :cropper-props="true">
                 <div class="avatar-box" :class="{ empty: !formValue.avatar }">
                     <template v-if="formValue.avatar">
                         <img :src="formValue.avatar" class="avatar-pic" />
@@ -23,9 +23,9 @@
 <script setup lang="ts">
 import { type Ref, ref, reactive } from "vue";
 import { type InputFormProps, type DialogFormButton, type DialogFormRef } from "@yujinjin/cms-components";
-import { storageStore } from "@/stores";
 import { Plus, Check, Close } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import { storageStore } from "@/stores";
 import systemAPI from "@api/system";
 
 defineProps({

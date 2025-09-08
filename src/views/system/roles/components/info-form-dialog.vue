@@ -5,18 +5,18 @@
 <template>
     <dialog-form
         ref="dialogFormRef"
-        :isShow="isShow"
+        :is-show="isShow"
         :buttons="buttons"
-        :inputFormProps="inputForm"
-        :dialogProps="{ title: row ? '编辑角色信息' : '新增角色信息', width: '600px' }"
+        :input-form-props="inputForm"
+        :dialog-props="{ title: row ? '编辑角色信息' : '新增角色信息', width: '600px' }"
         @close="emits('update:isShow', false)"
     />
 </template>
 <script setup lang="ts">
-import type { DialogFormButton, DialogFormRef, InputFormProps } from "@yujinjin/cms-components";
+import { type DialogFormButton, type DialogFormRef, type InputFormProps } from "@yujinjin/cms-components";
 import { type PropType, ref, reactive } from "vue";
-import systemAPI from "@api/system";
 import { ElMessage } from "element-plus";
+import systemAPI from "@api/system";
 
 const props = defineProps({
     // 是否显示弹窗
@@ -25,7 +25,10 @@ const props = defineProps({
         default: false
     },
     row: {
-        type: Object
+        type: Object,
+        default: function () {
+            return null;
+        }
     },
     moduleList: {
         type: Array as PropType<Record<string, any>[]>,

@@ -3,8 +3,8 @@
  * @描述: Excel大数据导出弹窗
 -->
 <template>
-    <el-dialog v-model="dialogVisible" title="订单Excel大数据导出" class="common-dialog" width="800px" @closed="dialogClosed">
-        <el-collapse v-model="activeCollapseNames" v-show="!progressInfo.isShow" style="border: 0px">
+    <el-dialog v-model="dialogVisible" title="订单Excel大数据导出" class="common-dialog export-dialog" width="800px" @closed="dialogClosed">
+        <el-collapse v-show="!progressInfo.isShow" v-model="activeCollapseNames" style="border: 0px">
             <el-collapse-item name="1">
                 <template #title>
                     <div class="header-content">
@@ -12,13 +12,13 @@
                         <el-checkbox v-model="isStorageSearchFormValue" @click.stop>记住当前筛选项的值</el-checkbox>
                     </div>
                 </template>
-                <search-form ref="searchFormRef" :fields="searchFields" :isShowSearchButton="false" :isShowCollapse="false" @fieldsChange="initSearchFieldsValue" />
+                <search-form ref="searchFormRef" :fields="searchFields" :is-show-search-button="false" :is-show-collapse="false" @fields-change="initSearchFieldsValue" />
             </el-collapse-item>
             <el-collapse-item name="2">
                 <template #title>
                     <div class="header-content">
                         <div class="title-bar">导入字段</div>
-                        <el-input v-model.trim="keyword" @click.stop style="width: 360px" clearable placeholder="搜索字段" :prefix-icon="Search" @input="searchHandle" />
+                        <el-input v-model.trim="keyword" style="width: 360px" clearable placeholder="搜索字段" :prefix-icon="Search" @click.stop @input="searchHandle" />
                     </div>
                 </template>
                 <div v-if="searchLoading" class="loading-text">数据匹配中...</div>
@@ -28,7 +28,7 @@
                         <el-col :span="24">
                             <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" label="全选" @change="checkChange(checkAll, true)" />
                         </el-col>
-                        <el-col v-for="item in exportFields" :key="item.key" v-show="item.isShow" :span="8">
+                        <el-col v-for="item in exportFields" v-show="item.isShow" :key="item.key" :span="8">
                             <el-checkbox v-model="item.selected" :disabled="item.disabled" @change="checkChange(item.selected, false)">
                                 <span class="checkbox-label-text" :title="item.name">{{ item.name }}</span>
                             </el-checkbox>
@@ -49,12 +49,13 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import type { SearchFormField, DataTableColumn, SearchFormRef } from "@yujinjin/cms-components";
+import { type SearchFormField, type DataTableColumn, type SearchFormRef } from "@yujinjin/cms-components";
 import { type PropType, ref, watch, computed, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { debounce, getObjectProperty, dateFormat } from "@yujinjin/utils";
 import commonApi from "@/api/common";
 import virtuallyProgress from "@views/components/virtually-progress.vue";
+import tempateFile from "/templates/订单数据导出模板.xlsx?url";
 
 const props = defineProps({
     isShow: {
@@ -207,7 +208,7 @@ const submitHandle = function () {
         async () => {
             await commonApi.download({
                 type: "a",
-                url: require("/templates/批量新增菜单模板.xlsx"),
+                url: tempateFile,
                 fileName: "订单数据导出(" + dateFormat(Date.now()) + ").xlsx"
             });
             progressInfo.isLoading = false;
@@ -263,7 +264,7 @@ watch(
     }
 }
 
-:deep(.search-panel) {
+:deep(.cms-search-panel) {
     border-bottom: 0px;
 }
 
